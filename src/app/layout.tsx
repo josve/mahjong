@@ -23,8 +23,7 @@ export default function RootLayout({
             style={{
               maxWidth: "980px",
               minWidth: "600px",
-              top: "20px",
-              position: "relative",
+              paddingTop: "20px",
             }}
           >
             <Header />
