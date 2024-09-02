@@ -1,7 +1,7 @@
-import db from "@/lib/db";
+import Connection from "@/lib/connection";
 
 async function getTotalStatistics() {
-  const connection = await db.getConnection();
+  const connection = await Connection.getInstance().getConnection();
   try {
     const [result] = await connection.query(`
       SELECT 

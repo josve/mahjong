@@ -1,9 +1,9 @@
 import MatchGridItem from "@/components/matchGridItem";
 import TotalStatisticsRow from "@/components/totalStatisticsRow";
-import db from "@/lib/db";
+import Connection from "@/lib/connection";
 
 async function getAllMatches(): Promise<any> {
-  const connection = await db.getConnection(); // Get a connection
+  const connection = await Connection.getInstance().getConnection(); // Get a connection
   try {
     const [matches] = await connection.query(
       "SELECT GAME_ID FROM Games ORDER BY TIME DESC"
