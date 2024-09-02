@@ -1,12 +1,42 @@
-import Image from "next/image";
-import styles from "./page.module.css";
+import MatchGridItem from "@/components/matchGridItem";
+import TotalStatisticsRow from "@/components/totalStatisticsRow";
+import db from "@/lib/db";
 
-export default function Home() {
+async function getAllMatches(): Promise<any> {
+  const connection = await db.getConnection(); // Get a connection
+  try {
+    const [matches] = await connection.query(
+      "SELECT GAME_ID FROM Games ORDER BY TIME DESC"
+    );
+    return matches;
+  } finally {
+    connection.release(); // Ensure the connection is released
+  }
+}
+
+export default async function Home() {
+  const matches = await getAllMatches();
+
   return (
-    <main className={styles.main}>
-      <div className={styles.description}>
-        <p>Hello!</p>
+    <>
+      <h1>Matcher</h1>
+      <TotalStatisticsRow />
+      <div
+        style={{
+          display: "grid",
+          gridTemplateColumns: "1fr 1fr",
+          gap: "20px",
+        }}
+      >
+        <>
+          {matches.map((match: { GAME_ID: string }) => (
+            <MatchGridItem
+              key={match.GAME_ID}
+              id={match.GAME_ID}
+            />
+          ))}
+        </>
       </div>
-    </main>
+    </>
   );
 }
