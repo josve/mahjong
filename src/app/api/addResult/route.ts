@@ -13,6 +13,13 @@ export async function POST(req: NextRequest) {
     const teamIds = Object.keys(scores);
     const eastIndex = teamIds.indexOf(eastTeam);
 
+    const [latestRoundResult] = await connection.query(
+      'SELECT MAX(ROUND) as latestRound FROM Hands WHERE GAME_ID = ?',
+      [matchId]
+    );
+    const latestRound = latestRoundResult[0]?.latestRound || 0;
+    const newRound = latestRound + 1;
+
     for (let i = 0; i < teamIds.length; i++) {
       const teamId = teamIds[i];
       const score = scores[teamId];
@@ -21,8 +28,8 @@ export async function POST(req: NextRequest) {
       console.log(`Inserting result for team ${teamId}: score=${score}, wind=${wind}, isWinner=${teamId === winner}`);
 
       await connection.query(
-        'INSERT INTO Hands (GAME_ID, TEAM_ID, HAND_SCORE, IS_WINNER, WIND) VALUES (?, ?, ?, ?, ?)',
-        [matchId, teamId, score, teamId === winner, wind]
+        'INSERT INTO Hands (GAME_ID, TEAM_ID, HAND_SCORE, IS_WINNER, WIND, ROUND) VALUES (?, ?, ?, ?, ?, ?)',
+        [matchId, teamId, score, teamId === winner, wind, newRound]
       );
     }
     console.log('Results added successfully');
