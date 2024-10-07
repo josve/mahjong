@@ -46,7 +46,12 @@ export default function RoundResultFormClient({ teamIdToName }: { teamIdToName: 
     console.log("Form submitted:", formData);
   };
 
-  return (
+  const isFormValid = () => {
+    const allScoresEntered = Object.values(formData.scores).every(
+      (score) => score !== ""
+    );
+    return formData.eastTeam !== "" && formData.winner !== "" && allScoresEntered;
+  };
     <form onSubmit={handleSubmit} style={{ marginTop: "20px" }}>
       {Object.entries(teamIdToName).map(([teamId, teamName]) => (
         <div key={teamId}>
@@ -95,7 +100,9 @@ export default function RoundResultFormClient({ teamIdToName }: { teamIdToName: 
           </select>
         </label>
       </div>
-      <button type="submit">Add Result</button>
+      <button type="submit" disabled={!isFormValid()}>
+        Add Result
+      </button>
     </form>
   );
 }
