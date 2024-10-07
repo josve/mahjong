@@ -47,9 +47,14 @@ export default function MatchChart({
           return params
             .map((param) => {
               const teamName = getTeamName(param.seriesName);
-              return teamName !== "Unknown Team"
-                ? `${teamName}: ${param.value - 500}`
-                : null;
+              if (teamName !== "Unknown Team") {
+                const windHand = param.data.name.WIND_HAND;
+                const handScore = param.data.name.HAND_SCORE;
+                const isWinner = param.data.name.IS_WINNER;
+                const mahjongText = isWinner ? " mahjong" : "";
+                return `${teamName}: ${param.value - 500} (${windHand} HANDp${mahjongText}, ${handScore})`;
+              }
+              return null;
             })
             .filter((text) => text !== null)
             .join("<br/>");
