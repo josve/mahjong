@@ -168,7 +168,7 @@ export default function MatchChart({
           .map((param) => {
             const teamName = getTeamName(param.seriesName);
             if (teamName !== "Unknown Team") {
-              const windHand = param.data.name.HAND + 'p';
+              const windHand = param.data.name.WIND + 'p';
               const handScore = param.data.name.HAND_SCORE;
               const isWinner = param.data.name.IS_WINNER;
               const mahjongText = isWinner ? " mahjong" : "";
