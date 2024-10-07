@@ -44,7 +44,20 @@ export default function RoundResultFormClient({ teamIdToName }: { teamIdToName: 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     // Handle form submission logic here
-    console.log("Form submitted:", formData);
+    fetch('/api/addResult', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ ...formData, matchId: 'your-match-id' }), // Replace 'your-match-id' with the actual match ID
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        console.log('Success:', data);
+      })
+      .catch((error) => {
+        console.error('Error:', error);
+      });
   };
 
   const isFormValid = () => {
