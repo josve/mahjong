@@ -21,7 +21,7 @@ export default async function Home() {
     <>
       <div style={{ backgroundColor: "rgb(250, 250, 250)", padding: "20px" }}>
         <div style={{ backgroundColor: "white", padding: "20px", boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)" }}>
-          <h1 style={{ margin: 0, color: "#943030", fontFamily: "HelveticaNeueLight, Helvetica, tahoma, arial", fontSize: "42px" }}>
+          <h1 style={{ margin: 0, color: "#943030", fontFamily: "HelveticaNeueLight, Helvetica, tahoma, arial", fontSize: "42px", textAlign: "left" }}>
             Matcher
           </h1>
           <TotalStatisticsRow />
