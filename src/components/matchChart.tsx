@@ -2,11 +2,10 @@
 import React from "react";
 import ReactEcharts from "echarts-for-react";
 
-import { getTeamIdToNameNoAlias } from "@/lib/dbMatch";
-
-export default async function MatchChart({
+export default function MatchChart({
   hands,
   teamHands,
+  teamIdToName,
 }: {
   hands: any[];
   teamHands: any[];
@@ -14,7 +13,6 @@ export default async function MatchChart({
   // Initialize rounds starting from 1
   const rounds = Array.from({ length: 19 }, (_, i) => (i + 1).toString());
 
-  const teamIdToName = await getTeamIdToNameNoAlias();
   const getTeamName = (teamId: string) => teamIdToName[teamId];
 
   let series = [];
