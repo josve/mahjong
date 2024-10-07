@@ -32,7 +32,7 @@ export default function MatchChart({
 
     // Initialize scores with zero for round 1
     const scores = [{ value: 0, name: { ROUND: 0, IS_WINNER: 0 } }, ...teamHands[teamId].map((round: any) => ({
-      value: round.SCORE,
+      value: round.SCORE + 500,
       name: round,
       itemStyle: {
         color: round.IS_WINNER ? 'white' : undefined,
@@ -70,7 +70,19 @@ export default function MatchChart({
     });
   }
 
-  console.log("Team colors:", teamColors);
+  series.push({
+    data: rounds.map(() => 500),
+    type: "line",
+    name: "Threshold",
+    lineStyle: {
+      color: "gray",
+      type: "dashed",
+    },
+    symbol: "none",
+    label: {
+      show: false,
+    },
+  });
   console.log("Series data:", series);
 
   const options = {
