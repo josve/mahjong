@@ -70,6 +70,7 @@ export default function MatchChart({
     });
   }
 
+  console.log("Team colors:", teamColors);
   console.log("Series data:", series);
 
   const options = {
