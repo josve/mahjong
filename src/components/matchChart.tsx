@@ -165,10 +165,13 @@ export default function MatchChart({
       formatter: (params: any) => {
         if (Array.isArray(params)) {
           return params
-            .map(
-              (param) =>
-                `${getTeamName(param.seriesName)}: ${param.value - 500}`
-            )
+            .map((param) => {
+              const teamName = getTeamName(param.seriesName);
+              return teamName !== "Unknown Team"
+                ? `${teamName}: ${param.value - 500}`
+                : null;
+            })
+            .filter((text) => text !== null)
             .join("<br/>");
         } else {
           const teamName = getTeamName(params.seriesName);
