@@ -48,8 +48,8 @@ export default function MatchChart({
 
   series.push({
     type: 'pie',
-    radius: ['40%', '70%'], // Convert to donut chart
-    center: ['15%', '20%'],
+    radius: ['30%', '50%'], // Make the donut chart smaller
+    center: ['10%', '15%'], // Adjust position if needed
     data: pieData,
     label: {
       show: false, // Remove labels
