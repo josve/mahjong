@@ -1,4 +1,5 @@
 import { getMatchById, getHandsByGameId, getTeamIdToName, getTeamColors } from "@/lib/dbMatch";
+import RoundResultForm from "@/components/RoundResultForm";
 import MatchChart from "@/components/matchChart";
 
 interface PageProps {
@@ -43,6 +44,7 @@ export default async function Page({ params }: PageProps) {
       </h1>
       <h2 style={{ margin: 0 }}>{numRounds} omgångar</h2>
     </div>
+    <RoundResultForm />
     <h3 style={{ color: "#909090", fontSize: "16px", textAlign: "left", fontFamily: "HelveticaNeueLight, Helvetica, tahoma, arial" }}>
       Datum {new Date(match.TIME).toLocaleDateString()}
     </h3>
