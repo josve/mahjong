@@ -9,24 +9,9 @@ export default function Header() {
       style={{ background: "linear-gradient(to right, #db5a4c, #8a5331)" }}
     >
       <Toolbar>
-        <Box
-          sx={{
-            display: "flex",
-            alignItems: "center",
-          }}
-        >
-          <Link
-            href="/"
-            passHref
-          >
-            <Box
-              sx={{
-                display: "flex",
-                alignItems: "center",
-                cursor: "pointer",
-                flexDirection: "column",
-              }}
-            >
+        <Box sx={{ display: "flex", alignItems: "center", flexGrow: 1 }}>
+          <Link href="/" passHref>
+            <Box sx={{ display: "flex", alignItems: "center", cursor: "pointer" }}>
               <Image
                 src="/mahjong_tiles.png"
                 alt="Mahjong Tiles"
@@ -36,18 +21,17 @@ export default function Header() {
               <Typography
                 variant="h6"
                 style={{
-                  marginTop: "10px",
+                  marginLeft: "10px",
                   color: "white",
                   fontWeight: "bold",
                 }}
               >
-                mahjong master system 4.0
+                <span style={{ fontWeight: "bold" }}>mahjong</span> master system 4.0
               </Typography>
             </Box>
           </Link>
         </Box>
-        <Box sx={{ flexGrow: 1 }} />
-        <Box sx={{ display: "flex", alignItems: "center" }}>
+        <Box sx={{ display: "flex", alignItems: "center", justifyContent: "flex-end", flexGrow: 1 }}>
           <Link
             href="/"
             passHref
