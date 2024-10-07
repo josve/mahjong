@@ -1,9 +1,10 @@
-import { NextApiRequest, NextApiResponse } from 'next';
+import { NextRequest, NextResponse } from 'next/server';
 import Connection from '@/lib/connection';
 
-export async function POST(req: NextApiRequest, res: NextApiResponse) {
-  console.log('Received request:', req.body);
-  const { scores, eastTeam, winner, matchId } = req.body;
+export async function POST(req: NextRequest) {
+  const body = await req.json();
+  console.log('Received request:', body);
+  const { scores, eastTeam, winner, matchId } = body;
 
   const windOrder = ['E', 'N', 'W', 'S'];
 
@@ -25,10 +26,10 @@ export async function POST(req: NextApiRequest, res: NextApiResponse) {
       );
     }
     console.log('Results added successfully');
-    res.status(200).json({ message: 'Results added successfully' });
+    return NextResponse.json({ message: 'Results added successfully' }, { status: 200 });
   } catch (error) {
     console.error('Error adding results:', error);
-    res.status(500).json({ error: 'Failed to add results' });
+    return NextResponse.json({ error: 'Failed to add results' }, { status: 500 });
   } finally {
     connection.release();
   }
