@@ -43,14 +43,11 @@ export default function MatchChart({
       : 'black'; // Default color if no color is found
 
     series.push({
-      lineStyle: {
-        color: color,
-        width: 6, // Make the line way thicker
-      },
       data: scores,
       type: "line",
       name: teamId,
       lineStyle: {
+        color: color,
         width: 6, // Make the line way thicker
       },
       smooth: true, // Ensure smoothing is enabled
