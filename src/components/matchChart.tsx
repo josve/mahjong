@@ -37,7 +37,7 @@ export default function MatchChart({
       itemStyle: {
         color: round.IS_WINNER ? 'white' : undefined,
         borderColor: color, // Use line color
-        borderWidth: round.IS_WINNER ? 2 : undefined,
+        borderWidth: round.IS_WINNER ? 4 : undefined,
       },
     }))];
 
@@ -53,7 +53,7 @@ export default function MatchChart({
       },
       smooth: true, // Ensure smoothing is enabled
       symbol: 'circle',
-      symbolSize: (value: any, params: any) => (params.data.name.IS_WINNER ? 10 : 0),
+      symbolSize: (value: any, params: any) => (params.data.name.IS_WINNER ? 15 : 0),
       label: {
         show: true,
         position: 'right',
