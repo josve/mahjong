@@ -29,14 +29,12 @@ export async function POST(req: NextRequest) {
       for (let j = 0; j < teamIds.length; j++) {
         if (i !== j) {
           const otherHand = scores[teamIds[j]];
-          const difference = hand - otherHand;
+          let difference = hand - otherHand;
+          if (teamId === eastTeam || teamIds[j] === eastTeam) {
+            difference *= 2;
+          }
           handScore += difference < 0 ? 0 : difference;
         }
-      }
-
-      // Double the score if any player is the east team
-      if (teamId === eastTeam || teamIds.some(id => id === eastTeam)) {
-        handScore *= 2;
       }
       const wind = windOrder[(i - eastIndex + 4) % 4];
 
