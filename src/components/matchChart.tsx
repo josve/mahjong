@@ -157,6 +157,19 @@ export default function MatchChart({
     },
     tooltip: {
       trigger: "axis",
+      formatter: (params: any) => {
+        if (Array.isArray(params)) {
+          return params
+            .map(
+              (param) =>
+                `${getTeamName(param.seriesName)}: ${param.value - 500}`
+            )
+            .join("<br/>");
+        } else {
+          const teamName = getTeamName(params.seriesName);
+          return `${teamName}: ${params.value - 500}`;
+        }
+      },
     },
     grid: {
       left: "3%",
