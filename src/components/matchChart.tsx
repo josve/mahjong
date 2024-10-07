@@ -30,8 +30,7 @@ export default function MatchChart({
       ? `rgb(${teamColors[teamId].color_red}, ${teamColors[teamId].color_green}, ${teamColors[teamId].color_blue})`
       : 'black'; // Default color if no color is found
 
-    // Initialize scores with zero for round 1
-    const scores = [{ value: 0, name: { ROUND: 0, IS_WINNER: 0 } }, ...teamHands[teamId].map((round: any) => ({
+    const scores = teamHands[teamId].map((round: any) => ({
       value: round.SCORE + 500,
       name: round,
       itemStyle: {
@@ -40,7 +39,7 @@ export default function MatchChart({
         borderWidth: round.IS_WINNER ? 4 : undefined,
         fontWeight: 'bold', // Make the text bold
       },
-    }))];
+    }));
 
     const lastRound = teamHands[teamId][teamHands[teamId].length - 1];
 
