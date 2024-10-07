@@ -71,8 +71,9 @@ export default function MatchChart({
     radius: ['18%', '30%'], // Make the pie chart smaller
     center: ['20%', '25%'], // Move it slightly to the left
     data: pieData,
-    backgroundColor: 'rgba(0, 0, 0, 0.7)', // Transparent black
-    borderRadius: 10, // Rounded corners
+    tooltip: {
+      show: false,
+    },
     label: {
       show: false,
       position: 'inside',
