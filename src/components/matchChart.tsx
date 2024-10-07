@@ -25,6 +25,37 @@ export default function MatchChart({
 
   let series = [];
 
+  // Calculate the percentage of wins for each player
+  const winCounts = hands.reduce((acc: any, hand: any) => {
+    if (hand.IS_WINNER) {
+      acc[hand.TEAM_ID] = (acc[hand.TEAM_ID] || 0) + 1;
+    }
+    return acc;
+  }, {});
+
+  const totalWins = Object.values(winCounts).reduce((sum: number, count: number) => sum + count, 0);
+
+  const pieData = Object.keys(winCounts).map((teamId) => ({
+    value: winCounts[teamId],
+    name: getTeamName(teamId),
+    itemStyle: {
+      color: teamColors[teamId]
+        ? `rgb(${teamColors[teamId].color_red}, ${teamColors[teamId].color_green}, ${teamColors[teamId].color_blue})`
+        : 'transparent', // Use transparent if no color is found
+    },
+    height: 800, // Make the chart twice as high
+  }));
+
+  series.push({
+    type: 'pie',
+    radius: '30%',
+    center: ['15%', '20%'],
+    data: pieData,
+    label: {
+      formatter: '{b}: {d}%',
+    },
+  });
+
   for (const teamId in teamHands) {
     const color = teamColors[teamId]
       ? `rgb(${teamColors[teamId].color_red}, ${teamColors[teamId].color_green}, ${teamColors[teamId].color_blue})`
