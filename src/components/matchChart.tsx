@@ -2,7 +2,9 @@
 import React from "react";
 import ReactEcharts from "echarts-for-react";
 
-export default function MatchChart({
+import { getTeamIdToNameNoAlias } from "@/lib/dbMatch";
+
+export default async function MatchChart({
   hands,
   teamHands,
 }: {
@@ -11,6 +13,9 @@ export default function MatchChart({
 }) {
   // Initialize rounds starting from 1
   const rounds = Array.from({ length: 19 }, (_, i) => (i + 1).toString());
+
+  const teamIdToName = await getTeamIdToNameNoAlias();
+  const getTeamName = (teamId: string) => teamIdToName[teamId];
 
   let series = [];
 
@@ -42,7 +47,7 @@ export default function MatchChart({
         position: 'right',
         formatter: (params: any) => {
           if (params.dataIndex === scores.length - 1) {
-            return `${params.value} - ${teamId}`;
+            return `${params.value} - ${getTeamName(teamId)}`;
           }
           return '';
         },
