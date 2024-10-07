@@ -169,10 +169,11 @@ export default function MatchChart({
             const teamName = getTeamName(param.seriesName);
             if (teamName !== "Unknown Team") {
               const windHand = param.data.name.WIND;
+              const hand = param.data.name.HAND + 'pp';
               const handScore = param.data.name.HAND_SCORE;
               const isWinner = param.data.name.IS_WINNER;
               const mahjongText = isWinner ? " mahjong" : "";
-              return `${teamName}: ${param.value - 500} (${windHand} HANDp${mahjongText}, ${handScore})`;
+              return `${teamName}: ${param.value - 500} (${windHand} ${hand}${mahjongText}, ${handScore})`;
             }
             return null;
           })
