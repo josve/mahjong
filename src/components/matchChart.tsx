@@ -102,7 +102,7 @@ export default function MatchChart({
       type: "category",
       boundaryGap: false,
       data: rounds,
-      startValue: 1,
+      startValue: 0,
     },
     yAxis: {
       type: "value",
