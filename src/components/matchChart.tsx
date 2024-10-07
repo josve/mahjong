@@ -41,7 +41,7 @@ export default function MatchChart({
         show: true,
         position: 'right',
         formatter: `{c} - ${teamId}`,
-        color: lastRound ? lastRound.itemStyle.color : 'black',
+        color: lastRound && lastRound.itemStyle ? lastRound.itemStyle.color : 'black',
       },
     });
   }
