@@ -55,17 +55,19 @@ export default function RoundResultFormClient({ teamIdToName }: { teamIdToName: 
   };
   return (
     <Box component="form" onSubmit={handleSubmit} sx={{ mt: 3 }}>
-      {Object.entries(teamIdToName).map(([teamId, teamName]) => (
-        <TextField
-          key={teamId}
-          label={`${teamName} Score`}
-          type="number"
-          value={formData.scores[teamId]}
-          onChange={(e) => handleScoreChange(e, teamId)}
-          fullWidth
-          margin="normal"
-        />
-      ))}
+      <Box sx={{ display: 'flex', gap: 2, flexWrap: 'wrap' }}>
+        {Object.entries(teamIdToName).map(([teamId, teamName]) => (
+          <TextField
+            key={teamId}
+            label={`${teamName} Score`}
+            type="number"
+            value={formData.scores[teamId]}
+            onChange={(e) => handleScoreChange(e, teamId)}
+            margin="normal"
+            sx={{ flex: '1 1 200px' }}
+          />
+        ))}
+      </Box>
       <FormControl fullWidth margin="normal">
         <InputLabel>East Team</InputLabel>
         <Select
