@@ -40,7 +40,7 @@ export default async function Page({ params }: PageProps) {
       <h1 style={{ margin: 0 }}>{match.NAME}</h1>
       <h2 style={{ margin: 0 }}>{numRounds} omgångar</h2>
     </div>
-    <h3 style={{ color: "grey", fontSize: "smaller" }}>
+    <h3 style={{ color: "grey", fontSize: "smaller", textAlign: "left" }}>
       Datum {new Date(match.TIME).toLocaleDateString()}
     </h3>
     <div>
