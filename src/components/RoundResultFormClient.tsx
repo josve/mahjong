@@ -52,6 +52,7 @@ export default function RoundResultFormClient({ teamIdToName }: { teamIdToName: 
     );
     return formData.eastTeam !== "" && formData.winner !== "" && allScoresEntered;
   };
+  return (
     <form onSubmit={handleSubmit} style={{ marginTop: "20px" }}>
       {Object.entries(teamIdToName).map(([teamId, teamName]) => (
         <div key={teamId}>
