@@ -55,9 +55,8 @@ export default function MatchChart({
           const percentage = ((params.value / totalWins) * 100).toFixed(2);
           return `${teamName}: ${params.value} wins (${percentage}%)`;
         }
-      },
-    height: 800, // Make the chart twice as high
-  }));
+      }
+  }}));
 
   series.push({
     type: 'pie',
