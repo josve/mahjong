@@ -15,10 +15,11 @@ export default function MatchChart({
   const rounds = Array.from({ length: 19 }, (_, i) => (i + 1).toString());
 
   const getTeamName = (teamId: string) => {
-    if (!teamIdToName || !teamIdToName[teamId]) {
+    if (!teamIdToName) {
+      console.error("teamIdToName is undefined");
       return "Unknown Team";
     }
-    return teamIdToName[teamId];
+    return teamIdToName[teamId] || "Unknown Team";
   };
 
   let series = [];
