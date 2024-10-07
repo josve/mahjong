@@ -38,9 +38,14 @@ export default function MatchChart({
       symbol: 'circle',
       symbolSize: (value: any, params: any) => (params.data.name.IS_WINNER ? 10 : 0),
       label: {
-        show: (params: any) => params.dataIndex === scores.length - 1,
+        show: true,
         position: 'right',
-        formatter: `{c} - ${teamId}`,
+        formatter: (params: any) => {
+          if (params.dataIndex === scores.length - 1) {
+            return `${params.value} - ${teamId}`;
+          }
+          return '';
+        },
         color: lastRound && lastRound.itemStyle ? lastRound.itemStyle.color : 'black',
       },
     });
