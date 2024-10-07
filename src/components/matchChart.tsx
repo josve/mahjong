@@ -38,6 +38,7 @@ export default function MatchChart({
         color: round.IS_WINNER ? 'white' : undefined,
         borderColor: color, // Use line color
         borderWidth: round.IS_WINNER ? 4 : undefined,
+        fontWeight: 'bold', // Make the text bold
       },
     }))];
 
