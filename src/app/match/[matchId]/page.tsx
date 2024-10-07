@@ -35,7 +35,8 @@ export default async function Page({ params }: PageProps) {
   const numRounds = Math.floor(hands.length / 4 - 1);
 
   return (
-  <div style={{ backgroundColor: "rgb(250, 250, 250)", padding: "20px" }}>
+  <div style={{ backgroundColor: "rgb(250, 250, 250)" }}>
+    <div style={{ backgroundColor: "white", padding: "20px", boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)" }}>
     <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "20px" }}>
       <h1 style={{ margin: 0, color: "#943030", fontFamily: "HelveticaNeueLight, Helvetica, tahoma, arial", fontSize: "42px" }}>
         {match.NAME}
@@ -52,6 +53,7 @@ export default async function Page({ params }: PageProps) {
         teamIdToName={teamIdToName}
         teamColors={teamColors}
       />
+    </div>
     </div>
   </div>
   );
