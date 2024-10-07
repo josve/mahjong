@@ -48,8 +48,8 @@ export default function MatchChart({
 
   series.push({
     type: 'pie',
-    radius: ['21%', '35%'], // Reduce size by 30%
-    center: ['15%', '25%'], // Move 20px further down
+    radius: ['18%', '30%'], // Make the pie chart smaller
+    center: ['25%', '25%'], // Move it to the right
     data: pieData,
     label: {
       show: false, // Remove labels
