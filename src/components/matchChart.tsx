@@ -59,11 +59,12 @@ export default function MatchChart({
         position: 'right',
         formatter: (params: any) => {
           if (params.dataIndex === scores.length - 1) {
-            return `${params.value} - ${getTeamName(teamId)}`;
+            return `${params.value} ${getTeamName(teamId)}`;
           }
           return '';
         },
-        color: lastRound && lastRound.itemStyle ? lastRound.itemStyle.color : 'black',
+        color: color,
+        fontSize: 14, // Slightly larger font size
       },
     });
   }
