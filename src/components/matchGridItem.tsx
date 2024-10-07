@@ -34,10 +34,10 @@ export default async function MatchGridItem({ id }: { id: string }) {
       <div style={{ color: "#909090", textAlign: "left" }}>
         {new Date(time).toLocaleDateString()} ({timeString})
       </div>
-      <Link href={`/match/${id}`} style={{ fontSize: "20px", display: "block", margin: "5px 0", textAlign: "left", color: "#db5a4c" }}>
+      <Link href={`/match/${id}`} style={{ fontSize: "20px", display: "block", margin: "5px 0", textAlign: "left", color: "rgb(148, 48, 48)" }}>
         #{match.GAME_IDX}. {name}
       </Link>
-      <p style={{ margin: 0, color: "#db5a4c" }}>
+      <p style={{ margin: 0, color: "rgb(148, 48, 48)" }}>
         {numberOfRounds} omgångar, {getTeamName(match.TEAM_ID_1)}, {getTeamName(match.TEAM_ID_2)}, {getTeamName(match.TEAM_ID_3)}, {getTeamName(match.TEAM_ID_4)}
       </p>
     </div>
