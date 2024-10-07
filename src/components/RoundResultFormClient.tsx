@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 
-export default function RoundResultFormClient() {
+export default function RoundResultFormClient({ teamIdToName }: { teamIdToName: { [key: string]: string } }) {
   const [formData, setFormData] = useState({
     teamId: "",
     score: "",
@@ -30,10 +30,12 @@ export default function RoundResultFormClient() {
           Team ID:
           <select name="teamId" value={formData.teamId} onChange={handleChange}>
             <option value="">Select a team</option>
-            <option value="1">Team 1</option>
-            <option value="2">Team 2</option>
-            <option value="3">Team 3</option>
-            <option value="4">Team 4</option>
+            <option value="">Select a team</option>
+            {Object.entries(teamIdToName).map(([teamId, teamName]) => (
+              <option key={teamId} value={teamId}>
+                {teamName}
+              </option>
+            ))}
           </select>
         </label>
       </div>
