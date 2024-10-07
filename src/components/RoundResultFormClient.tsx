@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 import { TextField, Select, MenuItem, Button, FormControl, InputLabel, Box } from "@mui/material";
 
-export default function RoundResultFormClient({ teamIdToName }: { teamIdToName: { [key: string]: string } }) {
+export default function RoundResultFormClient({ teamIdToName, matchId }: { teamIdToName: { [key: string]: string }, matchId: string }) {
   const [formData, setFormData] = useState<{ [key: string]: any }>({
     scores: {},
     eastTeam: "",
@@ -49,7 +49,7 @@ export default function RoundResultFormClient({ teamIdToName }: { teamIdToName: 
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ ...formData, matchId: 'your-match-id' }), // Replace 'your-match-id' with the actual match ID
+      body: JSON.stringify({ ...formData, matchId }),
     })
       .then((response) => response.json())
       .then((data) => {

@@ -66,7 +66,7 @@ export default async function Page({ params }: PageProps) {
         teamColors={teamColors}
       />
     </div>
-    <RoundResultForm teamIdToName={relevantTeams} />
+    <RoundResultForm teamIdToName={relevantTeams} matchId={params.matchId} />
     </div>
   </div>
   );
