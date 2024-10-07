@@ -149,5 +149,5 @@ export default function MatchChart({
     series: series,
   };
 
-  return <ReactEcharts option={options} />;
+  return <ReactEcharts option={options} style={{ height: "600px" }} />;
 }
