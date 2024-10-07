@@ -178,17 +178,20 @@ export default function MatchChart({
         }
         return params
           .map((param) => {
-            const teamName = getTeamName(param.seriesName);
-            if (teamName !== "Unknown Team") {
-              const windHand = param.data.name.WIND;
-              const hand = param.data.name.HAND + 'p';
-              const handScore = param.data.name.HAND_SCORE;
-              const formattedHandScore = handScore > 0 ? `+${handScore}` : handScore;
-              const isWinner = param.data.name.IS_WINNER;
-              const mahjongText = isWinner ? " mahjong" : "";
-              return `${teamName}: ${param.value - 500} (${windHand} ${hand}${mahjongText}, ${formattedHandScore})`;
-            }
-            return null;
+              const teamName = getTeamName(param.seriesName);
+              if (teamName !== "Unknown Team") {
+                const windHand = param.data.name.WIND;
+                const hand = param.data.name.HAND + 'p';
+                const handScore = param.data.name.HAND_SCORE;
+                const formattedHandScore = handScore > 0 ? `+${handScore}` : handScore;
+                const isWinner = param.data.name.IS_WINNER;
+                const mahjongText = isWinner ? " mahjong" : "";
+                const color = teamColors[param.seriesName]
+                  ? `rgb(${teamColors[param.seriesName].color_red}, ${teamColors[param.seriesName].color_green}, ${teamColors[param.seriesName].color_blue})`
+                  : 'black';
+                return `<span style="display:inline-block;width:10px;height:10px;background-color:${color};margin-right:5px;"></span>${teamName}: ${param.value - 500} (${windHand} ${hand}${mahjongText}, ${formattedHandScore})`;
+              }
+              return null;
           })
           .filter((text) => text !== null)
           .join("<br/>");
