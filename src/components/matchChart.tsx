@@ -72,7 +72,14 @@ export default function MatchChart({
       },
     },
     label: {
-      show: false, // Remove labels
+      show: false,
+      position: 'inside',
+      emphasis: {
+        show: true,
+        formatter: '{b}: {c} ({d}%)',
+        fontSize: 12,
+        fontWeight: 'bold',
+      },
     },
   });
 
