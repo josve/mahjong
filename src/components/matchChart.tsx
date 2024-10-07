@@ -71,6 +71,8 @@ export default function MatchChart({
         return `${teamName}: ${params.value} wins (${percentage}%)`;
       },
     },
+    backgroundColor: 'rgba(0, 0, 0, 0.7)', // Transparent black
+    borderRadius: 10, // Rounded corners
     label: {
       show: false,
       position: 'inside',
