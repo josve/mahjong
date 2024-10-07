@@ -6,6 +6,7 @@ export default function MatchChart({
   hands,
   teamHands,
   teamIdToName,
+  teamColors,
 }: {
   hands: any[];
   teamHands: any[];
@@ -37,7 +38,15 @@ export default function MatchChart({
     }))];
 
     const lastRound = teamHands[teamId][teamHands[teamId].length - 1];
+    const color = teamColors[teamId]
+      ? `rgb(${teamColors[teamId].color_red}, ${teamColors[teamId].color_green}, ${teamColors[teamId].color_blue})`
+      : 'black'; // Default color if no color is found
+
     series.push({
+      lineStyle: {
+        color: color,
+        width: 6, // Make the line way thicker
+      },
       data: scores,
       type: "line",
       name: teamId,
