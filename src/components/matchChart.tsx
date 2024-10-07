@@ -26,6 +26,10 @@ export default function MatchChart({
   let series = [];
 
   for (const teamId in teamHands) {
+    const color = teamColors[teamId]
+      ? `rgb(${teamColors[teamId].color_red}, ${teamColors[teamId].color_green}, ${teamColors[teamId].color_blue})`
+      : 'black'; // Default color if no color is found
+
     // Initialize scores with zero for round 1
     const scores = [{ value: 0, name: { ROUND: 0, IS_WINNER: 0 } }, ...teamHands[teamId].map((round: any) => ({
       value: round.SCORE,
