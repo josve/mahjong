@@ -3,17 +3,40 @@
 import React, { useState } from "react";
 
 export default function RoundResultFormClient({ teamIdToName }: { teamIdToName: { [key: string]: string } }) {
-  const [formData, setFormData] = useState({
-    teamId: "",
-    score: "",
-    isWinner: false,
+  const [formData, setFormData] = useState<{ [key: string]: any }>({
+    scores: {},
+    eastTeam: "",
+    winner: "",
   });
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-    const { name, value, type, checked } = e.target;
+  // Initialize scores for each team
+  Object.keys(teamIdToName).forEach((teamId) => {
+    if (!formData.scores[teamId]) {
+      formData.scores[teamId] = "";
+    }
+  });
+
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) => {
+    const { name, value } = e.target;
     setFormData((prevData) => ({
       ...prevData,
-      [name]: type === "checkbox" ? checked : value,
+      [name]: value,
+    }));
+  };
+
+  const handleScoreChange = (
+    e: React.ChangeEvent<HTMLInputElement>,
+    teamId: string
+  ) => {
+    const { value } = e.target;
+    setFormData((prevData) => ({
+      ...prevData,
+      scores: {
+        ...prevData.scores,
+        [teamId]: value,
+      },
     }));
   };
 
@@ -25,12 +48,27 @@ export default function RoundResultFormClient({ teamIdToName }: { teamIdToName: 
 
   return (
     <form onSubmit={handleSubmit} style={{ marginTop: "20px" }}>
+      {Object.entries(teamIdToName).map(([teamId, teamName]) => (
+        <div key={teamId}>
+          <label>
+            {teamName} Score:
+            <input
+              type="number"
+              value={formData.scores[teamId]}
+              onChange={(e) => handleScoreChange(e, teamId)}
+            />
+          </label>
+        </div>
+      ))}
       <div>
         <label>
-          Team ID:
-          <select name="teamId" value={formData.teamId} onChange={handleChange}>
-            <option value="">Select a team</option>
-            <option value="">Select a team</option>
+          East Team:
+          <select
+            name="eastTeam"
+            value={formData.eastTeam}
+            onChange={handleChange}
+          >
+            <option value="">Select East Team</option>
             {Object.entries(teamIdToName).map(([teamId, teamName]) => (
               <option key={teamId} value={teamId}>
                 {teamName}
@@ -41,24 +79,20 @@ export default function RoundResultFormClient({ teamIdToName }: { teamIdToName: 
       </div>
       <div>
         <label>
-          Score:
-          <input
-            type="number"
-            name="score"
-            value={formData.score}
-            onChange={handleChange}
-          />
-        </label>
-      </div>
-      <div>
-        <label>
           Winner:
-          <input
-            type="checkbox"
-            name="isWinner"
-            checked={formData.isWinner}
+          <select
+            name="winner"
+            value={formData.winner}
             onChange={handleChange}
-          />
+          >
+            <option value="">Select Winner</option>
+            {Object.entries(teamIdToName).map(([teamId, teamName]) => (
+              <option key={teamId} value={teamId}>
+                {teamName}
+              </option>
+            ))}
+            <option value="none">No Winner</option>
+          </select>
         </label>
       </div>
       <button type="submit">Add Result</button>
