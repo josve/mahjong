@@ -22,14 +22,29 @@ export async function POST(req: NextRequest) {
 
     for (let i = 0; i < teamIds.length; i++) {
       const teamId = teamIds[i];
-      const score = scores[teamId];
+      let handScore = 0;
+      const hand = scores[teamId];
+
+      // Calculate the hand score based on the difference with other players
+      for (let j = 0; j < teamIds.length; j++) {
+        if (i !== j) {
+          const otherHand = scores[teamIds[j]];
+          const difference = hand - otherHand;
+          handScore += difference < 0 ? 0 : difference;
+        }
+      }
+
+      // Double the score if any player is the east team
+      if (teamId === eastTeam || teamIds.some(id => id === eastTeam)) {
+        handScore *= 2;
+      }
       const wind = windOrder[(i - eastIndex + 4) % 4];
 
-      console.log(`Inserting result for team ${teamId}: score=${score}, wind=${wind}, isWinner=${teamId === winner}`);
+      console.log(`Inserting result for team ${teamId}: handScore=${handScore}, wind=${wind}, isWinner=${teamId === winner}`);
 
       await connection.query(
         'INSERT INTO Hands (GAME_ID, TEAM_ID, HAND_SCORE, IS_WINNER, WIND, ROUND, TIME) VALUES (?, ?, ?, ?, ?, ?, ?)',
-        [matchId, teamId, score, teamId === winner, wind, newRound, new Date()]
+        [matchId, teamId, handScore, teamId === winner, wind, newRound, new Date()]
       );
     }
     console.log('Results added successfully');
