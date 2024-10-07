@@ -38,7 +38,7 @@ export default function MatchChart({
       symbol: 'circle',
       symbolSize: (value: any, params: any) => (params.data.name.IS_WINNER ? 10 : 0),
       label: {
-        show: true,
+        show: (params: any) => params.dataIndex === scores.length - 1,
         position: 'right',
         formatter: `{c} - ${teamId}`,
         color: lastRound && lastRound.itemStyle ? lastRound.itemStyle.color : 'black',
