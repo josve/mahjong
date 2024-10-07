@@ -33,7 +33,11 @@ export async function POST(req: NextRequest) {
           if (teamId === eastTeam || teamIds[j] === eastTeam) {
             difference *= 2;
           }
-          handScore += difference < 0 ? 0 : difference;
+          if (teamId === winner) {
+            handScore += difference < 0 ? 0 : difference;
+          } else {
+            handScore += difference;
+          }
         }
       }
       const wind = windOrder[(i - eastIndex + 4) % 4];
