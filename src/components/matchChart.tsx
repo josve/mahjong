@@ -49,7 +49,7 @@ export default function MatchChart({
   series.push({
     type: 'pie',
     radius: ['21%', '35%'], // Reduce size by 30%
-    center: ['15%', '20%'], // Adjust position to fit the screen
+    center: ['15%', '25%'], // Move 20px further down
     data: pieData,
     label: {
       show: false, // Remove labels
