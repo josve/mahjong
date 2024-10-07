@@ -30,17 +30,15 @@ export default async function MatchGridItem({ id }: { id: string }) {
   const getTeamName = (teamId: string) => teamIdToName[teamId];
 
   return (
-    <div style={{ border: "1px solid #ccc", padding: "10px", borderRadius: "5px", backgroundColor: "white", marginBottom: "20px", boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)" }}>
-      <div>
+    <div style={{ padding: "10px", backgroundColor: "white", marginBottom: "20px" }}>
+      <div style={{ color: "#909090" }}>
         {new Date(time).toLocaleDateString()} ({timeString})
       </div>
-      <Link href={`/match/${id}`}>
+      <Link href={`/match/${id}`} style={{ fontSize: "20px", display: "block", margin: "5px 0" }}>
         #{match.GAME_IDX}. {name}
       </Link>
-      <p>
-        {numberOfRounds} omgångar, {getTeamName(match.TEAM_ID_1)},{" "}
-        {getTeamName(match.TEAM_ID_2)}, {getTeamName(match.TEAM_ID_3)},{" "}
-        {getTeamName(match.TEAM_ID_4)}
+      <p style={{ margin: 0 }}>
+        {numberOfRounds} omgångar, {getTeamName(match.TEAM_ID_1)}, {getTeamName(match.TEAM_ID_2)}, {getTeamName(match.TEAM_ID_3)}, {getTeamName(match.TEAM_ID_4)}
       </p>
     </div>
   );
