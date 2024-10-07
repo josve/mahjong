@@ -24,6 +24,7 @@ export default function Header() {
                   marginLeft: "10px",
                   color: "white",
                   fontWeight: "bold",
+                  textAlign: "left"
                 }}
               >
                 <span style={{ fontWeight: "bold" }}>mahjong</span> master system 4.0

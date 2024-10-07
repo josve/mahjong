@@ -34,7 +34,7 @@ export default async function MatchGridItem({ id }: { id: string }) {
       <div style={{ color: "#909090" }}>
         {new Date(time).toLocaleDateString()} ({timeString})
       </div>
-      <Link href={`/match/${id}`} style={{ fontSize: "20px", display: "block", margin: "5px 0" }}>
+      <Link href={`/match/${id}`} style={{ fontSize: "20px", display: "block", margin: "5px 0", textAlign: "left" }}>
         #{match.GAME_IDX}. {name}
       </Link>
       <p style={{ margin: 0 }}>
