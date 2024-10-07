@@ -9,11 +9,17 @@ export default function MatchChart({
 }: {
   hands: any[];
   teamHands: any[];
+  teamIdToName: { [key: string]: string };
 }) {
   // Initialize rounds starting from 1
   const rounds = Array.from({ length: 19 }, (_, i) => (i + 1).toString());
 
-  const getTeamName = (teamId: string) => teamIdToName[teamId] || "Unknown Team";
+  const getTeamName = (teamId: string) => {
+    if (!teamIdToName || !teamIdToName[teamId]) {
+      return "Unknown Team";
+    }
+    return teamIdToName[teamId];
+  };
 
   let series = [];
 
