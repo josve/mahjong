@@ -9,22 +9,25 @@ export default function MatchChart({
   hands: any[];
   teamHands: any[];
 }) {
-  // Find all unique rounds and sort them
-  const rounds = Array.from(new Set(hands.map((hand) => hand.ROUND + 1))).sort(
-    (a, b) => Number(a) - Number(b)
-  );
-
-  // If less than 19 rounds add the missing rounds with null values to rounds.
-  if (rounds.length < 19) {
-    for (let i = rounds.length; i < 19; i++) {
-      rounds.push("");
-    }
-  }
+  // Initialize rounds starting from 1
+  const rounds = Array.from({ length: 19 }, (_, i) => (i + 1).toString());
 
   let series = [];
 
   for (const teamId in teamHands) {
+    // Initialize scores with zero for round 1
+    const scores = [{ value: 0, name: { ROUND: 0, IS_WINNER: 0 } }, ...teamHands[teamId].map((round: any) => ({
+      value: round.SCORE,
+      name: round,
+      itemStyle: {
+        color: round.IS_WINNER ? 'white' : undefined,
+        borderColor: round.IS_WINNER ? 'black' : undefined,
+        borderWidth: round.IS_WINNER ? 2 : undefined,
+      },
+    }))];
+
     series.push({
+      data: scores,
       data: teamHands[teamId].map((round: any) => ({
         value: round.SCORE,
         name: round,
