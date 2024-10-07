@@ -68,41 +68,43 @@ export default function RoundResultFormClient({ teamIdToName }: { teamIdToName: 
           />
         ))}
       </Box>
-      <FormControl fullWidth margin="normal">
-        <InputLabel>East Team</InputLabel>
-        <Select
-          name="eastTeam"
-          value={formData.eastTeam}
-          onChange={handleChange}
-        >
-          <MenuItem value="">
-            <em>Select East Team</em>
-          </MenuItem>
-          {Object.entries(teamIdToName).map(([teamId, teamName]) => (
-            <MenuItem key={teamId} value={teamId}>
-              {teamName}
+      <Box sx={{ display: 'flex', gap: 2, flexWrap: 'wrap' }}>
+        <FormControl fullWidth sx={{ flex: '1 1 200px' }} margin="normal">
+          <InputLabel>East Team</InputLabel>
+          <Select
+            name="eastTeam"
+            value={formData.eastTeam}
+            onChange={handleChange}
+          >
+            <MenuItem value="">
+              <em>Select East Team</em>
             </MenuItem>
-          ))}
-        </Select>
-      </FormControl>
-      <FormControl fullWidth margin="normal">
-        <InputLabel>Winner</InputLabel>
-        <Select
-          name="winner"
-          value={formData.winner}
-          onChange={handleChange}
-        >
-          <MenuItem value="">
-            <em>Select Winner</em>
-          </MenuItem>
-          {Object.entries(teamIdToName).map(([teamId, teamName]) => (
-            <MenuItem key={teamId} value={teamId}>
-              {teamName}
+            {Object.entries(teamIdToName).map(([teamId, teamName]) => (
+              <MenuItem key={teamId} value={teamId}>
+                {teamName}
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
+        <FormControl fullWidth sx={{ flex: '1 1 200px' }} margin="normal">
+          <InputLabel>Winner</InputLabel>
+          <Select
+            name="winner"
+            value={formData.winner}
+            onChange={handleChange}
+          >
+            <MenuItem value="">
+              <em>Select Winner</em>
             </MenuItem>
-          ))}
-          <MenuItem value="none">No Winner</MenuItem>
-        </Select>
-      </FormControl>
+            {Object.entries(teamIdToName).map(([teamId, teamName]) => (
+              <MenuItem key={teamId} value={teamId}>
+                {teamName}
+              </MenuItem>
+            ))}
+            <MenuItem value="none">No Winner</MenuItem>
+          </Select>
+        </FormControl>
+      </Box>
       <Button type="submit" variant="contained" color="primary" disabled={!isFormValid()}>
         Add Result
       </Button>
