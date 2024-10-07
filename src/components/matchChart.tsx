@@ -13,7 +13,7 @@ export default function MatchChart({
   // Initialize rounds starting from 1
   const rounds = Array.from({ length: 19 }, (_, i) => (i + 1).toString());
 
-  const getTeamName = (teamId: string) => teamIdToName[teamId];
+  const getTeamName = (teamId: string) => teamIdToName[teamId] || "Unknown Team";
 
   let series = [];
 
