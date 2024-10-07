@@ -171,9 +171,10 @@ export default function MatchChart({
               const windHand = param.data.name.WIND;
               const hand = param.data.name.HAND + 'p';
               const handScore = param.data.name.HAND_SCORE;
+              const formattedHandScore = handScore > 0 ? `+${handScore}` : handScore;
               const isWinner = param.data.name.IS_WINNER;
               const mahjongText = isWinner ? " mahjong" : "";
-              return `${teamName}: ${param.value - 500} (${windHand} ${hand}${mahjongText}, ${handScore})`;
+              return `${teamName}: ${param.value - 500} (${windHand} ${hand}${mahjongText}, ${formattedHandScore})`;
             }
             return null;
           })
