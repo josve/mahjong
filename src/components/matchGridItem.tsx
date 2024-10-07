@@ -30,9 +30,7 @@ export default async function MatchGridItem({ id }: { id: string }) {
   const getTeamName = (teamId: string) => teamIdToName[teamId];
 
   return (
-    <div
-      style={{ border: "1px solid #ccc", padding: "10px", borderRadius: "5px" }}
-    >
+    <div style={{ border: "1px solid #ccc", padding: "10px", borderRadius: "5px", backgroundColor: "rgb(250, 250, 250)", marginBottom: "20px" }}>
       <div>
         {new Date(time).toLocaleDateString()} ({timeString})
       </div>

@@ -35,9 +35,11 @@ export default async function Page({ params }: PageProps) {
   const numRounds = Math.floor(hands.length / 4 - 1);
 
   return (
-  <>
-    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-      <h1 style={{ margin: 0, color: "#943030", fontFamily: "HelveticaNeueLight, Helvetica, tahoma, arial", fontSize: "42px" }}>{match.NAME}</h1>
+  <div style={{ backgroundColor: "rgb(250, 250, 250)", padding: "20px" }}>
+    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "20px" }}>
+      <h1 style={{ margin: 0, color: "#943030", fontFamily: "HelveticaNeueLight, Helvetica, tahoma, arial", fontSize: "42px" }}>
+        {match.NAME}
+      </h1>
       <h2 style={{ margin: 0 }}>{numRounds} omgångar</h2>
     </div>
     <h3 style={{ color: "#909090", fontSize: "16px", textAlign: "left", fontFamily: "HelveticaNeueLight, Helvetica, tahoma, arial" }}>
@@ -51,6 +53,6 @@ export default async function Page({ params }: PageProps) {
         teamColors={teamColors}
       />
     </div>
-  </>
+  </div>
   );
 }
