@@ -63,6 +63,14 @@ export default function MatchChart({
     radius: ['18%', '30%'], // Make the pie chart smaller
     center: ['20%', '25%'], // Move it slightly to the left
     data: pieData,
+    tooltip: {
+      trigger: "item",
+      formatter: (params: any) => {
+        const teamName = getTeamName(params.name);
+        const percentage = ((params.value / totalWins) * 100).toFixed(2);
+        return `${teamName}: ${params.value} wins (${percentage}%)`;
+      },
+    },
     label: {
       show: false, // Remove labels
     },
