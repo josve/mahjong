@@ -161,20 +161,18 @@ export default function MatchChart({
     tooltip: {
       trigger: "axis",
       formatter: (params: any) => {
-        if (Array.isArray(params)) {
-          return params
-            .map((param) => {
-              const teamName = getTeamName(param.seriesName);
-              return teamName !== "Unknown Team"
-                ? `${teamName}: ${param.value - 500}`
-                : null;
-            })
-            .filter((text) => text !== null)
-            .join("<br/>");
-        } else {
-          const teamName = getTeamName(params.seriesName);
-          return `${teamName}: ${params.value - 500}`;
+        if (params.some((param: any) => param.seriesType === 'pie')) {
+          return ''; // Hide tooltip when hovering over pie chart
         }
+        return params
+          .map((param) => {
+            const teamName = getTeamName(param.seriesName);
+            return teamName !== "Unknown Team"
+              ? `${teamName}: ${param.value - 500}`
+              : null;
+          })
+          .filter((text) => text !== null)
+          .join("<br/>");
       },
     },
     grid: {
