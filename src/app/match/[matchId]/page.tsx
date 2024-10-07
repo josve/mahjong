@@ -11,6 +11,7 @@ export default async function Page({ params }: PageProps) {
   const match = await getMatchById(params.matchId);
   const hands = await getHandsByGameId(params.matchId);
   const teamIdToName = await getTeamIdToName();
+  const teamColors = await getTeamColors(); // Assuming you have a function to get team colors
 
   // Get the hands for each team
   const teamHands = hands.reduce((acc: any, hand: any) => {
@@ -43,6 +44,7 @@ export default async function Page({ params }: PageProps) {
           hands={hands}
           teamHands={teamHands}
           teamIdToName={teamIdToName}
+          teamColors={teamColors}
         />
       </div>
     </>
