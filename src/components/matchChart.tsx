@@ -86,6 +86,9 @@ export default function MatchChart({
         show: true, // Show horizontal grid lines
       },
     },
+    textStyle: {
+      align: 'left', // Align text to the left
+    },
     label: {
       show: false,
       position: 'inside',
