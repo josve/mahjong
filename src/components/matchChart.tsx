@@ -122,7 +122,7 @@ export default function MatchChart({
       name: teamId,
       lineStyle: {
         color: color,
-        width: 6, // Make the line way thicker
+        width: 12, // Make the line twice as thick
       },
       smooth: true, // Ensure smoothing is enabled
       symbol: 'circle',
