@@ -26,17 +26,9 @@ export default function MatchChart({
       },
     }))];
 
+    const lastRound = teamHands[teamId][teamHands[teamId].length - 1];
     series.push({
       data: scores,
-      data: teamHands[teamId].map((round: any) => ({
-        value: round.SCORE,
-        name: round,
-        itemStyle: {
-          color: round.WINNER ? 'white' : undefined,
-          borderColor: round.WINNER ? 'black' : undefined,
-          borderWidth: round.WINNER ? 2 : undefined,
-        },
-      })),
       type: "line",
       name: teamId,
       lineStyle: {
@@ -44,7 +36,13 @@ export default function MatchChart({
         smooth: true, // Enable smoothing
       },
       symbol: 'circle',
-      symbolSize: (value: any, params: any) => (params.data.name.WINNER ? 10 : 0),
+      symbolSize: (value: any, params: any) => (params.data.name.IS_WINNER ? 10 : 0),
+      label: {
+        show: true,
+        position: 'right',
+        formatter: `{c} - ${teamId}`,
+        color: lastRound ? lastRound.itemStyle.color : 'black',
+      },
     });
   }
 
