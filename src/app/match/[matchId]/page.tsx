@@ -37,10 +37,10 @@ export default async function Page({ params }: PageProps) {
   return (
   <>
     <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-      <h1 style={{ margin: 0 }}>{match.NAME}</h1>
+      <h1 style={{ margin: 0, color: "#943030", fontFamily: "HelveticaNeueLight, Helvetica, tahoma, arial", fontSize: "42px" }}>{match.NAME}</h1>
       <h2 style={{ margin: 0 }}>{numRounds} omgångar</h2>
     </div>
-    <h3 style={{ color: "grey", fontSize: "smaller", textAlign: "left" }}>
+    <h3 style={{ color: "#909090", fontSize: "16px", textAlign: "left", fontFamily: "HelveticaNeueLight, Helvetica, tahoma, arial" }}>
       Datum {new Date(match.TIME).toLocaleDateString()}
     </h3>
     <div>
