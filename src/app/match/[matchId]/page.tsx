@@ -12,6 +12,17 @@ export default async function Page({ params }: PageProps) {
   const match = await getMatchById(params.matchId);
   const hands = await getHandsByGameId(params.matchId);
   const teamIdToName = await getTeamIdToName();
+  const relevantTeamIds = [
+    match.TEAM_ID_1,
+    match.TEAM_ID_2,
+    match.TEAM_ID_3,
+    match.TEAM_ID_4,
+  ];
+  const relevantTeams = Object.fromEntries(
+    Object.entries(teamIdToName).filter(([teamId]) =>
+      relevantTeamIds.includes(teamId)
+    )
+  );
   const teamColors = await getTeamColors(); // Assuming you have a function to get team colors
 
   // Get the hands for each team
@@ -55,7 +66,7 @@ export default async function Page({ params }: PageProps) {
         teamColors={teamColors}
       />
     </div>
-    <RoundResultForm teamIdToName={teamIdToName} />
+    <RoundResultForm teamIdToName={relevantTeams} />
     </div>
   </div>
   );
