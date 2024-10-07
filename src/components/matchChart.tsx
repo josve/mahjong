@@ -42,7 +42,20 @@ export default function MatchChart({
       color: teamColors[teamId]
         ? `rgb(${teamColors[teamId].color_red}, ${teamColors[teamId].color_green}, ${teamColors[teamId].color_blue})`
         : 'transparent', // Use transparent if no color is found
-    },
+      formatter: (params: any) => {
+        if (Array.isArray(params)) {
+          return params
+            .map(
+              (param) =>
+                `${getTeamName(param.seriesName)}: ${param.value - 500}`
+            )
+            .join("<br/>");
+        } else {
+          const teamName = getTeamName(params.name);
+          const percentage = ((params.value / totalWins) * 100).toFixed(2);
+          return `${teamName}: ${params.value} wins (${percentage}%)`;
+        }
+      },
     height: 800, // Make the chart twice as high
   }));
 
