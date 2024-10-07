@@ -70,6 +70,8 @@ export default function MatchChart({
     });
   }
 
+  console.log("Series data:", series);
+
   const options = {
     title: {
       text: "Match Chart",
