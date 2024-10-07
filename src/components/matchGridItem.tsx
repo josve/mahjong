@@ -13,7 +13,7 @@ export default async function MatchGridItem({ id }: { id: string }) {
   const time = match.TIME;
 
   // generate a string with the time for the first and last rounds like (19:28-21:42)
-  const firstRound = hands.length > 1 ? hands[1].TIME : hands[0].TIME;
+  const firstRound = hands.length > 4 ? hands[4].TIME : hands[0].TIME;
   const lastRound = hands[hands.length - 1].TIME;
 
   // Find the number of rounds, this is the number of hands divided by 4
