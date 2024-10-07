@@ -73,6 +73,12 @@ export default function MatchChart({
     data: pieData,
     tooltip: {
       show: false,
+      splitLine: {
+        show: true, // Show vertical grid lines
+      },
+      splitLine: {
+        show: true, // Show horizontal grid lines
+      },
     },
     label: {
       show: false,
