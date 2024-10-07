@@ -35,18 +35,22 @@ export default async function Page({ params }: PageProps) {
   const numRounds = Math.floor(hands.length / 4 - 1);
 
   return (
-    <>
-      <h1>Match: {match.NAME}</h1>
-      <h2>Datum {new Date(match.TIME).toLocaleDateString()}</h2>
-      <h2>{numRounds} omgångar</h2>
-      <div>
-        <MatchChart
-          hands={hands}
-          teamHands={teamHands}
-          teamIdToName={teamIdToName}
-          teamColors={teamColors}
-        />
-      </div>
-    </>
+  <>
+    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+      <h1 style={{ margin: 0 }}>{match.NAME}</h1>
+      <h2 style={{ margin: 0 }}>{numRounds} omgångar</h2>
+    </div>
+    <h3 style={{ color: "grey", fontSize: "smaller" }}>
+      Datum {new Date(match.TIME).toLocaleDateString()}
+    </h3>
+    <div>
+      <MatchChart
+        hands={hands}
+        teamHands={teamHands}
+        teamIdToName={teamIdToName}
+        teamColors={teamColors}
+      />
+    </div>
+  </>
   );
 }
