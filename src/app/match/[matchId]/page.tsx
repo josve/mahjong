@@ -42,6 +42,7 @@ export default async function Page({ params }: PageProps) {
         <MatchChart
           hands={hands}
           teamHands={teamHands}
+          teamIdToName={teamIdToName}
         />
       </div>
     </>
