@@ -32,9 +32,9 @@ export default function MatchChart({
       type: "line",
       name: teamId,
       lineStyle: {
-        width: 3, // Thicker line
-        smooth: true, // Enable smoothing
+        width: 6, // Make the line way thicker
       },
+      smooth: true, // Ensure smoothing is enabled
       symbol: 'circle',
       symbolSize: (value: any, params: any) => (params.data.name.IS_WINNER ? 10 : 0),
       label: {
