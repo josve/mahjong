@@ -28,8 +28,8 @@ export async function POST(req: NextRequest) {
       console.log(`Inserting result for team ${teamId}: score=${score}, wind=${wind}, isWinner=${teamId === winner}`);
 
       await connection.query(
-        'INSERT INTO Hands (GAME_ID, TEAM_ID, HAND_SCORE, IS_WINNER, WIND, ROUND) VALUES (?, ?, ?, ?, ?, ?)',
-        [matchId, teamId, score, teamId === winner, wind, newRound]
+        'INSERT INTO Hands (GAME_ID, TEAM_ID, HAND_SCORE, IS_WINNER, WIND, ROUND, TIME) VALUES (?, ?, ?, ?, ?, ?, ?)',
+        [matchId, teamId, score, teamId === winner, wind, newRound, new Date()]
       );
     }
     console.log('Results added successfully');
