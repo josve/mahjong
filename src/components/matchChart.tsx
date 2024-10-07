@@ -122,11 +122,11 @@ export default function MatchChart({
       name: teamId,
       lineStyle: {
         color: color,
-        width: 12, // Make the line twice as thick
+        width: 8, // Adjust the line thickness
       },
       smooth: true, // Ensure smoothing is enabled
       symbol: 'circle',
-      symbolSize: (value: any, params: any) => (params.data.name.IS_WINNER ? 15 : 0),
+      symbolSize: (value: any, params: any) => (params.data.name.IS_WINNER ? 20 : 0), // Make the circles larger
       label: {
         show: true,
         position: 'right',
