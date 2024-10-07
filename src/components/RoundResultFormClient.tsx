@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
+import { TextField, Select, MenuItem, Button, FormControl, InputLabel, Box } from "@mui/material";
 
 export default function RoundResultFormClient({ teamIdToName }: { teamIdToName: { [key: string]: string } }) {
   const [formData, setFormData] = useState<{ [key: string]: any }>({
@@ -53,57 +54,56 @@ export default function RoundResultFormClient({ teamIdToName }: { teamIdToName: 
     return formData.eastTeam !== "" && formData.winner !== "" && allScoresEntered;
   };
   return (
-    <form onSubmit={handleSubmit} style={{ marginTop: "20px" }}>
+    <Box component="form" onSubmit={handleSubmit} sx={{ mt: 3 }}>
       {Object.entries(teamIdToName).map(([teamId, teamName]) => (
-        <div key={teamId}>
-          <label>
-            {teamName} Score:
-            <input
-              type="number"
-              value={formData.scores[teamId]}
-              onChange={(e) => handleScoreChange(e, teamId)}
-            />
-          </label>
-        </div>
+        <TextField
+          key={teamId}
+          label={`${teamName} Score`}
+          type="number"
+          value={formData.scores[teamId]}
+          onChange={(e) => handleScoreChange(e, teamId)}
+          fullWidth
+          margin="normal"
+        />
       ))}
-      <div>
-        <label>
-          East Team:
-          <select
-            name="eastTeam"
-            value={formData.eastTeam}
-            onChange={handleChange}
-          >
-            <option value="">Select East Team</option>
-            {Object.entries(teamIdToName).map(([teamId, teamName]) => (
-              <option key={teamId} value={teamId}>
-                {teamName}
-              </option>
-            ))}
-          </select>
-        </label>
-      </div>
-      <div>
-        <label>
-          Winner:
-          <select
-            name="winner"
-            value={formData.winner}
-            onChange={handleChange}
-          >
-            <option value="">Select Winner</option>
-            {Object.entries(teamIdToName).map(([teamId, teamName]) => (
-              <option key={teamId} value={teamId}>
-                {teamName}
-              </option>
-            ))}
-            <option value="none">No Winner</option>
-          </select>
-        </label>
-      </div>
-      <button type="submit" disabled={!isFormValid()}>
+      <FormControl fullWidth margin="normal">
+        <InputLabel>East Team</InputLabel>
+        <Select
+          name="eastTeam"
+          value={formData.eastTeam}
+          onChange={handleChange}
+        >
+          <MenuItem value="">
+            <em>Select East Team</em>
+          </MenuItem>
+          {Object.entries(teamIdToName).map(([teamId, teamName]) => (
+            <MenuItem key={teamId} value={teamId}>
+              {teamName}
+            </MenuItem>
+          ))}
+        </Select>
+      </FormControl>
+      <FormControl fullWidth margin="normal">
+        <InputLabel>Winner</InputLabel>
+        <Select
+          name="winner"
+          value={formData.winner}
+          onChange={handleChange}
+        >
+          <MenuItem value="">
+            <em>Select Winner</em>
+          </MenuItem>
+          {Object.entries(teamIdToName).map(([teamId, teamName]) => (
+            <MenuItem key={teamId} value={teamId}>
+              {teamName}
+            </MenuItem>
+          ))}
+          <MenuItem value="none">No Winner</MenuItem>
+        </Select>
+      </FormControl>
+      <Button type="submit" variant="contained" color="primary" disabled={!isFormValid()}>
         Add Result
-      </button>
-    </form>
+      </Button>
+    </Box>
   );
 }
