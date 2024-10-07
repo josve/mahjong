@@ -76,6 +76,9 @@ export default function MatchChart({
     lineStyle: {
       color: "gray",
       type: "dashed",
+      splitLine: {
+        show: true, // Show horizontal grid lines
+      },
     },
     yAxis: {
       type: "value",
