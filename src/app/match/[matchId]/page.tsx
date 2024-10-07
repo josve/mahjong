@@ -1,4 +1,4 @@
-import { getMatchById, getHandsByGameId, getTeamIdToName } from "@/lib/dbMatch";
+import { getMatchById, getHandsByGameId, getTeamIdToName, getTeamColors } from "@/lib/dbMatch";
 import MatchChart from "@/components/matchChart";
 
 interface PageProps {

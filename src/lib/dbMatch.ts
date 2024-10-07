@@ -15,6 +15,31 @@ export async function getMatchById(id: string): Promise<any> {
   }
 }
 
+export async function getTeamColors() {
+  const connection = await Connection.getInstance().getConnection();
+  try {
+    const [result] = await connection.query(
+      "SELECT Teams.TEAM_ID, AVG(Players.color_red) as color_red, AVG(Players.color_green) as color_green, AVG(Players.color_blue) as color_blue FROM Teams \
+      INNER JOIN Players ON Players.PLAYER_ID = Teams.PLAYER_ID \
+      GROUP BY Teams.TEAM_ID"
+    );
+
+    // Convert the result to an object with the team_id as the key and the color as the value
+    const teamColors = result.reduce((acc: any, row: any) => {
+      acc[row.TEAM_ID] = {
+        color_red: row.color_red,
+        color_green: row.color_green,
+        color_blue: row.color_blue,
+      };
+      return acc;
+    }, {});
+
+    return teamColors;
+  } finally {
+    connection.release();
+  }
+}
+
 export async function getHandsByGameId(id: string): Promise<any> {
   const connection = await Connection.getInstance().getConnection();
   try {
