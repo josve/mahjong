@@ -31,7 +31,7 @@ export default async function MatchGridItem({ id }: { id: string }) {
 
   return (
     <div style={{ padding: "10px", backgroundColor: "white", marginBottom: "20px" }}>
-      <div style={{ color: "#909090" }}>
+      <div style={{ color: "#909090", textAlign: "left" }}>
         {new Date(time).toLocaleDateString()} ({timeString})
       </div>
       <Link href={`/match/${id}`} style={{ fontSize: "20px", display: "block", margin: "5px 0", textAlign: "left" }}>
