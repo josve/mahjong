@@ -28,9 +28,20 @@ export default function MatchChart({
       data: teamHands[teamId].map((round: any) => ({
         value: round.SCORE,
         name: round,
+        itemStyle: {
+          color: round.WINNER ? 'white' : undefined,
+          borderColor: round.WINNER ? 'black' : undefined,
+          borderWidth: round.WINNER ? 2 : undefined,
+        },
       })),
       type: "line",
       name: teamId,
+      lineStyle: {
+        width: 3, // Thicker line
+        smooth: true, // Enable smoothing
+      },
+      symbol: 'circle',
+      symbolSize: (value: any, params: any) => (params.data.name.WINNER ? 10 : 0),
     });
   }
 
