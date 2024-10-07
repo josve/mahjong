@@ -21,7 +21,7 @@ export default function MatchChart({
       name: round,
       itemStyle: {
         color: round.IS_WINNER ? 'white' : undefined,
-        borderColor: round.IS_WINNER ? undefined : undefined, // Use line color
+        borderColor: round.IS_WINNER ? teamId : undefined, // Use line color
         borderWidth: round.IS_WINNER ? 2 : undefined,
       },
     }))];
