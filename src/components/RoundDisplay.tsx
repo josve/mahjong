@@ -21,6 +21,7 @@ const RoundDisplay: React.FC<RoundDisplayProps> = ({ round, hands, matchId, team
           teamIdToName={teamIdToName}
           isEditMode={true}
           round={round}
+          round={round}
         />
       )}
     </div>
