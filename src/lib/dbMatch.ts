@@ -72,6 +72,19 @@ export async function getTeamIdToNameNoAlias() {
     }, {});
 
     return teamIdToName;
+  }
+
+  export async function getPlayersForTeam(teamId: string): Promise<any[]> {
+    const connection = await Connection.getInstance().getConnection();
+    try {
+      const [players] = await connection.query(
+        "SELECT Players.NAME FROM Players INNER JOIN Teams ON Players.PLAYER_ID = Teams.PLAYER_ID WHERE Teams.TEAM_ID = ?",
+        [teamId]
+      );
+      return players;
+    } finally {
+      connection.release();
+    }
   } finally {
     connection.release();
   }
