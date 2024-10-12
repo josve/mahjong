@@ -48,7 +48,7 @@ export default function RoundResultFormClient({ teamIdToName, matchId, hands }: 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     // Handle form submission logic here
-    fetch('/api/addResult', {
+    fetch('/api/updateResult', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -87,7 +87,7 @@ export default function RoundResultFormClient({ teamIdToName, matchId, hands }: 
         ))}
       </Box>
       <Button type="submit" variant="contained" color="primary" disabled={!isFormValid()}>
-        Add Result
+        Ändra resultat
       </Button>
     </Box>
   );
