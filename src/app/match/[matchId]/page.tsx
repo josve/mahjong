@@ -1,5 +1,5 @@
 import { getMatchById, getHandsByGameId, getTeamIdToName, getTeamColors } from "@/lib/dbMatch";
-import RoundResultForm from "@/components/RoundResultForm";
+import RoundResultFormAdd from "@/components/RoundResultFormAdd";
 import MatchChart from "@/components/matchChart";
 
 interface PageProps {
@@ -66,7 +66,7 @@ export default async function Page({ params }: PageProps) {
         teamColors={teamColors}
       />
     </div>
-    <RoundResultForm teamIdToName={relevantTeams} matchId={params.matchId} />
+    <RoundResultFormAdd teamIdToName={relevantTeams} matchId={params.matchId} />
     <div style={{ marginTop: "20px" }}>
       <a href={`/match/${params.matchId}/edit`} style={{ color: "#943030", textDecoration: "none", fontWeight: "bold" }}>
         Korrigera resultat

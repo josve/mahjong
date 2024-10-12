@@ -1,6 +1,6 @@
 import React from "react";
 import { hello } from "./hello";
-import RoundResultFormClient from "./RoundResultFormClient";
+import RoundResultFormEdit from "./RoundResultFormEdit";
 
 interface RoundDisplayProps {
   round: string;
@@ -15,7 +15,7 @@ const RoundDisplay: React.FC<RoundDisplayProps> = ({ round, hands, matchId, team
       <h2>Round {round}</h2>
       <div>Current Value: {hands.map(hand => hand.HAND).join(', ')}</div>
       {round !== "0" && (
-        <RoundResultFormClient
+        <RoundResultFormEdit
           hands={hands}
           matchId={matchId}
           teamIdToName={teamIdToName}
