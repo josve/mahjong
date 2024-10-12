@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { TextField, Select, MenuItem, Button, FormControl, InputLabel, Box } from "@mui/material";
 
 export default function RoundResultFormClient({ teamIdToName, matchId, hands }: { teamIdToName: { [key: string]: string }, matchId: string, hands: any[] }) {
@@ -11,12 +11,18 @@ export default function RoundResultFormClient({ teamIdToName, matchId, hands }: 
     winner: "",
   });
 
-  // Initialize scores for each team
-  Object.keys(teamIdToName).forEach((teamId) => {
-    if (!formData.scores[teamId]) {
-      formData.scores[teamId] = "";
-    }
-  });
+  useEffect(() => {
+    // Initialize scores for each team
+    setFormData((prevData) => {
+      const initialScores = { ...prevData.scores };
+      Object.keys(teamIdToName).forEach((teamId) => {
+        if (!initialScores[teamId]) {
+          initialScores[teamId] = "";
+        }
+      });
+      return { ...prevData, scores: initialScores };
+    });
+  }, [teamIdToName]);
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
