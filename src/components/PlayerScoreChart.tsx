@@ -1,6 +1,6 @@
 "use client";
-import React, { useEffect, useState } from "react";
-import { getPlayersForTeam } from "@/lib/dbMatch"; // Assuming this function exists
+import React from "react";
+import { getPlayersForTeam } from "@/lib/dbMatch";
 import ReactEcharts from "echarts-for-react";
 
 interface PlayerScoreChartProps {
@@ -12,36 +12,30 @@ const PlayerScoreChart: React.FC<PlayerScoreChartProps> = ({
   matches,
   teamIdToName,
 }) => {
-  const [playerScores, setPlayerScores] = useState<{ [key: string]: number[] }>({});
+  const playerScores: { [key: string]: number[] } = {};
   const labels: string[] = [];
 
-  useEffect(() => {
-    const fetchPlayerScores = async () => {
-      const scores: { [key: string]: number[] } = {};
+  const fetchPlayerScores = async () => {
+    for (const [index, match] of matches.entries()) {
+      labels.push(`Game ${index + 1}`);
 
-      for (const [index, match] of matches.entries()) {
-        labels.push(`Game ${index + 1}`);
+      for (const hand of match.hands) {
+        const players = await getPlayersForTeam(hand.TEAM_ID);
+        const score = hand.HAND_SCORE / players.length;
 
-        for (const hand of match.hands) {
-          const players = await getPlayersForTeam(hand.TEAM_ID);
-          const score = hand.HAND_SCORE / players.length;
+        players.forEach((player: any) => {
+          if (!playerScores[player.NAME]) {
+            playerScores[player.NAME] = [];
+          }
 
-          players.forEach((player: any) => {
-            if (!scores[player.NAME]) {
-              scores[player.NAME] = [];
-            }
-
-            const previousScore = scores[player.NAME][index - 1] || 0;
-            scores[player.NAME][index] = previousScore + score;
-          });
-        }
+          const previousScore = playerScores[player.NAME][index - 1] || 0;
+          playerScores[player.NAME][index] = previousScore + score;
+        });
       }
+    }
+  };
 
-      setPlayerScores(scores);
-    };
-
-    fetchPlayerScores();
-  }, [matches]);
+  fetchPlayerScores();
 
   const series = Object.entries(playerScores).map(([player, scores]) => ({
     name: player,
