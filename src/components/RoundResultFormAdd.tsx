@@ -8,6 +8,8 @@ export default function RoundResultFormAdd({ teamIdToName, matchId }: { teamIdTo
   const router = useRouter();
   const [formData, setFormData] = useState<{ [key: string]: any }>({
     scores: {},
+    eastTeam: "",
+    winner: "",
   });
 
   const handleScoreChange = (
@@ -24,7 +26,19 @@ export default function RoundResultFormAdd({ teamIdToName, matchId }: { teamIdTo
     }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleEastTeamChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFormData((prevData) => ({
+      ...prevData,
+      eastTeam: e.target.value,
+    }));
+  };
+
+  const handleWinnerChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFormData((prevData) => ({
+      ...prevData,
+      winner: e.target.value,
+    }));
+  };
     e.preventDefault();
     fetch('/api/addResult', {
       method: 'POST',
@@ -47,7 +61,9 @@ export default function RoundResultFormAdd({ teamIdToName, matchId }: { teamIdTo
     const allScoresEntered = Object.values(formData.scores).every(
       (score) => score !== "" && score !== undefined && score !== null
     );
-    return allScoresEntered;
+    const eastTeamSelected = formData.eastTeam !== "";
+    const winnerSelected = formData.winner !== "";
+    return allScoresEntered && eastTeamSelected && winnerSelected;
   };
 
   return (
@@ -66,7 +82,43 @@ export default function RoundResultFormAdd({ teamIdToName, matchId }: { teamIdTo
           />
         ))}
       </Box>
-      <Button type="submit" variant="contained" color="primary" disabled={!isFormValid()}>
+      <Box sx={{ display: 'flex', gap: 2, flexWrap: 'wrap', marginTop: 2 }}>
+        <TextField
+          select
+          label="East Team"
+          value={formData.eastTeam}
+          onChange={handleEastTeamChange}
+          SelectProps={{
+            native: true,
+          }}
+          sx={{ flex: '1 1 200px' }}
+        >
+          <option value="">Select East Team</option>
+          {Object.entries(teamIdToName).map(([teamId, teamName]) => (
+            <option key={teamId} value={teamId}>
+              {teamName}
+            </option>
+          ))}
+        </TextField>
+        <TextField
+          select
+          label="Winner"
+          value={formData.winner}
+          onChange={handleWinnerChange}
+          SelectProps={{
+            native: true,
+          }}
+          sx={{ flex: '1 1 200px' }}
+        >
+          <option value="">Select Winner</option>
+          {Object.entries(teamIdToName).map(([teamId, teamName]) => (
+            <option key={teamId} value={teamId}>
+              {teamName}
+            </option>
+          ))}
+        </TextField>
+      </Box>
+      <Button type="submit" variant="contained" color="primary" disabled={!isFormValid()} sx={{ marginTop: 2 }}>
         Lägg till resultat
       </Button>
     </Box>
