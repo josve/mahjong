@@ -3,7 +3,8 @@
 import React, { useState } from "react";
 import { TextField, Select, MenuItem, Button, FormControl, InputLabel, Box } from "@mui/material";
 
-export default function RoundResultFormClient({ teamIdToName, matchId }: { teamIdToName: { [key: string]: string }, matchId: string }) {
+export default function RoundResultFormClient({ teamIdToName, matchId, hands }: { teamIdToName: { [key: string]: string }, matchId: string, hands: any[] }) {
+  console.log("RoundResultFormClient hands:", hands);
   const [formData, setFormData] = useState<{ [key: string]: any }>({
     scores: {},
     eastTeam: "",
