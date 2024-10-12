@@ -1,5 +1,5 @@
 import { getMatchById, getHandsByGameId, getTeamIdToName } from "@/lib/dbMatch";
-import RoundResultFormClient from "@/components/RoundResultFormClient";
+import RoundDisplay from "@/components/RoundDisplay";
 
 interface PageProps {
   params: {
@@ -38,15 +38,13 @@ export default async function EditPage({ params }: PageProps) {
         Korrigera resultat för {match.NAME}
       </h1>
       {Object.entries(rounds).map(([round, hands]: [string, any]) => (
-        <div key={round} style={{ marginBottom: "20px" }}>
-          <h2>Round {round}</h2>
-          <RoundResultFormClient
-            hands={hands}
-            matchId={params.matchId}
-            teamIdToName={relevantTeams}
-            isEditMode={true}
-          />
-        </div>
+        <RoundDisplay
+          key={round}
+          round={round}
+          hands={hands}
+          matchId={params.matchId}
+          teamIdToName={relevantTeams}
+        />
       ))}
   );
 }
