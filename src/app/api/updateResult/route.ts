@@ -11,13 +11,18 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   try {
     const connection = await Connection.getInstance().getConnection();
 
-    const [handDetails] = await connection.query(
-      "SELECT EAST_TEAM, WINNER FROM Hands WHERE MATCH_ID = ? AND ROUND = ? LIMIT 1",
+    const [eastTeamResult] = await connection.query(
+      "SELECT TEAM_ID as EAST_TEAM FROM Hands WHERE MATCH_ID = ? AND ROUND = ? AND WIND = 'E' LIMIT 1",
       [matchId, req.body.round]
     );
 
-    const eastTeam = handDetails[0]?.EAST_TEAM;
-    const winner = handDetails[0]?.WINNER;
+    const eastTeam = eastTeamResult[0]?.EAST_TEAM;
+
+    const [winnerResult] = await connection.query(
+      "SELECT WINNER FROM Hands WHERE MATCH_ID = ? AND ROUND = ? LIMIT 1",
+      [matchId, req.body.round]
+    );
+    const winner = winnerResult[0]?.WINNER;
 
     const teamIds = Object.keys(scores);
     const eastIndex = teamIds.indexOf(eastTeam);
