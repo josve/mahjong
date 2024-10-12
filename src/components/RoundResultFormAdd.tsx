@@ -66,13 +66,6 @@ export default function RoundResultFormAdd({ teamIdToName, matchId }: { teamIdTo
         console.error('Error:', error);
       });
   };
-    const allScoresEntered = Object.values(formData.scores).every(
-      (score) => score !== "" && score !== undefined && score !== null
-    );
-    const eastTeamSelected = formData.eastTeam !== "";
-    const winnerSelected = formData.winner !== "";
-    return allScoresEntered && eastTeamSelected && winnerSelected;
-  };
 
   return (
     <Box component="form" onSubmit={handleSubmit} sx={{ mt: 3 }}>
