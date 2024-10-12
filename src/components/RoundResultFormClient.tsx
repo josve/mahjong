@@ -47,7 +47,6 @@ export default function RoundResultFormClient({ teamIdToName, matchId, hands }: 
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // Handle form submission logic here
     fetch('/api/updateResult', {
       method: 'POST',
       headers: {
