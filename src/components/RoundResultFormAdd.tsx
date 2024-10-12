@@ -39,22 +39,13 @@ export default function RoundResultFormAdd({ teamIdToName, matchId }: { teamIdTo
       winner: e.target.value,
     }));
   };
-    e.preventDefault();
-    fetch('/api/addResult', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ ...formData, matchId }),
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        console.log('Success:', data);
-        router.push(`/match/${matchId}`);
-      }) 
-      .catch((error) => {
-        console.error('Error:', error);
-      });
+  const isFormValid = () => {
+    const allScoresEntered = Object.values(formData.scores).every(
+      (score) => score !== "" && score !== undefined && score !== null
+    );
+    const eastTeamSelected = formData.eastTeam !== "";
+    const winnerSelected = formData.winner !== "";
+    return allScoresEntered && eastTeamSelected && winnerSelected;
   };
 
   const handleSubmit = (e: React.FormEvent) => {
