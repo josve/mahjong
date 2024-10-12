@@ -10,8 +10,18 @@ export default async function fetchMatches(timeRange: string) {
       const currentYear = new Date().getFullYear();
       query += ` WHERE YEAR(TIME) = ${currentYear}`;
     }
-    const [result] = await connection.query(query);
-    return result;
+    const [games] = await connection.query(query);
+
+    // Fetch hands for each game
+    for (const game of games) {
+      const [hands] = await connection.query(
+        "SELECT * FROM Hands WHERE GAME_ID = ? ORDER BY ROUND ASC",
+        [game.GAME_ID]
+      );
+      game.hands = hands;
+    }
+
+    return games;
   } finally {
     connection.release();
   }
