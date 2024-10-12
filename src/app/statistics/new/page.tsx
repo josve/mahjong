@@ -1,4 +1,5 @@
 import React from "react";
+import StatisticsNav from "@/components/StatisticsNav";
 import fetchMatches from "@/lib/fetchMatches";
 
 export default async function NewStatisticsPage() {
@@ -6,6 +7,7 @@ export default async function NewStatisticsPage() {
 
   return (
     <div style={{ padding: "20px" }}>
+      <StatisticsNav />
       <h1 style={{ color: "#943030", fontFamily: "HelveticaNeueLight, Helvetica, tahoma, arial", fontSize: "42px" }}>
         Statistik - Ny tid
       </h1>
