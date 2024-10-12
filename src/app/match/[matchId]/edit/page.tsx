@@ -1,5 +1,5 @@
 import { getMatchById, getHandsByGameId, getTeamIdToName } from "@/lib/dbMatch";
-import RoundResultForm from "@/components/RoundResultForm";
+import RoundResultFormClient from "@/components/RoundResultFormClient";
 
 interface PageProps {
   params: {
@@ -24,7 +24,31 @@ export default async function EditPage({ params }: PageProps) {
     )
   );
 
+  const rounds = hands.reduce((acc: any, hand: any) => {
+    if (!acc[hand.ROUND]) {
+      acc[hand.ROUND] = [];
+    }
+    acc[hand.ROUND].push(hand);
+    return acc;
+  }, {});
+
   return (
+    <div style={{ backgroundColor: "rgb(250, 250, 250)", padding: "20px" }}>
+      <h1 style={{ color: "#943030", fontFamily: "HelveticaNeueLight, Helvetica, tahoma, arial", fontSize: "42px" }}>
+        Korrigera resultat för {match.NAME}
+      </h1>
+      {Object.entries(rounds).map(([round, hands]: [string, any]) => (
+        <div key={round} style={{ marginBottom: "20px" }}>
+          <h2>Round {round}</h2>
+          <RoundResultFormClient
+            hands={hands}
+            matchId={params.matchId}
+            teamIdToName={relevantTeams}
+            isEditMode={true}
+          />
+        </div>
+      ))}
+    </div>
     <div style={{ backgroundColor: "rgb(250, 250, 250)", padding: "20px" }}>
       <h1 style={{ color: "#943030", fontFamily: "HelveticaNeueLight, Helvetica, tahoma, arial", fontSize: "42px" }}>
         Korrigera resultat för {match.NAME}
