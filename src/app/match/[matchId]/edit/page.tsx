@@ -38,15 +38,17 @@ export default async function EditPage({ params }: PageProps) {
         Korrigera resultat för {match.NAME}
       </h1>
       {console.log("Rounds data:", rounds)}
-      {Object.entries(rounds).map(([round, hands]: [string, any]) => (
-        <RoundDisplay
-          key={round}
-          round={round}
-          hands={hands}
-          matchId={params.matchId}
-          teamIdToName={relevantTeams}
-        />
-      ))}
+      {Object.entries(rounds).map(([round, hands]: [string, any]) => 
+        round !== "0" && (
+          <RoundDisplay
+            key={round}
+            round={round}
+            hands={hands}
+            matchId={params.matchId}
+            teamIdToName={relevantTeams}
+          />
+        )
+      )}
       </div>
   );
 }
