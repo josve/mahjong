@@ -1,30 +1,28 @@
-import React, { useEffect } from "react";
+import React from "react";
 import TimeRangeSelector from "@/components/TimeRangeSelector";
 import Connection from "@/lib/connection";
 
-export default function StatisticsPage() {
-  const [timeRange, setTimeRange] = React.useState("ny tid");
-  const [matches, setMatches] = useState([]);
-
-  useEffect(() => {
-    async function fetchMatches() {
-      const connection = await Connection.getInstance().getConnection();
-      try {
-        let query = "SELECT * FROM Games";
-        if (timeRange === "ny tid") {
-          query += " WHERE TIME >= '2024-10-01'";
-        } else if (timeRange === "nuvarande år") {
-          const currentYear = new Date().getFullYear();
-          query += ` WHERE YEAR(TIME) = ${currentYear}`;
-        }
-        const [result] = await connection.query(query);
-        setMatches(result);
-      } finally {
-        connection.release();
-      }
+async function fetchMatches(timeRange: string) {
+  const connection = await Connection.getInstance().getConnection();
+  try {
+    let query = "SELECT * FROM Games";
+    if (timeRange === "ny tid") {
+      query += " WHERE TIME >= '2024-10-01'";
+    } else if (timeRange === "nuvarande år") {
+      const currentYear = new Date().getFullYear();
+      query += ` WHERE YEAR(TIME) = ${currentYear}`;
     }
-    fetchMatches();
-  }, [timeRange]);
+    const [result] = await connection.query(query);
+    return result;
+  } finally {
+    connection.release();
+  }
+}
+
+export default async function StatisticsPage() {
+  const [timeRange, setTimeRange] = React.useState("ny tid");
+  const matches = await fetchMatches(timeRange);
+  const [timeRange, setTimeRange] = React.useState("ny tid");
 
   return (
     <div style={{ padding: "20px" }}>
