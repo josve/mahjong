@@ -77,7 +77,7 @@ export default function RoundResultFormClient({ teamIdToName, matchId, hands, ro
             key={teamId}
             label={`${teamName} Score`}
             type="number"
-            value={formData.scores[teamId]}
+            value={formData.scores[teamId] || ""}
             onChange={(e) => handleScoreChange(e, teamId)}
             focused
             margin="normal"
