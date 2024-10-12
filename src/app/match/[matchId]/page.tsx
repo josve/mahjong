@@ -11,7 +11,7 @@ interface PageProps {
 export default async function Page({ params }: PageProps) {
   const match = await getMatchById(params.matchId);
   const hands = await getHandsByGameId(params.matchId);
-  const teamIdToName = await getTeamIdToName() || {};
+  const teamIdToName = (await getTeamIdToName()) || {};
   const relevantTeamIds = [
     match.TEAM_ID_1,
     match.TEAM_ID_2,
