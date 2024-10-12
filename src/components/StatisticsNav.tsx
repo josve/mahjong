@@ -15,17 +15,17 @@ const StatisticsNav: React.FC<StatisticsNavProps> = ({ currentPath }) => {
   return (
     <nav style={{ marginBottom: "20px" }}>
       {links.map((link) => (
-        <Link key={link.path} href={link.path} passHref>
-          <a
-            style={{
-              marginRight: "15px",
-              textDecoration: currentPath === link.path ? "underline" : "none",
-              fontWeight: currentPath === link.path ? "bold" : "normal",
-              color: currentPath === link.path ? "#943030" : "black",
-            }}
-          >
-            {link.label}
-          </a>
+        <Link
+          key={link.path}
+          href={link.path}
+          style={{
+            marginRight: "15px",
+            textDecoration: currentPath === link.path ? "underline" : "none",
+            fontWeight: currentPath === link.path ? "bold" : "normal",
+            color: currentPath === link.path ? "#943030" : "black",
+          }}
+        >
+          {link.label}
         </Link>
       ))}
     </nav>
