@@ -11,7 +11,13 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   try {
     const connection = await Connection.getInstance().getConnection();
 
-    const { eastTeam, winner } = req.body;
+    const [handDetails] = await connection.query(
+      "SELECT EAST_TEAM, WINNER FROM Hands WHERE MATCH_ID = ? AND ROUND = ? LIMIT 1",
+      [matchId, req.body.round]
+    );
+
+    const eastTeam = handDetails[0]?.EAST_TEAM;
+    const winner = handDetails[0]?.WINNER;
 
     const teamIds = Object.keys(scores);
     const eastIndex = teamIds.indexOf(eastTeam);
