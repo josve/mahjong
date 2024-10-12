@@ -12,16 +12,16 @@ export default function RoundResultFormClient({ teamIdToName, matchId, hands }: 
   });
 
   useEffect(() => {
-    // Initialize scores for each team
-    setFormData((prevData) => {
-      const initialScores = { ...prevData.scores };
-      Object.keys(teamIdToName).forEach((teamId) => {
-        if (!initialScores[teamId]) {
-          initialScores[teamId] = "";
-        }
-      });
-      return { ...prevData, scores: initialScores };
-    });
+    // Initialize scores for each team from hands data
+    const initialScores = hands.reduce((acc, hand) => {
+      acc[hand.TEAM_ID] = hand.value || "";
+      return acc;
+    }, {} as { [key: string]: string });
+
+    setFormData((prevData) => ({
+      ...prevData,
+      scores: initialScores,
+    }));
   }, [teamIdToName]);
 
   const handleChange = (
