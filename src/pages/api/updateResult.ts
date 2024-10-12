@@ -11,33 +11,35 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   try {
     const connection = await Connection.getInstance().getConnection();
 
-    // Fetch the east team and winner from the database
-    const [hands] = await connection.query(
-      "SELECT EAST_TEAM, WINNER FROM Hands WHERE MATCH_ID = ? AND ROUND = ?",
-      [matchId, req.body.round]
-    );
+    const { eastTeam, winner } = req.body;
 
-    // Calculate and update the hand_score for each team
-    await Promise.all(Object.entries(scores).map(async ([teamId, score]) => {
-      const handScore = calculateHandScore(score, hands[0].EAST_TEAM, hands[0].WINNER, teamId);
+    const teamIds = Object.keys(scores);
+    const eastIndex = teamIds.indexOf(eastTeam);
+
+    await Promise.all(teamIds.map(async (teamId, i) => {
+      let handScore = 0;
+      const hand = scores[teamId];
+
+      for (let j = 0; j < teamIds.length; j++) {
+        if (i !== j) {
+          const otherHand = scores[teamIds[j]];
+          let difference = hand - otherHand;
+          if (teamId === eastTeam || teamIds[j] === eastTeam) {
+            difference *= 2;
+          }
+          if (teamId === winner) {
+            handScore += difference < 0 ? 0 : difference;
+          } else {
+            handScore += difference;
+          }
+        }
+      }
+
       await connection.query(
         "UPDATE Hands SET HAND = ?, HAND_SCORE = ? WHERE MATCH_ID = ? AND ROUND = ? AND TEAM_ID = ?",
-        [score, handScore, matchId, req.body.round, teamId]
+        [hand, handScore, matchId, req.body.round, teamId]
       );
     }));
-
-    function calculateHandScore(score: number, eastTeam: string, winner: string, teamId: string): number {
-      // Implement the algorithm to calculate hand_score based on score, eastTeam, winner, and teamId
-      // This is a placeholder implementation, replace it with the actual logic
-      let handScore = score;
-      if (teamId === eastTeam) {
-        handScore += 10; // Example adjustment for east team
-      }
-      if (teamId === winner) {
-        handScore += 20; // Example adjustment for winner
-      }
-      return handScore;
-    }
 
     res.status(200).json({ message: 'Result updated successfully' });
   } catch (error) {
