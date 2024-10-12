@@ -24,6 +24,9 @@ export default async function EditPage({ params }: PageProps) {
     )
   );
 
+  const matchDate = new Date(match.TIME);
+  const isEditable = (new Date().getTime() - matchDate.getTime()) < 24 * 60 * 60 * 1000;
+
   const rounds = hands.reduce((acc: any, hand: any) => {
     if (!acc[hand.ROUND]) {
       acc[hand.ROUND] = [];
@@ -38,16 +41,20 @@ export default async function EditPage({ params }: PageProps) {
         Korrigera resultat för {match.NAME}
       </h1>
       {console.log("Rounds data:", rounds)}
-      {Object.entries(rounds).map(([round, hands]: [string, any]) => 
-        round !== "0" && (
-          <RoundDisplay
-            key={round}
-            round={round}
-            hands={hands}
-            matchId={params.matchId}
-            teamIdToName={relevantTeams}
-          />
+      {isEditable ? (
+        Object.entries(rounds).map(([round, hands]: [string, any]) => 
+          round !== "0" && (
+            <RoundDisplay
+              key={round}
+              round={round}
+              hands={hands}
+              matchId={params.matchId}
+              teamIdToName={relevantTeams}
+            />
+          )
         )
+      ) : (
+        <p style={{ color: "#943030", fontWeight: "bold" }}>Matchen är för gammal för att göra ändringar.</p>
       )}
       </div>
   );

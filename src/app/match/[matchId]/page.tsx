@@ -45,6 +45,8 @@ export default async function Page({ params }: PageProps) {
   console.log(teamHands);
 
   const numRounds = Math.floor(hands.length / 4 - 1);
+  const matchDate = new Date(match.TIME);
+  const isEditable = (new Date().getTime() - matchDate.getTime()) < 24 * 60 * 60 * 1000;
 
   return (
   <div style={{ backgroundColor: "rgb(250, 250, 250)" }}>
@@ -66,12 +68,18 @@ export default async function Page({ params }: PageProps) {
         teamColors={teamColors}
       />
     </div>
-    <RoundResultFormAdd teamIdToName={relevantTeams} matchId={params.matchId} />
-    <div style={{ marginTop: "20px" }}>
-      <a href={`/match/${params.matchId}/edit`} style={{ color: "#943030", textDecoration: "none", fontWeight: "bold" }}>
-        Korrigera resultat
-      </a>
-    </div>
+    {isEditable ? (
+      <>
+        <RoundResultFormAdd teamIdToName={relevantTeams} matchId={params.matchId} />
+        <div style={{ marginTop: "20px" }}>
+          <a href={`/match/${params.matchId}/edit`} style={{ color: "#943030", textDecoration: "none", fontWeight: "bold" }}>
+            Korrigera resultat
+          </a>
+        </div>
+      </>
+    ) : (
+      <p style={{ color: "#943030", fontWeight: "bold" }}>Matchen är för gammal för att göra ändringar.</p>
+    )}
     </div>
   </div>
   );
