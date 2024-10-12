@@ -15,19 +15,20 @@ const PlayerScoreChart: React.FC<PlayerScoreChartProps> = ({
   const labels: string[] = [];
 
   matches.forEach((match, index) => {
-    const gameId = match.GAME_ID;
     labels.push(`Game ${index + 1}`);
 
     match.hands.forEach((hand: any) => {
-      const teamName = teamIdToName[hand.TEAM_ID];
-      const score = hand.HAND_SCORE / (teamName.includes('+') ? 2 : 1);
+      const playerNames = teamIdToName[hand.TEAM_ID].split('+');
+      const score = hand.HAND_SCORE / playerNames.length;
 
-      if (!playerScores[teamName]) {
-        playerScores[teamName] = [];
-      }
+      playerNames.forEach((playerName: string) => {
+        if (!playerScores[playerName]) {
+          playerScores[playerName] = [];
+        }
 
-      const previousScore = playerScores[teamName][index - 1] || 0;
-      playerScores[teamName][index] = previousScore + score;
+        const previousScore = playerScores[playerName][index - 1] || 0;
+        playerScores[playerName][index] = previousScore + score;
+      });
     });
   });
 
