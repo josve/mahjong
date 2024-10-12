@@ -7,7 +7,7 @@ export default async function YearStatisticsPage() {
 
   return (
     <div style={{ padding: "20px" }}>
-      <StatisticsNav />
+      <StatisticsNav currentPath="/statistics/year" />
       <h1 style={{ color: "#943030", fontFamily: "HelveticaNeueLight, Helvetica, tahoma, arial", fontSize: "42px" }}>
         Statistik - Nuvarande år
       </h1>

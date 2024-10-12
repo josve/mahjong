@@ -1,9 +1,10 @@
 import React from "react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+interface StatisticsNavProps {
+  currentPath: string;
+}
 
-const StatisticsNav: React.FC = () => {
-  const pathname = usePathname();
+const StatisticsNav: React.FC<StatisticsNavProps> = ({ currentPath }) => {
 
   const links = [
     { path: "/statistics/all", label: "All tid" },
@@ -18,9 +19,9 @@ const StatisticsNav: React.FC = () => {
           <a
             style={{
               marginRight: "15px",
-              textDecoration: pathname === link.path ? "underline" : "none",
-              fontWeight: pathname === link.path ? "bold" : "normal",
-              color: pathname === link.path ? "#943030" : "black",
+              textDecoration: currentPath === link.path ? "underline" : "none",
+              fontWeight: currentPath === link.path ? "bold" : "normal",
+              color: currentPath === link.path ? "#943030" : "black",
             }}
           >
             {link.label}

@@ -7,7 +7,7 @@ export default async function NewStatisticsPage() {
 
   return (
     <div style={{ padding: "20px" }}>
-      <StatisticsNav />
+      <StatisticsNav currentPath="/statistics/new" />
       <h1 style={{ color: "#943030", fontFamily: "HelveticaNeueLight, Helvetica, tahoma, arial", fontSize: "42px" }}>
         Statistik - Ny tid
       </h1>

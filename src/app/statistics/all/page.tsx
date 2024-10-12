@@ -7,7 +7,7 @@ export default async function AllStatisticsPage() {
 
   return (
     <div style={{ padding: "20px" }}>
-      <StatisticsNav />
+      <StatisticsNav currentPath="/statistics/all" />
       <h1 style={{ color: "#943030", fontFamily: "HelveticaNeueLight, Helvetica, tahoma, arial", fontSize: "42px" }}>
         Statistik - All tid
       </h1>
