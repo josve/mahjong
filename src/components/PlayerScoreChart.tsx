@@ -1,15 +1,17 @@
 import React from "react";
-import { Line } from "react-chartjs-2";
-import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend } from 'chart.js';
-
-ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
+"use client";
+import React from "react";
+import ReactEcharts from "echarts-for-react";
 
 interface PlayerScoreChartProps {
   matches: any[];
   teamIdToName: { [key: string]: string };
 }
 
-const PlayerScoreChart: React.FC<PlayerScoreChartProps> = ({ matches, teamIdToName }) => {
+const PlayerScoreChart: React.FC<PlayerScoreChartProps> = ({
+  matches,
+  teamIdToName,
+}) => {
   const playerScores: { [key: string]: number[] } = {};
   const labels: string[] = [];
 
@@ -30,17 +32,44 @@ const PlayerScoreChart: React.FC<PlayerScoreChartProps> = ({ matches, teamIdToNa
     });
   });
 
-  const data = {
-    labels,
-    datasets: Object.entries(playerScores).map(([player, scores]) => ({
-      label: player,
-      data: scores,
-      fill: false,
-      borderColor: `#${Math.floor(Math.random()*16777215).toString(16)}`,
-    })),
+  const series = Object.entries(playerScores).map(([player, scores]) => ({
+    name: player,
+    type: "line",
+    data: scores,
+    smooth: true,
+    lineStyle: {
+      width: 2,
+    },
+  }));
+
+  const options = {
+    title: {
+      text: "Player Scores Over Games",
+    },
+    tooltip: {
+      trigger: "axis",
+    },
+    legend: {
+      data: Object.keys(playerScores),
+    },
+    grid: {
+      left: "3%",
+      right: "4%",
+      bottom: "3%",
+      containLabel: true,
+    },
+    xAxis: {
+      type: "category",
+      boundaryGap: false,
+      data: labels,
+    },
+    yAxis: {
+      type: "value",
+    },
+    series: series,
   };
 
-  return <Line data={data} />;
+  return <ReactEcharts option={options} style={{ height: "400px" }} />;
 };
 
 export default PlayerScoreChart;
