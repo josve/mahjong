@@ -83,6 +83,7 @@ export default function RoundResultFormClient({ teamIdToName, matchId, hands }: 
             type="number"
             value={formData.scores[teamId]}
             onChange={(e) => handleScoreChange(e, teamId)}
+            focused
             margin="normal"
             sx={{ flex: '1 1 200px' }}
           />
