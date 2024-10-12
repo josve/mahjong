@@ -13,7 +13,7 @@ const RoundDisplay: React.FC<RoundDisplayProps> = ({ round, hands, matchId, team
   return (
     <div style={{ marginBottom: "20px" }}>
       <h2>Round {parseInt(round) + 1}</h2>
-      <div>Current Value: {hands.map(hand => hand.value).join(', ')}</div>
+      <div>Current Value: {hands.map(hand => hand.HAND).join(', ')}</div>
       <RoundResultFormClient
         hands={hands}
         matchId={matchId}
