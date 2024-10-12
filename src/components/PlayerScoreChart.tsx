@@ -1,5 +1,6 @@
 "use client";
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { getPlayersForTeam } from "@/lib/dbMatch"; // Assuming this function exists
 import ReactEcharts from "echarts-for-react";
 
 interface PlayerScoreChartProps {
@@ -11,26 +12,36 @@ const PlayerScoreChart: React.FC<PlayerScoreChartProps> = ({
   matches,
   teamIdToName,
 }) => {
-  const playerScores: { [key: string]: number[] } = {};
+  const [playerScores, setPlayerScores] = useState<{ [key: string]: number[] }>({});
   const labels: string[] = [];
 
-  matches.forEach((match, index) => {
-    labels.push(`Game ${index + 1}`);
+  useEffect(() => {
+    const fetchPlayerScores = async () => {
+      const scores: { [key: string]: number[] } = {};
 
-    match.hands.forEach((hand: any) => {
-      const playerNames = teamIdToName[hand.TEAM_ID].split('+');
-      const score = hand.HAND_SCORE / playerNames.length;
+      for (const [index, match] of matches.entries()) {
+        labels.push(`Game ${index + 1}`);
 
-      playerNames.forEach((playerName: string) => {
-        if (!playerScores[playerName]) {
-          playerScores[playerName] = [];
+        for (const hand of match.hands) {
+          const players = await getPlayersForTeam(hand.TEAM_ID);
+          const score = hand.HAND_SCORE / players.length;
+
+          players.forEach((player: any) => {
+            if (!scores[player.NAME]) {
+              scores[player.NAME] = [];
+            }
+
+            const previousScore = scores[player.NAME][index - 1] || 0;
+            scores[player.NAME][index] = previousScore + score;
+          });
         }
+      }
 
-        const previousScore = playerScores[playerName][index - 1] || 0;
-        playerScores[playerName][index] = previousScore + score;
-      });
-    });
-  });
+      setPlayerScores(scores);
+    };
+
+    fetchPlayerScores();
+  }, [matches]);
 
   const series = Object.entries(playerScores).map(([player, scores]) => ({
     name: player,
