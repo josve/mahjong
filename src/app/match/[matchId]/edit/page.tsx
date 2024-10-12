@@ -46,5 +46,6 @@ export default async function EditPage({ params }: PageProps) {
           teamIdToName={relevantTeams}
         />
       ))}
+      </div>
   );
 }
