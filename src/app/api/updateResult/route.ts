@@ -3,7 +3,8 @@ import Connection from '@/lib/connection';
 
 export async function POST(req: NextRequest) {
 
-  const { matchId, scores } = req.body;
+  const body = await req.json();
+  const { matchId, scores, round } = body;
 
   try {
     const connection = await Connection.getInstance().getConnection();
