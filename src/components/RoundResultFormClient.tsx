@@ -66,7 +66,7 @@ export default function RoundResultFormClient({ teamIdToName, matchId, hands }: 
 
   const isFormValid = () => {
     const allScoresEntered = Object.values(formData.scores).every(
-      (score) => score !== ""
+      (score) => score !== "" && score !== undefined && score !== null
     );
     return allScoresEntered;
   };
