@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from "react";
-import { Select, MenuItem, FormControl, InputLabel } from "@mui/material";
+import React, { useEffect } from "react";
+import TimeRangeSelector from "@/components/TimeRangeSelector";
 import Connection from "@/lib/connection";
 
 export default function StatisticsPage() {
-  const [timeRange, setTimeRange] = useState("ny tid");
+  const [timeRange, setTimeRange] = React.useState("ny tid");
   const [matches, setMatches] = useState([]);
 
   useEffect(() => {
@@ -31,19 +31,7 @@ export default function StatisticsPage() {
       <h1 style={{ color: "#943030", fontFamily: "HelveticaNeueLight, Helvetica, tahoma, arial", fontSize: "42px" }}>
         Statistik
       </h1>
-      <FormControl variant="outlined" style={{ marginBottom: "20px", minWidth: 120 }}>
-        <InputLabel id="time-range-label">Tidsintervall</InputLabel>
-        <Select
-          labelId="time-range-label"
-          value={timeRange}
-          onChange={(e) => setTimeRange(e.target.value)}
-          label="Tidsintervall"
-        >
-          <MenuItem value="ny tid">Ny tid</MenuItem>
-          <MenuItem value="all tid">All tid</MenuItem>
-          <MenuItem value="nuvarande år">Nuvarande år</MenuItem>
-        </Select>
-      </FormControl>
+      <TimeRangeSelector timeRange={timeRange} setTimeRange={setTimeRange} />
       <div>
         {matches.length > 0 ? (
           matches.map((match) => (
