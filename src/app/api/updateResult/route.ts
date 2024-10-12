@@ -19,10 +19,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     const eastTeam = eastTeamResult[0]?.EAST_TEAM;
 
     const [winnerResult] = await connection.query(
-      "SELECT WINNER FROM Hands WHERE MATCH_ID = ? AND ROUND = ? LIMIT 1",
+      "SELECT TEAM_ID as WINNER FROM Hands WHERE MATCH_ID = ? AND ROUND = ? AND IS_WINNER = TRUE LIMIT 1",
       [matchId, req.body.round]
     );
-    const winner = winnerResult[0]?.WINNER;
+    const winner = winnerResult[0]?.WINNER || null;
 
     const teamIds = Object.keys(scores);
     const eastIndex = teamIds.indexOf(eastTeam);
