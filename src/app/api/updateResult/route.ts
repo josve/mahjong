@@ -10,14 +10,14 @@ export async function POST(req: NextRequest) {
     const connection = await Connection.getInstance().getConnection();
 
     const [eastTeamResult] = await connection.query(
-      "SELECT TEAM_ID as EAST_TEAM FROM Hands WHERE MATCH_ID = ? AND ROUND = ? AND WIND = 'E' LIMIT 1",
+      "SELECT TEAM_ID as EAST_TEAM FROM Hands WHERE GAME_ID = ? AND ROUND = ? AND WIND = 'E' LIMIT 1",
       [matchId, req.body.round]
     );
 
     const eastTeam = eastTeamResult[0]?.EAST_TEAM;
 
     const [winnerResult] = await connection.query(
-      "SELECT TEAM_ID as WINNER FROM Hands WHERE MATCH_ID = ? AND ROUND = ? AND IS_WINNER = TRUE LIMIT 1",
+      "SELECT TEAM_ID as WINNER FROM Hands WHERE GAME_ID = ? AND ROUND = ? AND IS_WINNER = TRUE LIMIT 1",
       [matchId, req.body.round]
     );
     const winner = winnerResult[0]?.WINNER || null;
@@ -45,7 +45,7 @@ export async function POST(req: NextRequest) {
       }
 
       await connection.query(
-        "UPDATE Hands SET HAND = ?, HAND_SCORE = ? WHERE MATCH_ID = ? AND ROUND = ? AND TEAM_ID = ?",
+        "UPDATE Hands SET HAND = ?, HAND_SCORE = ? WHERE GAME_ID = ? AND ROUND = ? AND TEAM_ID = ?",
         [hand, handScore, matchId, req.body.round, teamId]
       );
     }));
