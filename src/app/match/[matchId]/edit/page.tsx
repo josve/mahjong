@@ -22,7 +22,6 @@ export default async function EditPage({ params }: PageProps) {
     Object.entries(teamIdToName).filter(([teamId]) =>
       relevantTeamIds.includes(teamId)
     )
-    </div>
   );
 
   const rounds = hands.reduce((acc: any, hand: any) => {
