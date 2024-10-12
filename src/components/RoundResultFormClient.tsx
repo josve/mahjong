@@ -10,11 +10,6 @@ export default function RoundResultFormClient({ teamIdToName, matchId, hands }: 
   });
 
   useEffect(() => {
-    // Initialize scores for each team from hands data
-    const initialScores = hands.reduce((acc, hand) => {
-      acc[hand.TEAM_ID] = hand.HAND || "";
-      return acc;
-    }, {} as { [key: string]: string });
 
     setFormData((prevData) => ({
       ...prevData,
