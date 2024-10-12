@@ -67,6 +67,11 @@ export default async function Page({ params }: PageProps) {
       />
     </div>
     <RoundResultForm teamIdToName={relevantTeams} matchId={params.matchId} />
+    <div style={{ marginTop: "20px" }}>
+      <a href={`/match/${params.matchId}/edit`} style={{ color: "#943030", textDecoration: "none", fontWeight: "bold" }}>
+        Korrigera resultat
+      </a>
+    </div>
     </div>
   </div>
   );
