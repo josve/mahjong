@@ -2,9 +2,6 @@ import { NextRequest, NextResponse } from 'next/server';
 import Connection from '@/lib/connection';
 
 export async function POST(req: NextRequest) {
-  if (req.method !== 'POST') {
-    return res.status(405).json({ message: 'Method not allowed' });
-  }
 
   const { matchId, scores } = req.body;
 
@@ -52,9 +49,9 @@ export async function POST(req: NextRequest) {
       );
     }));
 
-    res.status(200).json({ message: 'Result updated successfully' });
+    return NextResponse.json({ message: 'Result updated successfully' }, { status: 200 });
   } catch (error) {
     console.error('Error updating result:', error);
-    res.status(500).json({ message: 'Internal server error' });
+    return NextResponse.json({ message: 'Internal server error' }, { status: 500 });
   }
 }
