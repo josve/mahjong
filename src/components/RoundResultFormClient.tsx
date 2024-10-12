@@ -2,9 +2,10 @@
 
 import React, { useState, useEffect } from "react";
 import { TextField, Select, MenuItem, Button, FormControl, InputLabel, Box } from "@mui/material";
+import { useRouter } from 'next/navigation';
 
 export default function RoundResultFormClient({ teamIdToName, matchId, hands, round }: { teamIdToName: { [key: string]: string }, matchId: string, hands: any[], round: string }) {
-  console.log("RoundResultFormClient hands:", hands);
+  const router = useRouter();
   const [formData, setFormData] = useState<{ [key: string]: any }>({
     scores: {},
   });
@@ -57,7 +58,8 @@ export default function RoundResultFormClient({ teamIdToName, matchId, hands, ro
       .then((response) => response.json())
       .then((data) => {
         console.log('Success:', data);
-      })
+        router.push(`/match/${matchId}`);
+      }) 
       .catch((error) => {
         console.error('Error:', error);
       });
