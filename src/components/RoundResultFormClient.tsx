@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from "react";
 import { TextField, Select, MenuItem, Button, FormControl, InputLabel, Box } from "@mui/material";
 
-export default function RoundResultFormClient({ teamIdToName, matchId, hands }: { teamIdToName: { [key: string]: string }, matchId: string, hands: any[] }) {
+export default function RoundResultFormClient({ teamIdToName, matchId, hands, round }: { teamIdToName: { [key: string]: string }, matchId: string, hands: any[], round: string }) {
   console.log("RoundResultFormClient hands:", hands);
   const [formData, setFormData] = useState<{ [key: string]: any }>({
     scores: {},
@@ -52,7 +52,7 @@ export default function RoundResultFormClient({ teamIdToName, matchId, hands }: 
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ ...formData, matchId }),
+      body: JSON.stringify({ ...formData, matchId, round }),
     })
       .then((response) => response.json())
       .then((data) => {
