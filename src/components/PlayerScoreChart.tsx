@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { getPlayersForTeam } from "@/lib/dbMatch";
 import ReactEcharts from "echarts-for-react";
 
@@ -12,30 +12,38 @@ const PlayerScoreChart: React.FC<PlayerScoreChartProps> = ({
   matches,
   teamIdToName,
 }) => {
-  const playerScores: { [key: string]: number[] } = {};
-  const labels: string[] = [];
+  const [playerScores, setPlayerScores] = useState<{ [key: string]: number[] }>({});
+  const [labels, setLabels] = useState<string[]>([]);
 
-  const fetchPlayerScores = async () => {
-    for (const [index, match] of matches.entries()) {
-      labels.push(`Game ${index + 1}`);
+  useEffect(() => {
+    const fetchPlayerScores = async () => {
+      const scores: { [key: string]: number[] } = {};
+      const newLabels: string[] = [];
 
-      for (const hand of match.hands) {
-        const players = await getPlayersForTeam(hand.TEAM_ID);
-        const score = hand.HAND_SCORE / players.length;
+      for (const [index, match] of matches.entries()) {
+        newLabels.push(`Game ${index + 1}`);
 
-        players.forEach((player: any) => {
-          if (!playerScores[player.NAME]) {
-            playerScores[player.NAME] = [];
-          }
+        for (const hand of match.hands) {
+          const players = await getPlayersForTeam(hand.TEAM_ID);
+          const score = hand.HAND_SCORE / players.length;
 
-          const previousScore = playerScores[player.NAME][index - 1] || 0;
-          playerScores[player.NAME][index] = previousScore + score;
-        });
+          players.forEach((player: any) => {
+            if (!scores[player.NAME]) {
+              scores[player.NAME] = [];
+            }
+
+            const previousScore = scores[player.NAME][index - 1] || 0;
+            scores[player.NAME][index] = previousScore + score;
+          });
+        }
       }
-    }
-  };
 
-  fetchPlayerScores();
+      setPlayerScores(scores);
+      setLabels(newLabels);
+    };
+
+    fetchPlayerScores();
+  }, [matches]);
 
   const series = Object.entries(playerScores).map(([player, scores]) => ({
     name: player,
