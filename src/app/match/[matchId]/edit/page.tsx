@@ -37,6 +37,7 @@ export default async function EditPage({ params }: PageProps) {
       <h1 style={{ color: "#943030", fontFamily: "HelveticaNeueLight, Helvetica, tahoma, arial", fontSize: "42px" }}>
         Korrigera resultat för {match.NAME}
       </h1>
+      {console.log("Rounds data:", rounds)}
       {Object.entries(rounds).map(([round, hands]: [string, any]) => (
         <RoundDisplay
           key={round}
