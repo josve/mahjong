@@ -5,7 +5,7 @@ export default async function fetchMatches(timeRange: string) {
   try {
     let query = "SELECT * FROM Games";
     if (timeRange === "ny tid") {
-      query += " WHERE TIME >= '2024-10-01'";
+      query += " WHERE TIME >= '2014-10-01'";
     } else if (timeRange === "nuvarande år") {
       const currentYear = new Date().getFullYear();
       query += ` WHERE YEAR(TIME) = ${currentYear}`;
