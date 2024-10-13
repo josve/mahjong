@@ -13,39 +13,24 @@ const PlayerScoreChart: React.FC<PlayerScoreChartProps> = ({ matches, teamIdToNa
   const { playerScores, labels } = useMemo(() => {
     const scores: { [key: string]: number[] } = {};
     const labels: string[] = [];
-    const playersSet = new Set(allPlayers);
 
-    // Initialize scores for all players from matches
-    matches.forEach((match, index) => {
-      labels.push(`Game ${index + 1}`);
-      match.hands.forEach((hand: any) => {
-        const playerIds = teamIdToPlayerIds[hand.TEAM_ID] || [];
-        playerIds.forEach((playerId: string) => {
-          const player = allPlayers.find(p => p === playerId) || '';
-          if (!scores[player]) {
-            scores[player] = new Array(matches.length).fill(0);
-            playersSet.add(player);
-          }
-        });
-      });
-    });
-
-    // Add any remaining players from allPlayers
-    playersSet.forEach(player => {
-      if (!scores[player]) {
-        scores[player] = new Array(matches.length).fill(0);
-      }
+    // Initialize scores for all players
+    allPlayers.forEach(player => {
+      scores[player] = new Array(matches.length).fill(0);
     });
 
     // Calculate scores
     matches.forEach((match, index) => {
+      labels.push(`Game ${index + 1}`);
       match.hands.forEach((hand: any) => {
         const playerIds = teamIdToPlayerIds[hand.TEAM_ID] || [];
         const scorePerPlayer = hand.HAND_SCORE / playerIds.length;
 
         playerIds.forEach((playerId: string) => {
-          const player = allPlayers.find(p => p === playerId) || '';
-          scores[player][index] += scorePerPlayer;
+          const player = allPlayers.find(p => p === playerId);
+          if (player) {
+            scores[player][index] += scorePerPlayer;
+          }
         });
       });
     });
