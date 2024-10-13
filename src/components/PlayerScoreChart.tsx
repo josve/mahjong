@@ -1,6 +1,5 @@
 "use client";
-import React, { useState, useEffect } from "react";
-import { getPlayersForTeam } from "@/lib/dbMatch";
+import React, { useMemo } from "react";
 import ReactEcharts from "echarts-for-react";
 
 interface PlayerScoreChartProps {
@@ -8,42 +7,37 @@ interface PlayerScoreChartProps {
   teamIdToName: { [key: string]: string };
 }
 
-const PlayerScoreChart: React.FC<PlayerScoreChartProps> = ({
-  matches,
-  teamIdToName,
-}) => {
-  const [playerScores, setPlayerScores] = useState<{ [key: string]: number[] }>({});
-  const [labels, setLabels] = useState<string[]>([]);
+const PlayerScoreChart: React.FC<PlayerScoreChartProps> = ({ matches, teamIdToName }) => {
+  const { playerScores, labels } = useMemo(() => {
+    const scores: { [key: string]: number[] } = {};
+    const labels: string[] = [];
 
-  useEffect(() => {
-    const fetchPlayerScores = async () => {
-      const scores: { [key: string]: number[] } = {};
-      const newLabels: string[] = [];
+    matches.forEach((match, index) => {
+      labels.push(`Game ${index + 1}`);
 
-      for (const [index, match] of matches.entries()) {
-        newLabels.push(`Game ${index + 1}`);
+      match.hands.forEach((hand: any) => {
+        const teamName = teamIdToName[hand.TEAM_ID];
+        const players = teamName.split('+');
+        const scorePerPlayer = hand.HAND_SCORE / players.length;
 
-        for (const hand of match.hands) {
-          const players = await getPlayersForTeam(hand.TEAM_ID);
-          const score = hand.HAND_SCORE / players.length;
+        players.forEach((player: string) => {
+          if (!scores[player]) {
+            scores[player] = new Array(matches.length).fill(0);
+          }
+          scores[player][index] += scorePerPlayer;
+        });
+      });
+    });
 
-          players.forEach((player: any) => {
-            if (!scores[player.NAME]) {
-              scores[player.NAME] = [];
-            }
-
-            const previousScore = scores[player.NAME][index - 1] || 0;
-            scores[player.NAME][index] = previousScore + score;
-          });
-        }
+    // Calculate cumulative scores
+    Object.keys(scores).forEach((player) => {
+      for (let i = 1; i < scores[player].length; i++) {
+        scores[player][i] += scores[player][i - 1];
       }
+    });
 
-      setPlayerScores(scores);
-      setLabels(newLabels);
-    };
-
-    fetchPlayerScores();
-  }, [matches]);
+    return { playerScores: scores, labels };
+  }, [matches, teamIdToName]);
 
   const series = Object.entries(playerScores).map(([player, scores]) => ({
     name: player,
