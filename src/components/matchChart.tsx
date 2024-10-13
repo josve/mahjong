@@ -11,6 +11,7 @@ export default function MatchChart({
   hands: any[];
   teamHands: any[];
   teamIdToName: { [key: string]: string };
+  teamColors: any;
 }) {
   // Initialize rounds starting from 1
   const rounds = Array.from({ length: 19 }, (_, i) => (i + 1).toString());
@@ -33,7 +34,7 @@ export default function MatchChart({
     return acc;
   }, {});
 
-  const totalWins = Object.values(winCounts).reduce((sum: number, count: number) => sum + count, 0);
+  const totalWins: any = Object.values(winCounts).reduce((sum: any, count: any) => sum + count, 0);
 
   const pieData = Object.keys(winCounts).map((teamId) => ({
     value: winCounts[teamId],
@@ -73,15 +74,6 @@ export default function MatchChart({
     data: pieData,
     tooltip: {
       show: false,
-      splitLine: {
-        show: true, // Show vertical grid lines
-      },
-      splitLine: {
-        show: true, // Show horizontal grid lines
-      },
-      splitLine: {
-        show: true, // Show vertical grid lines
-      },
       splitLine: {
         show: true, // Show horizontal grid lines
       },
@@ -177,7 +169,7 @@ export default function MatchChart({
           return ''; // Hide tooltip when hovering over pie chart
         }
         return params
-          .map((param) => {
+          .map((param: any) => {
               const teamName = getTeamName(param.seriesName);
               if (teamName !== "Unknown Team") {
                 const windHand = param.data.name.WIND;
@@ -193,7 +185,7 @@ export default function MatchChart({
               }
               return null;
           })
-          .filter((text) => text !== null)
+          .filter((text: any) => text !== null)
           .join("<br/>");
       },
     },

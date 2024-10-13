@@ -23,7 +23,7 @@ export default function RoundResultFormEdit({ teamIdToName, matchId, hands, roun
   }, [teamIdToName]);
 
   const handleScoreChange = (
-    e: React.ChangeEvent<HTMLInputElement>,
+    e: any,
     teamId: string
   ) => {
     const { value } = e.target;
@@ -36,7 +36,7 @@ export default function RoundResultFormEdit({ teamIdToName, matchId, hands, roun
     }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = (e: any) => {
     e.preventDefault();
     fetch('/api/updateResult', {
       method: 'POST',

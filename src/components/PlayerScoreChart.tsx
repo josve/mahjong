@@ -3,7 +3,7 @@ import React, { useMemo } from "react";
 import ReactEcharts from "echarts-for-react";
 
 interface PlayerScoreChartProps {
-  matches: any[];
+  matches: any;
   teamIdToName: { [key: string]: string };
   allPlayers: { id: string; name: string }[];
   teamIdToPlayerIds: { [key: string]: string[] };

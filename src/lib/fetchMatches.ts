@@ -13,7 +13,7 @@ export default async function fetchMatches(timeRange: string) {
     // For "all tid", we don't need to add any additional conditions
     query += " ORDER BY TIME ASC";
     
-    const [games] = await connection.query(query);
+    const [games]: any = await connection.query(query);
 
     // Fetch hands for each game
     for (const game of games) {

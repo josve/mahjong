@@ -13,7 +13,7 @@ export default function RoundResultFormAdd({ teamIdToName, matchId }: { teamIdTo
   });
 
   const handleScoreChange = (
-    e: React.ChangeEvent<HTMLInputElement>,
+    e: any,
     teamId: string
   ) => {
     const { value } = e.target;
@@ -26,14 +26,14 @@ export default function RoundResultFormAdd({ teamIdToName, matchId }: { teamIdTo
     }));
   };
 
-  const handleEastTeamChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleEastTeamChange = (e: any) => {
     setFormData((prevData) => ({
       ...prevData,
       eastTeam: e.target.value,
     }));
   };
 
-  const handleWinnerChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleWinnerChange = (e: any) => {
     setFormData((prevData) => ({
       ...prevData,
       winner: e.target.value,

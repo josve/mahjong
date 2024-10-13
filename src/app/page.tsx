@@ -41,7 +41,7 @@ export default async function Home() {
               </button>
             </Link>
           </div>
-          <TotalStatisticsRow style={{ textAlign: "left" }} />
+          <TotalStatisticsRow/>
           <div
             style={{
               display: "grid",

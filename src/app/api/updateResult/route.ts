@@ -9,14 +9,14 @@ export async function POST(req: NextRequest) {
   try {
     const connection = await Connection.getInstance().getConnection();
 
-    const [eastTeamResult] = await connection.query(
+    const [eastTeamResult]: any = await connection.query(
       "SELECT TEAM_ID as EAST_TEAM FROM Hands WHERE GAME_ID = ? AND ROUND = ? AND WIND = 'E' LIMIT 1",
       [matchId, round]
     );
 
     const eastTeam = eastTeamResult[0]?.EAST_TEAM;
 
-    const [winnerResult] = await connection.query(
+    const [winnerResult]: any = await connection.query(
       "SELECT TEAM_ID as WINNER FROM Hands WHERE GAME_ID = ? AND ROUND = ? AND IS_WINNER = TRUE LIMIT 1",
       [matchId, round]
     );

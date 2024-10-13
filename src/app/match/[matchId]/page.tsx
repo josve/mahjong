@@ -18,7 +18,7 @@ export default async function Page({ params }: PageProps) {
     match.TEAM_ID_3,
     match.TEAM_ID_4,
   ];
-  const relevantTeams = Object.fromEntries(
+  const relevantTeams: any = Object.fromEntries(
     Object.entries(teamIdToName).filter(([teamId]) =>
       relevantTeamIds.includes(teamId)
     )

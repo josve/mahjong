@@ -5,7 +5,7 @@ import Connection from "@/lib/connection";
 export async function getMatchById(id: string): Promise<any> {
   const connection = await Connection.getInstance().getConnection();
   try {
-    const [rows] = await connection.query(
+    const [rows]: any = await connection.query(
       "SELECT *, (SELECT COUNT(*) From Games g where g.TIME < Games.TIME AND g.IS_TEST = 0) as GAME_IDX FROM Games WHERE GAME_ID = ? AND IS_TEST = 0",
       [id]
     );
@@ -18,7 +18,7 @@ export async function getMatchById(id: string): Promise<any> {
 export async function getTeamColors() {
   const connection = await Connection.getInstance().getConnection();
   try {
-    const [result] = await connection.query(
+    const [result]: any = await connection.query(
       "SELECT Teams.TEAM_ID, AVG(Players.color_red) as color_red, AVG(Players.color_green) as color_green, AVG(Players.color_blue) as color_blue FROM Teams \
       INNER JOIN Players ON Players.PLAYER_ID = Teams.PLAYER_ID \
       GROUP BY Teams.TEAM_ID"
@@ -43,7 +43,7 @@ export async function getTeamColors() {
 export async function getHandsByGameId(id: string): Promise<any> {
   const connection = await Connection.getInstance().getConnection();
   try {
-    const [hands] = await connection.query(
+    const [hands]: any = await connection.query(
       "SELECT * FROM Hands WHERE GAME_ID = ? ORDER BY ROUND ASC",
       [id]
     );
@@ -56,7 +56,7 @@ export async function getHandsByGameId(id: string): Promise<any> {
 export async function getTeamIdToNameNoAlias() {
   const connection = await Connection.getInstance().getConnection();
   try {
-    const [result] = await connection.query(
+    const [result]: any = await connection.query(
       "SELECT COALESCE(GROUP_CONCAT(Players.NAME order by Players.NAME separator '+')) as NAME, Teams.TEAM_ID from Teams \
      INNER JOIN \
      Players \
@@ -81,7 +81,7 @@ export async function getTeamIdToNameNoAlias() {
   export async function getPlayersForTeam(teamId: string): Promise<any[]> {
     const connection = await Connection.getInstance().getConnection();
     try {
-      const [players] = await connection.query(
+      const [players]: any = await connection.query(
         "SELECT Players.NAME FROM Players INNER JOIN Teams ON Players.PLAYER_ID = Teams.PLAYER_ID WHERE Teams.TEAM_ID = ?",
         [teamId]
       );
@@ -94,7 +94,7 @@ export async function getTeamIdToNameNoAlias() {
 export async function getTeamIdToName() {
   const connection = await Connection.getInstance().getConnection();
   try {
-    const [result] = await connection.query(
+    const [result]: any = await connection.query(
       "SELECT COALESCE(MAX(TeamAttributes.`VALUE`), GROUP_CONCAT(Players.NAME order by Players.NAME separator '+')) as NAME, Teams.TEAM_ID from Teams \
    LEFT OUTER JOIN \
    TeamAttributes \
@@ -124,7 +124,7 @@ export async function getTeamIdToName() {
 export async function getAllPlayers(): Promise<{ id: string; name: string }[]> {
   const connection = await Connection.getInstance().getConnection();
   try {
-    const [result] = await connection.query(
+    const [result]: any = await connection.query(
       "SELECT DISTINCT Players.PLAYER_ID, Players.NAME FROM Players"
     );
     return result.map((row: any) => ({ id: row.PLAYER_ID, name: row.NAME }));
@@ -136,7 +136,7 @@ export async function getAllPlayers(): Promise<{ id: string; name: string }[]> {
 export async function getTeamIdToPlayerIds(): Promise<{ [key: string]: string[] }> {
   const connection = await Connection.getInstance().getConnection();
   try {
-    const [result] = await connection.query(
+    const [result]: any = await connection.query(
       "SELECT Teams.TEAM_ID, Players.PLAYER_ID FROM Teams INNER JOIN Players ON Teams.PLAYER_ID = Players.PLAYER_ID"
     );
     const teamIdToPlayerIds: { [key: string]: string[] } = {};
@@ -155,7 +155,7 @@ export async function getTeamIdToPlayerIds(): Promise<{ [key: string]: string[] 
 export async function getTeamDetails(): Promise<{ [key: string]: { playerIds: string[], teamName: string, concatenatedName: string } }> {
   const connection = await Connection.getInstance().getConnection();
   try {
-    const [result] = await connection.query(`
+    const [result]: any = await connection.query(`
       SELECT 
         Teams.TEAM_ID,
         GROUP_CONCAT(Players.PLAYER_ID) as player_ids,

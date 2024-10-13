@@ -18,7 +18,7 @@ export default async function EditPage({ params }: PageProps) {
     match.TEAM_ID_3,
     match.TEAM_ID_4,
   ];
-  const relevantTeams = Object.fromEntries(
+  const relevantTeams: any = Object.fromEntries(
     Object.entries(teamIdToName).filter(([teamId]) =>
       relevantTeamIds.includes(teamId)
     )
@@ -40,7 +40,6 @@ export default async function EditPage({ params }: PageProps) {
       <h1 style={{ color: "#943030", fontFamily: "HelveticaNeueLight, Helvetica, tahoma, arial", fontSize: "42px" }}>
         Korrigera resultat för {match.NAME}
       </h1>
-      {console.log("Rounds data:", rounds)}
       {isEditable ? (
         Object.entries(rounds).map(([round, hands]: [string, any]) => 
           round !== "0" && (

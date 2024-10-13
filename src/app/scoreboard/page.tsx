@@ -1,6 +1,6 @@
 import React from "react";
 
-const tableStyle = {
+const tableStyle: any = {
   borderCollapse: "collapse",
   width: "100%",
   maxWidth: "600px",
@@ -8,19 +8,19 @@ const tableStyle = {
   boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
 };
 
-const thStyle = {
+const thStyle: any = {
   backgroundColor: "#943030",
   color: "white",
   padding: "12px",
   textAlign: "left",
 };
 
-const tdStyle = {
+const tdStyle: any = {
   border: "1px solid #ddd",
   padding: "12px",
 };
 
-const listStyle = {
+const listStyle: any = {
   backgroundColor: "#f9f9f9",
   borderRadius: "8px",
   padding: "20px",

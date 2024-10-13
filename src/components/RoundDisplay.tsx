@@ -1,5 +1,4 @@
 import React from "react";
-import { hello } from "./hello";
 import RoundResultFormEdit from "./RoundResultFormEdit";
 
 interface RoundDisplayProps {
@@ -19,8 +18,6 @@ const RoundDisplay: React.FC<RoundDisplayProps> = ({ round, hands, matchId, team
           hands={hands}
           matchId={matchId}
           teamIdToName={teamIdToName}
-          isEditMode={true}
-          round={round}
           round={round}
         />
       )}

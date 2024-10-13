@@ -3,7 +3,7 @@ import Connection from "@/lib/connection";
 async function getTotalStatistics() {
   const connection = await Connection.getInstance().getConnection();
   try {
-    const [result] = await connection.query(`
+    const [result]: any = await connection.query(`
       SELECT 
         COUNT(DISTINCT Games.GAME_ID) as totalMatches,
         SUM(CASE WHEN IS_WINNER = 1 THEN 1 ELSE 0 END) as totalMahjongs,
