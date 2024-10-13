@@ -19,12 +19,22 @@ const PlayerScoreChart: React.FC<PlayerScoreChartProps> = ({ matches, teamIdToNa
 
     // Initialize scores for all players
     allPlayers.forEach(player => {
-      scores[player.name] = new Array(matches.length).fill(0);
+      scores[player.name] = [];
     });
 
+    // Sort matches by date
+    const sortedMatches = [...matches].sort((a, b) => new Date(a.TIME).getTime() - new Date(b.TIME).getTime());
+
     // Calculate scores
-    matches.forEach((match, index) => {
-      labels.push(`Game ${index + 1}`);
+    sortedMatches.forEach((match) => {
+      const matchDate = new Date(match.TIME).toLocaleDateString();
+      labels.push(matchDate);
+
+      // Initialize scores for this match
+      allPlayers.forEach(player => {
+        scores[player.name].push(scores[player.name].length > 0 ? scores[player.name][scores[player.name].length - 1] : 0);
+      });
+
       match.hands.forEach((hand: any) => {
         const playerIds = teamIdToPlayerIds[hand.TEAM_ID] || [];
         const scorePerPlayer = hand.HAND_SCORE / playerIds.length;
@@ -32,17 +42,10 @@ const PlayerScoreChart: React.FC<PlayerScoreChartProps> = ({ matches, teamIdToNa
         playerIds.forEach((playerId: string) => {
           const player = allPlayers.find(p => p.id === playerId);
           if (player) {
-            scores[player.name][index] += scorePerPlayer;
+            scores[player.name][scores[player.name].length - 1] += scorePerPlayer;
           }
         });
       });
-    });
-
-    // Calculate cumulative scores
-    Object.keys(scores).forEach((playerName) => {
-      for (let i = 1; i < scores[playerName].length; i++) {
-        scores[playerName][i] += scores[playerName][i - 1];
-      }
     });
 
     return { playerScores: scores, labels };
