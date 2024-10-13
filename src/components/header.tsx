@@ -67,17 +67,6 @@ export default function Header() {
               poängtabell
             </Typography>
           </Link>
-          <Link
-            href="/match/new"
-            passHref
-          >
-            <Typography
-              variant="body1"
-              style={{ color: "white", cursor: "pointer" }}
-            >
-              ny match
-            </Typography>
-          </Link>
         </Box>
       </Toolbar>
     </AppBar>
