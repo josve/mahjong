@@ -50,9 +50,19 @@ export default function NewMatchPage() {
   };
 
   const getFilteredTeams = (index: number) => {
-    return teams.filter(team => 
-      !selectedTeams.some((selectedTeam, i) => i !== index && selectedTeam?.id === team.id)
-    );
+    return teams.filter(team => {
+      // Check if this team is already selected
+      const isTeamSelected = selectedTeams.some((selectedTeam, i) => i !== index && selectedTeam?.id === team.id);
+      
+      // Check if any player from this team is already selected in another team
+      const isPlayerSelected = team.playerIds.some(playerId => 
+        selectedTeams.some((selectedTeam, i) => 
+          i !== index && selectedTeam?.playerIds.includes(playerId)
+        )
+      );
+
+      return !isTeamSelected && !isPlayerSelected;
+    });
   };
 
   return (
