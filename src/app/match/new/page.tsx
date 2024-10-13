@@ -1,12 +1,14 @@
 "use client";
 
 import React, { useState, useEffect } from 'react';
-import { Autocomplete, TextField, Button, Box, Typography, Container } from '@mui/material';
+import { Autocomplete, TextField, Button, Box, Typography, Container, Chip } from '@mui/material';
 import { useRouter } from 'next/navigation';
 
 interface Team {
   id: string;
   name: string;
+  concatenatedName: string;
+  playerIds: string[];
 }
 
 export default function NewMatchPage() {
@@ -59,9 +61,28 @@ export default function NewMatchPage() {
               key={index}
               options={teams}
               getOptionLabel={(option) => option.name}
+              renderOption={(props, option) => (
+                <li {...props}>
+                  <Box>
+                    <Typography variant="body1">{option.name}</Typography>
+                    <Typography variant="body2" color="text.secondary">
+                      {option.concatenatedName}
+                    </Typography>
+                  </Box>
+                </li>
+              )}
               value={team}
               onChange={(_, newValue) => handleTeamChange(index, newValue)}
               renderInput={(params) => <TextField {...params} fullWidth label={`Lag ${index + 1}`} margin="normal" />}
+              renderTags={(value, getTagProps) =>
+                value.map((option, index) => (
+                  <Chip
+                    label={option.name}
+                    {...getTagProps({ index })}
+                    key={option.id}
+                  />
+                ))
+              }
             />
           ))}
           <Button
