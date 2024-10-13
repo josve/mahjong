@@ -5,21 +5,16 @@ import ReactEcharts from "echarts-for-react";
 interface PlayerScoreChartProps {
   matches: any[];
   teamIdToName: { [key: string]: string };
+  allPlayers: string[];
 }
 
-const PlayerScoreChart: React.FC<PlayerScoreChartProps> = ({ matches, teamIdToName }) => {
+const PlayerScoreChart: React.FC<PlayerScoreChartProps> = ({ matches, teamIdToName, allPlayers }) => {
   const { playerScores, labels } = useMemo(() => {
     const scores: { [key: string]: number[] } = {};
     const labels: string[] = [];
-    const playerSet = new Set<string>();
-
-    // First, collect all unique players
-    Object.values(teamIdToName).forEach(teamName => {
-      teamName.split('+').forEach(player => playerSet.add(player.trim()));
-    });
 
     // Initialize scores for all players
-    playerSet.forEach(player => {
+    allPlayers.forEach(player => {
       scores[player] = new Array(matches.length).fill(0);
     });
 
@@ -45,7 +40,7 @@ const PlayerScoreChart: React.FC<PlayerScoreChartProps> = ({ matches, teamIdToNa
     });
 
     return { playerScores: scores, labels };
-  }, [matches, teamIdToName]);
+  }, [matches, teamIdToName, allPlayers]);
 
   const series = Object.entries(playerScores).map(([player, scores]) => ({
     name: player,

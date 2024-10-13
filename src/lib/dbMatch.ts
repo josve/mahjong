@@ -120,3 +120,15 @@ export async function getTeamIdToName() {
     connection.release();
   }
 }
+
+export async function getAllPlayers(): Promise<string[]> {
+  const connection = await Connection.getInstance().getConnection();
+  try {
+    const [result] = await connection.query(
+      "SELECT DISTINCT Players.NAME FROM Players"
+    );
+    return result.map((row: any) => row.NAME);
+  } finally {
+    connection.release();
+  }
+}
