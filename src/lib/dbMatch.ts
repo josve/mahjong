@@ -151,3 +151,33 @@ export async function getTeamIdToPlayerIds(): Promise<{ [key: string]: string[] 
     connection.release();
   }
 }
+
+export async function getTeamDetails(): Promise<{ [key: string]: { playerIds: string[], teamName: string, concatenatedName: string } }> {
+  const connection = await Connection.getInstance().getConnection();
+  try {
+    const [result] = await connection.query(`
+      SELECT 
+        Teams.TEAM_ID,
+        GROUP_CONCAT(Players.PLAYER_ID) as player_ids,
+        COALESCE(MAX(TeamAttributes.VALUE), GROUP_CONCAT(Players.NAME ORDER BY Players.NAME SEPARATOR '+')) as team_name,
+        GROUP_CONCAT(Players.NAME ORDER BY Players.NAME SEPARATOR '+') as concatenated_name
+      FROM Teams
+      INNER JOIN Players ON Teams.PLAYER_ID = Players.PLAYER_ID
+      LEFT OUTER JOIN TeamAttributes ON TeamAttributes.TEAM_ID = Teams.TEAM_ID AND TeamAttributes.ATTRIBUTE = 'alias'
+      GROUP BY Teams.TEAM_ID
+    `);
+
+    const teamDetails: { [key: string]: { playerIds: string[], teamName: string, concatenatedName: string } } = {};
+    result.forEach((row: any) => {
+      teamDetails[row.TEAM_ID] = {
+        playerIds: row.player_ids.split(','),
+        teamName: row.team_name,
+        concatenatedName: row.concatenated_name
+      };
+    });
+
+    return teamDetails;
+  } finally {
+    connection.release();
+  }
+}
