@@ -14,6 +14,8 @@ interface Team {
 export default function NewMatchPage() {
   const [teams, setTeams] = useState<Team[]>([]);
   const [selectedTeams, setSelectedTeams] = useState<(Team | null)[]>([null, null, null, null]);
+  const [matchName, setMatchName] = useState('');
+  const [matchDescription, setMatchDescription] = useState('');
   const router = useRouter();
 
   useEffect(() => {
@@ -36,13 +38,15 @@ export default function NewMatchPage() {
     
     const teamIds = selectedTeams.map(team => team?.id).filter(Boolean);
     console.log('New match with teams:', teamIds);
+    console.log('Match name:', matchName);
+    console.log('Match description:', matchDescription);
     
     // Here you would typically send the data to your backend
     // For example:
     // await fetch('/api/matches', {
     //   method: 'POST',
     //   headers: { 'Content-Type': 'application/json' },
-    //   body: JSON.stringify({ teamIds }),
+    //   body: JSON.stringify({ teamIds, matchName, matchDescription }),
     // });
     
     // Redirect to the home page after submission
@@ -65,6 +69,12 @@ export default function NewMatchPage() {
     });
   };
 
+  const isFormValid = () => {
+    return matchName.trim() !== '' &&
+           matchDescription.trim() !== '' &&
+           selectedTeams.every(team => team !== null);
+  };
+
   return (
     <Container maxWidth="sm">
       <Box sx={{ my: 4 }}>
@@ -72,6 +82,24 @@ export default function NewMatchPage() {
           Skapa ny match
         </Typography>
         <form onSubmit={handleSubmit}>
+          <TextField
+            fullWidth
+            label="Matchnamn"
+            value={matchName}
+            onChange={(e) => setMatchName(e.target.value)}
+            margin="normal"
+            required
+          />
+          <TextField
+            fullWidth
+            label="Matchbeskrivning"
+            value={matchDescription}
+            onChange={(e) => setMatchDescription(e.target.value)}
+            margin="normal"
+            multiline
+            rows={3}
+            required
+          />
           {selectedTeams.map((team, index) => (
             <Autocomplete
               key={index}
@@ -89,7 +117,7 @@ export default function NewMatchPage() {
               )}
               value={team}
               onChange={(_, newValue) => handleTeamChange(index, newValue)}
-              renderInput={(params) => <TextField {...params} fullWidth label={`Lag ${index + 1}`} margin="normal" />}
+              renderInput={(params) => <TextField {...params} fullWidth label={`Lag ${index + 1}`} margin="normal" required />}
               renderTags={(value, getTagProps) =>
                 value.map((option, index) => (
                   <Chip
@@ -106,6 +134,7 @@ export default function NewMatchPage() {
             fullWidth
             variant="contained"
             sx={{ mt: 3, mb: 2 }}
+            disabled={!isFormValid()}
           >
             Skapa match
           </Button>
