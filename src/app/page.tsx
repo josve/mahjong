@@ -7,7 +7,7 @@ async function getAllMatches(): Promise<any> {
   const connection = await Connection.getInstance().getConnection(); // Get a connection
   try {
     const [matches] = await connection.query(
-      "SELECT GAME_ID FROM Games ORDER BY TIME DESC"
+      "SELECT GAME_ID, TIME, NAME, COMMENT, TEAM_ID_1, TEAM_ID_2, TEAM_ID_3, TEAM_ID_4 FROM Games WHERE IS_TEST = 0 ORDER BY TIME DESC"
     );
     return matches;
   } finally {

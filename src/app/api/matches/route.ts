@@ -11,18 +11,10 @@ export async function POST(request: Request) {
 
     // Insert into Games table
     const [gameResult] = await connection.query(
-      'INSERT INTO Games (NAME, DESCRIPTION, TIME) VALUES (?, ?, NOW())',
-      [matchName, matchDescription]
+      'INSERT INTO Games (NAME, COMMENT, TIME, TEAM_ID_1, TEAM_ID_2, TEAM_ID_3, TEAM_ID_4, IS_TEST) VALUES (?, ?, NOW(), ?, ?, ?, ?, 0)',
+      [matchName, matchDescription, ...teamIds, ...Array(4 - teamIds.length).fill(null)]
     );
     const gameId = (gameResult as any).insertId;
-
-    // Insert into GameTeams table
-    for (const teamId of teamIds) {
-      await connection.query(
-        'INSERT INTO GameTeams (GAME_ID, TEAM_ID) VALUES (?, ?)',
-        [gameId, teamId]
-      );
-    }
 
     // Commit the transaction
     await connection.commit();

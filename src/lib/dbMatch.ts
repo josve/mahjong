@@ -6,7 +6,7 @@ export async function getMatchById(id: string): Promise<any> {
   const connection = await Connection.getInstance().getConnection();
   try {
     const [rows] = await connection.query(
-      "SELECT *, (SELECT COUNT(*) From Games g where g.TIME < Games.TIME) as GAME_IDX FROM Games WHERE GAME_ID = ?",
+      "SELECT *, (SELECT COUNT(*) From Games g where g.TIME < Games.TIME AND g.IS_TEST = 0) as GAME_IDX FROM Games WHERE GAME_ID = ? AND IS_TEST = 0",
       [id]
     );
     return rows[0];
