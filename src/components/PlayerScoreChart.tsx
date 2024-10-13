@@ -47,8 +47,8 @@ const PlayerScoreChart: React.FC<PlayerScoreChartProps> = ({ matches, teamIdToNa
             if (hand.IS_WINNER) {
               wins[player.name]++;
             }
-            if (hand.HAND_SCORE > 100) {
-              highRollerScores[player.name].push([gameIndex, hand.HAND_SCORE]);
+            if (hand.HAND > 100) {
+              highRollerScores[player.name].push([gameIndex, hand.HAND]);
             }
           }
         });
@@ -139,7 +139,7 @@ const PlayerScoreChart: React.FC<PlayerScoreChartProps> = ({ matches, teamIdToNa
 
   const highRollerOptions = {
     title: {
-      text: "High Roller-ligan",
+      text: "High Roller-ligan (Hands over 100 han)",
       left: 'center'
     },
     tooltip: {
@@ -147,8 +147,8 @@ const PlayerScoreChart: React.FC<PlayerScoreChartProps> = ({ matches, teamIdToNa
       formatter: (params: any) => {
         const playerName = params.seriesName;
         const gameIndex = params.data[0];
-        const score = params.data[1];
-        return `${playerName}<br/>Game ${gameIndex + 1}: ${score} points`;
+        const hand = params.data[1];
+        return `${playerName}<br/>Game ${gameIndex + 1}: ${hand} han`;
       }
     },
     legend: {
