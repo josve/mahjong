@@ -133,8 +133,8 @@ const PlayerScoreChart: React.FC<PlayerScoreChartProps> = ({ matches, teamIdToNa
   const highRollerSeries = Object.entries(highRollerScores).map(([player, scores]) => ({
     name: player,
     type: 'scatter',
-    data: scores,
-    symbolSize: (data: number[]) => (data[1] - 100) / 5 + 5, // Adjust size based on score
+    data: scores.map(score => [score[1], player]), // [han, playerName]
+    symbolSize: (data: number[]) => (data[0] - 100) / 5 + 5, // Adjust size based on score
   }));
 
   const highRollerOptions = {
@@ -145,26 +145,25 @@ const PlayerScoreChart: React.FC<PlayerScoreChartProps> = ({ matches, teamIdToNa
     tooltip: {
       trigger: 'item',
       formatter: (params: any) => {
-        const playerName = params.seriesName;
-        const gameIndex = params.data[0];
-        const hand = params.data[1];
-        return `${playerName}<br/>Game ${gameIndex + 1}: ${hand} han`;
+        const playerName = params.data[1];
+        const hand = params.data[0];
+        return `${playerName}: ${hand} han`;
       }
     },
-    legend: {
-      data: Object.keys(highRollerScores),
-      orient: 'vertical',
-      left: 'left',
+    grid: {
+      left: '15%',
+      right: '10%',
     },
     xAxis: {
       type: 'value',
-      name: 'Game Number',
+      name: 'Han',
       nameLocation: 'middle',
       nameGap: 30,
+      min: 100,
     },
     yAxis: {
-      type: 'value',
-      name: 'Score',
+      type: 'category',
+      data: Object.keys(highRollerScores),
       nameLocation: 'middle',
       nameGap: 30,
     },
