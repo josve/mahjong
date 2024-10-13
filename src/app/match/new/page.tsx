@@ -49,6 +49,12 @@ export default function NewMatchPage() {
     router.push('/');
   };
 
+  const getFilteredTeams = (index: number) => {
+    return teams.filter(team => 
+      !selectedTeams.some((selectedTeam, i) => i !== index && selectedTeam?.id === team.id)
+    );
+  };
+
   return (
     <Container maxWidth="sm">
       <Box sx={{ my: 4 }}>
@@ -59,7 +65,7 @@ export default function NewMatchPage() {
           {selectedTeams.map((team, index) => (
             <Autocomplete
               key={index}
-              options={teams}
+              options={getFilteredTeams(index)}
               getOptionLabel={(option) => option.name}
               renderOption={(props, option) => (
                 <li {...props}>
