@@ -11,6 +11,17 @@ const PlayerScoreChart: React.FC<PlayerScoreChartProps> = ({ matches, teamIdToNa
   const { playerScores, labels } = useMemo(() => {
     const scores: { [key: string]: number[] } = {};
     const labels: string[] = [];
+    const playerSet = new Set<string>();
+
+    // First, collect all unique players
+    Object.values(teamIdToName).forEach(teamName => {
+      teamName.split('+').forEach(player => playerSet.add(player.trim()));
+    });
+
+    // Initialize scores for all players
+    playerSet.forEach(player => {
+      scores[player] = new Array(matches.length).fill(0);
+    });
 
     matches.forEach((match, index) => {
       labels.push(`Game ${index + 1}`);
@@ -21,10 +32,7 @@ const PlayerScoreChart: React.FC<PlayerScoreChartProps> = ({ matches, teamIdToNa
         const scorePerPlayer = hand.HAND_SCORE / players.length;
 
         players.forEach((player: string) => {
-          if (!scores[player]) {
-            scores[player] = new Array(matches.length).fill(0);
-          }
-          scores[player][index] += scorePerPlayer;
+          scores[player.trim()][index] += scorePerPlayer;
         });
       });
     });
