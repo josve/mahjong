@@ -45,17 +45,6 @@ export default function Header() {
             </Typography>
           </Link>
           <Link
-            href="/players"
-            passHref
-          >
-            <Typography
-              variant="body1"
-              style={{ color: "white", marginRight: "20px", cursor: "pointer" }}
-            >
-              spelare
-            </Typography>
-          </Link>
-          <Link
             href="/statistics"
             passHref
           >
