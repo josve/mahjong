@@ -10,9 +10,6 @@ interface PlayerScoreChartProps {
 }
 
 const PlayerScoreChart: React.FC<PlayerScoreChartProps> = ({ matches, teamIdToName, allPlayers, teamIdToPlayerIds }) => {
-  console.log('allPlayers:', allPlayers);
-  console.log('teamIdToPlayerIds:', teamIdToPlayerIds);
-
   const { playerScores, labels } = useMemo(() => {
     const scores: { [key: string]: number[] } = {};
     const labels: string[] = [];

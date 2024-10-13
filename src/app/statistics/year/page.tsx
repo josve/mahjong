@@ -17,17 +17,6 @@ export default async function YearStatisticsPage() {
         Statistik - Nuvarande år
       </h1>
       <PlayerScoreChart matches={matches} teamIdToName={teamIdToName} allPlayers={allPlayers} teamIdToPlayerIds={teamIdToPlayerIds} />
-      <div style={{ marginTop: "20px" }}>
-        {matches.length > 0 ? (
-          matches.map((match) => (
-            <div key={match.GAME_ID}>
-              <p>{match.NAME} - {new Date(match.TIME).toLocaleDateString()}</p>
-            </div>
-          ))
-        ) : (
-          <p>Inga matcher hittades för det valda tidsintervallet.</p>
-        )}
-      </div>
     </div>
   );
 }
