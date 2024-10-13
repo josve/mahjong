@@ -37,20 +37,27 @@ export default function NewMatchPage() {
     event.preventDefault();
     
     const teamIds = selectedTeams.map(team => team?.id).filter(Boolean);
-    console.log('New match with teams:', teamIds);
-    console.log('Match name:', matchName);
-    console.log('Match description:', matchDescription);
     
-    // Here you would typically send the data to your backend
-    // For example:
-    // await fetch('/api/matches', {
-    //   method: 'POST',
-    //   headers: { 'Content-Type': 'application/json' },
-    //   body: JSON.stringify({ teamIds, matchName, matchDescription }),
-    // });
-    
-    // Redirect to the home page after submission
-    router.push('/');
+    try {
+      const response = await fetch('/api/matches', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ teamIds, matchName, matchDescription }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to create match');
+      }
+
+      const data = await response.json();
+      console.log('Match created successfully:', data);
+
+      // Redirect to the new match page
+      router.push(`/match/${data.gameId}`);
+    } catch (error) {
+      console.error('Error creating match:', error);
+      // Here you might want to show an error message to the user
+    }
   };
 
   const getFilteredTeams = (index: number) => {
