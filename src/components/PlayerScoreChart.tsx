@@ -82,7 +82,7 @@ const PlayerScoreChart: React.FC<PlayerScoreChartProps> = ({ matches, teamIdToNa
 
   const scoreOptions = {
     title: {
-      text: "Player Scores Over Games",
+      text: "Spelarpoäng över spel",
     },
     tooltip: {
       trigger: "axis",
@@ -114,7 +114,7 @@ const PlayerScoreChart: React.FC<PlayerScoreChartProps> = ({ matches, teamIdToNa
 
   const winsOptions = {
     title: {
-      text: "Total Mahjong Wins per Player",
+      text: "Totala Mahjong-vinster per spelare",
       left: 'center'
     },
     tooltip: {
@@ -127,7 +127,7 @@ const PlayerScoreChart: React.FC<PlayerScoreChartProps> = ({ matches, teamIdToNa
     },
     series: [
       {
-        name: 'Mahjong Wins',
+        name: 'Mahjong-vinster',
         type: 'pie',
         radius: '50%',
         data: winsSeries,
@@ -151,7 +151,7 @@ const PlayerScoreChart: React.FC<PlayerScoreChartProps> = ({ matches, teamIdToNa
 
   const highRollerOptions = {
     title: {
-      text: "High Roller-ligan (Hands over 100 han)",
+      text: "High Roller-ligan (Händer över 100 han)",
       left: 'center'
     },
     tooltip: {
@@ -160,7 +160,7 @@ const PlayerScoreChart: React.FC<PlayerScoreChartProps> = ({ matches, teamIdToNa
         const playerName = params.data[2];
         const gameIndex = params.data[0] + 1; // Add 1 to make it 1-indexed
         const hand = params.data[1];
-        return `${playerName}<br/>Game #${gameIndex}: ${hand} han`;
+        return `${playerName}<br/>Spel #${gameIndex}: ${hand} han`;
       }
     },
     grid: {
@@ -171,7 +171,7 @@ const PlayerScoreChart: React.FC<PlayerScoreChartProps> = ({ matches, teamIdToNa
     },
     xAxis: {
       type: 'value',
-      name: 'Game Number',
+      name: 'Spelnummer',
       nameLocation: 'middle',
       nameGap: 30,
       min: 0,
@@ -212,7 +212,7 @@ const PlayerScoreChart: React.FC<PlayerScoreChartProps> = ({ matches, teamIdToNa
 
   const averageHanOptions = {
     title: {
-      text: "Average Han per Player",
+      text: "Genomsnittlig Han per spelare",
       left: 'center'
     },
     tooltip: {
@@ -237,7 +237,7 @@ const PlayerScoreChart: React.FC<PlayerScoreChartProps> = ({ matches, teamIdToNa
     },
     series: [
       {
-        name: 'Average Han',
+        name: 'Genomsnittlig Han',
         type: 'bar',
         data: averageHanSeries
       }

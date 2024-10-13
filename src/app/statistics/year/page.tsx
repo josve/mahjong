@@ -14,7 +14,7 @@ export default async function YearStatisticsPage() {
     <div style={{ padding: "20px" }}>
       <StatisticsNav currentPath="/statistics/year" />
       <h1 style={{ color: "#943030", fontFamily: "HelveticaNeueLight, Helvetica, tahoma, arial", fontSize: "42px" }}>
-        Statistik - Nuvarande år
+        Statistik - Innevarande år
       </h1>
       <PlayerScoreChart matches={matches} teamIdToName={teamIdToName} allPlayers={allPlayers} teamIdToPlayerIds={teamIdToPlayerIds} />
     </div>
