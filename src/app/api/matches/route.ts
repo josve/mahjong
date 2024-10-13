@@ -17,6 +17,14 @@ export async function POST(request: Request) {
       [gameId, matchName, matchDescription, ...teamIds, ...Array(4 - teamIds.length).fill(null)]
     );
 
+    // Insert initial hands for each team
+    for (const teamId of teamIds) {
+      await connection.query(
+        'INSERT INTO Hands (GAME_ID, TEAM_ID, ROUND, HAND, IS_WINNER, WIND, HAND_SCORE) VALUES (?, ?, 1, 0, NULL, NULL, 0)',
+        [gameId, teamId]
+      );
+    }
+
     // Commit the transaction
     await connection.commit();
 
