@@ -13,7 +13,7 @@ export async function POST(req: NextRequest) {
     const teamIds = Object.keys(scores);
     const eastIndex = teamIds.indexOf(eastTeam);
 
-    const [latestRoundResult] = await connection.query(
+    const [latestRoundResult] : any = await connection.query(
       'SELECT MAX(ROUND) as latestRound FROM Hands WHERE GAME_ID = ?',
       [matchId]
     );
