@@ -18,10 +18,11 @@ export async function POST(request: Request) {
     );
 
     // Insert initial hands for each team
+    const currentTime = new Date().toISOString().slice(0, 19).replace('T', ' ');
     for (const teamId of teamIds) {
       await connection.query(
-        'INSERT INTO Hands (GAME_ID, TEAM_ID, ROUND, HAND, IS_WINNER, WIND, HAND_SCORE) VALUES (?, ?, 1, 0, NULL, NULL, 0)',
-        [gameId, teamId]
+        'INSERT INTO Hands (GAME_ID, TEAM_ID, ROUND, HAND, IS_WINNER, WIND, HAND_SCORE, TIME) VALUES (?, ?, 1, 0, NULL, NULL, 0, ?)',
+        [gameId, teamId, currentTime]
       );
     }
 
