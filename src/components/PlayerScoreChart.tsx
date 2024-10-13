@@ -6,9 +6,10 @@ interface PlayerScoreChartProps {
   matches: any[];
   teamIdToName: { [key: string]: string };
   allPlayers: string[];
+  teamIdToPlayerIds: { [key: string]: string[] };
 }
 
-const PlayerScoreChart: React.FC<PlayerScoreChartProps> = ({ matches, teamIdToName, allPlayers }) => {
+const PlayerScoreChart: React.FC<PlayerScoreChartProps> = ({ matches, teamIdToName, allPlayers, teamIdToPlayerIds }) => {
   const { playerScores, labels } = useMemo(() => {
     const scores: { [key: string]: number[] } = {};
     const labels: string[] = [];
@@ -18,13 +19,12 @@ const PlayerScoreChart: React.FC<PlayerScoreChartProps> = ({ matches, teamIdToNa
     matches.forEach((match, index) => {
       labels.push(`Game ${index + 1}`);
       match.hands.forEach((hand: any) => {
-        const teamName = teamIdToName[hand.TEAM_ID];
-        const players = teamName.split('+');
-        players.forEach((player: string) => {
-          const trimmedPlayer = player.trim();
-          if (!scores[trimmedPlayer]) {
-            scores[trimmedPlayer] = new Array(matches.length).fill(0);
-            playersSet.add(trimmedPlayer);
+        const playerIds = teamIdToPlayerIds[hand.TEAM_ID] || [];
+        playerIds.forEach((playerId: string) => {
+          const player = allPlayers.find(p => p === playerId) || '';
+          if (!scores[player]) {
+            scores[player] = new Array(matches.length).fill(0);
+            playersSet.add(player);
           }
         });
       });
@@ -40,12 +40,12 @@ const PlayerScoreChart: React.FC<PlayerScoreChartProps> = ({ matches, teamIdToNa
     // Calculate scores
     matches.forEach((match, index) => {
       match.hands.forEach((hand: any) => {
-        const teamName = teamIdToName[hand.TEAM_ID];
-        const players = teamName.split('+');
-        const scorePerPlayer = hand.HAND_SCORE / players.length;
+        const playerIds = teamIdToPlayerIds[hand.TEAM_ID] || [];
+        const scorePerPlayer = hand.HAND_SCORE / playerIds.length;
 
-        players.forEach((player: string) => {
-          scores[player.trim()][index] += scorePerPlayer;
+        playerIds.forEach((playerId: string) => {
+          const player = allPlayers.find(p => p === playerId) || '';
+          scores[player][index] += scorePerPlayer;
         });
       });
     });
@@ -58,7 +58,7 @@ const PlayerScoreChart: React.FC<PlayerScoreChartProps> = ({ matches, teamIdToNa
     });
 
     return { playerScores: scores, labels };
-  }, [matches, teamIdToName, allPlayers]);
+  }, [matches, teamIdToName, allPlayers, teamIdToPlayerIds]);
 
   const series = Object.entries(playerScores).map(([player, scores]) => ({
     name: player,

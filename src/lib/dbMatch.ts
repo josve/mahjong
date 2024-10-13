@@ -132,3 +132,22 @@ export async function getAllPlayers(): Promise<string[]> {
     connection.release();
   }
 }
+
+export async function getTeamIdToPlayerIds(): Promise<{ [key: string]: string[] }> {
+  const connection = await Connection.getInstance().getConnection();
+  try {
+    const [result] = await connection.query(
+      "SELECT Teams.TEAM_ID, Players.PLAYER_ID FROM Teams INNER JOIN Players ON Teams.PLAYER_ID = Players.PLAYER_ID"
+    );
+    const teamIdToPlayerIds: { [key: string]: string[] } = {};
+    result.forEach((row: any) => {
+      if (!teamIdToPlayerIds[row.TEAM_ID]) {
+        teamIdToPlayerIds[row.TEAM_ID] = [];
+      }
+      teamIdToPlayerIds[row.TEAM_ID].push(row.PLAYER_ID);
+    });
+    return teamIdToPlayerIds;
+  } finally {
+    connection.release();
+  }
+}
