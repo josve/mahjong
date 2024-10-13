@@ -1,8 +1,10 @@
 import { NextResponse } from 'next/server';
 import Connection from '@/lib/connection';
+import { v4 as uuidv4 } from 'uuid';
 
 export async function POST(request: Request) {
   const { teamIds, matchName, matchDescription } = await request.json();
+  const gameId = uuidv4();
 
   const connection = await Connection.getInstance().getConnection();
   try {
@@ -10,11 +12,10 @@ export async function POST(request: Request) {
     await connection.beginTransaction();
 
     // Insert into Games table
-    const [gameResult] = await connection.query(
-      'INSERT INTO Games (NAME, COMMENT, TIME, TEAM_ID_1, TEAM_ID_2, TEAM_ID_3, TEAM_ID_4, IS_TEST) VALUES (?, ?, NOW(), ?, ?, ?, ?, 0)',
-      [matchName, matchDescription, ...teamIds, ...Array(4 - teamIds.length).fill(null)]
+    await connection.query(
+      'INSERT INTO Games (GAME_ID, NAME, COMMENT, TIME, TEAM_ID_1, TEAM_ID_2, TEAM_ID_3, TEAM_ID_4, IS_TEST) VALUES (?, ?, ?, NOW(), ?, ?, ?, ?, 0)',
+      [gameId, matchName, matchDescription, ...teamIds, ...Array(4 - teamIds.length).fill(null)]
     );
-    const gameId = (gameResult as any).insertId;
 
     // Commit the transaction
     await connection.commit();
