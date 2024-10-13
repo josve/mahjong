@@ -12,15 +12,33 @@ const PlayerScoreChart: React.FC<PlayerScoreChartProps> = ({ matches, teamIdToNa
   const { playerScores, labels } = useMemo(() => {
     const scores: { [key: string]: number[] } = {};
     const labels: string[] = [];
+    const playersSet = new Set(allPlayers);
 
-    // Initialize scores for all players
-    allPlayers.forEach(player => {
-      scores[player] = new Array(matches.length).fill(0);
-    });
-
+    // Initialize scores for all players from matches
     matches.forEach((match, index) => {
       labels.push(`Game ${index + 1}`);
+      match.hands.forEach((hand: any) => {
+        const teamName = teamIdToName[hand.TEAM_ID];
+        const players = teamName.split('+');
+        players.forEach((player: string) => {
+          const trimmedPlayer = player.trim();
+          if (!scores[trimmedPlayer]) {
+            scores[trimmedPlayer] = new Array(matches.length).fill(0);
+            playersSet.add(trimmedPlayer);
+          }
+        });
+      });
+    });
 
+    // Add any remaining players from allPlayers
+    playersSet.forEach(player => {
+      if (!scores[player]) {
+        scores[player] = new Array(matches.length).fill(0);
+      }
+    });
+
+    // Calculate scores
+    matches.forEach((match, index) => {
       match.hands.forEach((hand: any) => {
         const teamName = teamIdToName[hand.TEAM_ID];
         const players = teamName.split('+');
