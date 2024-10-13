@@ -70,9 +70,13 @@ export async function getTeamIdToNameNoAlias() {
       acc[row.TEAM_ID] = row.NAME;
       return acc;
     }, {});
-
     return teamIdToName;
+  } finally {
+    connection.release();
   }
+
+  }
+
 
   export async function getPlayersForTeam(teamId: string): Promise<any[]> {
     const connection = await Connection.getInstance().getConnection();
@@ -85,9 +89,6 @@ export async function getTeamIdToNameNoAlias() {
     } finally {
       connection.release();
     }
-  } finally {
-    connection.release();
-  }
 }
 
 export async function getTeamIdToName() {
