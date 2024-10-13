@@ -6,7 +6,7 @@ export default function Header() {
   return (
     <AppBar
       position="static"
-      style={{ background: "linear-gradient(to right, #db5a4c, #8a5331)" }}
+      style={{ background: "linear-gradient(to right, #FF3366, #FF6B6B)" }}
     >
       <Toolbar>
         <Box sx={{ display: "flex", alignItems: "center", flexGrow: 1 }}>
@@ -21,13 +21,14 @@ export default function Header() {
               <Typography
                 variant="h6"
                 style={{
-                  marginLeft: "10px",
+                  marginLeft: "15px",
                   color: "white",
-                  fontWeight: "bold",
-                  textAlign: "left"
+                  fontWeight: "300",
+                  textAlign: "left",
+                  letterSpacing: "1px"
                 }}
               >
-                <span style={{ fontWeight: "bold" }}>mahjong</span> master system 4.0
+                <span style={{ fontWeight: "700" }}>Mahjong</span> Master System 4.0
               </Typography>
             </Box>
           </Link>
