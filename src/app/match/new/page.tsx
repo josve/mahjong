@@ -1,25 +1,47 @@
 "use client";
 
-import React, { useState } from 'react';
-import { TextField, Button, Box, Typography, Container } from '@mui/material';
+import React, { useState, useEffect } from 'react';
+import { Autocomplete, TextField, Button, Box, Typography, Container } from '@mui/material';
 import { useRouter } from 'next/navigation';
 
+interface Team {
+  id: string;
+  name: string;
+}
+
 export default function NewMatchPage() {
-  const [playerNames, setPlayerNames] = useState(['', '', '', '']);
+  const [teams, setTeams] = useState<Team[]>([]);
+  const [selectedTeams, setSelectedTeams] = useState<(Team | null)[]>([null, null, null, null]);
   const router = useRouter();
 
-  const handlePlayerNameChange = (index: number, value: string) => {
-    const newPlayerNames = [...playerNames];
-    newPlayerNames[index] = value;
-    setPlayerNames(newPlayerNames);
+  useEffect(() => {
+    const fetchTeams = async () => {
+      const response = await fetch('/api/teams');
+      const data = await response.json();
+      setTeams(data);
+    };
+    fetchTeams();
+  }, []);
+
+  const handleTeamChange = (index: number, value: Team | null) => {
+    const newSelectedTeams = [...selectedTeams];
+    newSelectedTeams[index] = value;
+    setSelectedTeams(newSelectedTeams);
   };
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
     
+    const teamIds = selectedTeams.map(team => team?.id).filter(Boolean);
+    console.log('New match with teams:', teamIds);
+    
     // Here you would typically send the data to your backend
-    // For now, we'll just log it and redirect
-    console.log('New match with players:', playerNames);
+    // For example:
+    // await fetch('/api/matches', {
+    //   method: 'POST',
+    //   headers: { 'Content-Type': 'application/json' },
+    //   body: JSON.stringify({ teamIds }),
+    // });
     
     // Redirect to the home page after submission
     router.push('/');
@@ -32,14 +54,14 @@ export default function NewMatchPage() {
           Skapa ny match
         </Typography>
         <form onSubmit={handleSubmit}>
-          {playerNames.map((name, index) => (
-            <TextField
+          {selectedTeams.map((team, index) => (
+            <Autocomplete
               key={index}
-              fullWidth
-              label={`Spelare ${index + 1}`}
-              value={name}
-              onChange={(e) => handlePlayerNameChange(index, e.target.value)}
-              margin="normal"
+              options={teams}
+              getOptionLabel={(option) => option.name}
+              value={team}
+              onChange={(_, newValue) => handleTeamChange(index, newValue)}
+              renderInput={(params) => <TextField {...params} fullWidth label={`Lag ${index + 1}`} margin="normal" />}
             />
           ))}
           <Button
