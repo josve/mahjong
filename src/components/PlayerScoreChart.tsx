@@ -133,8 +133,8 @@ const PlayerScoreChart: React.FC<PlayerScoreChartProps> = ({ matches, teamIdToNa
   const highRollerSeries = Object.entries(highRollerScores).map(([player, scores]) => ({
     name: player,
     type: 'scatter',
-    data: scores.map(score => [score[1], player]), // [han, playerName]
-    symbolSize: (data: number[]) => (data[0] - 100) / 5 + 5, // Adjust size based on score
+    data: scores.map(score => [score[0], score[1], player]), // [gameIndex, han, playerName]
+    symbolSize: (data: number[]) => (data[1] - 100) / 3 + 10, // Adjust size based on score
   }));
 
   const highRollerOptions = {
@@ -145,29 +145,52 @@ const PlayerScoreChart: React.FC<PlayerScoreChartProps> = ({ matches, teamIdToNa
     tooltip: {
       trigger: 'item',
       formatter: (params: any) => {
-        const playerName = params.data[1];
-        const hand = params.data[0];
-        return `${playerName}: ${hand} han`;
+        const playerName = params.data[2];
+        const gameIndex = params.data[0] + 1; // Add 1 to make it 1-indexed
+        const hand = params.data[1];
+        return `${playerName}<br/>Game #${gameIndex}: ${hand} han`;
       }
     },
     grid: {
-      left: '15%',
-      right: '10%',
+      left: '5%',
+      right: '15%',
+      top: '10%',
+      bottom: '10%',
     },
     xAxis: {
       type: 'value',
-      name: 'Han',
+      name: 'Game Number',
       nameLocation: 'middle',
       nameGap: 30,
-      min: 100,
+      min: 0,
     },
     yAxis: {
-      type: 'category',
-      data: Object.keys(highRollerScores),
+      type: 'value',
+      name: 'Han',
       nameLocation: 'middle',
-      nameGap: 30,
+      nameGap: 40,
+      min: 100,
     },
     series: highRollerSeries,
+    legend: {
+      type: 'scroll',
+      orient: 'vertical',
+      right: 10,
+      top: 20,
+      bottom: 20,
+    },
+    dataZoom: [
+      {
+        type: 'inside',
+        xAxisIndex: 0,
+        filterMode: 'empty'
+      },
+      {
+        type: 'inside',
+        yAxisIndex: 0,
+        filterMode: 'empty'
+      }
+    ],
   };
 
   return (
