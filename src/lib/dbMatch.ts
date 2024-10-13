@@ -121,13 +121,13 @@ export async function getTeamIdToName() {
   }
 }
 
-export async function getAllPlayers(): Promise<string[]> {
+export async function getAllPlayers(): Promise<{ id: string; name: string }[]> {
   const connection = await Connection.getInstance().getConnection();
   try {
     const [result] = await connection.query(
-      "SELECT DISTINCT Players.NAME FROM Players"
+      "SELECT DISTINCT Players.PLAYER_ID, Players.NAME FROM Players"
     );
-    return result.map((row: any) => row.NAME);
+    return result.map((row: any) => ({ id: row.PLAYER_ID, name: row.NAME }));
   } finally {
     connection.release();
   }

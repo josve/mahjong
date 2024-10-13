@@ -5,7 +5,7 @@ import ReactEcharts from "echarts-for-react";
 interface PlayerScoreChartProps {
   matches: any[];
   teamIdToName: { [key: string]: string };
-  allPlayers: string[];
+  allPlayers: { id: string; name: string }[];
   teamIdToPlayerIds: { [key: string]: string[] };
 }
 
@@ -19,7 +19,7 @@ const PlayerScoreChart: React.FC<PlayerScoreChartProps> = ({ matches, teamIdToNa
 
     // Initialize scores for all players
     allPlayers.forEach(player => {
-      scores[player] = new Array(matches.length).fill(0);
+      scores[player.name] = new Array(matches.length).fill(0);
     });
 
     // Calculate scores
@@ -30,18 +30,18 @@ const PlayerScoreChart: React.FC<PlayerScoreChartProps> = ({ matches, teamIdToNa
         const scorePerPlayer = hand.HAND_SCORE / playerIds.length;
 
         playerIds.forEach((playerId: string) => {
-          const player = allPlayers.find(p => p === playerId);
+          const player = allPlayers.find(p => p.id === playerId);
           if (player) {
-            scores[player][index] += scorePerPlayer;
+            scores[player.name][index] += scorePerPlayer;
           }
         });
       });
     });
 
     // Calculate cumulative scores
-    Object.keys(scores).forEach((player) => {
-      for (let i = 1; i < scores[player].length; i++) {
-        scores[player][i] += scores[player][i - 1];
+    Object.keys(scores).forEach((playerName) => {
+      for (let i = 1; i < scores[playerName].length; i++) {
+        scores[playerName][i] += scores[playerName][i - 1];
       }
     });
 

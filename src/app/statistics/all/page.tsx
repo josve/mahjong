@@ -7,7 +7,7 @@ import { getTeamIdToName, getAllPlayers, getTeamIdToPlayerIds } from "@/lib/dbMa
 export default async function AllStatisticsPage() {
   const matches = await fetchMatches("all tid");
   const teamIdToName = await getTeamIdToName();
-  const allPlayers = await getAllPlayers();
+  const allPlayers: { id: string; name: string }[] = await getAllPlayers();
   const teamIdToPlayerIds = await getTeamIdToPlayerIds();
 
   return (
