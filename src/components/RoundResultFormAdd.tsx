@@ -93,7 +93,6 @@ export default function RoundResultFormAdd({ teamIdToName, matchId }: { teamIdTo
             native: true,
           }}
           focused
-          focused
           sx={{ flex: '1 1 200px' }}
         >
           <option value="">Select East Team</option>
@@ -111,6 +110,7 @@ export default function RoundResultFormAdd({ teamIdToName, matchId }: { teamIdTo
           SelectProps={{
             native: true,
           }}
+          focused
           sx={{ flex: '1 1 200px' }}
         >
           <option value="">Select Winner</option>

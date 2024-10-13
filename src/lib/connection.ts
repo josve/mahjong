@@ -15,7 +15,7 @@ export default class Connection {
       waitForConnections: true,
       connectionLimit: 10,
       maxIdle: 10,
-      timezone: "Z", // Use UTC timezone
+      timezone: "+01:00", 
     };
 
     this.pool = mysql.createPool(poolConfig);
