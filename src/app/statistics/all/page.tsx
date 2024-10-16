@@ -1,5 +1,5 @@
 import React from "react";
-import StatisticsNav from "@/components/StatisticsNav";
+import StatisticsNav from "@/components/statisticsNav";
 import PlayerScoreChart from "@/components/PlayerScoreChart";
 import fetchMatches from "@/lib/fetchMatches";
 import {
