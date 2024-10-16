@@ -7,7 +7,13 @@ import {
   getAllPlayers,
   getTeamIdToPlayerIds,
 } from "@/lib/dbMatch";
+import { Metadata } from "next";
 
+export async function generateMetadata(): Promise<Metadata> {
+  return {
+    title: "Statistik (nuvarande år) - Mahjong Master System",
+  };
+}
 export const revalidate = 60; // Revalidate every 60 seconds
 
 export default async function YearStatisticsPage() {
@@ -18,16 +24,10 @@ export default async function YearStatisticsPage() {
 
   return (
     <div style={{ padding: "20px" }}>
-      <StatisticsNav currentPath="/statistics/year" />
-      <h1
-        style={{
-          color: "#943030",
-          fontFamily: "HelveticaNeueLight, Helvetica, tahoma, arial",
-          fontSize: "42px",
-        }}
-      >
-        Statistik - Innevarande år
-      </h1>
+      <div className="multi-title-header">
+        <h1>Statistik - Innevarande år</h1>
+        <StatisticsNav currentPath="/statistics/year" />
+      </div>
       <PlayerScoreChart
         matches={matches}
         teamIdToName={teamIdToName}

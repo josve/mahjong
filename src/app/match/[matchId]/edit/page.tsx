@@ -48,15 +48,7 @@ export default async function EditPage({ params }: PageProps) {
 
   return (
     <div style={{ backgroundColor: "rgb(250, 250, 250)", padding: "20px" }}>
-      <h1
-        style={{
-          color: "#943030",
-          fontFamily: "HelveticaNeueLight, Helvetica, tahoma, arial",
-          fontSize: "42px",
-        }}
-      >
-        Korrigera resultat för {match.NAME}
-      </h1>
+      <h1>Korrigera resultat för {match.NAME}</h1>
       {isEditable ? (
         Object.entries(rounds).map(
           ([round, hands]: [string, any]) =>

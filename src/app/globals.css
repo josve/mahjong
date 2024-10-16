@@ -20,6 +20,7 @@ a {
 }
 
 h1 {
+  text-align: left;
   color: #943030;
   font-family: HelveticaNeueLight, Helvetica, tahoma, arial;
   font-size: 42px;
@@ -41,4 +42,25 @@ h3 {
 .too-old-text {
   color: #943030;
   font-weight: bold;
+}
+
+.correct-result-link {
+  color: #943030;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.multi-title-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.statistics-nav {
+  .selected-statistics {
+    text-decoration: underline;
+    font-weight: bold;
+    color: #943030;
+  }
 }

@@ -5,7 +5,6 @@ interface StatisticsNavProps {
 }
 
 const StatisticsNav: React.FC<StatisticsNavProps> = ({ currentPath }) => {
-
   const links = [
     { path: "/statistics/all", label: "All tid" },
     { path: "/statistics/new", label: "Ny tid" },
@@ -13,16 +12,16 @@ const StatisticsNav: React.FC<StatisticsNavProps> = ({ currentPath }) => {
   ];
 
   return (
-    <nav style={{ marginBottom: "20px" }}>
+    <nav className="statistics-nav">
       {links.map((link) => (
         <Link
           key={link.path}
           href={link.path}
+          className={
+            currentPath === link.path ? "selected-statistics" : undefined
+          }
           style={{
             marginRight: "15px",
-            textDecoration: currentPath === link.path ? "underline" : "none",
-            fontWeight: currentPath === link.path ? "bold" : "normal",
-            color: currentPath === link.path ? "#943030" : "black",
           }}
         >
           {link.label}

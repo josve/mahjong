@@ -71,14 +71,7 @@ export default async function Page({ params }: PageProps) {
           boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
         }}
       >
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
-            marginBottom: "20px",
-          }}
-        >
+        <div className="multi-title-header">
           <h1>{match.NAME}</h1>
           <h2 style={{ textAlign: "left" }}>{numRounds} omgångar</h2>
         </div>
@@ -107,12 +100,7 @@ export default async function Page({ params }: PageProps) {
             <div style={{ marginTop: "20px" }}>
               <a
                 href={`/match/${params.matchId}/edit`}
-                style={{
-                  color: "#943030",
-                  textDecoration: "none",
-                  marginTop: "20px",
-                  fontWeight: "bold",
-                }}
+                className="correct-result-link"
               >
                 Korrigera resultat
               </a>
