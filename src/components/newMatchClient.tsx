@@ -113,7 +113,7 @@ export default function NewMatchClient() {
         <form onSubmit={handleSubmit}>
           <TextField
             fullWidth
-            label="Matchnamn"
+            label="Namn"
             value={matchName}
             onChange={(e) => setMatchName(e.target.value)}
             margin="normal"
@@ -121,7 +121,7 @@ export default function NewMatchClient() {
           />
           <TextField
             fullWidth
-            label="Matchbeskrivning"
+            label="Beskrivning"
             value={matchDescription}
             onChange={(e) => setMatchDescription(e.target.value)}
             margin="normal"

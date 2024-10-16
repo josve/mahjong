@@ -64,3 +64,10 @@ h3 {
     color: #943030;
   }
 }
+
+.correct-round {
+  margin-top: 20px;
+  margin-bottom: 20px;
+  border: 1px solid #909090;
+  padding: 20px;
+}
