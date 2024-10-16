@@ -1,5 +1,6 @@
 import { getMatchById, getHandsByGameId, getTeamIdToName } from "@/lib/dbMatch";
 import RoundDisplay from "@/components/RoundDisplay";
+import { Metadata } from "next";
 
 interface PageProps {
   params: {
@@ -7,11 +8,20 @@ interface PageProps {
   };
 }
 
+export async function generateMetadata({
+  params,
+}: PageProps): Promise<Metadata> {
+  const match = await getMatchById(params.matchId);
+  return {
+    title: `Korrigera resultat för ${match.NAME} - Mahjong Master System`,
+  };
+}
+
 export default async function EditPage({ params }: PageProps) {
   const match = await getMatchById(params.matchId);
   const hands = await getHandsByGameId(params.matchId);
 
-  const teamIdToName = (await getTeamIdToName()) || {};
+  const teamIdToName = await getTeamIdToName();
   const relevantTeamIds = [
     match.TEAM_ID_1,
     match.TEAM_ID_2,
@@ -25,7 +35,8 @@ export default async function EditPage({ params }: PageProps) {
   );
 
   const matchDate = new Date(match.TIME);
-  const isEditable = (new Date().getTime() - matchDate.getTime()) < 24 * 60 * 60 * 1000;
+  const isEditable =
+    new Date().getTime() - matchDate.getTime() < 24 * 60 * 60 * 1000;
 
   const rounds = hands.reduce((acc: any, hand: any) => {
     if (!acc[hand.ROUND]) {
@@ -37,24 +48,33 @@ export default async function EditPage({ params }: PageProps) {
 
   return (
     <div style={{ backgroundColor: "rgb(250, 250, 250)", padding: "20px" }}>
-      <h1 style={{ color: "#943030", fontFamily: "HelveticaNeueLight, Helvetica, tahoma, arial", fontSize: "42px" }}>
+      <h1
+        style={{
+          color: "#943030",
+          fontFamily: "HelveticaNeueLight, Helvetica, tahoma, arial",
+          fontSize: "42px",
+        }}
+      >
         Korrigera resultat för {match.NAME}
       </h1>
       {isEditable ? (
-        Object.entries(rounds).map(([round, hands]: [string, any]) => 
-          round !== "0" && (
-            <RoundDisplay
-              key={round}
-              round={round}
-              hands={hands}
-              matchId={params.matchId}
-              teamIdToName={relevantTeams}
-            />
-          )
+        Object.entries(rounds).map(
+          ([round, hands]: [string, any]) =>
+            round !== "0" && (
+              <RoundDisplay
+                key={round}
+                round={round}
+                hands={hands}
+                matchId={params.matchId}
+                teamIdToName={relevantTeams}
+              />
+            )
         )
       ) : (
-        <p style={{ color: "#943030", fontWeight: "bold" }}>Matchen är för gammal för att göra ändringar.</p>
+        <p className="too-old-text">
+          Matchen är för gammal för att göra ändringar.
+        </p>
       )}
-      </div>
+    </div>
   );
 }
