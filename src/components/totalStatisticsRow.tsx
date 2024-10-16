@@ -20,7 +20,10 @@ export default async function TotalStatisticsRow() {
   const stats = await getTotalStatistics();
 
   return (
-    <div style={{ marginBottom: "20px", color: "#909090", textAlign: "left" }}>
+    <div
+      className="grey-text"
+      style={{ marginBottom: "20px", textAlign: "left" }}
+    >
       <p>
         Totalt {stats.totalMatches} matcher, {stats.totalMahjongs} mahjonger på{" "}
         {stats.totalRounds} omgångar
