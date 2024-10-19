@@ -71,3 +71,32 @@ h3 {
   border: 1px solid #909090;
   padding: 20px;
 }
+
+.header-bar {
+  background: linear-gradient(to right, #FF3366, #FF6B6B)
+}
+
+.bold-header {
+  font-weight: 700;
+}
+
+.header-text {
+  margin-left: 15px;
+  color: white;
+  font-weight: 300;
+  text-align: left;
+  letter-spacing: 1px;
+}
+
+.header-links {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  flex-grow: 1;
+}
+
+.header-links a p {
+  color: white;
+  margin-right: 20px;
+  cursor: pointer;
+}
