@@ -17,10 +17,6 @@ export default function MatchChart({
   const rounds = Array.from({ length: 19 }, (_, i) => (i + 1).toString());
 
   const getTeamName = (teamId: string) => {
-    if (!teamIdToName) {
-      console.error("teamIdToName is undefined");
-      return "Unknown Team";
-    }
     return teamIdToName[teamId] || "Unknown Team";
   };
 
@@ -34,7 +30,10 @@ export default function MatchChart({
     return acc;
   }, {});
 
-  const totalWins: any = Object.values(winCounts).reduce((sum: any, count: any) => sum + count, 0);
+  const totalWins: any = Object.values(winCounts).reduce(
+    (sum: any, count: any) => sum + count,
+    0
+  );
 
   const pieData = Object.keys(winCounts).map((teamId) => ({
     value: winCounts[teamId],
@@ -42,7 +41,7 @@ export default function MatchChart({
     itemStyle: {
       color: teamColors[teamId]
         ? `rgb(${teamColors[teamId].color_red}, ${teamColors[teamId].color_green}, ${teamColors[teamId].color_blue})`
-        : 'transparent', // Use transparent if no color is found
+        : "transparent", // Use transparent if no color is found
       formatter: (params: any) => {
         if (Array.isArray(params)) {
           return params
@@ -53,7 +52,9 @@ export default function MatchChart({
                 const handScore = param.data.name.HAND_SCORE;
                 const isWinner = param.data.name.IS_WINNER;
                 const mahjongText = isWinner ? " mahjong" : "";
-                return `${teamName}: ${param.value - 500} (${windHand} HANDp${mahjongText}, ${handScore})`;
+                return `${teamName}: ${
+                  param.value - 500
+                } (${windHand} HANDp${mahjongText}, ${handScore})`;
               }
               return null;
             })
@@ -64,13 +65,14 @@ export default function MatchChart({
           const percentage = ((params.value / totalWins) * 100).toFixed(2);
           return `${teamName}: ${params.value} wins (${percentage}%)`;
         }
-      }
-  }}));
+      },
+    },
+  }));
 
   series.push({
-    type: 'pie',
-    radius: ['18%', '30%'], // Make the pie chart smaller
-    center: ['20%', '25%'], // Move it slightly to the left
+    type: "pie",
+    radius: ["18%", "30%"], // Make the pie chart smaller
+    center: ["20%", "25%"], // Move it slightly to the left
     data: pieData,
     tooltip: {
       show: false,
@@ -79,16 +81,16 @@ export default function MatchChart({
       },
     },
     textStyle: {
-      align: 'left', // Align text to the left
+      align: "left", // Align text to the left
     },
     label: {
       show: false,
-      position: 'inside',
+      position: "inside",
       emphasis: {
         show: true,
-        formatter: '{b}: {c} ({d}%)',
+        formatter: "{b}: {c} ({d}%)",
         fontSize: 12,
-        fontWeight: 'bold',
+        fontWeight: "bold",
       },
     },
   });
@@ -96,20 +98,18 @@ export default function MatchChart({
   for (const teamId in teamHands) {
     const color = teamColors[teamId]
       ? `rgb(${teamColors[teamId].color_red}, ${teamColors[teamId].color_green}, ${teamColors[teamId].color_blue})`
-      : 'black'; // Default color if no color is found
+      : "black"; // Default color if no color is found
 
     const scores = teamHands[teamId].map((round: any) => ({
       value: round.SCORE + 500,
       name: round,
       itemStyle: {
-        color: round.IS_WINNER ? 'white' : undefined,
+        color: round.IS_WINNER ? "white" : undefined,
         borderColor: color, // Use line color
         borderWidth: round.IS_WINNER ? 4 : undefined,
-        fontWeight: 'bold', // Make the text bold
+        fontWeight: "bold", // Make the text bold
       },
     }));
-
-    const lastRound = teamHands[teamId][teamHands[teamId].length - 1];
 
     series.push({
       data: scores,
@@ -120,16 +120,17 @@ export default function MatchChart({
         width: 8, // Adjust the line thickness
       },
       smooth: true, // Ensure smoothing is enabled
-      symbol: 'circle',
-      symbolSize: (value: any, params: any) => (params.data.name.IS_WINNER ? 20 : 0), // Make the circles larger
+      symbol: "circle",
+      symbolSize: (value: any, params: any) =>
+        params.data.name.IS_WINNER ? 20 : 0, // Make the circles larger
       label: {
         show: true,
-        position: 'right',
+        position: "right",
         formatter: (params: any) => {
           if (params.dataIndex === scores.length - 1) {
             return `${params.value} ${getTeamName(teamId)}`;
           }
-          return '';
+          return "";
         },
         color: color,
         fontSize: 14, // Slightly larger font size
@@ -165,25 +166,30 @@ export default function MatchChart({
     tooltip: {
       trigger: "axis",
       formatter: (params: any) => {
-        if (params.some((param: any) => param.seriesType === 'pie')) {
-          return ''; // Hide tooltip when hovering over pie chart
+        if (params.some((param: any) => param.seriesType === "pie")) {
+          return ""; // Hide tooltip when hovering over pie chart
         }
         return params
           .map((param: any) => {
-              const teamName = getTeamName(param.seriesName);
-              if (teamName !== "Unknown Team") {
-                const windHand = param.data.name.WIND;
-                const hand = param.data.name.HAND + 'p';
-                const handScore = param.data.name.HAND_SCORE;
-                const formattedHandScore = handScore > 0 ? `+${handScore}` : handScore;
-                const isWinner = param.data.name.IS_WINNER;
-                const mahjongText = isWinner ? " mahjong" : "";
-                const color = teamColors[param.seriesName]
-                  ? `rgb(${teamColors[param.seriesName].color_red}, ${teamColors[param.seriesName].color_green}, ${teamColors[param.seriesName].color_blue})`
-                  : 'black';
-                return `<span style="display:inline-block;width:10px;height:10px;background-color:${color};margin-right:5px;"></span>${teamName}: ${param.value - 500} (${windHand} ${hand}${mahjongText}, ${formattedHandScore})`;
-              }
-              return null;
+            const teamName = getTeamName(param.seriesName);
+            if (teamName !== "Unknown Team") {
+              const windHand = param.data.name.WIND;
+              const hand = param.data.name.HAND + "p";
+              const handScore = param.data.name.HAND_SCORE;
+              const formattedHandScore =
+                handScore > 0 ? `+${handScore}` : handScore;
+              const isWinner = param.data.name.IS_WINNER;
+              const mahjongText = isWinner ? " mahjong" : "";
+              const color = teamColors[param.seriesName]
+                ? `rgb(${teamColors[param.seriesName].color_red}, ${
+                    teamColors[param.seriesName].color_green
+                  }, ${teamColors[param.seriesName].color_blue})`
+                : "black";
+              return `<span style="display:inline-block;width:10px;height:10px;background-color:${color};margin-right:5px;"></span>${teamName}: ${
+                param.value - 500
+              } (${windHand} ${hand}${mahjongText}, ${formattedHandScore})`;
+            }
+            return null;
           })
           .filter((text: any) => text !== null)
           .join("<br/>");
@@ -207,5 +213,10 @@ export default function MatchChart({
     series: series,
   };
 
-  return <ReactEcharts option={options} style={{ height: "600px" }} />;
+  return (
+    <ReactEcharts
+      option={options}
+      style={{ height: "600px" }}
+    />
+  );
 }
