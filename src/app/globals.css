@@ -100,3 +100,28 @@ h3 {
   margin-right: 20px;
   cursor: pointer;
 }
+
+.match-round-info {
+  margin: 0;
+   color: rgb(148, 48, 48);
+   text-align: left;
+}
+
+.match-round-name {
+  font-size: 20px;
+  display: block;
+  margin: 5px 0;
+  text-align: left;
+  color: rgb(148, 48, 48);
+}
+
+.match-round-time {
+  color: #909090;
+  text-align: left;
+}
+
+.match-round-grid-item {
+  padding: 10px;
+  background-color: white;
+  margin-bottom: 20px;
+}
