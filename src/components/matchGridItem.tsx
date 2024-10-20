@@ -21,7 +21,7 @@ export default async function MatchGridItem({ id }: { id: string }) {
 
   // Update time format
   const formatTime = (date: Date) =>
-    date.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
+    date.toLocaleTimeString("sv-SE", { hour: "2-digit", minute: "2-digit" });
   const timeString = `${formatTime(new Date(firstRound))}-${formatTime(
     new Date(lastRound)
   )}`;
