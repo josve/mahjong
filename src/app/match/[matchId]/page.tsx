@@ -82,7 +82,13 @@ export default async function Page({ params }: PageProps) {
           }}
         >
           Datum {new Date(match.TIME).toLocaleDateString("sv-SE")}
+          
         </h3>
+        {match.COMMENT && (
+        <p>
+        	Kommentar: {match.COMMENT}
+        </p>
+        )}
         <div>
           <MatchChart
             hands={hands}
