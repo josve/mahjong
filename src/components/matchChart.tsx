@@ -206,6 +206,13 @@ export default function MatchChart({
       boundaryGap: false,
       data: rounds,
       startValue: 0,
+      axisLabel: {
+        formatter: (value: string) => {
+          const roundNumber = parseInt(value, 10);
+          const actualMatchLength = Math.floor(hands.length / 4);
+          return roundNumber <= actualMatchLength ? value : "";
+        },
+      },
     },
     yAxis: {
       type: "value",
