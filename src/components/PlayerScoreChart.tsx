@@ -1,17 +1,17 @@
 "use client";
 import React, { useMemo } from "react";
 import ReactEcharts from "echarts-for-react";
-import { getTeamColors } from "src/lib/dbMatch";
+import { getPlayerColors } from "src/lib/dbMatch";
 
 interface PlayerScoreChartProps {
   matches: any;
   teamIdToName: { [key: string]: string };
   allPlayers: { id: string; name: string }[];
   teamIdToPlayerIds: { [key: string]: string[] };
-  teamColors: { [key: string]: { color_red: number; color_green: number; color_blue: number } };
+  playerColors: { [key: string]: { color_red: number; color_green: number; color_blue: number } };
 }
 
-const PlayerScoreChart: React.FC<PlayerScoreChartProps> = ({ matches, teamIdToName, allPlayers, teamIdToPlayerIds, teamColors }) => {
+const PlayerScoreChart: React.FC<PlayerScoreChartProps> = ({ matches, teamIdToName, allPlayers, teamIdToPlayerIds, playerColors }) => {
   const { playerScores, labels, mahjongWins, highRollerScores, averageHan } = useMemo(() => {
     const scores: { [key: string]: number[] } = {};
     const labels: string[] = [];
@@ -79,7 +79,7 @@ const PlayerScoreChart: React.FC<PlayerScoreChartProps> = ({ matches, teamIdToNa
     smooth: true,
     lineStyle: {
       width: 2,
-      color: teamColors[player] ? `rgb(${teamColors[player].color_red}, ${teamColors[player].color_green}, ${teamColors[player].color_blue})` : undefined,
+      color: playerColors[player] ? `rgb(${playerColors[player].color_red}, ${playerColors[player].color_green}, ${playerColors[player].color_blue})` : undefined,
     },
   }));
 
@@ -114,7 +114,7 @@ const PlayerScoreChart: React.FC<PlayerScoreChartProps> = ({ matches, teamIdToNa
     name: player,
     value: wins,
     itemStyle: {
-      color: teamColors[player] ? `rgb(${teamColors[player].color_red}, ${teamColors[player].color_green}, ${teamColors[player].color_blue})` : undefined,
+      color: playerColors[player] ? `rgb(${playerColors[player].color_red}, ${playerColors[player].color_green}, ${playerColors[player].color_blue})` : undefined,
     },
   }));
 
@@ -154,7 +154,7 @@ const PlayerScoreChart: React.FC<PlayerScoreChartProps> = ({ matches, teamIdToNa
     data: scores.map(score => [score[0], score[1], player]), // [gameIndex, han, playerName]
     symbolSize: (data: number[]) => (data[1] - 100) / 3 + 10, // Adjust size based on score
     itemStyle: {
-      color: teamColors[player] ? `rgb(${teamColors[player].color_red}, ${teamColors[player].color_green}, ${teamColors[player].color_blue})` : undefined,
+      color: playerColors[player] ? `rgb(${playerColors[player].color_red}, ${playerColors[player].color_green}, ${playerColors[player].color_blue})` : undefined,
     },
   }));
 
@@ -218,7 +218,7 @@ const PlayerScoreChart: React.FC<PlayerScoreChartProps> = ({ matches, teamIdToNa
     name: player,
     value: avgHan,
     itemStyle: {
-      color: teamColors[player] ? `rgb(${teamColors[player].color_red}, ${teamColors[player].color_green}, ${teamColors[player].color_blue})` : undefined,
+      color: playerColors[player] ? `rgb(${playerColors[player].color_red}, ${playerColors[player].color_green}, ${playerColors[player].color_blue})` : undefined,
     },
   }));
 

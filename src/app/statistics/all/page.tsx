@@ -7,6 +7,7 @@ import {
   getAllPlayers,
   getTeamIdToPlayerIds,
   getTeamColors,
+  getPlayerColors,
 } from "@/lib/dbMatch";
 import { Metadata } from "next";
 
@@ -22,6 +23,7 @@ export default async function AllStatisticsPage() {
   const allPlayers: { id: string; name: string }[] = await getAllPlayers();
   const teamIdToPlayerIds = await getTeamIdToPlayerIds();
   const teamColors = await getTeamColors();
+  const playerColors = await getPlayerColors();
 
   return (
     <div>
@@ -35,6 +37,7 @@ export default async function AllStatisticsPage() {
         allPlayers={allPlayers}
         teamIdToPlayerIds={teamIdToPlayerIds}
         teamColors={teamColors}
+        playerColors={playerColors}
       />
     </div>
   );
