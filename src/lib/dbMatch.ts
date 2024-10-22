@@ -40,6 +40,29 @@ export async function getTeamColors() {
   }
 }
 
+export async function getPlayerColors() {
+  const connection = await Connection.getInstance().getConnection();
+  try {
+    const [result]: any = await connection.query(
+      "SELECT PLAYER_ID, color_red, color_green, color_blue FROM Players"
+    );
+
+    // Convert the result to an object with the player_id as the key and the color as the value
+    const playerColors = result.reduce((acc: any, row: any) => {
+      acc[row.PLAYER_ID] = {
+        color_red: row.color_red,
+        color_green: row.color_green,
+        color_blue: row.color_blue,
+      };
+      return acc;
+    }, {});
+
+    return playerColors;
+  } finally {
+    connection.release();
+  }
+}
+
 export async function getHandsByGameId(id: string): Promise<any> {
   const connection = await Connection.getInstance().getConnection();
   try {
