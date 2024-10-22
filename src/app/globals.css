@@ -125,3 +125,27 @@ h3 {
   background-color: white;
   margin-bottom: 20px;
 }
+
+/* Media queries to hide navigation links on screens below 768px */
+@media (max-width: 768px) {
+  .header-links {
+    display: none;
+  }
+}
+
+/* Styles for the Drawer component to ensure it covers the entire screen */
+.MuiDrawer-paper {
+  width: 100%;
+  max-width: 300px;
+}
+
+/* Styles for the MenuIcon component to position it correctly in the header */
+.MuiIconButton-root {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .MuiIconButton-root {
+    display: block;
+  }
+}
