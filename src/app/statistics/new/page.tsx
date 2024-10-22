@@ -14,7 +14,6 @@ export async function generateMetadata(): Promise<Metadata> {
     title: "Statistik (ny tid) - Mahjong Master System",
   };
 }
-export const revalidate = 60; // Revalidate every 60 seconds
 
 export default async function NewStatisticsPage() {
   const matches = await fetchMatches("ny tid");

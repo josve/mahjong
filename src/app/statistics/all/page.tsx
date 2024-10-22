@@ -15,8 +15,6 @@ export async function generateMetadata(): Promise<Metadata> {
   };
 }
 
-export const revalidate = 60; // Revalidate every 60 seconds
-
 export default async function AllStatisticsPage() {
   const matches = await fetchMatches("all tid");
   const teamIdToName = await getTeamIdToName();
