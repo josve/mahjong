@@ -51,7 +51,7 @@ const PlayerScoreChart: React.FC<PlayerScoreChartProps> = ({
 
       // Calculate scores, Mahjong wins, high roller scores, and average han
       sortedMatches.forEach((match, gameIndex) => {
-        const matchDate = new Date(match.TIME).getTime();
+        const matchDate: any = new Date(match.TIME).getTime();
         labels.push(matchDate);
 
         // Initialize scores for this match
@@ -106,10 +106,16 @@ const PlayerScoreChart: React.FC<PlayerScoreChartProps> = ({
       <PlayerScoresChart
         playerScores={playerScores}
         labels={labels}
+        playerNameToId={Object.fromEntries(
+          allPlayers.map((player) => [player.name, player.id])
+        )}
         playerColors={playerColors}
       />
       <MahjongWinsChart
         mahjongWins={mahjongWins}
+        playerNameToId={Object.fromEntries(
+          allPlayers.map((player) => [player.name, player.id])
+        )}
         playerColors={playerColors}
       />
       <HighRollerChart
