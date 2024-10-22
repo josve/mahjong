@@ -27,7 +27,13 @@ export default function RootLayout({
             }}
           >
             <Header />
+            <Box 
+      sx={{
+        margin: "20px"
+      }}
+          >
             {children}
+          </Box>
           </Box>
         </Container>
       </body>
