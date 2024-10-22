@@ -22,12 +22,8 @@ export default function RootLayout({
         <Container>
           <Box
             sx={{
-              maxWidth: { xs: "100%", sm: "90%", md: "80%", lg: "70%", xl: "60%" },
-              minWidth: { xs: "100%", sm: "90%", md: "80%", lg: "70%", xl: "60%" },
-              paddingTop: "20px",
               margin: "0 auto",
               backgroundColor: "white",
-              padding: "20px",
             }}
           >
             <Header />
