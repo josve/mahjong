@@ -83,14 +83,14 @@ export default function Header() {
         sx={{ display: { xs: "block", md: "none" } }}
       >
         <List>
-          <ListItem button component={Link} href="/" onClick={handleMenuToggle}>
-            <ListItemText primary="matcher" />
+          <ListItem component={Link} href="/" onClick={handleMenuToggle}>
+            <ListItemText primary="Matcher" />
           </ListItem>
-          <ListItem button component={Link} href="/statistics" onClick={handleMenuToggle}>
-            <ListItemText primary="statistik" />
+          <ListItem component={Link} href="/statistics" onClick={handleMenuToggle}>
+            <ListItemText primary="Statistik" />
           </ListItem>
-          <ListItem button component={Link} href="/scoreboard" onClick={handleMenuToggle}>
-            <ListItemText primary="poängtabell" />
+          <ListItem component={Link} href="/scoreboard" onClick={handleMenuToggle}>
+            <ListItemText primary="Poängtabell" />
           </ListItem>
         </List>
       </Drawer>
