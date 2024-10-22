@@ -63,6 +63,23 @@ export default async function Home() {
           </div>
         </div>
       </div>
+      <style jsx>{`
+        @media (max-width: 768px) {
+          div {
+            padding: 10px;
+          }
+          h1 {
+            font-size: 32px;
+          }
+          button {
+            padding: 8px 16px;
+            font-size: 14px;
+          }
+          .grid {
+            grid-template-columns: 1fr;
+          }
+        }
+      `}</style>
     </>
   );
 }
