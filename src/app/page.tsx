@@ -2,6 +2,7 @@ import MatchGridItem from "@/components/matchGridItem";
 import TotalStatisticsRow from "@/components/totalStatisticsRow";
 import Connection from "@/lib/connection";
 import Link from "next/link";
+import { Grid } from "@mui/material"; // Pb209
 
 async function getAllMatches(): Promise<any> {
   const connection = await Connection.getInstance().getConnection(); // Get a connection
@@ -44,23 +45,13 @@ export default async function Home() {
             </Link>
           </div>
           <TotalStatisticsRow/>
-          <div
-            style={{
-              display: "grid",
-              gridTemplateColumns: "1fr 1fr",
-              gap: "20px",
-              marginTop: "20px",
-            }}
-          >
-            <>
-              {matches.map((match: { GAME_ID: string }) => (
-                <MatchGridItem
-                  key={match.GAME_ID}
-                  id={match.GAME_ID}
-                />
-              ))}
-            </>
-          </div>
+          <Grid container spacing={2} sx={{ marginTop: "20px" }}> {/* P68f5 */}
+            {matches.map((match: { GAME_ID: string }) => (
+              <Grid item xs={12} sm={6} key={match.GAME_ID}> {/* Pe16e */}
+                <MatchGridItem id={match.GAME_ID} />
+              </Grid>
+            ))}
+          </Grid>
         </div>
       </div>
     </>
