@@ -1,15 +1,17 @@
 "use client";
 import React, { useMemo } from "react";
 import ReactEcharts from "echarts-for-react";
+import { getTeamColors } from "src/lib/dbMatch";
 
 interface PlayerScoreChartProps {
   matches: any;
   teamIdToName: { [key: string]: string };
   allPlayers: { id: string; name: string }[];
   teamIdToPlayerIds: { [key: string]: string[] };
+  teamColors: { [key: string]: { color_red: number; color_green: number; color_blue: number } };
 }
 
-const PlayerScoreChart: React.FC<PlayerScoreChartProps> = ({ matches, teamIdToName, allPlayers, teamIdToPlayerIds }) => {
+const PlayerScoreChart: React.FC<PlayerScoreChartProps> = ({ matches, teamIdToName, allPlayers, teamIdToPlayerIds, teamColors }) => {
   const { playerScores, labels, mahjongWins, highRollerScores, averageHan } = useMemo(() => {
     const scores: { [key: string]: number[] } = {};
     const labels: string[] = [];
@@ -77,6 +79,7 @@ const PlayerScoreChart: React.FC<PlayerScoreChartProps> = ({ matches, teamIdToNa
     smooth: true,
     lineStyle: {
       width: 2,
+      color: teamColors[player] ? `rgb(${teamColors[player].color_red}, ${teamColors[player].color_green}, ${teamColors[player].color_blue})` : undefined,
     },
   }));
 
@@ -110,6 +113,9 @@ const PlayerScoreChart: React.FC<PlayerScoreChartProps> = ({ matches, teamIdToNa
   const winsSeries = Object.entries(mahjongWins).map(([player, wins]) => ({
     name: player,
     value: wins,
+    itemStyle: {
+      color: teamColors[player] ? `rgb(${teamColors[player].color_red}, ${teamColors[player].color_green}, ${teamColors[player].color_blue})` : undefined,
+    },
   }));
 
   const winsOptions = {
@@ -147,6 +153,9 @@ const PlayerScoreChart: React.FC<PlayerScoreChartProps> = ({ matches, teamIdToNa
     type: 'scatter',
     data: scores.map(score => [score[0], score[1], player]), // [gameIndex, han, playerName]
     symbolSize: (data: number[]) => (data[1] - 100) / 3 + 10, // Adjust size based on score
+    itemStyle: {
+      color: teamColors[player] ? `rgb(${teamColors[player].color_red}, ${teamColors[player].color_green}, ${teamColors[player].color_blue})` : undefined,
+    },
   }));
 
   const highRollerOptions = {
@@ -208,6 +217,9 @@ const PlayerScoreChart: React.FC<PlayerScoreChartProps> = ({ matches, teamIdToNa
   const averageHanSeries = Object.entries(averageHan).map(([player, avgHan]) => ({
     name: player,
     value: avgHan,
+    itemStyle: {
+      color: teamColors[player] ? `rgb(${teamColors[player].color_red}, ${teamColors[player].color_green}, ${teamColors[player].color_blue})` : undefined,
+    },
   }));
 
   const averageHanOptions = {
