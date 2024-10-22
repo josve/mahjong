@@ -22,7 +22,7 @@ export default async function YearStatisticsPage() {
   const teamIdToPlayerIds = await getTeamIdToPlayerIds();
 
   return (
-    <div style={{ padding: "20px" }}>
+    <div>
       <div className="multi-title-header">
         <h1>Statistik - Innevarande år</h1>
         <StatisticsNav currentPath="/statistics/year" />
