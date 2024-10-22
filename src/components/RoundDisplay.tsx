@@ -1,5 +1,5 @@
 import React from "react";
-import RoundResultFormEdit from "./roundResultFormEdit";
+import RoundResultFormEdit from "./RoundResultFormEdit";
 
 interface RoundDisplayProps {
   round: string;
