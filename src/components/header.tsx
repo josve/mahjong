@@ -2,12 +2,13 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { AppBar, Toolbar, Typography, Box, IconButton, Drawer, List, ListItem, ListItemText } from "@mui/material";
+import { AppBar, Toolbar, Typography, Box, IconButton, Drawer, List, ListItem, ListItemText, useMediaQuery } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import { useState } from "react";
 
 export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
+  const isLargeScreen = useMediaQuery('(min-width:768px)');
 
   const handleMenuToggle = () => {
     setMenuOpen(!menuOpen);
@@ -27,12 +28,15 @@ export default function Header() {
             <Box
               sx={{ display: "flex", alignItems: "center", cursor: "pointer" }}
             >
-              <Image
-                src="/mahjong_tiles.png"
-                alt="Mahjong Tiles"
-                width={104}
-                height={52}
-              />
+              {isLargeScreen && (
+                <Image
+                  src="/mahjong_tiles.png"
+                  alt="Mahjong Tiles"
+                  width={104}
+                  height={52}
+                  className="header-logo"
+                />
+              )}
               <Typography
                 variant="h6"
                 className="header-text"
