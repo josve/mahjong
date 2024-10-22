@@ -1,7 +1,6 @@
 "use client";
 import React, { useMemo } from "react";
 import ReactEcharts from "echarts-for-react";
-import { getPlayerColors } from "src/lib/dbMatch";
 
 interface PlayerScoreChartProps {
   matches: any;

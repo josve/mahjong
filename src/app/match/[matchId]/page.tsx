@@ -63,14 +63,7 @@ export default async function Page({ params }: PageProps) {
     new Date().getTime() - matchDate.getTime() < 24 * 60 * 60 * 1000;
 
   return (
-    <div style={{ backgroundColor: "rgb(250, 250, 250)" }}>
-      <div
-        style={{
-          backgroundColor: "white",
-          padding: "20px",
-          boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
-        }}
-      >
+      <div>
         <div className="multi-title-header">
           <h1>{match.NAME}</h1>
           <h2 style={{ textAlign: "left" }}>{numRounds} omgångar</h2>
@@ -118,6 +111,5 @@ export default async function Page({ params }: PageProps) {
           </p>
         )}
       </div>
-    </div>
   );
 }

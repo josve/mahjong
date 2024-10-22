@@ -22,7 +22,6 @@ export default async function AllStatisticsPage() {
   const teamIdToName = await getTeamIdToName();
   const allPlayers: { id: string; name: string }[] = await getAllPlayers();
   const teamIdToPlayerIds = await getTeamIdToPlayerIds();
-  const teamColors = await getTeamColors();
   const playerColors = await getPlayerColors();
 
   return (
@@ -36,7 +35,6 @@ export default async function AllStatisticsPage() {
         teamIdToName={teamIdToName}
         allPlayers={allPlayers}
         teamIdToPlayerIds={teamIdToPlayerIds}
-        teamColors={teamColors}
         playerColors={playerColors}
       />
     </div>
