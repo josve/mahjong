@@ -11,15 +11,18 @@ interface PlayerScoresChartProps {
       color_blue: number;
     };
   };
+  playerNameToId: { [key: string]: string };
 }
 
 const PlayerScoresChart: React.FC<PlayerScoresChartProps> = ({
   playerScores,
   labels,
   playerColors,
+  playerNameToId,
 }) => {
   const getPlayerColor = (playerName: string) => {
-    const playerColor = playerColors[playerName];
+    const playerId = playerNameToId[playerName];
+    const playerColor = playerColors[playerId];
     return playerColor
       ? `rgb(${playerColor.color_red}, ${playerColor.color_green}, ${playerColor.color_blue})`
       : undefined;

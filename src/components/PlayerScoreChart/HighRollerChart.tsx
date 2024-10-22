@@ -38,7 +38,7 @@ const HighRollerChart: React.FC<HighRollerChartProps> = ({
 
   return (
     <div>
-      <h2>High Roller-ligan (Händer över 100 han)</h2>
+      <h2>High Roller-ligan (över 100)</h2>
       {Object.entries(highRollerScores).map(([player, scores]) => (
         <div key={player} style={{ marginBottom: "20px" }}>
           <h3>{player}</h3>
@@ -57,7 +57,7 @@ const HighRollerChart: React.FC<HighRollerChartProps> = ({
                   margin: "0 5px",
                   position: "relative",
                 }}
-                title={`Spel #${gameIndex + 1}: ${score} han`}
+                title={`Spel #${gameIndex + 1}: ${score}`}
               >
                 <span
                   style={{
@@ -74,7 +74,7 @@ const HighRollerChart: React.FC<HighRollerChartProps> = ({
                     visibility: "hidden",
                   }}
                 >
-                  {`Spel #${gameIndex + 1}: ${score} han`}
+                  {`Spel #${gameIndex + 1}: ${score}`}
                 </span>
               </div>
             ))}

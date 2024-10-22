@@ -10,14 +10,17 @@ interface MahjongWinsChartProps {
       color_blue: number;
     };
   };
+  playerNameToId: { [key: string]: string };
 }
 
 const MahjongWinsChart: React.FC<MahjongWinsChartProps> = ({
   mahjongWins,
   playerColors,
+  playerNameToId,
 }) => {
   const getPlayerColor = (playerName: string) => {
-    const playerColor = playerColors[playerName];
+    const playerId = playerNameToId[playerName];
+    const playerColor = playerColors[playerId];
     return playerColor
       ? `rgb(${playerColor.color_red}, ${playerColor.color_green}, ${playerColor.color_blue})`
       : undefined;
@@ -39,10 +42,6 @@ const MahjongWinsChart: React.FC<MahjongWinsChartProps> = ({
     tooltip: {
       trigger: "item",
       formatter: "{a} <br/>{b} : {c} ({d}%)",
-    },
-    legend: {
-      orient: "vertical",
-      left: "left",
     },
     series: [
       {
