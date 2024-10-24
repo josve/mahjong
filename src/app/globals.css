@@ -149,3 +149,24 @@ h3 {
     display: block;
   }
 }
+
+/* Pfad8 */
+.create-match-button {
+  background-color: #943030;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: bold;
+}
+
+/* Pcde0 */
+@media (max-width: 768px) {
+  .create-match-button {
+    width: 100%;
+    padding: 15px;
+    font-size: 18px;
+  }
+}
