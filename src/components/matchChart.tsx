@@ -1,6 +1,7 @@
 "use client";
 import React from "react";
 import ReactEcharts from "echarts-for-react";
+import * as math from "mathjs";
 
 export default function MatchChart({
   hands,
@@ -136,6 +137,43 @@ export default function MatchChart({
         fontSize: 14, // Slightly larger font size
       },
     });
+
+    // Calculate prediction values using polynomial regression
+    const x = teamHands[teamId].map((round: any, index: number) => index);
+    const y = teamHands[teamId].map((round: any) => round.SCORE + 500);
+    const degree = 2; // Degree of the polynomial
+    const coeffs = math.polyfit(x, y, degree);
+    const predict = (x: number) =>
+      coeffs.reduce((sum: number, coeff: number, index: number) => {
+        return sum + coeff * Math.pow(x, index);
+      }, 0);
+
+    const predictionScores = Array.from({ length: 19 }, (_, i) => ({
+      value: predict(i),
+      name: { IS_PREDICTION: true },
+      itemStyle: {
+        color: color,
+        borderColor: color,
+        borderWidth: 2,
+        type: "dashed",
+      },
+    }));
+
+    series.push({
+      data: predictionScores,
+      type: "line",
+      name: `${teamId} Prediction`,
+      lineStyle: {
+        color: color,
+        width: 2,
+        type: "dashed",
+      },
+      smooth: true,
+      symbol: "none",
+      label: {
+        show: false,
+      },
+    });
   }
 
   series.push({
@@ -160,7 +198,6 @@ export default function MatchChart({
       show: false,
     },
   });
-  console.log("Series data:", series);
 
   const options = {
     tooltip: {
@@ -218,6 +255,9 @@ export default function MatchChart({
       type: "value",
     },
     series: series,
+    legend: {
+      data: series.map((s) => s.name),
+    },
   };
 
   return (
