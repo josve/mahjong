@@ -216,6 +216,26 @@ export default function MatchChart({
     },
     yAxis: {
       type: "value",
+      min: (value: any) => {
+        const minValue = Math.min(0, Math.floor((value.min - 100) / 100) * 100);
+        return minValue;
+      },
+      max: (value: any) => {
+        const minValue = Math.min(0, Math.floor((value.min - 100) / 100) * 100);
+        const maxValue = Math.ceil((value.max + 100) / 100) * 100;
+        if (maxValue - minValue < 1000) {
+          return maxValue + (1000 -  Math.abs(minValue - maxValue));
+        }
+        return maxValue;
+      },
+      splitLine: {
+        show: true, // Show grid lines for y-axis
+      },
+      axisLabel: {
+        formatter: (value: number) => {
+          return value === 500 ? "500" : value.toString();
+        },
+      },
     },
     series: series,
   };
