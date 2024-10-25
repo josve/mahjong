@@ -63,7 +63,9 @@ const PlayerScoresChart: React.FC<PlayerScoresChartProps> = ({
       axisLabel: {
         formatter: (value: string) => {
           const date = new Date(parseInt(value));
-          return `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`;
+          return `${date.getFullYear()}-${(date.getMonth() + 1)
+            .toString()
+            .padStart(2, "0")}-${date.getDate().toString().padStart(2, "0")}`;
         },
       },
     },
