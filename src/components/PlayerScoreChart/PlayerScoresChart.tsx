@@ -57,7 +57,7 @@ const PlayerScoresChart: React.FC<PlayerScoresChartProps> = ({
       containLabel: true,
     },
     xAxis: {
-      type: "category",
+      type: "time",
       boundaryGap: false,
       data: labels,
     },
