@@ -25,8 +25,8 @@ export default async function TotalStatisticsRow() {
       style={{ marginBottom: "20px", textAlign: "left" }}
     >
       <p>
-        Totalt {stats.totalMatches} matcher, {stats.totalMahjongs} mahjonger på{" "}
-        {stats.totalRounds} omgångar
+        Totalt {stats?.totalMatches} matcher, {stats?.totalMahjongs} mahjonger på{" "}
+        {stats?.totalRounds} omgångar
       </p>
     </div>
   );
