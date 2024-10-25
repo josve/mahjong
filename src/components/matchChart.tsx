@@ -71,8 +71,8 @@ export default function MatchChart({
 
   series.push({
     type: "pie",
-    radius: ["15%", "25%"], // Make the pie chart smaller
-    center: ["20%", "20%"], // Move it slightly to the left and up
+    radius: ["10%", "20%"], // Make the pie chart smaller
+    center: ["20%", "15%"], // Move it slightly to the left and up
     data: pieData,
     tooltip: {
       show: false,
