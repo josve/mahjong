@@ -216,6 +216,16 @@ export default function MatchChart({
     },
     yAxis: {
       type: "value",
+      min: (value: any) => Math.floor((value.min - 100) / 100) * 100,
+      max: (value: any) => Math.ceil((value.max + 100) / 100) * 100,
+      splitLine: {
+        show: true, // Show grid lines for y-axis
+      },
+      axisLabel: {
+        formatter: (value: number) => {
+          return value === 500 ? "500" : value.toString();
+        },
+      },
     },
     series: series,
   };
