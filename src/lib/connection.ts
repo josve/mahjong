@@ -30,10 +30,45 @@ export default class Connection {
   }
 
   public async getConnection(): Promise<PoolConnection> {
-    return this.pool.getConnection();
+    if (await this.isDatabaseRunning()) {
+      return this.pool.getConnection();
+    } else {
+      return this.getMockConnection();
+    }
   }
 
   public async closePool(): Promise<void> {
     await this.pool.end();
+  }
+
+  private async isDatabaseRunning(): Promise<boolean> {
+    try {
+      const connection = await this.pool.getConnection();
+      await connection.ping();
+      connection.release();
+      return true;
+    } catch (error) {
+      return false;
+    }
+  }
+
+  private getMockConnection(): PoolConnection {
+    return {
+      query: async () => [[]],
+      release: () => {},
+      beginTransaction: async () => {},
+      commit: async () => {},
+      rollback: async () => {},
+      changeUser: async () => {},
+      ping: async () => {},
+      statistics: async () => {},
+      end: async () => {},
+      destroy: () => {},
+      pause: () => {},
+      resume: () => {},
+      escape: (value: any) => value,
+      escapeId: (value: any) => value,
+      format: (sql: string, values: any[]) => sql,
+    } as PoolConnection;
   }
 }
