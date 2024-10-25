@@ -3,7 +3,7 @@ import React, { useMemo } from "react";
 import PlayerScoresChart from "./PlayerScoreChart/PlayerScoresChart";
 import MahjongWinsChart from "./PlayerScoreChart/MahjongWinsChart";
 import HighRollerChart from "./PlayerScoreChart/HighRollerChart";
-import AverageHanChart from "./PlayerScoreChart/AverageHanChart";
+import AverageHanTable from "./PlayerScoreChart/AverageHanTable";
 
 interface PlayerScoreChartProps {
   matches: any;
@@ -125,7 +125,7 @@ const PlayerScoreChart: React.FC<PlayerScoreChartProps> = ({
           allPlayers.map((player) => [player.name, player.id])
         )}
       />
-      <AverageHanChart
+      <AverageHanTable
         averageHan={averageHan}
         playerColors={playerColors}
       />
