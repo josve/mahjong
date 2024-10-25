@@ -71,8 +71,8 @@ export default function MatchChart({
 
   series.push({
     type: "pie",
-    radius: ["18%", "30%"], // Make the pie chart smaller
-    center: ["20%", "25%"], // Move it slightly to the left
+    radius: ["15%", "25%"], // Make the pie chart smaller
+    center: ["20%", "20%"], // Move it slightly to the left and up
     data: pieData,
     tooltip: {
       show: false,
@@ -133,7 +133,9 @@ export default function MatchChart({
           return "";
         },
         color: color,
-        fontSize: 14, // Slightly larger font size
+        fontSize: 16, // Larger font size
+        textBorderColor: "white", // White border around text
+        textBorderWidth: 2, // Border width
       },
     });
   }
@@ -239,6 +241,10 @@ export default function MatchChart({
     },
     series: series,
   };
+
+  if (hands.length === 0) {
+    return null; // Hide the graph if no rounds are registered
+  }
 
   return (
     <ReactEcharts
