@@ -18,6 +18,9 @@ export default function Header() {
     <AppBar
       position="static"
       className="header-bar"
+      sx={{
+          background: "linear-gradient(to right, #FF3366, #FF6B6B)"
+      }}
     >
       <Toolbar>
         <Box sx={{ display: "flex", alignItems: "center", flexGrow: 1 }}>

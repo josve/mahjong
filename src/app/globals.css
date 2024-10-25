@@ -72,10 +72,6 @@ h3 {
   padding: 20px;
 }
 
-.header-bar {
-  background: linear-gradient(to right, #FF3366, #FF6B6B)
-}
-
 .bold-header {
   font-weight: 700;
 }
