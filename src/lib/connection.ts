@@ -52,7 +52,7 @@ export default class Connection {
     }
   }
 
-  private getMockConnection(): PoolConnection {
+  private getMockConnection(): any {
     return {
       query: async () => [[]],
       release: () => {},
@@ -69,6 +69,6 @@ export default class Connection {
       escape: (value: any) => value,
       escapeId: (value: any) => value,
       format: (sql: string, values: any[]) => sql,
-    } as PoolConnection;
+    };
   }
 }
