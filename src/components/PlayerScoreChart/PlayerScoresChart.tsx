@@ -57,9 +57,15 @@ const PlayerScoresChart: React.FC<PlayerScoresChartProps> = ({
       containLabel: true,
     },
     xAxis: {
-      type: "time",
+      type: "category",
       boundaryGap: false,
       data: labels,
+      axisLabel: {
+        formatter: (value: string) => {
+          const date = new Date(parseInt(value));
+          return `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`;
+        },
+      },
     },
     yAxis: {
       type: "value",
