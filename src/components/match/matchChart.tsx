@@ -1,4 +1,3 @@
-import { getTeamIdToName, getTeamColors } from "@/lib/dbMatch";
 import MatchChartClient from "@/components/match/matchChartClient";
 
 interface PageProps {
@@ -6,14 +5,16 @@ interface PageProps {
 }
 
 export default async function MatchChart({ hands }: PageProps) {
-  const teamIdToName = await getTeamIdToName();
-  const teamColors = await getTeamColors();
+  const matchId = "some-match-id"; // Replace with actual matchId
+
+  const response = await fetch(`/api/matchChart?matchId=${matchId}`);
+  const data = await response.json();
 
   return (
     <MatchChartClient
-      hands={hands}
-      teamIdToName={teamIdToName}
-      teamColors={teamColors}
+      hands={data.hands}
+      teamIdToName={data.teamIdToName}
+      teamColors={data.teamColors}
     />
   );
 }

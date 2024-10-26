@@ -1,16 +1,30 @@
 "use client";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import ReactEcharts from "echarts-for-react";
 
 export default function MatchChartClient({
-  hands,
-  teamIdToName,
-  teamColors,
+  matchId,
 }: {
-  hands: any[];
-  teamIdToName: { [key: string]: string };
-  teamColors: any;
+  matchId: string;
 }) {
+  const [data, setData] = useState<any>(null);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const response = await fetch(`/api/matchChart?matchId=${matchId}`);
+      const data = await response.json();
+      setData(data);
+    };
+
+    fetchData();
+  }, [matchId]);
+
+  if (!data) {
+    return <div>Loading...</div>;
+  }
+
+  const { hands, teamIdToName, teamColors } = data;
+
   // Get the hands for each team
   const teamHands = hands.reduce((acc: any, hand: any) => {
     acc[hand.TEAM_ID] = acc[hand.TEAM_ID] || [];
@@ -80,7 +94,7 @@ export default function MatchChartClient({
               return null;
             })
             .filter((text) => text !== null)
-            .join("<br/>");
+            .join("<br/>";
         } else {
           const teamName = getTeamName(params.name);
           const percentage = ((params.value / totalWins) * 100).toFixed(2);
@@ -216,7 +230,7 @@ export default function MatchChartClient({
             return null;
           })
           .filter((text: any) => text !== null)
-          .join("<br/>");
+          .join("<br/>";
       },
     },
     grid: {
