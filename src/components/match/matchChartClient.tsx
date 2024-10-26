@@ -86,7 +86,7 @@ export default function MatchChartClient({
   }, {});
 
   // Add no-winner team for rounds with no IS_WINNER
-  for (let i = 0; i < numRounds; i++) {
+  for (let i = 1; i < numRounds; i++) {
     const roundHands = hands.slice(i * 4, (i + 1) * 4);
     const hasWinner = roundHands.some((hand: any) => hand.IS_WINNER);
     if (!hasWinner) {
@@ -100,11 +100,12 @@ export default function MatchChartClient({
     value: winCounts[teamId],
     name: teamId === "no-winner" ? "No Winner" : getTeamName(teamId),
     itemStyle: {
-      color: teamId === "no-winner"
-        ? "gray"
-        : teamColors[teamId]
-        ? `rgb(${teamColors[teamId].color_red}, ${teamColors[teamId].color_green}, ${teamColors[teamId].color_blue})`
-        : "transparent", // Use transparent if no color is found
+      color:
+        teamId === "no-winner"
+          ? "transparent"
+          : teamColors[teamId]
+          ? `rgb(${teamColors[teamId].color_red}, ${teamColors[teamId].color_green}, ${teamColors[teamId].color_blue})`
+          : "transparent", // Use transparent if no color is found
       formatter: (params: any) => {
         if (Array.isArray(params)) {
           return params
