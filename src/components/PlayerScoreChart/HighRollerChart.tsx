@@ -27,7 +27,7 @@ const HighRollerChart: React.FC<HighRollerChartProps> = ({
 
   const getCircleSize = (score: number) => {
     const minSize = 10;
-    const maxSize = 30;
+    const maxSize = 25;
     const minScore = 100;
     const maxScore = 300;
     return (
@@ -45,7 +45,7 @@ const HighRollerChart: React.FC<HighRollerChartProps> = ({
           style={{ marginBottom: "20px" }}
         >
           <h3>{player}</h3>
-          <div style={{ display: "flex", alignItems: "center" }}>
+          <div style={{ marginTop: "10px", display: "grid", gap: "5px", justifyItems: "center", alignItems: "center", gridTemplateColumns: "repeat(auto-fill, 30px)" }}>
             {scores.map(([gameIndex, score]) => (
               <div
                 key={gameIndex}
@@ -58,27 +58,9 @@ const HighRollerChart: React.FC<HighRollerChartProps> = ({
                   alignItems: "center",
                   justifyContent: "center",
                   margin: "0 5px",
-                  position: "relative",
                 }}
                 title={`Spel #${gameIndex + 1}: ${score}`}
               >
-                <span
-                  style={{
-                    position: "absolute",
-                    top: "100%",
-                    left: "50%",
-                    transform: "translateX(-50%)",
-                    whiteSpace: "nowrap",
-                    backgroundColor: "rgba(0, 0, 0, 0.7)",
-                    color: "white",
-                    padding: "2px 5px",
-                    borderRadius: "3px",
-                    fontSize: "12px",
-                    visibility: "hidden",
-                  }}
-                >
-                  {`Spel #${gameIndex + 1}: ${score}`}
-                </span>
               </div>
             ))}
           </div>

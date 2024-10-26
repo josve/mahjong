@@ -47,7 +47,7 @@ const MahjongWinsChart: React.FC<MahjongWinsChartProps> = ({
       {
         name: "Mahjong-vinster",
         type: "pie",
-        radius: "50%",
+        radius: ["50%", "30%"],
         data: winsSeries,
         emphasis: {
           itemStyle: {

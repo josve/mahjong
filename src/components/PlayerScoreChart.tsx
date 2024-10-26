@@ -34,6 +34,7 @@ const PlayerScoreChart: React.FC<PlayerScoreChartProps> = ({
       const highRollerScores: { [key: string]: [number, number][] } = {}; // [gameIndex, score]
       const totalHan: { [key: string]: number } = {};
       const winCount: { [key: string]: number } = {};
+      const handCount: { [key: string]: number } = {};
 
       // Initialize scores, wins, highRollerScores, totalHan, and winCount for all players
       allPlayers.forEach((player) => {
@@ -42,6 +43,7 @@ const PlayerScoreChart: React.FC<PlayerScoreChartProps> = ({
         highRollerScores[player.name] = [];
         totalHan[player.name] = 0;
         winCount[player.name] = 0;
+        handCount[player.name] = 0;
       });
 
       // Sort matches by date
@@ -77,6 +79,7 @@ const PlayerScoreChart: React.FC<PlayerScoreChartProps> = ({
                 totalHan[player.name] += hand.HAND;
                 winCount[player.name]++;
               }
+              handCount[player.name] += 1;
               if (hand.HAND > 100) {
                 highRollerScores[player.name].push([gameIndex, hand.HAND]);
               }
@@ -89,7 +92,7 @@ const PlayerScoreChart: React.FC<PlayerScoreChartProps> = ({
       const averageHand: { [key: string]: number } = {};
       Object.keys(totalHan).forEach((player) => {
         averageHand[player] =
-          winCount[player] > 0 ? totalHan[player] / winCount[player] : 0;
+            handCount[player] > 0 ? totalHan[player] / handCount[player] : 0;
       });
 
       return {
