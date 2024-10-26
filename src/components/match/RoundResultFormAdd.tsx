@@ -71,7 +71,7 @@ export default function RoundResultFormAdd({
           eastTeam: "",
           winner: "-1",
         });
-        router.push(`/match/${matchId}/edit`);
+        window.location.reload();
       })
       .catch((error) => {
         console.error("Error:", error);

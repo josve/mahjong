@@ -28,7 +28,10 @@ export default async function Page({ params }: PageProps) {
         matchId={params.matchId}
         numRounds={numRounds}
       />
-      <MatchChart matchId={params.matchId} />
+      <MatchChart
+        matchId={params.matchId}
+        autoReload={false}
+      />
       <RegisterResultControls matchId={params.matchId} />
     </>
   );

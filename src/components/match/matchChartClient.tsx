@@ -3,7 +3,13 @@ import React, { useEffect, useState } from "react";
 import ReactEcharts from "echarts-for-react";
 import { CircularProgress } from "@mui/material";
 
-export default function MatchChartClient({ matchId }: { matchId: string }) {
+export default function MatchChartClient({
+  matchId,
+  autoReload,
+}: {
+  matchId: string;
+  autoReload: boolean;
+}) {
   const [data, setData] = useState<any>(null);
 
   const fetchData = async () => {
