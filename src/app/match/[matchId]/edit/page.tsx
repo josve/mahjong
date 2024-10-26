@@ -1,5 +1,11 @@
-import { getMatchById, getHandsByGameId } from "@/lib/dbMatch";
+import {
+  getMatchById,
+  getHandsByGameId,
+  getTeamIdToName,
+  getTeamColors,
+} from "@/lib/dbMatch";
 import MatchChart from "@/components/match/matchChart";
+import RegisterResultControls from "@/components/match/RegisterResultControls";
 import MatchHeader from "@/components/match/MatchHeader";
 import { Metadata } from "next";
 
@@ -19,14 +25,8 @@ export async function generateMetadata({
 }
 
 export default async function Page({ params }: PageProps) {
-  const match = await getMatchById(params.matchId);
   const hands = await getHandsByGameId(params.matchId);
   const numRounds = Math.floor(hands.length / 4 - 1);
-
-  const matchDate = new Date(match.TIME);
-  const isEditable =
-    new Date().getTime() - matchDate.getTime() < 24 * 60 * 60 * 1000;
-
   return (
     <>
       <MatchHeader
@@ -34,18 +34,7 @@ export default async function Page({ params }: PageProps) {
         numRounds={numRounds}
       />
       <MatchChart hands={hands} />
-      {isEditable && (
-        <div style={{ marginTop: "20px" }}>
-          <a
-            href={`/match/${params.matchId}/edit`}
-            style={{
-              textDecoration: "underline",
-            }}
-          >
-            Till registrerings sida
-          </a>
-        </div>
-      )}
+      <RegisterResultControls matchId={params.matchId} />
     </>
   );
 }

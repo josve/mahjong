@@ -44,7 +44,11 @@ export default function RoundResultFormAdd({
   };
   const isFormValid = () => {
     const allScoresEntered = Object.values(formData.scores).every(
-      (score) => score !== "" && score !== undefined && score !== null
+      (score) =>
+        score !== "" &&
+        score !== undefined &&
+        score !== null &&
+        Number(score) % 2 == 0
     );
     const eastTeamSelected = formData.eastTeam !== "";
     const winnerSelected = String(formData.winner) !== "-1";
