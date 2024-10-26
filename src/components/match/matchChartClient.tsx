@@ -1,16 +1,27 @@
 "use client";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import ReactEcharts from "echarts-for-react";
+import { CircularProgress } from "@mui/material";
 
-export default function MatchChartClient({
-  hands,
-  teamIdToName,
-  teamColors,
-}: {
-  hands: any[];
-  teamIdToName: { [key: string]: string };
-  teamColors: any;
-}) {
+export default function MatchChartClient({ matchId }: { matchId: string }) {
+  const [data, setData] = useState<any>(null);
+
+  const fetchData = async () => {
+    const response = await fetch(`/api/matchChart?matchId=${matchId}`);
+    const data = await response.json();
+    setData(data);
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, [matchId]);
+
+  if (!data) {
+    return <CircularProgress />;
+  }
+
+  const { hands, teamIdToName, teamColors } = data;
+
   // Get the hands for each team
   const teamHands = hands.reduce((acc: any, hand: any) => {
     acc[hand.TEAM_ID] = acc[hand.TEAM_ID] || [];
