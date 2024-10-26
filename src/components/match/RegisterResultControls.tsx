@@ -34,7 +34,7 @@ export default async function RegisterResultControls({ matchId }: Props) {
           />
           <div style={{ marginTop: "20px" }}>
             <a
-              href={`/match/${matchId}/edit`}
+              href={`/match/${matchId}/correct`}
               style={{
                 textDecoration: "underline",
               }}
