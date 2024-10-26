@@ -1,32 +1,19 @@
-import Connection from "@/lib/connection";
-
-async function getTotalStatistics() {
-  const connection = await Connection.getInstance().getConnection();
-  try {
-    const [result]: any = await connection.query(`
-      SELECT 
-        COUNT(DISTINCT Games.GAME_ID) as totalMatches,
-        SUM(CASE WHEN IS_WINNER = 1 THEN 1 ELSE 0 END) as totalMahjongs,
-        COUNT(distinct concat(ROUND, Games.GAME_ID)) as totalRounds
-      FROM Hands INNER JOIN Games ON Hands.GAME_ID = Games.GAME_ID
-    `);
-    return result[0];
-  } finally {
-    connection.release();
-  }
-}
+import { getTotalStatistics } from "@/lib/dbMatch";
 
 export default async function TotalStatisticsRow() {
   const stats = await getTotalStatistics();
 
   return (
     <div
-      className="grey-text"
-      style={{ marginBottom: "20px", textAlign: "left" }}
+      style={{
+        color: "var(--grey-color)",
+        marginBottom: "20px",
+        textAlign: "left",
+      }}
     >
       <p>
-        Totalt {stats?.totalMatches} matcher, {stats?.totalMahjongs} mahjonger på{" "}
-        {stats?.totalRounds} omgångar
+        Totalt {stats?.totalMatches} matcher,
+        {stats?.totalMahjongs} mahjonger på {stats?.totalRounds} omgångar
       </p>
     </div>
   );

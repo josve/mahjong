@@ -2,6 +2,22 @@
 
 import Connection from "@/lib/connection";
 
+export async function getTotalStatistics() {
+  const connection = await Connection.getInstance().getConnection();
+  try {
+    const [result]: any = await connection.query(`
+      SELECT 
+        COUNT(DISTINCT Games.GAME_ID) as totalMatches,
+        SUM(CASE WHEN IS_WINNER = 1 THEN 1 ELSE 0 END) as totalMahjongs,
+        COUNT(distinct concat(ROUND, Games.GAME_ID)) as totalRounds
+      FROM Hands INNER JOIN Games ON Hands.GAME_ID = Games.GAME_ID
+    `);
+    return result[0];
+  } finally {
+    connection.release();
+  }
+}
+
 export async function getMatchById(id: string): Promise<any> {
   const connection = await Connection.getInstance().getConnection();
   try {
@@ -97,21 +113,19 @@ export async function getTeamIdToNameNoAlias() {
   } finally {
     connection.release();
   }
+}
 
+export async function getPlayersForTeam(teamId: string): Promise<any[]> {
+  const connection = await Connection.getInstance().getConnection();
+  try {
+    const [players]: any = await connection.query(
+      "SELECT Players.NAME FROM Players INNER JOIN Teams ON Players.PLAYER_ID = Teams.PLAYER_ID WHERE Teams.TEAM_ID = ?",
+      [teamId]
+    );
+    return players;
+  } finally {
+    connection.release();
   }
-
-
-  export async function getPlayersForTeam(teamId: string): Promise<any[]> {
-    const connection = await Connection.getInstance().getConnection();
-    try {
-      const [players]: any = await connection.query(
-        "SELECT Players.NAME FROM Players INNER JOIN Teams ON Players.PLAYER_ID = Teams.PLAYER_ID WHERE Teams.TEAM_ID = ?",
-        [teamId]
-      );
-      return players;
-    } finally {
-      connection.release();
-    }
 }
 
 export async function getTeamIdToName() {
@@ -156,7 +170,9 @@ export async function getAllPlayers(): Promise<{ id: string; name: string }[]> {
   }
 }
 
-export async function getTeamIdToPlayerIds(): Promise<{ [key: string]: string[] }> {
+export async function getTeamIdToPlayerIds(): Promise<{
+  [key: string]: string[];
+}> {
   const connection = await Connection.getInstance().getConnection();
   try {
     const [result]: any = await connection.query(
@@ -175,7 +191,13 @@ export async function getTeamIdToPlayerIds(): Promise<{ [key: string]: string[] 
   }
 }
 
-export async function getTeamDetails(): Promise<{ [key: string]: { playerIds: string[], teamName: string, concatenatedName: string } }> {
+export async function getTeamDetails(): Promise<{
+  [key: string]: {
+    playerIds: string[];
+    teamName: string;
+    concatenatedName: string;
+  };
+}> {
   const connection = await Connection.getInstance().getConnection();
   try {
     const [result]: any = await connection.query(`
@@ -190,12 +212,18 @@ export async function getTeamDetails(): Promise<{ [key: string]: { playerIds: st
       GROUP BY Teams.TEAM_ID
     `);
 
-    const teamDetails: { [key: string]: { playerIds: string[], teamName: string, concatenatedName: string } } = {};
+    const teamDetails: {
+      [key: string]: {
+        playerIds: string[];
+        teamName: string;
+        concatenatedName: string;
+      };
+    } = {};
     result.forEach((row: any) => {
       teamDetails[row.TEAM_ID] = {
-        playerIds: row.player_ids.split(','),
+        playerIds: row.player_ids.split(","),
         teamName: row.team_name,
-        concatenatedName: row.concatenated_name
+        concatenatedName: row.concatenated_name,
       };
     });
 

@@ -12,7 +12,7 @@ const StatisticsNav: React.FC<StatisticsNavProps> = ({ currentPath }) => {
   ];
 
   return (
-    <nav className="statistics-nav">
+    <nav>
       {links.map((link) => (
         <Link
           key={link.path}

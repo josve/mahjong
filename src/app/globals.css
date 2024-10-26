@@ -3,6 +3,10 @@
   padding: 0;
   margin: 0;
 }
+:root {
+  --grey-color: #909090;
+  --header-color: #943030;
+}
 
 html,
 body {
@@ -35,10 +39,6 @@ h3 {
   font-family: HelveticaNeueLight, Helvetica, tahoma, arial;
 }
 
-.grey-text {
-  color: #909090;
-}
-
 .too-old-text {
   color: #943030;
   font-weight: bold;
@@ -57,13 +57,11 @@ h3 {
   margin-bottom: 20px;
 }
 
-.statistics-nav {
   .selected-statistics {
     text-decoration: underline;
     font-weight: bold;
-    color: #943030;
+    color: var(--header-color);
   }
-}
 
 .correct-round {
   margin-top: 20px;

@@ -15,7 +15,7 @@ export default function RoundResultFormAdd({
   const [formData, setFormData] = useState<{ [key: string]: any }>({
     scores: {},
     eastTeam: "",
-    winner: "",
+    winner: "-1",
   });
 
   const handleScoreChange = (e: any, teamId: string) => {
@@ -47,7 +47,8 @@ export default function RoundResultFormAdd({
       (score) => score !== "" && score !== undefined && score !== null
     );
     const eastTeamSelected = formData.eastTeam !== "";
-    return allScoresEntered && eastTeamSelected;
+    const winnerSelected = String(formData.winner) !== "-1";
+    return allScoresEntered && eastTeamSelected && winnerSelected;
   };
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -122,6 +123,7 @@ export default function RoundResultFormAdd({
           focused
           sx={{ flex: "1 1 200px" }}
         >
+          <option value="-1">Välj vinnare</option>
           <option value="">Ingen vinnare</option>
           {Object.entries(teamIdToName).map(([teamId, teamName]) => (
             <option

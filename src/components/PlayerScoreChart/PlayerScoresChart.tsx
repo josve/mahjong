@@ -60,7 +60,7 @@ const PlayerScoresChart: React.FC<PlayerScoresChartProps> = ({
   labels.push(toAdd);
 
   const scoreOptions = {
-    animationDuration: "10000",
+    animationDuration: "5000",
     title: {
       text: "Poäng",
     },
