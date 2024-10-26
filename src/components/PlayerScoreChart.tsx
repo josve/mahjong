@@ -3,7 +3,7 @@ import React, { useMemo } from "react";
 import PlayerScoresChart from "./PlayerScoreChart/PlayerScoresChart";
 import MahjongWinsChart from "./PlayerScoreChart/MahjongWinsChart";
 import HighRollerChart from "./PlayerScoreChart/HighRollerChart";
-import AverageHanTable from "./PlayerScoreChart/AverageHanTable";
+import AverageHandTable from "./PlayerScoreChart/AverageHandTable";
 
 interface PlayerScoreChartProps {
   matches: any;
@@ -26,7 +26,7 @@ const PlayerScoreChart: React.FC<PlayerScoreChartProps> = ({
   teamIdToPlayerIds,
   playerColors,
 }) => {
-  const { playerScores, labels, mahjongWins, highRollerScores, averageHan } =
+  const { playerScores, labels, mahjongWins, highRollerScores, averageHand } =
     useMemo(() => {
       const scores: { [key: string]: number[] } = {};
       const labels: string[] = [];
@@ -86,9 +86,9 @@ const PlayerScoreChart: React.FC<PlayerScoreChartProps> = ({
       });
 
       // Calculate average han for each player
-      const averageHan: { [key: string]: number } = {};
+      const averageHand: { [key: string]: number } = {};
       Object.keys(totalHan).forEach((player) => {
-        averageHan[player] =
+        averageHand[player] =
           winCount[player] > 0 ? totalHan[player] / winCount[player] : 0;
       });
 
@@ -97,7 +97,7 @@ const PlayerScoreChart: React.FC<PlayerScoreChartProps> = ({
         labels,
         mahjongWins: wins,
         highRollerScores,
-        averageHan,
+        averageHand,
       };
     }, [matches, teamIdToName, allPlayers, teamIdToPlayerIds]);
 
@@ -125,8 +125,8 @@ const PlayerScoreChart: React.FC<PlayerScoreChartProps> = ({
           allPlayers.map((player) => [player.name, player.id])
         )}
       />
-      <AverageHanTable
-        averageHan={averageHan}
+      <AverageHandTable
+        averageHand={averageHand}
         playerColors={playerColors}
       />
     </div>

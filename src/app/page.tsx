@@ -16,27 +16,56 @@ async function getAllMatches(): Promise<any> {
   }
 }
 
-export const revalidate = 60; // Revalidate every 60 seconds
+export const revalidate = 60;
 
 export default async function Home() {
   const matches = await getAllMatches();
 
   return (
     <>
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "20px" }}>
-        <h1 style={{ margin: 0, color: "#943030", fontFamily: "HelveticaNeueLight, Helvetica, tahoma, arial", fontSize: "42px", textAlign: "left" }}>
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          marginBottom: "20px",
+        }}
+      >
+        <h1
+          style={{
+            margin: 0,
+            color: "#943030",
+            fontFamily: "HelveticaNeueLight, Helvetica, tahoma, arial",
+            fontSize: "42px",
+            textAlign: "left",
+          }}
+        >
           Matcher
         </h1>
-        <Link href="/match/new" passHref>
-          <button className="create-match-button">
-            Skapa ny match
-          </button>
+        <Link
+          href="/match/new"
+          passHref
+        >
+          <button className="create-match-button">Skapa ny match</button>
         </Link>
       </div>
-      <TotalStatisticsRow/>
-      <Grid container spacing={2} sx={{ marginTop: "20px" }}> {/* P68f5 */}
+      <TotalStatisticsRow />
+      <Grid
+        container
+        spacing={2}
+        sx={{ marginTop: "20px" }}
+      >
+        {" "}
+        {/* P68f5 */}
         {matches.map((match: { GAME_ID: string }) => (
-          <Grid item xs={12} sm={6} key={match.GAME_ID}> {/* Pe16e */}
+          <Grid
+            item
+            xs={12}
+            sm={6}
+            key={match.GAME_ID}
+          >
+            {" "}
+            {/* Pe16e */}
             <MatchGridItem id={match.GAME_ID} />
           </Grid>
         ))}

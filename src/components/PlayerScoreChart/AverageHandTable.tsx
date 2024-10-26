@@ -1,8 +1,14 @@
 import React from "react";
-import { Table, TableHead, TableBody, TableRow, TableCell } from "@mui/material";
+import {
+  Table,
+  TableHead,
+  TableBody,
+  TableRow,
+  TableCell,
+} from "@mui/material";
 
-interface AverageHanTableProps {
-  averageHan: { [key: string]: number };
+interface AverageHandTableProps {
+  averageHand: { [key: string]: number };
   playerColors: {
     [key: string]: {
       color_red: number;
@@ -12,8 +18,8 @@ interface AverageHanTableProps {
   };
 }
 
-const AverageHanTable: React.FC<AverageHanTableProps> = ({
-  averageHan,
+const AverageHandTable: React.FC<AverageHandTableProps> = ({
+  averageHand,
   playerColors,
 }) => {
   const getPlayerColor = (playerName: string) => {
@@ -27,15 +33,17 @@ const AverageHanTable: React.FC<AverageHanTableProps> = ({
     <Table>
       <TableHead>
         <TableRow>
-          <TableCell>Player</TableCell>
-          <TableCell>Average Han</TableCell>
+          <TableCell>Spelare</TableCell>
+          <TableCell>Medelpoäng på handen</TableCell>
         </TableRow>
       </TableHead>
       <TableBody>
-        {Object.entries(averageHan).map(([player, avgHan]) => (
+        {Object.entries(averageHand).map(([player, avgHand]) => (
           <TableRow key={player}>
-            <TableCell style={{ color: getPlayerColor(player) }}>{player}</TableCell>
-            <TableCell>{avgHan.toFixed(2)}</TableCell>
+            <TableCell style={{ color: getPlayerColor(player) }}>
+              {player}
+            </TableCell>
+            <TableCell>{avgHand.toFixed(2)}</TableCell>
           </TableRow>
         ))}
       </TableBody>
@@ -43,4 +51,4 @@ const AverageHanTable: React.FC<AverageHanTableProps> = ({
   );
 };
 
-export default AverageHanTable;
+export default AverageHandTable;

@@ -16,6 +16,8 @@ export async function generateMetadata(): Promise<Metadata> {
   };
 }
 
+export const revalidate = 60;
+
 export default async function YearStatisticsPage() {
   const matches = await fetchMatches("nuvarande år");
   const teamIdToName = await getTeamIdToName();
