@@ -138,17 +138,19 @@ export default function MatchChartClient({
       symbol: "circle",
       symbolSize: (value: any, params: any) =>
         params.data.name.IS_WINNER ? 20 : 0, // Make the circles larger
-      label: {
+      endLabel: {
         show: true,
         position: "right",
+        color: color,
+        fontSize: 14,
+        fontWeight: "bold",
+        backgroundColor: "white",
+        textBorderColor: "white",
         formatter: (params: any) => {
           if (params.dataIndex === scores.length - 1) {
             return `${params.value} ${getTeamName(teamId)}`;
           }
-          return "";
         },
-        color: color,
-        fontSize: 14,
       },
     });
   }
@@ -178,6 +180,7 @@ export default function MatchChartClient({
   console.log("Series data:", series);
 
   const options = {
+    animationDuration: "500",
     tooltip: {
       trigger: "axis",
       formatter: (params: any) => {
