@@ -4,8 +4,8 @@ import {
   getTeamIdToName,
   getTeamColors,
 } from "@/lib/dbMatch";
-import RoundResultFormAdd from "@/components/RoundResultFormAdd";
-import MatchChart from "@/components/matchChart";
+import MatchChart from "@/components/match/matchChart";
+import RegisterResultControls from "@/components/match/RegisterResultControls";
 import { Metadata } from "next";
 
 interface PageProps {
@@ -58,58 +58,38 @@ export default async function Page({ params }: PageProps) {
   }
 
   const numRounds = Math.floor(hands.length / 4 - 1);
-  const matchDate = new Date(match.TIME);
-  const isEditable =
-    new Date().getTime() - matchDate.getTime() < 24 * 60 * 60 * 1000;
 
   return (
-      <div>
-        <div className="multi-title-header">
-          <h1>{match.NAME}</h1>
-          <h2 style={{ textAlign: "left" }}>{numRounds} omgångar</h2>
-        </div>
-        <h3
-          className="grey-text"
+    <div>
+      <div className="multi-title-header">
+        <h1>{match.NAME}</h1>
+        <h2 style={{ textAlign: "left" }}>{numRounds} omgångar</h2>
+      </div>
+      <h3
+        className="grey-text"
+        style={{
+          textAlign: "left",
+        }}
+      >
+        Datum {new Date(match.TIME).toLocaleDateString("sv-SE")}
+      </h3>
+      {match.COMMENT && (
+        <div
           style={{
-            textAlign: "left",
+            paddingBottom: "10px",
+            paddingTop: "10px",
           }}
         >
-          Datum {new Date(match.TIME).toLocaleDateString("sv-SE")}
-          
-        </h3>
-        {match.COMMENT && (
-        <p>
-        	Kommentar: {match.COMMENT}
-        </p>
-        )}
-        <div>
-          <MatchChart
-            hands={hands}
-            teamHands={teamHands}
-            teamIdToName={teamIdToName}
-            teamColors={teamColors}
-          />
+          {<p>Kommentar: {match.COMMENT}</p>}
         </div>
-        {isEditable ? (
-          <>
-            <RoundResultFormAdd
-              teamIdToName={relevantTeams}
-              matchId={params.matchId}
-            />
-            <div style={{ marginTop: "20px" }}>
-              <a
-                href={`/match/${params.matchId}/edit`}
-                className="correct-result-link"
-              >
-                Korrigera resultat
-              </a>
-            </div>
-          </>
-        ) : (
-          <p className="too-old-text">
-            Matchen är för gammal för att göra ändringar.
-          </p>
-        )}
-      </div>
+      )}
+      <MatchChart
+        hands={hands}
+        teamHands={teamHands}
+        teamIdToName={teamIdToName}
+        teamColors={teamColors}
+      />
+      <RegisterResultControls matchId={params.matchId} />
+    </div>
   );
 }
