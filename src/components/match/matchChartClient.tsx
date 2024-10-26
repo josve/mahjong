@@ -28,8 +28,14 @@ export default function MatchChartClient({
     }
   }
 
+  const numRounds = Math.floor(hands.length / 4 - 1);
+
+  const roundsToShow = Math.max(19, numRounds + 7);
+
   // Initialize rounds starting from 1
-  const rounds = Array.from({ length: 19 }, (_, i) => (i + 1).toString());
+  const rounds = Array.from({ length: roundsToShow }, (_, i) =>
+    (i + 1).toString()
+  );
 
   const getTeamName = (teamId: string) => {
     return teamIdToName[teamId] || "Unknown Team";
@@ -99,7 +105,7 @@ export default function MatchChartClient({
       align: "left", // Align text to the left
     },
     label: {
-      show: true,
+      show: false,
       position: "inside",
       emphasis: {
         show: true,
