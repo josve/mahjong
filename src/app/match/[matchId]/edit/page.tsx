@@ -1,9 +1,4 @@
-import {
-  getMatchById,
-  getHandsByGameId,
-  getTeamIdToName,
-  getTeamColors,
-} from "@/lib/dbMatch";
+import { getMatchById, getHandsByGameId } from "@/lib/dbMatch";
 import MatchChart from "@/components/match/matchChart";
 import RegisterResultControls from "@/components/match/RegisterResultControls";
 import MatchHeader from "@/components/match/MatchHeader";
