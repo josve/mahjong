@@ -38,11 +38,31 @@ const PlayerScoresChart: React.FC<PlayerScoresChartProps> = ({
       width: 2,
       color: getPlayerColor(player),
     },
+    endLabel: {
+      show: true,
+      position: "right",
+      color: getPlayerColor(player),
+      fontSize: 14,
+      fontWeight: "bold",
+      backgroundColor: "white",
+      textBorderColor: "white",
+      formatter: (params: any) => {
+        if (params.dataIndex === scores.length - 1) {
+          return `${params.value} ${player}`;
+        }
+      },
+    },
   }));
 
+  const toAdd = labels[labels.length - 1];
+  labels.push(toAdd);
+  labels.push(toAdd);
+  labels.push(toAdd);
+
   const scoreOptions = {
+    animationDuration: "10000",
     title: {
-      text: "Spelarpoäng över spel",
+      text: "Poäng",
     },
     tooltip: {
       trigger: "axis",
@@ -78,7 +98,7 @@ const PlayerScoresChart: React.FC<PlayerScoresChartProps> = ({
   return (
     <ReactEcharts
       option={scoreOptions}
-      style={{ height: "400px" }}
+      style={{ height: "400px", paddingBottom: "20px" }}
     />
   );
 };

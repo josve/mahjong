@@ -133,7 +133,7 @@ export default function MatchChart({
           return "";
         },
         color: color,
-        fontSize: 14, // Slightly larger font size
+        fontSize: 14,
       },
     });
   }
@@ -224,7 +224,7 @@ export default function MatchChart({
         const minValue = Math.min(0, Math.floor((value.min - 100) / 100) * 100);
         const maxValue = Math.ceil((value.max + 100) / 100) * 100;
         if (maxValue - minValue < 1000) {
-          return maxValue + (1000 -  Math.abs(minValue - maxValue));
+          return maxValue + (1000 - Math.abs(minValue - maxValue));
         }
         return maxValue;
       },

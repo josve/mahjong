@@ -34,7 +34,7 @@ const AverageHandTable: React.FC<AverageHandTableProps> = ({
       <TableHead>
         <TableRow>
           <TableCell>Spelare</TableCell>
-          <TableCell>Medelpoäng på handen</TableCell>
+          <TableCell>Medelpoäng (omgång)</TableCell>
         </TableRow>
       </TableHead>
       <TableBody>
