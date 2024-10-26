@@ -48,6 +48,8 @@ export default async function RegisterResultControls({ matchId }: Props) {
           style={{
             color: "var(--grey-color)",
             textAlign: "center",
+            paddingTop: "20px",
+            paddingBottom: "20px",
           }}
         >
           Matchen är för gammal för att göra ändringar.
