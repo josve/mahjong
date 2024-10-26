@@ -11,16 +11,33 @@ export default function MatchChartClient({
   autoReload: boolean;
 }) {
   const [data, setData] = useState<any>(null);
+  const [lastRoundCount, setLastRoundCount] = useState<number>(0);
 
   const fetchData = async () => {
     const response = await fetch(`/api/matchChart?matchId=${matchId}`);
     const data = await response.json();
     setData(data);
+    setLastRoundCount(data.hands.length);
   };
 
   useEffect(() => {
     fetchData();
   }, [matchId]);
+
+  useEffect(() => {
+    if (autoReload) {
+      const interval = setInterval(async () => {
+        const response = await fetch(`/api/matchChart?matchId=${matchId}`);
+        const newData = await response.json();
+        if (newData.hands.length > lastRoundCount) {
+          setData(newData);
+          setLastRoundCount(newData.hands.length);
+        }
+      }, 1000);
+
+      return () => clearInterval(interval);
+    }
+  }, [autoReload, matchId, lastRoundCount]);
 
   if (!data) {
     return <CircularProgress />;
