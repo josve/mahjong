@@ -86,8 +86,8 @@ export default function MatchChartClient({
 
   series.push({
     type: "pie",
-    radius: ["18%", "30%"], // Make the pie chart smaller
-    center: ["20%", "25%"], // Move it slightly to the left
+    radius: ["12%", "20%"],
+    center: ["90%", "20%"],
     data: pieData,
     tooltip: {
       show: false,
@@ -99,7 +99,7 @@ export default function MatchChartClient({
       align: "left", // Align text to the left
     },
     label: {
-      show: false,
+      show: true,
       position: "inside",
       emphasis: {
         show: true,
