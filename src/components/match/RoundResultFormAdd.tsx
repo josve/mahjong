@@ -66,8 +66,12 @@ export default function RoundResultFormAdd({
     })
       .then((response) => response.json())
       .then((data) => {
-        console.log("Success:", data);
-        router.push(`/match/${matchId}`);
+        setFormData({
+          scores: {},
+          eastTeam: "",
+          winner: "-1",
+        });
+        router.push(`/match/${matchId}/edit`);
       })
       .catch((error) => {
         console.error("Error:", error);
