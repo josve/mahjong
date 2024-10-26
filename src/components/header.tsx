@@ -2,13 +2,24 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { AppBar, Toolbar, Typography, Box, IconButton, Drawer, List, ListItem, ListItemText, useMediaQuery } from "@mui/material";
+import {
+  AppBar,
+  Toolbar,
+  Typography,
+  Box,
+  IconButton,
+  Drawer,
+  List,
+  ListItem,
+  ListItemText,
+  useMediaQuery,
+} from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import { useState } from "react";
 
 export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
-  const isLargeScreen = useMediaQuery('(min-width:768px)');
+  const isLargeScreen = useMediaQuery("(min-width:768px)");
 
   const handleMenuToggle = () => {
     setMenuOpen(!menuOpen);
@@ -19,7 +30,8 @@ export default function Header() {
       position="static"
       className="header-bar"
       sx={{
-          background: "linear-gradient(to right, #FF3366, #FF6B6B)"
+        background:
+          "radial-gradient(circle farthest-corner at 100px 100px, var(--gradient-start) 0% , var(--gradient-end) 100%)",
       }}
     >
       <Toolbar>
@@ -44,7 +56,8 @@ export default function Header() {
                 variant="h6"
                 className="header-text"
               >
-                <span className="bold-header">Mahjong</span> Master System 4.0
+                <span style={{ fontWeight: "700" }}>Mahjong</span> Master System
+                4.0
               </Typography>
             </Box>
           </Link>
@@ -86,13 +99,25 @@ export default function Header() {
         sx={{ display: { xs: "block", md: "none" } }}
       >
         <List>
-          <ListItem component={Link} href="/" onClick={handleMenuToggle}>
+          <ListItem
+            component={Link}
+            href="/"
+            onClick={handleMenuToggle}
+          >
             <ListItemText primary="Matcher" />
           </ListItem>
-          <ListItem component={Link} href="/statistics" onClick={handleMenuToggle}>
+          <ListItem
+            component={Link}
+            href="/statistics"
+            onClick={handleMenuToggle}
+          >
             <ListItemText primary="Statistik" />
           </ListItem>
-          <ListItem component={Link} href="/scoreboard" onClick={handleMenuToggle}>
+          <ListItem
+            component={Link}
+            href="/scoreboard"
+            onClick={handleMenuToggle}
+          >
             <ListItemText primary="Poängtabell" />
           </ListItem>
         </List>

@@ -15,7 +15,14 @@ const RoundDisplay: React.FC<RoundDisplayProps> = ({
   teamIdToName,
 }) => {
   return (
-    <div className="correct-round">
+    <div
+      style={{
+        marginTop: "20px",
+        marginBottom: "20px",
+        border: "1px solid var(--grey-color)",
+        padding: "20px",
+      }}
+    >
       <h2>Runda {round}</h2>
       <div>Nuvarande poäng: {hands.map((hand) => hand.HAND).join(", ")}</div>
       <RoundResultFormEdit

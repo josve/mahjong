@@ -2,9 +2,19 @@
 
 import React, { useState, useEffect } from "react";
 import { TextField, Button, Box } from "@mui/material";
-import { useRouter } from 'next/navigation';
+import { useRouter } from "next/navigation";
 
-export default function RoundResultFormEdit({ teamIdToName, matchId, hands, round }: { teamIdToName: { [key: string]: string }, matchId: string, hands: any[], round: string }) {
+export default function RoundResultFormEdit({
+  teamIdToName,
+  matchId,
+  hands,
+  round,
+}: {
+  teamIdToName: { [key: string]: string };
+  matchId: string;
+  hands: any[];
+  round: string;
+}) {
   const router = useRouter();
   const [formData, setFormData] = useState<{ [key: string]: any }>({
     scores: {},
@@ -22,10 +32,7 @@ export default function RoundResultFormEdit({ teamIdToName, matchId, hands, roun
     }));
   }, [teamIdToName]);
 
-  const handleScoreChange = (
-    e: any,
-    teamId: string
-  ) => {
+  const handleScoreChange = (e: any, teamId: string) => {
     const { value } = e.target;
     setFormData((prevData) => ({
       ...prevData,
@@ -38,47 +45,60 @@ export default function RoundResultFormEdit({ teamIdToName, matchId, hands, roun
 
   const handleSubmit = (e: any) => {
     e.preventDefault();
-    fetch('/api/updateResult', {
-      method: 'POST',
+    fetch("/api/updateResult", {
+      method: "POST",
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
       body: JSON.stringify({ ...formData, matchId, round }),
     })
       .then((response) => response.json())
       .then((data) => {
-        console.log('Success:', data);
-        router.push(`/match/${matchId}`);
-      }) 
+        console.log("Success:", data);
+        router.push(`/match/${matchId}/edit`);
+      })
       .catch((error) => {
-        console.error('Error:', error);
+        console.error("Error:", error);
       });
   };
 
   const isFormValid = () => {
     const allScoresEntered = Object.values(formData.scores).every(
-      (score) => score !== "" && score !== undefined && score !== null
+      (score) =>
+        score !== "" &&
+        score !== undefined &&
+        score !== null &&
+        Number(score) % 2 == 0
     );
     return allScoresEntered;
   };
 
   return (
-    <Box component="form" onSubmit={handleSubmit} sx={{ mt: 3 }}>
-      <Box sx={{ display: 'flex', gap: 2, flexWrap: 'wrap' }}>
+    <Box
+      component="form"
+      onSubmit={handleSubmit}
+      sx={{ mt: 3 }}
+    >
+      <Box sx={{ display: "flex", gap: 2, flexWrap: "wrap" }}>
         {Object.entries(teamIdToName).map(([teamId, teamName]) => (
           <TextField
             key={teamId}
-            label={`${teamName} Score`}
+            label={`${teamName} poäng`}
             type="number"
             value={formData.scores[teamId] || ""}
             onChange={(e) => handleScoreChange(e, teamId)}
             focused
             margin="normal"
-            sx={{ flex: '1 1 200px' }}
+            sx={{ flex: "1 1 200px" }}
           />
         ))}
       </Box>
-      <Button type="submit" variant="contained" color="primary" disabled={!isFormValid()}>
+      <Button
+        type="submit"
+        variant="contained"
+        color="primary"
+        disabled={!isFormValid()}
+      >
         Ändra resultat
       </Button>
     </Box>

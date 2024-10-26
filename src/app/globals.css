@@ -4,8 +4,15 @@
   margin: 0;
 }
 :root {
+  --background-color: rgb(250,250,250);
   --grey-color: #909090;
   --header-color: #943030;
+  --header-font-family: HelveticaNeueLight, Helvetica, tahoma, arial;
+  --gradient-start: rgb(229,70,70);
+  --gradient-end: rgb(127,82,49);
+  --match-item-color: rgb(148, 48, 48);
+  --grid-background-color: rgb(250,250,250);
+  --grid-background-hover-color: rgb(250,240,240);
 }
 
 html,
@@ -15,7 +22,7 @@ body {
 }
 
 body {
-  background-color: rgb(250, 250, 250);
+  background-color:  var(--background-color);
 }
 
 a {
@@ -25,29 +32,18 @@ a {
 
 h1 {
   text-align: left;
-  color: #943030;
-  font-family: HelveticaNeueLight, Helvetica, tahoma, arial;
+  color: var(--header-color);
+  font-family: var(--header-font-family);
   font-size: 42px;
 }
 
 h2 {
-  color: #943030;
+  color: var(--header-color);
 }
 
 h3 {
   font-size: 16px;
-  font-family: HelveticaNeueLight, Helvetica, tahoma, arial;
-}
-
-.too-old-text {
-  color: #943030;
-  font-weight: bold;
-}
-
-.correct-result-link {
-  color: #943030;
-  text-decoration: none;
-  font-weight: bold;
+  font-family: var(--header-font-family);
 }
 
 .multi-title-header {
@@ -57,21 +53,21 @@ h3 {
   margin-bottom: 20px;
 }
 
-  .selected-statistics {
+@media (max-width: 768px) {
+  .multi-title-header {
+    flex-direction: column;
+    align-items: normal;
+  }
+
+  .multi-title-header nav {
+    padding-top: 20px;
+  }
+}
+
+.selected-statistics {
     text-decoration: underline;
     font-weight: bold;
     color: var(--header-color);
-  }
-
-.correct-round {
-  margin-top: 20px;
-  margin-bottom: 20px;
-  border: 1px solid #909090;
-  padding: 20px;
-}
-
-.bold-header {
-  font-weight: 700;
 }
 
 .header-text {
@@ -97,7 +93,7 @@ h3 {
 
 .match-round-info {
   margin: 0;
-   color: rgb(148, 48, 48);
+   color: var(--match-item-color);
    text-align: left;
 }
 
@@ -106,18 +102,24 @@ h3 {
   display: block;
   margin: 5px 0;
   text-align: left;
-  color: rgb(148, 48, 48);
+  color: var(--match-item-color);
 }
 
 .match-round-time {
-  color: #909090;
+  color: var(--grey-color);
   text-align: left;
 }
 
 .match-round-grid-item {
   padding: 10px;
-  background-color: white;
+  cursor: pointer;
+  background-color: var(--grid-background-color);
   margin-bottom: 20px;
+  border-radius: 15px;
+}
+
+.match-round-grid-item:hover {
+  background-color: var(--grid-background-hover-color);
 }
 
 /* Media queries to hide navigation links on screens below 768px */
@@ -144,7 +146,6 @@ h3 {
   }
 }
 
-/* Pfad8 */
 .create-match-button {
   background-color: #943030;
   color: white;
@@ -156,7 +157,6 @@ h3 {
   font-weight: bold;
 }
 
-/* Pcde0 */
 @media (max-width: 768px) {
   .create-match-button {
     width: 100%;

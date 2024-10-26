@@ -1,6 +1,15 @@
 import React from "react";
 import { Metadata } from "next";
-import { Table, TableHead, TableBody, TableRow, TableCell, Paper, Typography, Box } from "@mui/material";
+import {
+  Table,
+  TableHead,
+  TableBody,
+  TableRow,
+  TableCell,
+  Paper,
+  Typography,
+  Box,
+} from "@mui/material";
 
 export async function generateMetadata(): Promise<Metadata> {
   return {
@@ -13,25 +22,24 @@ export default function ScoreboardPage() {
     <Box
       sx={{
         padding: "40px",
-        fontFamily: "HelveticaNeueLight, Helvetica, Arial, sans-serif",
         maxWidth: "800px",
         margin: "0 auto",
       }}
     >
-      <Typography variant="h1">Poängtabell</Typography>
-
-      <Typography
-        variant="h2"
-        sx={{
-          color: "#943030",
-          fontSize: "28px",
-          marginTop: "40px",
-          borderBottom: "2px solid #943030",
+      <h1
+        style={{
+          paddingBottom: "20px",
+        }}
+      >
+        Poängtabell
+      </h1>
+      <h2
+        style={{
           paddingBottom: "10px",
         }}
       >
         Ordinarie poäng
-      </Typography>
+      </h2>
       <Paper>
         <Table>
           <TableHead>
@@ -101,18 +109,15 @@ export default function ScoreboardPage() {
         </Table>
       </Paper>
 
-      <Typography
-        variant="h2"
-        sx={{
-          color: "#943030",
-          fontSize: "28px",
+      <h2
+        style={{
           marginTop: "40px",
           borderBottom: "2px solid #943030",
           paddingBottom: "10px",
         }}
       >
         Multiplikatorer
-      </Typography>
+      </h2>
       <Paper>
         <Box
           sx={{
@@ -130,18 +135,15 @@ export default function ScoreboardPage() {
         </Box>
       </Paper>
 
-      <Typography
-        variant="h2"
-        sx={{
-          color: "#943030",
-          fontSize: "28px",
+      <h2
+        style={{
           marginTop: "40px",
           borderBottom: "2px solid #943030",
           paddingBottom: "10px",
         }}
       >
         Vinnaren
-      </Typography>
+      </h2>
       <Paper>
         <Box
           sx={{

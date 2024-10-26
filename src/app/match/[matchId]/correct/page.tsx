@@ -47,7 +47,7 @@ export default async function EditPage({ params }: PageProps) {
   }, {});
 
   return (
-    <div style={{ backgroundColor: "rgb(250, 250, 250)", padding: "20px" }}>
+    <div style={{ padding: "20px" }}>
       <h1>Korrigera resultat för {match.NAME}</h1>
       {isEditable ? (
         Object.entries(rounds).map(
@@ -63,7 +63,14 @@ export default async function EditPage({ params }: PageProps) {
             )
         )
       ) : (
-        <p className="too-old-text">
+        <p
+          style={{
+            color: "var(--grey-color)",
+            textAlign: "center",
+            paddingTop: "20px",
+            paddingBottom: "20px",
+          }}
+        >
           Matchen är för gammal för att göra ändringar.
         </p>
       )}
