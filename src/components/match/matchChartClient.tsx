@@ -1,26 +1,23 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import ReactEcharts from "echarts-for-react";
+import { CircularProgress } from "@mui/material";
 
-export default function MatchChartClient({
-  matchId,
-}: {
-  matchId: string;
-}) {
+export default function MatchChartClient({ matchId }: { matchId: string }) {
   const [data, setData] = useState<any>(null);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      const response = await fetch(`/api/matchChart?matchId=${matchId}`);
-      const data = await response.json();
-      setData(data);
-    };
+  const fetchData = async () => {
+    const response = await fetch(`/api/matchChart?matchId=${matchId}`);
+    const data = await response.json();
+    setData(data);
+  };
 
+  useEffect(() => {
     fetchData();
   }, [matchId]);
 
   if (!data) {
-    return <div>Loading...</div>;
+    return <CircularProgress />;
   }
 
   const { hands, teamIdToName, teamColors } = data;
@@ -94,7 +91,7 @@ export default function MatchChartClient({
               return null;
             })
             .filter((text) => text !== null)
-            .join("<br/>";
+            .join("<br/>");
         } else {
           const teamName = getTeamName(params.name);
           const percentage = ((params.value / totalWins) * 100).toFixed(2);
@@ -230,7 +227,7 @@ export default function MatchChartClient({
             return null;
           })
           .filter((text: any) => text !== null)
-          .join("<br/>";
+          .join("<br/>");
       },
     },
     grid: {
