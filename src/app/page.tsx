@@ -56,7 +56,6 @@ export default async function Home() {
         sx={{ marginTop: "20px" }}
       >
         {" "}
-        {/* P68f5 */}
         {matches.map((match: { GAME_ID: string }) => (
           <Grid
             item
@@ -65,7 +64,6 @@ export default async function Home() {
             key={match.GAME_ID}
           >
             {" "}
-            {/* Pe16e */}
             <MatchGridItem id={match.GAME_ID} />
           </Grid>
         ))}
