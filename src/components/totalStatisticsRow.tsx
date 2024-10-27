@@ -13,7 +13,7 @@ export default async function TotalStatisticsRow() {
     >
       <p>
         Totalt {stats?.totalMatches} matcher,
-        {stats?.totalMahjongs} mahjonger på {stats?.totalRounds} omgångar
+        {stats?.totalMahjongs} mahjonger på {stats?.totalRounds - stats?.totalMatches} omgångar
       </p>
     </div>
   );
