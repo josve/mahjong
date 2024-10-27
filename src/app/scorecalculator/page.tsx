@@ -1,10 +1,11 @@
 "use client"
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Box, Typography, Slider, Select, MenuItem, Checkbox, FormControlLabel, FormControl, InputLabel } from "@mui/material";
 import { Metadata } from "next";
 
 export default function ScoreCalculatorPage() {
     const [flowers, setFlowers] = useState(0);
+
     const [combos, setCombos] = useState([
         { name: "(Inget)", isHidden: false },
         { name: "(Inget)", isHidden: false },
@@ -16,6 +17,32 @@ export default function ScoreCalculatorPage() {
     const [isFullStege, setIsFullStege] = useState(false);
     const [isEnSort, setIsEnSort] = useState(false);
     const [isEnSortEnbart, setIsEnSortEnbart] = useState(false);
+
+    const [flowerScore, setFlowerScore] = useState(0);
+    const [comboScore, setComboScore] = useState([
+        0, 0, 0, 0, 0
+    ]);
+
+    useEffect(() => {
+        const scoreForCombo = (comboName: string, isHidden: boolean) => {
+            let comboScore = 0;
+            if (comboName.includes("Tretal låg")) comboScore = 2;
+            if (comboName.includes("Tretal hög") || comboName.includes("Tretal annan vind") || comboName.includes("Tretal egen vind") || comboName.includes("Tretal drakar")) comboScore = 4;
+            if (comboName.includes("Fyrtal låg")) comboScore = 8;
+            if (comboName.includes("Fyrtal hög") || comboName.includes("Fyrtal annan vind") || comboName.includes("Fyrtal egen vind") || comboName.includes("Fyrtal drakar")) comboScore = 16;
+            if (isHidden) comboScore *= 2;
+            if (comboName.includes("Par drakar") || comboName.includes("Par egen vind")) comboScore = 2;
+            return comboScore;
+        };
+
+        setComboScore(combos.map((combo) => {
+            return scoreForCombo(combo.name, combo.isHidden);
+        }));
+    }, [combos])
+
+    useEffect(() => {
+        setFlowerScore(flowers * 4);
+    }, [flowers]);
 
     const handleFlowerChange = (event: any, newValue: any) => {
         setFlowers(newValue);
@@ -35,26 +62,8 @@ export default function ScoreCalculatorPage() {
 
     const calculateScore = () => {
         let totalScore = 0;
-        let flowerScore = flowers * 4;
         totalScore += flowerScore;
-
-        const scoreForCombo = (comboName: string, isHidden: boolean) => {
-            let comboScore = 0;
-            if (comboName.includes("Tretal låg")) comboScore = 2;
-            if (comboName.includes("Tretal hög") || comboName.includes("Tretal annan vind") || comboName.includes("Tretal egen vind") || comboName.includes("Tretal drakar")) comboScore = 4;
-            if (comboName.includes("Fyrtal låg")) comboScore = 8;
-            if (comboName.includes("Fyrtal hög") || comboName.includes("Fyrtal annan vind") || comboName.includes("Fyrtal egen vind") || comboName.includes("Fyrtal drakar")) comboScore = 16;
-            if (isHidden) comboScore *= 2;
-            if (comboName.includes("Par drakar") || comboName.includes("Par egen vind")) comboScore = 2;
-            return comboScore;
-        };
-
-        combos.forEach((combo) => {
-            const comboScoreToAdd = scoreForCombo(combo.name, combo.isHidden);
-            totalScore += comboScoreToAdd;
-        });
-
-        console.log("After combos: " + totalScore);
+        comboScore.map((combo) => totalScore += combo);
 
         let isMahjong = false;
 
@@ -126,13 +135,17 @@ export default function ScoreCalculatorPage() {
     };
 
     return (
-        <Box sx={{ padding: "40px", maxWidth: "800px", margin: "0 auto" }}>
+        <Box >
             <Typography variant="h4" gutterBottom>Poängräknare</Typography>
             <Box sx={{ marginBottom: "25px" }}>
                 <Typography variant="h6">Hand</Typography>
                 <Box sx={{ display: "flex", alignItems: "center", marginBottom: "8px", background: "#F6F6F6", padding: "10px" }}>
                     <Slider value={flowers} onChange={handleFlowerChange} min={0} max={8} sx={{ width: "250px", marginRight: "15px" }} />
                     <Typography>{flowers} blommor</Typography>
+                    {flowerScore > 0 &&
+                        <span style={{ textAlign: "right" }}>
+                            {flowerScore + 'p'}
+                        </span>}
                 </Box>
                 {combos.map((combo, index) => (
                     <Box key={index} sx={{ display: "flex", alignItems: "center", marginBottom: "8px", background: "#F6F6F6", padding: "10px" }}>
@@ -167,6 +180,10 @@ export default function ScoreCalculatorPage() {
 
                         </FormControl>
                         <FormControlLabel control={<Checkbox checked={combo.isHidden} onChange={(event) => handleHiddenChange(index, event)} />} label="Dold" />
+                        {comboScore[index] > 0 &&
+                        <span>
+                            {comboScore[index] + 'p'}
+                        </span>}
                     </Box>
                 ))}
             </Box>
