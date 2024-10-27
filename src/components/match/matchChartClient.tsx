@@ -64,7 +64,7 @@ export default function MatchChartClient({
 
   const numRounds = Math.floor(hands.length / 4 - 1);
 
-  const roundsToShow = Math.max(19, numRounds + 7);
+  const roundsToShow = Math.max(15, numRounds + 5);
 
   // Initialize rounds starting from 1
   const rounds = Array.from({ length: roundsToShow }, (_, i) =>
@@ -99,7 +99,12 @@ export default function MatchChartClient({
   const pieData = Object.keys(winCounts).map((teamId) => ({
     value: winCounts[teamId],
     name: teamId === "no-winner" ? "No Winner" : getTeamName(teamId),
+    label: {
+    	color: teamColors[teamId],
+    },
     itemStyle: {
+	  borderColor:"white",
+	  borderWidth:3,
       color:
         teamId === "no-winner"
           ? "transparent"
@@ -135,8 +140,8 @@ export default function MatchChartClient({
 
   series.push({
     type: "pie",
-    radius: ["12%", "20%"],
-    center: ["90%", "20%"],
+    radius: ["14%", "22%"],
+    center: ["10%", "18%"],
     data: pieData,
     tooltip: {
       show: false,
@@ -149,59 +154,18 @@ export default function MatchChartClient({
     },
     label: {
       show: false,
-      position: "inside",
+      position: "center",
       emphasis: {
         show: true,
         formatter: "{b}: {c} ({d}%)",
-        fontSize: 12,
+        fontSize: 16,
         fontWeight: "bold",
       },
+      textBorderWidth: 2,
+      textBorderColor: "white",
     },
   });
 
-  for (const teamId in teamHands) {
-    const color = teamColors[teamId]
-      ? `rgb(${teamColors[teamId].color_red}, ${teamColors[teamId].color_green}, ${teamColors[teamId].color_blue})`
-      : "black"; // Default color if no color is found
-
-    const scores = teamHands[teamId].map((round: any) => ({
-      value: round.SCORE + 500,
-      name: round,
-      itemStyle: {
-        color: round.IS_WINNER ? "white" : undefined,
-        borderColor: color, // Use line color
-        borderWidth: round.IS_WINNER ? 4 : undefined,
-        fontWeight: "bold", // Make the text bold
-      },
-    }));
-
-    series.push({
-      data: scores,
-      type: "line",
-      name: teamId,
-      lineStyle: {
-        color: color,
-        width: 8, // Adjust the line thickness
-      },
-      symbol: "circle",
-      symbolSize: (value: any, params: any) =>
-        params.data.name.IS_WINNER ? 20 : 0, // Make the circles larger
-      endLabel: {
-        show: true,
-        position: "right",
-        color: color,
-        fontSize: 14,
-        fontWeight: "bold",
-        backgroundColor: "white",
-        textBorderColor: "white",
-        formatter: (params: any) => {
-          if (params.dataIndex === scores.length - 1) {
-            return `${params.value} ${getTeamName(teamId)}`;
-          }
-        },
-      },
-    });
-  }
 
   series.push({
     data: rounds.map(() => 500),
@@ -209,7 +173,8 @@ export default function MatchChartClient({
     name: "Threshold",
     lineStyle: {
       color: "gray",
-      type: "dashed",
+      type: [5, 5], //custom dash
+      width: 1,
       splitLine: {
         show: true, // Show horizontal grid lines
       },
@@ -225,6 +190,54 @@ export default function MatchChartClient({
       show: false,
     },
   });
+
+
+  for (const teamId in teamHands) {
+    const color = teamColors[teamId]
+      ? `rgb(${teamColors[teamId].color_red}, ${teamColors[teamId].color_green}, ${teamColors[teamId].color_blue})`
+      : "black"; // Default color if no color is found
+
+    const scores = teamHands[teamId].map((round: any) => ({
+      value: round.SCORE + 500,
+      name: round,
+      itemStyle: {
+        color: round.IS_WINNER ? "white" : "transparent",
+        borderColor: color, // Use line color
+        borderWidth: round.IS_WINNER ? 6 : 0,
+        fontWeight: "bold", // Make the text bold
+      },
+    }));
+
+    series.push({
+      data: scores,
+      type: "line",
+      name: teamId,
+      lineStyle: {
+        color: color,
+        width: 8, // Adjust the line thickness
+        cap: "round",
+      },
+      smooth: 0.4,
+      symbol: "circle",
+      symbolSize: (value: any, params: any) =>
+        params.data.name.IS_WINNER ? 18 : 0, // Make the circles larger
+      endLabel: {
+        show: true,
+        position: "right",
+        distance: 15,
+        color: color,
+        fontSize: 18,
+        fontWeight: "bold",
+        textBorderWidth: 2,
+        textBorderColor: "white",
+        formatter: (params: any) => {
+          if (params.dataIndex === scores.length - 1) {
+            return `${params.value} ${getTeamName(teamId)}`;
+          }
+        },
+      },
+    });
+  }
 
   const options = {
     animationDuration: "500",
