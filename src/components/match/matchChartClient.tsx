@@ -162,6 +162,32 @@ export default function MatchChartClient({
     },
   });
 
+
+  series.push({
+    data: rounds.map(() => 500),
+    type: "line",
+    name: "Threshold",
+    lineStyle: {
+      color: "gray",
+      type: [5, 5], //custom dash
+      width: 1,
+      splitLine: {
+        show: true, // Show horizontal grid lines
+      },
+    },
+    yAxis: {
+      type: "value",
+      splitLine: {
+        show: true, // Show grid lines for y-axis
+      },
+    },
+    symbol: "none",
+    label: {
+      show: false,
+    },
+  });
+
+
   for (const teamId in teamHands) {
     const color = teamColors[teamId]
       ? `rgb(${teamColors[teamId].color_red}, ${teamColors[teamId].color_green}, ${teamColors[teamId].color_blue})`
@@ -208,29 +234,6 @@ export default function MatchChartClient({
       },
     });
   }
-
-  series.push({
-    data: rounds.map(() => 500),
-    type: "line",
-    name: "Threshold",
-    lineStyle: {
-      color: "gray",
-      type: "dashed",
-      splitLine: {
-        show: true, // Show horizontal grid lines
-      },
-    },
-    yAxis: {
-      type: "value",
-      splitLine: {
-        show: true, // Show grid lines for y-axis
-      },
-    },
-    symbol: "none",
-    label: {
-      show: false,
-    },
-  });
 
   const options = {
     animationDuration: "500",
