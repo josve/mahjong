@@ -65,6 +65,7 @@ h1 {
 
 h2 {
   color: var(--header-color);
+  font-weight: 400;
 }
 
 h3 {
