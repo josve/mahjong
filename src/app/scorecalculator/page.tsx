@@ -1,12 +1,7 @@
+"use client"
 import React, { useState } from "react";
 import { Box, Typography, Slider, Select, MenuItem, Checkbox, FormControlLabel, FormControl, InputLabel } from "@mui/material";
 import { Metadata } from "next";
-
-export async function generateMetadata(): Promise<Metadata> {
-    return {
-        title: "Poängräknare - Mahjong Master System",
-    };
-}
 
 export default function ScoreCalculatorPage() {
     const [flowers, setFlowers] = useState(0);
@@ -22,17 +17,17 @@ export default function ScoreCalculatorPage() {
     const [isEnSort, setIsEnSort] = useState(false);
     const [isEnSortEnbart, setIsEnSortEnbart] = useState(false);
 
-    const handleFlowerChange = (event, newValue) => {
+    const handleFlowerChange = (event: any, newValue: any) => {
         setFlowers(newValue);
     };
 
-    const handleComboChange = (index, event) => {
+    const handleComboChange = (index: any, event: any) => {
         const newCombos = [...combos];
         newCombos[index].name = event.target.value;
         setCombos(newCombos);
     };
 
-    const handleHiddenChange = (index, event) => {
+    const handleHiddenChange = (index: any, event: any) => {
         const newCombos = [...combos];
         newCombos[index].isHidden = event.target.checked;
         setCombos(newCombos);
@@ -43,7 +38,7 @@ export default function ScoreCalculatorPage() {
         let flowerScore = flowers * 4;
         totalScore += flowerScore;
 
-        const scoreForCombo = (comboName, isHidden) => {
+        const scoreForCombo = (comboName: string, isHidden: boolean) => {
             let comboScore = 0;
             if (comboName.includes("Tretal låg")) comboScore = 2;
             if (comboName.includes("Tretal hög") || comboName.includes("Tretal annan vind") || comboName.includes("Tretal egen vind") || comboName.includes("Tretal drakar")) comboScore = 4;
@@ -55,25 +50,76 @@ export default function ScoreCalculatorPage() {
         };
 
         combos.forEach((combo) => {
-            totalScore += scoreForCombo(combo.name, combo.isHidden);
+            const comboScoreToAdd = scoreForCombo(combo.name, combo.isHidden);
+            totalScore += comboScoreToAdd;
         });
 
+        console.log("After combos: " + totalScore);
+
+        let isMahjong = false;
+
         if (combos.every((combo) => combo.name !== "(Inget)" && combo.name !== "(Inget par)")) {
-            totalScore += 10; // Mahjong points
-            if (totalScore - flowerScore === 0) totalScore += 10; // Inga poäng bonus
-            if (isSelfTouch) totalScore += 2; // Self touch points
-            if (combos.filter((combo) => combo.isHidden).length === 4 && !isSelfTouch) totalScore += 2; // Nästan dold mahjong
+            isMahjong = true;
+            console.log("is mahjong");
+            totalScore += 10;
+            if (totalScore === 0) {
+                console.log("No score points");
+                totalScore += 10;
+            }
+            if (isSelfTouch) {
+                console.log("self touch");
+                totalScore += 2;
+            }
+            if (combos.filter((combo) => combo.isHidden).length === 4 && !isSelfTouch)  {
+                console.log("almost self touch");
+                totalScore += 2;
+            }
         }
 
         let scoreMultiplier = 1;
-        if (combos.filter((combo) => combo.name.includes("Stege")).length === 0) scoreMultiplier *= 2; // Inga stegar multiplier
-        if (combos.filter((combo) => combo.name.includes("Stege")).length > 2 && isFullStege) scoreMultiplier *= 2; // Full stege multiplier
-        if (combos.filter((combo) => combo.name.includes("drakar")).length > 0) scoreMultiplier *= 2; // Drakar multiplier
-        if (combos.filter((combo) => combo.name.includes("egen vind")).length > 0) scoreMultiplier *= 2; // Vind multiplier
-        if (isEnSort) scoreMultiplier *= 2; // En sort + vindar/drakar multiplier
-        if (isEnSortEnbart) scoreMultiplier *= 8; // En sort enbart multiplier
-        if (combos.filter((combo) => combo.isHidden && (combo.name.includes("Tretal") || combo.name.includes("Fyrtal"))).length > 2) scoreMultiplier *= 2; // Tre dolda tretal/fyrtal multiplier
-        if (combos.every((combo) => combo.isHidden)) scoreMultiplier *= 2; // Dold Mahjong multiplier
+
+        if (isMahjong) {
+            if (combos.filter((combo) => combo.name.includes("Stege")).length === 0) {
+                console.log("inga stegar");
+                scoreMultiplier *= 2;
+            }
+            if (combos.filter((combo) => combo.name.includes("Stege")).length > 2 && isFullStege) {
+                console.log("full stege");
+                scoreMultiplier *= 2;
+            }
+            if (isEnSort) {
+                console.log("Only one kind + dragons");
+                scoreMultiplier *= 2;
+            }
+            if (isEnSortEnbart) {
+                console.log("Only one kind");
+                scoreMultiplier *= 8;
+
+            }
+            if (combos.every((combo) => combo.isHidden)) {
+                scoreMultiplier *= 2; // Dold Mahjong multiplier
+            }
+
+        }
+        if (combos.filter((combo) => combo.name.includes("Tretal drakar")).length > 0) {
+            console.log("Drakar");
+            scoreMultiplier *= 2;
+        }
+        if (combos.filter((combo) => combo.name.includes("Fyrtal drakar")).length > 0) {
+            console.log("Drakar");
+            scoreMultiplier *= 2;
+        }
+        if (combos.filter((combo) => combo.name.includes("Fyrtal egen vind")).length > 0)  {
+            console.log("Egen vind");
+            scoreMultiplier *= 2;
+        }
+        if (combos.filter((combo) => combo.name.includes("Tretal egen vind")).length > 0)  {
+            console.log("Egen vind");
+            scoreMultiplier *= 2;
+        }
+        if (combos.filter((combo) => combo.isHidden && (combo.name.includes("Tretal") || combo.name.includes("Fyrtal"))).length > 2) {
+            scoreMultiplier *= 2;
+        }
 
         totalScore *= scoreMultiplier;
         return totalScore;
@@ -92,6 +138,7 @@ export default function ScoreCalculatorPage() {
                     <Box key={index} sx={{ display: "flex", alignItems: "center", marginBottom: "8px", background: "#F6F6F6", padding: "10px" }}>
                         <FormControl sx={{ width: "280px", marginRight: "15px" }}>
                             <InputLabel>Kombination {index + 1}</InputLabel>
+                            {index < 4 ?
                             <Select value={combo.name} onChange={(event) => handleComboChange(index, event)}>
                                 <MenuItem value="(Inget)">(Inget)</MenuItem>
                                 <MenuItem disabled>------</MenuItem>
@@ -108,11 +155,16 @@ export default function ScoreCalculatorPage() {
                                 <MenuItem value="Fyrtal annan vind">Fyrtal annan vind</MenuItem>
                                 <MenuItem value="Fyrtal egen vind">Fyrtal egen vind</MenuItem>
                                 <MenuItem value="Fyrtal drakar">Fyrtal drakar</MenuItem>
-                                <MenuItem value="(Inget par)">(Inget par)</MenuItem>
-                                <MenuItem value="Annat par">Annat par</MenuItem>
-                                <MenuItem value="Par drakar">Par drakar</MenuItem>
-                                <MenuItem value="Par egen vind">Par egen vind</MenuItem>
-                            </Select>
+                            </Select> :
+                                <Select value={combo.name} onChange={(event) => handleComboChange(index, event)}>
+                                    <MenuItem value="(Inget)">(Inget)</MenuItem>
+                                    <MenuItem disabled>------</MenuItem>
+                                    <MenuItem value="(Inget par)">(Inget par)</MenuItem>
+                                    <MenuItem value="Annat par">Annat par</MenuItem>
+                                    <MenuItem value="Par drakar">Par drakar</MenuItem>
+                                    <MenuItem value="Par egen vind">Par egen vind</MenuItem>
+                                </Select>}
+
                         </FormControl>
                         <FormControlLabel control={<Checkbox checked={combo.isHidden} onChange={(event) => handleHiddenChange(index, event)} />} label="Dold" />
                     </Box>
@@ -132,6 +184,9 @@ export default function ScoreCalculatorPage() {
                 <Typography variant="h6">Total poäng</Typography>
                 <Typography variant="h6">{calculateScore()}p</Typography>
             </Box>
+            <p>
+                Extra X2 vid mahjong på sista brickan i spelet eller extrabricka vid fyrtal ej med
+            </p>
         </Box>
     );
 }
