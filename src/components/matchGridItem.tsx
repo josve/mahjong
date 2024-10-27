@@ -4,6 +4,10 @@ import {
   getHandsByGameId,
   getTeamIdToNameNoAlias,
 } from "@/lib/dbMatch";
+import { 
+formatDate, 
+capitalize 
+} from "@/lib/formatting";
 
 export default async function MatchGridItem({ id }: { id: string }) {
   const match = await getMatchById(id);
@@ -32,7 +36,7 @@ export default async function MatchGridItem({ id }: { id: string }) {
   return (
     <div className="match-round-grid-item">
       <div className="match-round-time">
-        {new Date(time).toLocaleDateString("sv-SE")} ({timeString})
+        {capitalize(formatDate(time))} ({timeString})
       </div>
       <Link
         href={`/match/${id}`}
