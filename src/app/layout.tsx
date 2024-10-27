@@ -23,7 +23,7 @@ export default function RootLayout({
           <Box
             sx={{
               margin: "0 auto",
-              backgroundColor: "white",
+              backgroundColor: "var(--white)",
             }}
           >
             <Header />

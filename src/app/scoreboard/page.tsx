@@ -121,7 +121,7 @@ export default function ScoreboardPage() {
       <Paper>
         <Box
           sx={{
-            backgroundColor: "#f9f9f9",
+            backgroundColor: "var(--light-white)",
             borderRadius: "8px",
             padding: "20px",
             marginBottom: "20px",
@@ -147,7 +147,7 @@ export default function ScoreboardPage() {
       <Paper>
         <Box
           sx={{
-            backgroundColor: "#f9f9f9",
+            backgroundColor: "var(--light-white)",
             borderRadius: "8px",
             padding: "20px",
             marginBottom: "20px",

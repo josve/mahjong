@@ -140,7 +140,6 @@ export default function NewMatchClient() {
                     <Typography variant="body1">{option.name}</Typography>
                     <Typography
                       variant="body2"
-                      color="text.secondary"
                     >
                       {option.concatenatedName}
                     </Typography>

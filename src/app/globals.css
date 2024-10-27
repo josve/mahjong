@@ -13,6 +13,8 @@
   --match-item-color: rgb(148, 48, 48);
   --grid-background-color: rgb(250,250,250);
   --grid-background-hover-color: rgb(250,240,240);
+  --white: white;
+  --light-white: #f9f9f9:
 }
 
 html,
@@ -72,7 +74,7 @@ h3 {
 
 .header-text {
   margin-left: 15px;
-  color: white;
+  color: var(--white);
   font-weight: 300;
   text-align: left;
   letter-spacing: 1px;
@@ -86,7 +88,7 @@ h3 {
 }
 
 .header-links a p {
-  color: white;
+  color: var(--white);
   margin-right: 20px;
   cursor: pointer;
 }
@@ -147,8 +149,8 @@ h3 {
 }
 
 .create-match-button {
-  background-color: #943030;
-  color: white;
+  background-color: var(--header-color);
+  color: var(--white);
   border: none;
   padding: 10px 20px;
   border-radius: 5px;

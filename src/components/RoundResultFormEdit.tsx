@@ -96,7 +96,6 @@ export default function RoundResultFormEdit({
       <Button
         type="submit"
         variant="contained"
-        color="primary"
         disabled={!isFormValid()}
       >
         Ändra resultat

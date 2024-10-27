@@ -34,8 +34,6 @@ export default async function Home() {
         <h1
           style={{
             margin: 0,
-            color: "#943030",
-            fontFamily: "HelveticaNeueLight, Helvetica, tahoma, arial",
             fontSize: "42px",
             textAlign: "left",
           }}
