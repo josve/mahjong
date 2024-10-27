@@ -19,14 +19,14 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-        <Container>
+      <Header />
+        <Container className="content-container">
           <Box
             sx={{
               margin: "0 auto",
               backgroundColor: "var(--white)",
             }}
           >
-            <Header />
             <Box 
       sx={{
         margin: "20px"
