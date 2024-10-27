@@ -153,9 +153,12 @@ export default function MatchChartClient({
       emphasis: {
         show: true,
         formatter: "{b}: {c} ({d}%)",
-        fontSize: 12,
+        fontSize: 14,
         fontWeight: "bold",
       },
+      textBorderWidth: 2,
+      textBorderColor: "white",
+      color: "red",
     },
   });
 
@@ -168,9 +171,9 @@ export default function MatchChartClient({
       value: round.SCORE + 500,
       name: round,
       itemStyle: {
-        color: round.IS_WINNER ? "white" : undefined,
+        color: round.IS_WINNER ? "white" : "transparent",
         borderColor: color, // Use line color
-        borderWidth: round.IS_WINNER ? 4 : undefined,
+        borderWidth: round.IS_WINNER ? 6 : 0,
         fontWeight: "bold", // Make the text bold
       },
     }));
@@ -182,17 +185,20 @@ export default function MatchChartClient({
       lineStyle: {
         color: color,
         width: 8, // Adjust the line thickness
+        cap: "round",
       },
+      smooth: 0.4,
       symbol: "circle",
       symbolSize: (value: any, params: any) =>
-        params.data.name.IS_WINNER ? 20 : 0, // Make the circles larger
+        params.data.name.IS_WINNER ? 18 : 0, // Make the circles larger
       endLabel: {
         show: true,
         position: "right",
+        distance: 15,
         color: color,
-        fontSize: 14,
+        fontSize: 18,
         fontWeight: "bold",
-        backgroundColor: "white",
+        textBorderWidth: 2,
         textBorderColor: "white",
         formatter: (params: any) => {
           if (params.dataIndex === scores.length - 1) {
