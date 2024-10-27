@@ -43,14 +43,14 @@ export default function RoundResultFormAdd({
     }));
   };
   const isFormValid = () => {
-    const allScoresEntered = Object.values(formData.scores).every(
-      (score) =>
-        score !== "" &&
-        score !== undefined &&
-        score !== null &&
-        Number(score) % 2 == 0
-    );
-    const eastTeamSelected = formData.eastTeam !== "";
+    const allScoresEntered = Object.entries(teamIdToName).every(([teamId, teamName]) => (
+      formData.scores[teamId] && formData.scores[teamName] != "" &&
+      formData.scores[teamId] !== undefined &&
+      formData.scores[teamId] !== null &&
+      Number(formData.scores[teamId]) % 2 == 0
+    ));
+
+      const eastTeamSelected = formData.eastTeam !== "";
     const winnerSelected = String(formData.winner) !== "-1";
     return allScoresEntered && eastTeamSelected && winnerSelected;
   };
@@ -146,7 +146,7 @@ export default function RoundResultFormAdd({
       <Button
         type="submit"
         variant="contained"
-s        disabled={!isFormValid()}
+        disabled={!isFormValid()}
         sx={{ marginTop: 2 }}
       >
         Lägg till resultat
