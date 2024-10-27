@@ -256,7 +256,7 @@ export default function MatchChartClient({
                   }, ${teamColors[param.seriesName].color_blue})`
                 : "black";
               return `<span style="display:inline-block;width:10px;height:10px;background-color:${color};margin-right:5px;"></span>${teamName}: ${
-                param.value - 500
+                param.value
               } (${windHand} ${hand}${mahjongText}, ${formattedHandScore})`;
             }
             return null;
