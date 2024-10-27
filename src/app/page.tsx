@@ -31,13 +31,7 @@ export default async function Home() {
           marginBottom: "20px",
         }}
       >
-        <h1
-          style={{
-            margin: 0,
-            fontSize: "42px",
-            textAlign: "left",
-          }}
-        >
+        <h1>
           Matcher
         </h1>
         <Link
