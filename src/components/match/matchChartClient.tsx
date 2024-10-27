@@ -64,7 +64,7 @@ export default function MatchChartClient({
 
   const numRounds = Math.floor(hands.length / 4 - 1);
 
-  const roundsToShow = Math.max(19, numRounds + 7);
+  const roundsToShow = Math.max(15, numRounds + 5);
 
   // Initialize rounds starting from 1
   const rounds = Array.from({ length: roundsToShow }, (_, i) =>
