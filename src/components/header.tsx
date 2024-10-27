@@ -81,6 +81,12 @@ export default function Header() {
           >
             <Typography variant="body1">poängtabell</Typography>
           </Link>
+          <Link
+              href="/scorecalculator"
+              passHref
+          >
+            <Typography variant="body1">poängräknare</Typography>
+          </Link>
         </Box>
         <IconButton
           edge="end"
@@ -119,6 +125,13 @@ export default function Header() {
             onClick={handleMenuToggle}
           >
             <ListItemText primary="Poängtabell" />
+          </ListItem>
+          <ListItem
+              component={Link}
+              href="/scorecalculator"
+              onClick={handleMenuToggle}
+          >
+            <ListItemText primary="Poängräknare" />
           </ListItem>
         </List>
       </Drawer>
