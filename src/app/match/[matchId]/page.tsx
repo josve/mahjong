@@ -45,7 +45,7 @@ export default async function Page({ params }: PageProps) {
               textDecoration: "underline",
             }}
           >
-            Till registrerings sida
+            Till registrering
           </a>
         </div>
       )}
