@@ -44,7 +44,7 @@ export default async function Home() {
       <TotalStatisticsRow />
       <Grid
         container
-        spacing={2}
+        spacing={3}
         sx={{ marginTop: "20px" }}
       >
         {" "}
