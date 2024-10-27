@@ -32,6 +32,7 @@ export default function Header() {
       sx={{
         background:
           "radial-gradient(circle farthest-corner at 100px 100px, var(--gradient-start) 0% , var(--gradient-end) 100%)",
+          boxShadow: 0,
       }}
     >
       <Toolbar>
@@ -43,49 +44,44 @@ export default function Header() {
             <Box
               sx={{ display: "flex", alignItems: "center", cursor: "pointer" }}
             >
-              {isLargeScreen && (
-                <Image
+              <Image
                   src="/mahjong_tiles.png"
                   alt="Mahjong Tiles"
-                  width={104}
-                  height={52}
                   className="header-logo"
+                  width="300"
+                  height="200"
                 />
-              )}
-              <Typography
-                  variant="h6"
-                  className="header-text"
-              >
+              <div className="header-title">
                 <span style={{ fontWeight: "700" }}>Mahjong</span> Master System
                 4.0
-              </Typography>
+              </div>
             </Box>
           </Link>
         </Box>
-        <Box className="header-links">
-          <Link
+        <Box className="header-links header-text">
+          <Link className="header-link"
             href="/"
             passHref
           >
-            <Typography variant="body1">matcher</Typography>
+            matcher
           </Link>
-          <Link
+          <Link className="header-link"
             href="/statistics"
             passHref
           >
-            <Typography variant="body1">statistik</Typography>
+            statistik
           </Link>
-          <Link
+          <Link className="header-link"
             href="/scoreboard"
             passHref
           >
-            <Typography variant="body1">poängtabell</Typography>
+            poängtabell
           </Link>
-          <Link
+          <Link className="header-link"
               href="/scorecalculator"
               passHref
           >
-            <Typography variant="body1">poängräknare</Typography>
+            poängräknare
           </Link>
         </Box>
         <IconButton
