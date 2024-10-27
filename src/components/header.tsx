@@ -16,6 +16,7 @@ import {
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import { useState } from "react";
+import ReactEcharts from "echarts-for-react";
 
 export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -23,6 +24,54 @@ export default function Header() {
 
   const handleMenuToggle = () => {
     setMenuOpen(!menuOpen);
+  };
+
+  const options: any = {
+    graphic: {
+      elements: [
+        {
+          type: 'text',
+          left: 'center',
+          top: 'center',
+          style: {
+            text: 'Mahjong Master System 4.0',
+            fontSize: 24,
+            lineDash: [0, 200],
+            lineDashOffset: 0,
+            fill: 'transparent',
+            stroke: '#fff',
+            lineWidth: 1
+          },
+          keyframeAnimation: {
+            duration: 1000,
+            loop: false,
+            keyframes: [
+              {
+                percent: 0.7,
+                style: {
+                  fill: 'transparent',
+                  lineDashOffset: 200,
+                  lineDash: [200, 0]
+                }
+              },
+              {
+                // Stop for a while.
+                percent: 0.8,
+                style: {
+                  fill: 'transparent'
+                }
+              },
+              {
+                percent: 1,
+                style: {
+                  fill: 'white'
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
   };
 
   return (
@@ -52,13 +101,10 @@ export default function Header() {
                   className="header-logo"
                 />
               )}
-              <Typography
-                variant="h6"
-                className="header-text"
-              >
-                <span style={{ fontWeight: "700" }}>Mahjong</span> Master System
-                4.0
-              </Typography>
+              <ReactEcharts
+                  option={options}
+                  style={{ height: "64px", width: "350px" }}
+              />
             </Box>
           </Link>
         </Box>
