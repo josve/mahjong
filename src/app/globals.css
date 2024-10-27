@@ -6,6 +6,7 @@
 
 :root {
   --background-color: white;
+  --label_text-color: #606060;
   --grey-color: #909090;
   --header-color: #943030;
   --header-font-family: HelveticaNeueLight, Helvetica, tahoma, arial;
@@ -21,6 +22,7 @@
 @media (prefers-color-scheme: dark) {
   :root {
     --background-color: white;
+    --label_text-color: #606060;
     --grey-color: #909090;
     --header-color: #943030;
     --header-font-family: HelveticaNeueLight, Helvetica, tahoma, arial;
@@ -64,6 +66,14 @@ h3 {
   font-size: 16px;
   font-family: var(--header-font-family);
 }
+
+.label
+{
+	color: var(--label_text-color); 
+	margin-bottom: 20px; 
+	text-align: left;
+}
+
 
 .multi-title-header {
   display: flex;
