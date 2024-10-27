@@ -99,7 +99,12 @@ export default function MatchChartClient({
   const pieData = Object.keys(winCounts).map((teamId) => ({
     value: winCounts[teamId],
     name: teamId === "no-winner" ? "No Winner" : getTeamName(teamId),
+    label: {
+    	color: teamColors[teamId],
+    },
     itemStyle: {
+	  borderColor:"white",
+	  borderWidth:3,
       color:
         teamId === "no-winner"
           ? "transparent"
@@ -135,8 +140,8 @@ export default function MatchChartClient({
 
   series.push({
     type: "pie",
-    radius: ["12%", "20%"],
-    center: ["90%", "20%"],
+    radius: ["14%", "22%"],
+    center: ["10%", "18%"],
     data: pieData,
     tooltip: {
       show: false,
@@ -149,16 +154,15 @@ export default function MatchChartClient({
     },
     label: {
       show: false,
-      position: "inside",
+      position: "center",
       emphasis: {
         show: true,
         formatter: "{b}: {c} ({d}%)",
-        fontSize: 14,
+        fontSize: 16,
         fontWeight: "bold",
       },
       textBorderWidth: 2,
       textBorderColor: "white",
-      color: "red",
     },
   });
 
