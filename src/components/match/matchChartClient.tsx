@@ -225,7 +225,6 @@ export default function MatchChartClient({
       show: false,
     },
   });
-  console.log("Series data:", series);
 
   const options = {
     animationDuration: "500",
@@ -235,6 +234,11 @@ export default function MatchChartClient({
         if (params.some((param: any) => param.seriesType === "pie")) {
           return ""; // Hide tooltip when hovering over pie chart
         }
+
+        if (params[0].dataIndex === 0) {
+          return "Matchen börjar";
+        }
+
         return params
           .map((param: any) => {
             const teamName = getTeamName(param.seriesName);
@@ -265,7 +269,7 @@ export default function MatchChartClient({
       left: "3%",
       right: "4%",
       bottom: "3%",
-      containLabel: true,
+      containLabel: false,
     },
     xAxis: {
       type: "category",
@@ -275,8 +279,12 @@ export default function MatchChartClient({
       axisLabel: {
         formatter: (value: string) => {
           const roundNumber = parseInt(value, 10);
+          if ((roundNumber - 1) == 0) {
+            return "";
+          }
+
           const actualMatchLength = Math.floor(hands.length / 4);
-          return roundNumber <= actualMatchLength ? value : "";
+          return roundNumber <= actualMatchLength ? roundNumber - 1 : "";
         },
       },
     },
@@ -299,7 +307,7 @@ export default function MatchChartClient({
       },
       axisLabel: {
         formatter: (value: number) => {
-          return value === 500 ? "500" : value.toString();
+          return value.toString();
         },
       },
     },
