@@ -4,16 +4,9 @@ export default async function TotalStatisticsRow() {
   const stats = await getTotalStatistics();
 
   return (
-    <div
-      style={{
-        color: "var(--grey-color)",
-        marginBottom: "20px",
-        textAlign: "left",
-      }}
-    >
+    <div class="label">
       <p>
-        Totalt {stats?.totalMatches} matcher,
-        {stats?.totalMahjongs} mahjonger på {stats?.totalRounds - stats?.totalMatches} omgångar
+        Totalt {stats?.totalMatches} matcher, {stats?.totalMahjongs} mahjonger på {stats?.totalRounds - stats?.totalMatches} omgångar
       </p>
     </div>
   );
