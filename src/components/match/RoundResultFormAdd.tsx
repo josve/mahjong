@@ -142,8 +142,8 @@ export default function RoundResultFormAdd({
       <Button
         type="submit"
         variant="contained"
+        className="button match-add-result-button"
         disabled={!isFormValid()}
-        sx={{ marginTop: 2 }}
       >
         Lägg till resultat
       </Button>
