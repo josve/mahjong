@@ -1,7 +1,6 @@
 "use client"
 import React, { useState, useEffect } from "react";
 import { Box, Typography, Slider, Select, MenuItem, Checkbox, FormControlLabel, FormControl, InputLabel } from "@mui/material";
-import { Metadata } from "next";
 
 export default function ScoreCalculatorPage() {
     const [flowers, setFlowers] = useState(0);
