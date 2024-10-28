@@ -1,7 +1,6 @@
 import { getMatchById, getHandsByGameId } from "@/lib/dbMatch";
 import MatchChart from "@/components/match/matchChart";
 import RegisterResultControls from "@/components/match/RegisterResultControls";
-import MatchHeader from "@/components/match/MatchHeader";
 import { Metadata } from "next";
 
 interface PageProps {
