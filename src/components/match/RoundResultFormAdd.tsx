@@ -2,16 +2,14 @@
 
 import React, { useState } from "react";
 import {TextField, Button, Box, FormControl, InputLabel, Select, MenuItem} from "@mui/material";
-import { useRouter } from "next/navigation";
 
 export default function RoundResultFormAdd({
   teamIdToName,
   matchId,
 }: {
-  teamIdToName: { [key: string]: string };
-  matchId: string;
+  readonly teamIdToName: { [key: string]: string };
+  readonly matchId: string;
 }) {
-  const router = useRouter();
   const [formData, setFormData] = useState<{ [key: string]: any }>({
     scores: {},
     eastTeam: "",

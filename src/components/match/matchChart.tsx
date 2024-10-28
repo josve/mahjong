@@ -1,8 +1,8 @@
 import MatchChartClient from "@/components/match/matchChartClient";
 
 interface PageProps {
-  matchId: string;
-  autoReload: boolean;
+  readonly matchId: string;
+  readonly autoReload: boolean;
 }
 
 export default async function MatchChart({ matchId, autoReload }: PageProps) {

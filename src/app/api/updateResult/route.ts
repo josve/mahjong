@@ -23,7 +23,6 @@ export async function POST(req: NextRequest) {
     const winner = winnerResult[0]?.WINNER || null;
 
     const teamIds = Object.keys(scores);
-    const eastIndex = teamIds.indexOf(eastTeam);
 
     await Promise.all(teamIds.map(async (teamId, i) => {
       let handScore = 0;

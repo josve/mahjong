@@ -1,4 +1,4 @@
-import React, { useMemo } from "react";
+import React from "react";
 import ReactEcharts from "echarts-for-react";
 
 interface PlayerScoresChartProps {

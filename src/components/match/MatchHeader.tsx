@@ -5,8 +5,8 @@ capitalize
 } from "@/lib/formatting";
 
 interface Props {
-  numRounds: number;
-  matchId: string;
+  readonly numRounds: number;
+  readonly matchId: string;
 }
 
 export default async function MatchHeader({ numRounds, matchId }: Props) {

@@ -2,7 +2,7 @@ import { getMatchById, getTeamIdToName } from "@/lib/dbMatch";
 import RoundResultFormAdd from "@/components/match/RoundResultFormAdd";
 
 interface Props {
-  matchId: string;
+  readonly matchId: string;
 }
 
 export default async function RegisterResultControls({ matchId }: Props) {

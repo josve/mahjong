@@ -8,8 +8,8 @@ export default function MatchChartClient({
   matchId,
   autoReload,
 }: {
-  matchId: string;
-  autoReload: boolean;
+  readonly matchId: string;
+  readonly autoReload: boolean;
 }) {
   const [data, setData] = useState<any>(null);
   const [lastRoundCount, setLastRoundCount] = useState<number>(0);
@@ -57,9 +57,9 @@ export default function MatchChartClient({
   for (const teamId in teamHands) {
     const teamHand = teamHands[teamId];
     let totalScore = 0;
-    for (let i = 0; i < teamHand.length; i++) {
-      totalScore += teamHand[i].HAND_SCORE;
-      teamHand[i].SCORE = totalScore;
+    for (const item of teamHand) {
+      totalScore += item.HAND_SCORE;
+      item.SCORE = totalScore;
     }
   }
 

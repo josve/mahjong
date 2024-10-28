@@ -10,10 +10,10 @@ export default function RoundResultFormEdit({
   hands,
   round,
 }: {
-  teamIdToName: { [key: string]: string };
-  matchId: string;
-  hands: any[];
-  round: string;
+  readonly teamIdToName: { [key: string]: string };
+  readonly matchId: string;
+  readonly hands: any[];
+  readonly round: string;
 }) {
   const router = useRouter();
   const [formData, setFormData] = useState<{ [key: string]: any }>({
@@ -87,7 +87,6 @@ export default function RoundResultFormEdit({
             type="number"
             value={formData.scores[teamId] || ""}
             onChange={(e) => handleScoreChange(e, teamId)}
-            focused
             margin="normal"
             sx={{ flex: "1 1 200px" }}
           />
