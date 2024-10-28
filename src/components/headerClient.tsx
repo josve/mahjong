@@ -12,15 +12,26 @@ import {
   ListItem,
   ListItemText,
   Avatar,
+  Menu,
+  MenuItem,
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import { useState } from "react";
 
 export default function HeaderClient({ session }: { readonly session: any }) {
   const [menuOpen, setMenuOpen] = useState(false);
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 
   const handleMenuToggle = () => {
     setMenuOpen(!menuOpen);
+  };
+
+  const handleAvatarClick = (event: React.MouseEvent<HTMLElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleMenuClose = () => {
+    setAnchorEl(null);
   };
 
   return (
@@ -91,21 +102,27 @@ export default function HeaderClient({ session }: { readonly session: any }) {
       }
       {session?.user && (
         <Box sx={{ display: "flex", alignItems: "center" }}>
-          <Avatar sx={{ bgcolor: "primary.main", marginRight: 2 }}>
-            {session.user.firstInitial}
-          </Avatar>
-          <Link className="header-link"
-              href="/profile"
-              passHref
+          <IconButton onClick={handleAvatarClick}>
+            <Avatar sx={{ bgcolor: "var(--strong-color)", marginRight: 2 }}>
+              {session.user.firstInitial}
+            </Avatar>
+          </IconButton>
+          <Menu
+            anchorEl={anchorEl}
+            open={Boolean(anchorEl)}
+            onClose={handleMenuClose}
           >
-            Profil
-          </Link>
-          <Link className="header-link"
-              href="/api/auth/signout"
-              passHref
-          >
-            Logga ut
-          </Link>
+            <MenuItem onClick={handleMenuClose}>
+              <Link href="/profile" passHref>
+                Profil
+              </Link>
+            </MenuItem>
+            <MenuItem onClick={handleMenuClose}>
+              <Link href="/api/auth/signout" passHref>
+                Logga ut
+              </Link>
+            </MenuItem>
+          </Menu>
         </Box>
       )}
         </Box>
