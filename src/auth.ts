@@ -31,9 +31,12 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           [token.email]
         );
         if (rows.length > 0) {
+          const player = rows[0];
+          const firstInitial = player.NAME.charAt(0).toUpperCase();
           session.user = {
             ...session.user,
-            ...rows[0],
+            ...player,
+            firstInitial,
           };
         }
         return session;

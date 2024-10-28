@@ -11,6 +11,7 @@ import {
   List,
   ListItem,
   ListItemText,
+  Avatar,
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import { useState } from "react";
@@ -88,6 +89,19 @@ export default function HeaderClient({ session }: { readonly session: any }) {
             Logga in
           </Link>
       }
+      {session?.user && (
+        <Box sx={{ display: "flex", alignItems: "center" }}>
+          <Avatar sx={{ bgcolor: "primary.main", marginRight: 2 }}>
+            {session.user.firstInitial}
+          </Avatar>
+          <Link className="header-link"
+              href="/api/auth/signout"
+              passHref
+          >
+            Logga ut
+          </Link>
+        </Box>
+      )}
         </Box>
         <IconButton
           edge="end"
