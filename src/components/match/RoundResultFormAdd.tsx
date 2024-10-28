@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { TextField, Button, Box } from "@mui/material";
+import {TextField, Button, Box, FormControl, InputLabel, Select, MenuItem} from "@mui/material";
 import { useRouter } from "next/navigation";
 
 export default function RoundResultFormAdd({
@@ -92,56 +92,54 @@ export default function RoundResultFormAdd({
             type="number"
             value={formData.scores[teamId] || ""}
             onChange={(e) => handleScoreChange(e, teamId)}
-            focused
             margin="normal"
             sx={{ flex: "1 1 200px" }}
           />
         ))}
       </Box>
-      <Box sx={{ display: "flex", gap: 2, flexWrap: "wrap", marginTop: 2 }}>
-        <TextField
-          select
-          label="Öst"
-          value={formData.eastTeam}
-          onChange={handleEastTeamChange}
-          SelectProps={{
-            native: true,
-          }}
-          focused
-          sx={{ flex: "1 1 200px" }}
-        >
-          <option value="">Välj spelare i öst</option>
-          {Object.entries(teamIdToName).map(([teamId, teamName]) => (
-            <option
-              key={teamId}
-              value={teamId}
-            >
-              {teamName}
-            </option>
-          ))}
-        </TextField>
-        <TextField
-          select
-          label="Vinnare"
-          value={formData.winner}
-          onChange={handleWinnerChange}
-          SelectProps={{
-            native: true,
-          }}
-          focused
-          sx={{ flex: "1 1 200px" }}
-        >
-          <option value="-1">Välj vinnare</option>
-          <option value="">Ingen vinnare</option>
-          {Object.entries(teamIdToName).map(([teamId, teamName]) => (
-            <option
-              key={teamId}
-              value={teamId}
-            >
-              {teamName}
-            </option>
-          ))}
-        </TextField>
+      <Box sx={{ display: "grid", gap: 2, gridTemplateColumns: "1fr 1fr",  flexWrap: "wrap", marginTop: 2 }}>
+        <FormControl fullWidth>
+          <InputLabel id="east-label">Öst</InputLabel>
+          <Select
+              labelId="east-label"
+              id="east-select"
+              label="Öst"
+              value={formData.eastTeam}
+              onChange={handleEastTeamChange}
+          >
+            <option value="">Välj spelare i öst</option>
+            {Object.entries(teamIdToName).map(([teamId, teamName]) => (
+                <MenuItem
+                    key={teamId}
+                    value={teamId}
+                >
+                  {teamName}
+                </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
+
+        <FormControl fullWidth>
+          <InputLabel id="winner-label">Vinnare</InputLabel>
+          <Select
+              labelId="winner-label"
+              id="winner-select"
+              label="Vinnare"
+              value={formData.winner}
+              onChange={handleWinnerChange}
+          >
+            <MenuItem value="-1">Välj vinnare</MenuItem>
+            <MenuItem value="">Ingen vinnare</MenuItem>
+            {Object.entries(teamIdToName).map(([teamId, teamName]) => (
+                <MenuItem
+                    key={teamId}
+                    value={teamId}
+                >
+                  {teamName}
+                </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
       </Box>
       <Button
         type="submit"
