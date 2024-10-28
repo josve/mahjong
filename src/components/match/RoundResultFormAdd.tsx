@@ -107,7 +107,7 @@ export default function RoundResultFormAdd({
               value={formData.eastTeam}
               onChange={handleEastTeamChange}
           >
-            <option value="">Välj spelare i öst</option>
+            <MenuItem value="">Välj spelare i öst</MenuItem>
             {Object.entries(teamIdToName).map(([teamId, teamName]) => (
                 <MenuItem
                     key={teamId}
