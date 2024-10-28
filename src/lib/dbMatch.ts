@@ -83,7 +83,7 @@ export async function getHandsByGameId(id: string): Promise<any> {
   const connection = await Connection.getInstance().getConnection();
   try {
     const [hands]: any = await connection.query(
-      "SELECT * FROM Hands WHERE GAME_ID = ? ORDER BY ROUND ASC",
+      `SELECT * FROM Hands WHERE GAME_ID = ? ORDER BY ROUND ASC`,
       [id]
     );
     return hands;
@@ -96,12 +96,12 @@ export async function getTeamIdToNameNoAlias() {
   const connection = await Connection.getInstance().getConnection();
   try {
     const [result]: any = await connection.query(
-      "SELECT COALESCE(GROUP_CONCAT(Players.NAME order by Players.NAME separator '+')) as NAME, Teams.TEAM_ID from Teams \
-     INNER JOIN \
-     Players \
-     ON \
-     Players.PLAYER_ID = Teams.PLAYER_ID \
-     GROUP BY Teams.TEAM_ID"
+      `SELECT COALESCE(GROUP_CONCAT(Players.NAME order by Players.NAME separator '+')) as NAME, Teams.TEAM_ID from Teams 
+     INNER JOIN 
+     Players 
+     ON 
+     Players.PLAYER_ID = Teams.PLAYER_ID 
+     GROUP BY Teams.TEAM_ID`
     );
 
     // Convert the result to an object with the team_id as the key and the name as the value
@@ -132,18 +132,18 @@ export async function getTeamIdToName() {
   const connection = await Connection.getInstance().getConnection();
   try {
     const [result]: any = await connection.query(
-      "SELECT COALESCE(MAX(TeamAttributes.`VALUE`), GROUP_CONCAT(Players.NAME order by Players.NAME separator '+')) as NAME, Teams.TEAM_ID from Teams \
-   LEFT OUTER JOIN \
-   TeamAttributes \
-   ON \
-   TeamAttributes.`TEAM_ID` = Teams.TEAM_ID \
-   INNER JOIN \
-   Players \
-   ON \
-   Players.PLAYER_ID = Teams.PLAYER_ID \
-   WHERE \
-    TeamAttributes.ATTRIBUTE IS NULL OR TeamAttributes.ATTRIBUTE = 'alias' \
-   GROUP BY Teams.TEAM_ID"
+      `SELECT COALESCE(MAX(TeamAttributes.\`VALUE\`), GROUP_CONCAT(Players.NAME order by Players.NAME separator '+')) as NAME, Teams.TEAM_ID from Teams 
+   LEFT OUTER JOIN 
+   TeamAttributes 
+   ON 
+   TeamAttributes.\`TEAM_ID\` = Teams.TEAM_ID 
+   INNER JOIN 
+   Players 
+   ON 
+   Players.PLAYER_ID = Teams.PLAYER_ID 
+   WHERE 
+    TeamAttributes.ATTRIBUTE IS NULL OR TeamAttributes.ATTRIBUTE = 'alias' 
+   GROUP BY Teams.TEAM_ID`
     );
 
     // Convert the result to an object with the team_id as the key and the name as the value

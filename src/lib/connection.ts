@@ -3,7 +3,7 @@ import mysql, { Pool, PoolConnection } from "mysql2/promise";
 
 export default class Connection {
   private static instance: Connection;
-  private pool: Pool;
+  private readonly pool: Pool;
 
   private constructor() {
     const poolConfig: mysql.PoolOptions = {
