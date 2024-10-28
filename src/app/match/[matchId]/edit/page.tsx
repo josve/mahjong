@@ -19,8 +19,6 @@ export async function generateMetadata({
 }
 
 export default async function Page({ params }: PageProps) {
-  const hands = await getHandsByGameId(params.matchId);
-  const numRounds = Math.floor(hands.length / 4 - 1);
   return (
     <>
       <MatchChart
