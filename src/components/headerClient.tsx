@@ -95,6 +95,12 @@ export default function HeaderClient({ session }: { readonly session: any }) {
             {session.user.firstInitial}
           </Avatar>
           <Link className="header-link"
+              href="/profile"
+              passHref
+          >
+            Profil
+          </Link>
+          <Link className="header-link"
               href="/api/auth/signout"
               passHref
           >
@@ -148,6 +154,15 @@ export default function HeaderClient({ session }: { readonly session: any }) {
           >
             <ListItemText primary="Poängräknare" />
           </ListItem>
+          {session?.user && (
+            <ListItem
+              component={Link}
+              href="/profile"
+              onClick={handleMenuToggle}
+            >
+              <ListItemText primary="Profil" />
+            </ListItem>
+          )}
         </List>
       </Drawer>
     </AppBar>

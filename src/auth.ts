@@ -37,6 +37,8 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
             ...session.user,
             ...player,
             firstInitial,
+            name: player.NAME,
+            userColor: 'rgb(' + player.COLOR_RED + "," + player.COLOR_GREEN + "," + player.COLOR_BLUE +")", 
           };
         }
         return session;
