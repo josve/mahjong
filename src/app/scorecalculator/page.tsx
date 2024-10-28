@@ -190,18 +190,7 @@ export default function ScoreCalculatorPage() {
         newCombos[index].isHidden = event.target.checked;
         setCombos(newCombos);
     };
-
-    const calculateScore = () => {
-        let totalScore = 0;
-        totalScore += flowerScore;
-        comboScore.map((combo) => totalScore += combo);
-        totalScore += mahjongScore;
-        totalScore += selfTouchScore;
-        totalScore += noScorePoints;
-        totalScore *= totalMultiplier;
-        return totalScore;
-    };
-
+    
     return (
         <Box >
             <Typography variant="h4" gutterBottom>Poängräknare</Typography>
