@@ -1,9 +1,38 @@
-import { NextRequest, NextResponse } from 'next/server';
+import {NextRequest, NextResponse} from 'next/server';
 import Connection from '@/lib/connection';
+import {PoolConnection} from "mysql2/promise";
+
+async function getNewRoundIndex(connection: PoolConnection, matchId: string) {
+  const [latestRoundResult]: any = await connection.query(
+      'SELECT MAX(ROUND) as latestRound FROM Hands WHERE GAME_ID = ?',
+      [matchId]
+  );
+  const latestRound = latestRoundResult[0]?.latestRound || 0;
+  return latestRound + 1;
+}
+
+function calculateHandScore(teamIds: string[], i: number, scores: any, hand: any, teamId: string, eastTeam: string, winner: string) {
+  let handScore = 0;
+  // Calculate the hand score based on the difference with other players
+  for (let j = 0; j < teamIds.length; j++) {
+    if (i !== j) {
+      const otherHand = scores[teamIds[j]];
+      let difference = hand - otherHand;
+      if (teamId === eastTeam || teamIds[j] === eastTeam) {
+        difference *= 2;
+      }
+      if (teamId === winner) {
+        handScore += difference < 0 ? 0 : difference;
+      } else {
+        handScore += difference;
+      }
+    }
+  }
+  return handScore;
+}
 
 export async function POST(req: NextRequest) {
   const body = await req.json();
-  console.log('Received request:', body);
   const { scores, eastTeam, winner, matchId } = body;
 
   const windOrder = ['E', 'N', 'W', 'S'];
@@ -12,34 +41,12 @@ export async function POST(req: NextRequest) {
   try {
     const teamIds = Object.keys(scores);
     const eastIndex = teamIds.indexOf(eastTeam);
-
-    const [latestRoundResult] : any = await connection.query(
-      'SELECT MAX(ROUND) as latestRound FROM Hands WHERE GAME_ID = ?',
-      [matchId]
-    );
-    const latestRound = latestRoundResult[0]?.latestRound || 0;
-    const newRound = latestRound + 1;
+    const newRound = await getNewRoundIndex(connection, matchId);
 
     for (let i = 0; i < teamIds.length; i++) {
       const teamId = teamIds[i];
-      let handScore = 0;
       const hand = scores[teamId];
-
-      // Calculate the hand score based on the difference with other players
-      for (let j = 0; j < teamIds.length; j++) {
-        if (i !== j) {
-          const otherHand = scores[teamIds[j]];
-          let difference = hand - otherHand;
-          if (teamId === eastTeam || teamIds[j] === eastTeam) {
-            difference *= 2;
-          }
-          if (teamId === winner) {
-            handScore += difference < 0 ? 0 : difference;
-          } else {
-            handScore += difference;
-          }
-        }
-      }
+      let handScore = calculateHandScore(teamIds, i, scores, hand, teamId, eastTeam, winner);
       const wind = windOrder[(i - eastIndex + 4) % 4];
 
       console.log(`Inserting result for team ${teamId}: handScore=${handScore}, wind=${wind}, isWinner=${teamId === winner}`);
