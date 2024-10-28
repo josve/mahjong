@@ -3,7 +3,7 @@ import RoundDisplay from "@/components/RoundDisplay";
 import { Metadata } from "next";
 
 interface PageProps {
-  params: {
+  readonly params: {
     readonly matchId: string;
   };
 }

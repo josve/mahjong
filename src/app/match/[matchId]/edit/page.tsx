@@ -4,7 +4,7 @@ import RegisterResultControls from "@/components/match/RegisterResultControls";
 import { Metadata } from "next";
 
 interface PageProps {
-  params: {
+  readonly params: {
     readonly matchId: string;
   };
 }

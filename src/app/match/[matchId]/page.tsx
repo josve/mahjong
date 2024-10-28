@@ -3,7 +3,7 @@ import MatchChart from "@/components/match/matchChart";
 import { Metadata } from "next";
 
 interface PageProps {
-  params: {
+  readonly params: {
     readonly matchId: string;
   };
 }
