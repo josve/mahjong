@@ -297,3 +297,17 @@ h3 {
     font-size: 18px;
   }
 }
+
+
+.match-buttons-container {
+	margin-top: 30px;
+	margin-bottom: 30px;
+	display:flex;
+	justify-content:center;
+	gap:20px;
+}
+
+.match-add-result-button {
+  margin-top: 20px;
+  float:right;
+}
