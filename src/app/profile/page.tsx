@@ -7,7 +7,7 @@ export default async function ProfilePage() {
     return <p>Du måste vara inloggad för att se denna sida.</p>;
   }
 
-  const { user } = session;
+  const { user }: any = session;
   const { name, color } = user;
 
   return (
