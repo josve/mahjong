@@ -2,7 +2,6 @@ import Link from "next/link";
 import {
   getMatchById,
   getHandsByGameId,
-  getTeamIdToNameNoAlias,
 } from "@/lib/dbMatch";
 import { 
 formatDate, 
@@ -29,9 +28,6 @@ export default async function MatchGridItem({ id }: { id: string }) {
     const timeString = `${formatTime(new Date(firstRound))}-${formatTime(
         new Date(lastRound)
     )}`;
-
-    const teamIdToName = await getTeamIdToNameNoAlias();
-    const getTeamName = (teamId: string) => teamIdToName[teamId];
 
   return (
   <Link href={`/match/${id}`}>
