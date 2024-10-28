@@ -1,4 +1,8 @@
 import { getMatchById } from "@/lib/dbMatch";
+import { 
+formatDate, 
+capitalize 
+} from "@/lib/formatting";
 
 interface Props {
   numRounds: number;
@@ -14,22 +18,12 @@ export default async function MatchHeader({ numRounds, matchId }: Props) {
         <h1>{match.NAME}</h1>
         <h2 style={{ textAlign: "left" }}>{numRounds} omgångar</h2>
       </div>
-      <h3
-        className="grey-text"
-        style={{
-          textAlign: "left",
-        }}
-      >
-        Datum {new Date(match.TIME).toLocaleDateString("sv-SE")}
-      </h3>
+      <div className="label">
+        {capitalize(formatDate(match.TIME))}
+      </div>
       {match.COMMENT && (
-        <div
-          style={{
-            paddingBottom: "10px",
-            paddingTop: "10px",
-          }}
-        >
-          {<p>Kommentar: {match.COMMENT}</p>}
+        <div className="label">
+          {match.COMMENT}
         </div>
       )}
     </div>

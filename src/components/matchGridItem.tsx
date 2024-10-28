@@ -4,6 +4,10 @@ import {
   getHandsByGameId,
   getTeamIdToNameNoAlias,
 } from "@/lib/dbMatch";
+import { 
+formatDate, 
+capitalize 
+} from "@/lib/formatting";
 
 export default async function MatchGridItem({ id }: { id: string }) {
     const match = await getMatchById(id);
@@ -29,23 +33,28 @@ export default async function MatchGridItem({ id }: { id: string }) {
     const teamIdToName = await getTeamIdToNameNoAlias();
     const getTeamName = (teamId: string) => teamIdToName[teamId];
 
-    return (
-        <Link
-            href={`/match/${id}`}
-        >
-            <div className="match-round-grid-item">
-                <div className="match-round-time">
-                    {new Date(time).toLocaleDateString("sv-SE")} ({timeString})
-                </div>
-                <span className="match-round-name">
-                #{match.GAME_IDX}. {name}
-                </span>
-                <p className="match-round-info">
-                    {numberOfRounds} omgångar, {getTeamName(match.TEAM_ID_1)},{" "}
-                    {getTeamName(match.TEAM_ID_2)}, {getTeamName(match.TEAM_ID_3)},{" "}
-                    {getTeamName(match.TEAM_ID_4)}
-                </p>
-            </div>
-        </Link>
-    );
+  return (
+  <Link href={`/match/${id}`}>
+    <div className="match-grid-item">
+     <div className="match-grid-item-number">
+        #{match.GAME_IDX}
+      </div> 
+    <div className="match-grid-item-content">
+    <div className="match-grid-item-rounds">
+        {numberOfRounds} omgångar
+      </div> 
+      <div className="match-grid-item-time label">
+        {capitalize(formatDate(time))} ({timeString})
+      </div>
+           
+      <div className="match-list-item-name">
+        {name}
+      </div>
+      <p className="match-round-info label">
+        {match.COMMENT}
+      </p>
+    </div>
+    </div>
+    </Link>
+  );
 }

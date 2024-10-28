@@ -6,6 +6,9 @@
 
 :root {
   --background-color: white;
+  --label_text-color: #606060;
+  --strong-color: rgb(229,70,70);
+  --muted-color: #943030;
   --grey-color: #909090;
   --header-color: #943030;
   --header-font-family: HelveticaNeueLight, Helvetica, tahoma, arial;
@@ -21,6 +24,7 @@
 @media (prefers-color-scheme: dark) {
   :root {
     --background-color: white;
+    --label_text-color: #606060;
     --grey-color: #909090;
     --header-color: #943030;
     --header-font-family: HelveticaNeueLight, Helvetica, tahoma, arial;
@@ -53,17 +57,31 @@ h1 {
   text-align: left;
   color: var(--header-color);
   font-family: var(--header-font-family);
-  font-size: 42px;
+
+  font-weight: 400;
+  text-align: left;
+  letter-spacing: 1px;
+  text-transform:uppercase;
+  font-size: 32px;
 }
 
 h2 {
   color: var(--header-color);
+  font-weight: 400;
 }
 
 h3 {
   font-size: 16px;
   font-family: var(--header-font-family);
 }
+
+.label
+{
+	color: var(--label_text-color); 
+	margin-bottom: 20px; 
+	text-align: left;
+}
+
 
 .multi-title-header {
   display: flex;
@@ -142,25 +160,75 @@ h3 {
 }
 
 
+.match-grid-item {
+	display:flex;
+	cursor: pointer;
+	margin-bottom: 15px;
+}
+
+
+.match-grid-item-number {
+	display:inline-block;
+	font-size: 26px;
+	font-weight: 400;
+	color: var(--white);
+	background-color: var(--label_text-color);
+	opacity: 0.2;
+	margin-right: 20px;
+	vertical-align:top;
+	line-height:90px;
+	text-align:center;
+	width: 90px;
+	height: 90px;
+	border-radius: 45px;
+}
+
+@keyframes red_fade {
+  from {background-color: var(--label_text-color); opacity: 0.2;}
+  to {background-color: var(--strong-color); opacity: 1;}
+}
+
+.match-grid-item:hover .match-grid-item-number {
+	background-color: var(--strong-color);
+	opacity: 1;
+	animation-name: red_fade;
+	animation-duration: 0.5s;
+}
+
+.match-grid-item-content {
+	flex-grow:1;
+	display:block;
+}
+
+.match-grid-item-time {
+  text-align: left;
+  margin-bottom: 5px;
+}
+
+.match-grid-item-rounds {
+  float:right;
+  color: var(--match-item-color);
+  text-align: right;
+}
 
 .match-round-info {
   margin: 0;
-   color: var(--match-item-color);
+   color: var(--label_text-color);
    text-align: left;
 }
 
-.match-round-name {
-  font-size: 20px;
+.match-list-item-name {
+  font-size: 26px;
   display: block;
   margin: 5px 0;
   text-align: left;
   color: var(--match-item-color);
 }
 
-.match-round-time {
-  color: var(--grey-color);
-  text-align: left;
+.match-grid-item:hover .match-list-item-name {
+	color: var(--strong-color);
 }
+
 
 .match-round-grid-item {
   padding: 10px;

@@ -158,7 +158,7 @@ export default function MatchChartClient({
       emphasis: {
         show: true,
         formatter: "{b}: {c} ({d}%)",
-        fontSize: 16,
+        fontSize: 18,
         fontWeight: "bold",
       },
       textBorderWidth: 2,
@@ -203,7 +203,7 @@ export default function MatchChartClient({
       itemStyle: {
         color: round.IS_WINNER ? "white" : "transparent",
         borderColor: color, // Use line color
-        borderWidth: round.IS_WINNER ? 6 : 0,
+        borderWidth: round.IS_WINNER ? 4 : 0,
         fontWeight: "bold", // Make the text bold
       },
     }));
@@ -214,7 +214,7 @@ export default function MatchChartClient({
       name: teamId,
       lineStyle: {
         color: color,
-        width: 8, // Adjust the line thickness
+        width: 7, // Adjust the line thickness
         cap: "round",
       },
       smooth: 0.4,
@@ -224,7 +224,7 @@ export default function MatchChartClient({
       endLabel: {
         show: true,
         position: "right",
-        distance: 15,
+        distance: 18,
         color: color,
         fontSize: 18,
         fontWeight: "bold",
