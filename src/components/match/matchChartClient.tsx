@@ -107,9 +107,7 @@ export default function MatchChartClient({
 	  borderColor:"white",
 	  borderWidth:3,
       color:
-        teamId === "no-winner"
-          ? "transparent"
-          : teamColors[teamId]
+        teamColors[teamId]
           ? `rgb(${teamColors[teamId].color_red}, ${teamColors[teamId].color_green}, ${teamColors[teamId].color_blue})`
           : "transparent", // Use transparent if no color is found
       formatter: (params: any) => {
