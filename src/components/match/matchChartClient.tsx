@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from "react";
 import ReactEcharts from "echarts-for-react";
 import { CircularProgress } from "@mui/material";
+import {capitalize, formatDate} from "@/lib/formatting";
 
 export default function MatchChartClient({
   matchId,
@@ -328,9 +329,26 @@ export default function MatchChartClient({
   };
 
   return (
-    <ReactEcharts
+      <>
+      <div>
+        <div className="multi-title-header">
+          <h1>{data?.match?.NAME}</h1>
+          <h2 style={{textAlign: "left"}}>{numRounds} omgångar</h2>
+        </div>
+        <div className="label">
+          {capitalize(formatDate(data?.match?.TIME))}
+        </div>
+        {data?.match?.COMMENT && (
+            <div className="label">
+              {data?.match?.COMMENT}
+            </div>
+        )}
+      </div>
+
+  <ReactEcharts
       option={options}
-      style={{ height: "600px" }}
-    />
+      style={{height: "600px"}}
+  />
+      </>
   );
 }

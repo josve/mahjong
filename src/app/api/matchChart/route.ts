@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getHandsByGameId, getTeamIdToName, getTeamColors } from '@/lib/dbMatch';
+import {getHandsByGameId, getTeamIdToName, getTeamColors, getMatchById} from '@/lib/dbMatch';
 
 export async function GET(req: NextRequest) {
   const { searchParams } = new URL(req.url);
@@ -13,11 +13,13 @@ export async function GET(req: NextRequest) {
     const hands = await getHandsByGameId(matchId);
     const teamIdToName = await getTeamIdToName();
     const teamColors = await getTeamColors();
+    const match = await getMatchById(matchId);
 
     const data = {
       hands,
       teamIdToName,
       teamColors,
+      match
     };
 
     return NextResponse.json(data, { status: 200 });

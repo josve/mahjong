@@ -1,6 +1,5 @@
 import { getMatchById, getHandsByGameId } from "@/lib/dbMatch";
 import MatchChart from "@/components/match/matchChart";
-import MatchHeader from "@/components/match/MatchHeader";
 import { Metadata } from "next";
 
 interface PageProps {
@@ -29,10 +28,6 @@ export default async function Page({ params }: PageProps) {
 
   return (
     <>
-      <MatchHeader
-        matchId={params.matchId}
-        numRounds={numRounds}
-      />
       <MatchChart
         matchId={params.matchId}
         autoReload={true}

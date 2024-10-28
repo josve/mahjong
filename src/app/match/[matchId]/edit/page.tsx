@@ -24,10 +24,6 @@ export default async function Page({ params }: PageProps) {
   const numRounds = Math.floor(hands.length / 4 - 1);
   return (
     <>
-      <MatchHeader
-        matchId={params.matchId}
-        numRounds={numRounds}
-      />
       <MatchChart
         matchId={params.matchId}
         autoReload={false}
