@@ -2,28 +2,13 @@ import React from "react";
 
 interface HighRollerChartProps {
   highRollerScores: { [key: string]: [number, number][] };
-  playerColors: {
-    [key: string]: {
-      color_red: number;
-      color_green: number;
-      color_blue: number;
-    };
-  };
-  playerNameToId: { [key: string]: string };
+  getPlayerColor: (playerName: string) => string | undefined;
 }
 
 const HighRollerChart: React.FC<HighRollerChartProps> = ({
-  highRollerScores,
-  playerColors,
-  playerNameToId,
-}) => {
-  const getPlayerColor = (playerName: string) => {
-    const playerId = playerNameToId[playerName];
-    const playerColor = playerColors[playerId];
-    return playerColor
-      ? `rgb(${playerColor.color_red}, ${playerColor.color_green}, ${playerColor.color_blue})`
-      : "black";
-  };
+                                                           highRollerScores,
+                                                           getPlayerColor,
+                                                         }) => {
 
   const getCircleSize = (score: number) => {
     const minSize = 10;

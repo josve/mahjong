@@ -9,25 +9,13 @@ import {
 
 interface AverageHandTableProps {
   averageHand: { [key: string]: number };
-  playerColors: {
-    [key: string]: {
-      color_red: number;
-      color_green: number;
-      color_blue: number;
-    };
-  };
+  getPlayerColor: (playerName: string) => string | undefined;
 }
 
 const AverageHandTable: React.FC<AverageHandTableProps> = ({
-  averageHand,
-  playerColors,
-}) => {
-  const getPlayerColor = (playerName: string) => {
-    const playerColor = playerColors[playerName];
-    return playerColor
-      ? `rgb(${playerColor.color_red}, ${playerColor.color_green}, ${playerColor.color_blue})`
-      : undefined;
-  };
+                                                             averageHand,
+                                                             getPlayerColor,
+                                                           }) => {
 
   return (
     <Table>

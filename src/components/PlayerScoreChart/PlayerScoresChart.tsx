@@ -4,29 +4,14 @@ import ReactEcharts from "echarts-for-react";
 interface PlayerScoresChartProps {
   playerScores: { [key: string]: number[] };
   labels: string[];
-  playerColors: {
-    [key: string]: {
-      color_red: number;
-      color_green: number;
-      color_blue: number;
-    };
-  };
-  playerNameToId: { [key: string]: string };
+  getPlayerColor: (playerName: string) => string | undefined;
 }
 
 const PlayerScoresChart: React.FC<PlayerScoresChartProps> = ({
-  playerScores,
-  labels,
-  playerColors,
-  playerNameToId,
-}) => {
-  const getPlayerColor = (playerName: string) => {
-    const playerId = playerNameToId[playerName];
-    const playerColor = playerColors[playerId];
-    return playerColor
-      ? `rgb(${playerColor.color_red}, ${playerColor.color_green}, ${playerColor.color_blue})`
-      : undefined;
-  };
+                                                               playerScores,
+                                                               labels,
+                                                               getPlayerColor,
+                                                             }) => {
 
   const scoreSeries = Object.entries(playerScores).map(([player, scores]) => ({
     name: player,

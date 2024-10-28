@@ -190,7 +190,7 @@ export default function ScoreCalculatorPage() {
         newCombos[index].isHidden = event.target.checked;
         setCombos(newCombos);
     };
-    
+
     return (
         <Box >
             <Typography variant="h4" gutterBottom>Poängräknare</Typography>

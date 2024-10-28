@@ -3,28 +3,13 @@ import ReactEcharts from "echarts-for-react";
 
 interface MahjongWinsChartProps {
   mahjongWins: { [key: string]: number };
-  playerColors: {
-    [key: string]: {
-      color_red: number;
-      color_green: number;
-      color_blue: number;
-    };
-  };
-  playerNameToId: { [key: string]: string };
+  getPlayerColor: (playerName: string) => string | undefined;
 }
 
 const MahjongWinsChart: React.FC<MahjongWinsChartProps> = ({
-  mahjongWins,
-  playerColors,
-  playerNameToId,
-}) => {
-  const getPlayerColor = (playerName: string) => {
-    const playerId = playerNameToId[playerName];
-    const playerColor = playerColors[playerId];
-    return playerColor
-      ? `rgb(${playerColor.color_red}, ${playerColor.color_green}, ${playerColor.color_blue})`
-      : undefined;
-  };
+                                                             mahjongWins,
+                                                             getPlayerColor,
+                                                           }) => {
 
   const winsSeries = Object.entries(mahjongWins).map(([player, wins]) => ({
     name: player,
