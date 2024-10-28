@@ -1,9 +1,43 @@
 import NextAuth from "next-auth"
+import Credentials from "next-auth/providers/credentials"
+
 import Google from "next-auth/providers/google"
 import Connection from "@/lib/connection";
 
+function getProviders() {
+    const providers = [];
+
+    if (!!process.env.AUTH_GOOGLE_ID) {
+        providers.push(Google);
+    }
+
+    if (!!process.env.DEV_MOCK_PWD) {
+        // For testing allow people to login with a mock password
+        const credentials = Credentials({
+            credentials: {
+                email: {},
+                password: {}
+            },
+            authorize: async (credentials: any) => {
+                let user = null;
+                if (process.env.DEV_MOCK_PWD !== credentials.password) {
+                    throw new Error("No user found");
+                }
+
+                return {
+                    email: credentials.email,
+                };
+            },
+        });
+        providers.push(credentials);
+    }
+
+    return providers;
+}
+
+
 export const { handlers, signIn, signOut, auth } = NextAuth({
-  providers: [Google],
+  providers: getProviders(),
   callbacks: {
     async signIn({ user, account, profile, email, credentials }) {
       const connection = await Connection.getInstance().getConnection();
@@ -14,7 +48,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           "SELECT * FROM PlayerEmails WHERE EMAIL = ?",
           [user.email]
         );
-        if (rows.length > 0 && profile?.email_verified) {
+        if (rows.length > 0 && (profile?.email_verified || process.env.DEV_ALLOW_INSECURE_EMAIL)) {
           return true;
         } else {
           return false;

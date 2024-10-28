@@ -44,3 +44,13 @@ To update the DB with the latest schema changes run
 node node_modules/db-migrate/bin/db-migrate up
 ```
 
+# Testing loging
+
+First add a row to the Player matching the PLAYER_ID with the EMAIL that you want to use to login.
+
+Then you need to enable to very unsecure settings in your .env file.
+DEV_MOCK_PWD=password to use to login
+DEV_ALLOW_INSECURE_EMAIL=true
+
+This should obviously not be enabled in any production system but nice for quick testing.
+
