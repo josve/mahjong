@@ -10,28 +10,28 @@ capitalize
 } from "@/lib/formatting";
 
 export default async function MatchGridItem({ id }: { id: string }) {
-  const match = await getMatchById(id);
-  const hands = await getHandsByGameId(id);
+    const match = await getMatchById(id);
+    const hands = await getHandsByGameId(id);
 
-  const name = match.NAME;
-  const time = match.TIME;
+    const name = match.NAME;
+    const time = match.TIME;
 
-  // generate a string with the time for the first and last rounds like (19:28-21:42)
-  const firstRound = hands.length > 4 ? hands[4].TIME : hands[0].TIME;
-  const lastRound = hands[hands.length - 1].TIME;
+    // generate a string with the time for the first and last rounds like (19:28-21:42)
+    const firstRound = hands.length > 4 ? hands[4].TIME : hands[0].TIME;
+    const lastRound = hands[hands.length - 1].TIME;
 
-  // Find the number of rounds, this is the number of hands divided by 4
-  const numberOfRounds = Math.floor(hands.length / 4 - 1);
+    // Find the number of rounds, this is the number of hands divided by 4
+    const numberOfRounds = Math.floor(hands.length / 4 - 1);
 
-  // Update time format
-  const formatTime = (date: Date) =>
-    date.toLocaleTimeString("sv-SE", { hour: "2-digit", minute: "2-digit" });
-  const timeString = `${formatTime(new Date(firstRound))}-${formatTime(
-    new Date(lastRound)
-  )}`;
+    // Update time format
+    const formatTime = (date: Date) =>
+        date.toLocaleTimeString("sv-SE", {hour: "2-digit", minute: "2-digit"});
+    const timeString = `${formatTime(new Date(firstRound))}-${formatTime(
+        new Date(lastRound)
+    )}`;
 
-  const teamIdToName = await getTeamIdToNameNoAlias();
-  const getTeamName = (teamId: string) => teamIdToName[teamId];
+    const teamIdToName = await getTeamIdToNameNoAlias();
+    const getTeamName = (teamId: string) => teamIdToName[teamId];
 
   return (
   <Link href={`/match/${id}`}>
