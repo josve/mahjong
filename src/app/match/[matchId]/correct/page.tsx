@@ -4,7 +4,7 @@ import { Metadata } from "next";
 
 interface PageProps {
   params: {
-    matchId: string;
+    readonly matchId: string;
   };
 }
 

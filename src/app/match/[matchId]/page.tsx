@@ -1,10 +1,10 @@
-import { getMatchById, getHandsByGameId } from "@/lib/dbMatch";
+import { getMatchById } from "@/lib/dbMatch";
 import MatchChart from "@/components/match/matchChart";
 import { Metadata } from "next";
 
 interface PageProps {
   params: {
-    matchId: string;
+    readonly matchId: string;
   };
 }
 
@@ -19,8 +19,6 @@ export async function generateMetadata({
 
 export default async function Page({ params }: PageProps) {
   const match = await getMatchById(params.matchId);
-  const hands = await getHandsByGameId(params.matchId);
-  const numRounds = Math.floor(hands.length / 4 - 1);
 
   const matchDate = new Date(match.TIME);
   const isEditable =

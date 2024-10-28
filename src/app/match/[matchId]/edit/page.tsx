@@ -1,11 +1,11 @@
-import { getMatchById, getHandsByGameId } from "@/lib/dbMatch";
+import { getMatchById } from "@/lib/dbMatch";
 import MatchChart from "@/components/match/matchChart";
 import RegisterResultControls from "@/components/match/RegisterResultControls";
 import { Metadata } from "next";
 
 interface PageProps {
   params: {
-    matchId: string;
+    readonly matchId: string;
   };
 }
 

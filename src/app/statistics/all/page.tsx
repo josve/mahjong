@@ -6,7 +6,6 @@ import {
   getTeamIdToName,
   getAllPlayers,
   getTeamIdToPlayerIds,
-  getTeamColors,
   getPlayerColors,
 } from "@/lib/dbMatch";
 import { Metadata } from "next";
