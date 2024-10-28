@@ -31,9 +31,11 @@ const PlayerScoreChart: React.FC<PlayerScoreChartProps> = ({
             const scores: { [key: string]: number[] } = {};
             const labels: string[] = [];
             const wins: { [key: string]: number } = {};
-            const highRollerScores: { [key: string]: [number, number][] } = {}; // [gameIndex, score]
+            const highRollerScores: { [key: string]: [number, number, number, boolean][] } = {}; // [gameIndex, score]
             const totalHan: { [key: string]: number } = {};
             const handCount: { [key: string]: number } = {};
+
+            let highRollerIndex = 0;
 
             // Initialize scores, wins, highRollerScores, totalHan, and winCount for all players
             allPlayers.forEach((player) => {
@@ -75,7 +77,7 @@ const PlayerScoreChart: React.FC<PlayerScoreChartProps> = ({
                         }
                         handCount[player.name] += 1;
                         if (hand.HAND > 100) {
-                            highRollerScores[player.name].push([gameIndex, hand.HAND]);
+                            highRollerScores[player.name].push([gameIndex, hand.HAND, highRollerIndex++, playerIds.length > 1]);
                         }
                     });
                 });
