@@ -8,11 +8,13 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     async signIn({ user, account, profile, email, credentials }) {
       const connection = await Connection.getInstance().getConnection();
       try {
+        console.log(user);
+        console.log(profile);
         const [rows]: any = await connection.query(
           "SELECT * FROM PlayerEmails WHERE EMAIL = ?",
-          [email]
+          [user.email]
         );
-        if (rows.length > 0) {
+        if (rows.length > 0 && profile?.email_verified) {
           return true;
         } else {
           return false;
