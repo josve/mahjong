@@ -232,3 +232,20 @@ export async function getTeamDetails(): Promise<{
     connection.release();
   }
 }
+
+export async function deleteGameById(gameId: string): Promise<void> {
+  const connection = await Connection.getInstance().getConnection();
+  try {
+    await connection.beginTransaction();
+
+    await connection.query('DELETE FROM Hands WHERE GAME_ID = ?', [gameId]);
+    await connection.query('DELETE FROM Games WHERE GAME_ID = ?', [gameId]);
+
+    await connection.commit();
+  } catch (error) {
+    await connection.rollback();
+    throw error;
+  } finally {
+    connection.release();
+  }
+}
