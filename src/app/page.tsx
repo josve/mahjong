@@ -2,12 +2,14 @@ import MatchGridItem from "@/components/matchGridItem";
 import TotalStatisticsRow from "@/components/totalStatisticsRow";
 import Link from "next/link";
 import { Grid } from "@mui/material";
-import { getAllMatches} from "@/lib/fetchMatches";
+import { getAllMatches, getLatestMatch } from "@/lib/fetchMatches";
+import LatestMatchScores from "@/components/LatestMatchScores";
 
 export const revalidate = 60;
 
 export default async function Home() {
   const matches = await getAllMatches();
+  const latestMatch = await getLatestMatch();
 
   return (
     <>
@@ -30,6 +32,7 @@ export default async function Home() {
         </Link>
       </div>
       <TotalStatisticsRow />
+      {latestMatch && <LatestMatchScores match={latestMatch} />}
       <Grid
         container
         spacing={3}

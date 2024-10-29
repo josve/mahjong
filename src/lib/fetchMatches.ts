@@ -41,3 +41,23 @@ export default async function fetchMatches(timeRange: string) {
     connection.release();
   }
 }
+
+export async function getLatestMatch(): Promise<any> {
+  const connection = await Connection.getInstance().getConnection();
+  try {
+    const [matches]: any = await connection.query(
+      "SELECT GAME_ID, TIME, NAME, COMMENT, TEAM_ID_1, TEAM_ID_2, TEAM_ID_3, TEAM_ID_4 FROM Games WHERE IS_TEST = 0 ORDER BY TIME DESC LIMIT 1"
+    );
+    const latestMatch = matches[0];
+
+    const [hands]: any = await connection.query(
+      "SELECT * FROM Hands WHERE GAME_ID = ? ORDER BY ROUND ASC",
+      [latestMatch.GAME_ID]
+    );
+    latestMatch.hands = hands;
+
+    return latestMatch;
+  } finally {
+    connection.release();
+  }
+}
