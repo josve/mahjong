@@ -127,7 +127,7 @@ export default function MatchChartClient({
               return null;
             })
             .filter((text) => text !== null)
-            .join("<br/>");
+            .join("<br/>";
         } else {
           const teamName = getTeamName(params.name);
           const percentage = ((params.value / totalWins) * 100).toFixed(2);
@@ -274,7 +274,7 @@ export default function MatchChartClient({
             return null;
           })
           .filter((text: any) => text !== null)
-          .join("<br/>");
+          .join("<br/>";
       },
     },
     grid: {
