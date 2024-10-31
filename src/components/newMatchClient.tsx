@@ -168,7 +168,7 @@ export default function NewMatchClient() {
               }
             />
           ))}
-          <Button
+          <Button className="button"
             type="submit"
             fullWidth
             variant="contained"

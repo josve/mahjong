@@ -31,14 +31,18 @@ export default async function Page({ params }: PageProps) {
         autoReload={true}
       />
       {isEditable && (
-        <div style={{ marginTop: "20px" }}>
+        <div className="match-buttons-container">
           <a
             href={`/match/${params.matchId}/edit`}
-            style={{
-              textDecoration: "underline",
-            }}
+            className="button"
           >
-            Till registrering
+            Registrera resultat
+          </a>
+          <a
+            href={`/scorecalculator`}
+            className="button"
+          >
+            Poängräknare
           </a>
         </div>
       )}
