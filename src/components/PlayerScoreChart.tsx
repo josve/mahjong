@@ -4,7 +4,6 @@ import PlayerScoresChart from "./PlayerScoreChart/PlayerScoresChart";
 import MahjongWinsChart from "./PlayerScoreChart/MahjongWinsChart";
 import HighRollerChart from "./PlayerScoreChart/HighRollerChart";
 import AverageHandTable from "./PlayerScoreChart/AverageHandTable";
-import StandardDeviationChart from "./PlayerScoreChart/StandardDeviationChart"; // Import the new chart component
 
 interface PlayerScoreChartProps {
   matches: any;
@@ -140,10 +139,6 @@ const PlayerScoreChart: React.FC<PlayerScoreChartProps> = ({
             />
             <AverageHandTable
                 averageHand={averageHand}
-                getPlayerColor={getPlayerColor}
-            />
-            <StandardDeviationChart
-                standardDeviations={standardDeviations}
                 getPlayerColor={getPlayerColor}
             />
         </div>

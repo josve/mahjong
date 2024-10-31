@@ -15,19 +15,12 @@ export async function GET(req: NextRequest) {
     const teamColors = await getTeamColors();
     const match = await getMatchById(matchId);
 
-    // Calculate standard deviation of hand scores
-    const handScores = hands.map(hand => hand.HAND_SCORE);
-    const mean = handScores.reduce((acc, score) => acc + score, 0) / handScores.length;
-    const squaredDifferences = handScores.map(score => Math.pow(score - mean, 2));
-    const variance = squaredDifferences.reduce((acc, diff) => acc + diff, 0) / squaredDifferences.length;
-    const standardDeviation = Math.sqrt(variance);
 
     const data = {
       hands,
       teamIdToName,
       teamColors,
-      match,
-      standardDeviation
+      match
     };
 
     return NextResponse.json(data, { status: 200 });

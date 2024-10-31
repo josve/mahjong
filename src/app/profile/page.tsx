@@ -8,6 +8,9 @@ export default async function ProfilePage() {
   }
 
   const user : any = session.user;
+    
+  console.log(user);
+  console.log(session);
 
   return (
     <div style={{ backgroundColor: "var(--background-color)", padding: "20px" }}>
