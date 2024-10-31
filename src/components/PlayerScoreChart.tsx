@@ -4,6 +4,7 @@ import PlayerScoresChart from "./PlayerScoreChart/PlayerScoresChart";
 import MahjongWinsChart from "./PlayerScoreChart/MahjongWinsChart";
 import HighRollerChart from "./PlayerScoreChart/HighRollerChart";
 import AverageHandTable from "./PlayerScoreChart/AverageHandTable";
+import StandardDeviationChart from "./PlayerScoreChart/StandardDeviationChart"; // Import the new chart component
 
 interface PlayerScoreChartProps {
   matches: any;
@@ -26,7 +27,7 @@ const PlayerScoreChart: React.FC<PlayerScoreChartProps> = ({
   teamIdToPlayerIds,
   playerColors,
 }) => {
-    const {playerScores, labels, mahjongWins, highRollerScores, averageHand} =
+    const {playerScores, labels, mahjongWins, highRollerScores, averageHand, standardDeviations} =
         useMemo(() => {
             const scores: { [key: string]: number[] } = {};
             const labels: string[] = [];
@@ -34,6 +35,7 @@ const PlayerScoreChart: React.FC<PlayerScoreChartProps> = ({
             const highRollerScores: { [key: string]: [number, number, number, boolean][] } = {}; // [gameIndex, score]
             const totalHan: { [key: string]: number } = {};
             const handCount: { [key: string]: number } = {};
+            const standardDeviations: { [key: string]: number } = {};
 
             let highRollerIndex = 0;
 
@@ -44,6 +46,7 @@ const PlayerScoreChart: React.FC<PlayerScoreChartProps> = ({
                 highRollerScores[player.name] = [];
                 totalHan[player.name] = 0;
                 handCount[player.name] = 0;
+                standardDeviations[player.name] = 0;
             });
 
             // Sort matches by date
@@ -81,6 +84,15 @@ const PlayerScoreChart: React.FC<PlayerScoreChartProps> = ({
                         }
                     });
                 });
+
+                // Calculate standard deviation for each player
+                allPlayers.forEach((player) => {
+                    const playerScores = scores[player.name];
+                    const mean = playerScores.reduce((acc, score) => acc + score, 0) / playerScores.length;
+                    const squaredDifferences = playerScores.map(score => Math.pow(score - mean, 2));
+                    const variance = squaredDifferences.reduce((acc, diff) => acc + diff, 0) / squaredDifferences.length;
+                    standardDeviations[player.name] = Math.sqrt(variance);
+                });
             });
 
             // Calculate average han for each player
@@ -96,6 +108,7 @@ const PlayerScoreChart: React.FC<PlayerScoreChartProps> = ({
                 mahjongWins: wins,
                 highRollerScores,
                 averageHand,
+                standardDeviations,
             };
         }, [matches, teamIdToName, allPlayers, teamIdToPlayerIds]);
 
@@ -127,6 +140,10 @@ const PlayerScoreChart: React.FC<PlayerScoreChartProps> = ({
             />
             <AverageHandTable
                 averageHand={averageHand}
+                getPlayerColor={getPlayerColor}
+            />
+            <StandardDeviationChart
+                standardDeviations={standardDeviations}
                 getPlayerColor={getPlayerColor}
             />
         </div>
