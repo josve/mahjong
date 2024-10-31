@@ -26,7 +26,7 @@ export default async function Home() {
           href="/match/new"
           passHref
         >
-          <button className="create-match-button">Skapa ny match</button>
+          <button className="button create-match-button">Skapa ny match</button>
         </Link>
       </div>
       <TotalStatisticsRow />

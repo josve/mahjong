@@ -44,16 +44,9 @@ export default async function RegisterResultControls({ matchId }: Props) {
           </div>
         </>
       ) : (
-        <p
-          style={{
-            color: "var(--grey-color)",
-            textAlign: "center",
-            paddingTop: "20px",
-            paddingBottom: "20px",
-          }}
-        >
+        <div className="label">
           Matchen är för gammal för att göra ändringar.
-        </p>
+        </div>
       )}
     </>
   );
