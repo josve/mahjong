@@ -19,6 +19,8 @@
   --grid-background-hover-color: rgb(250,240,240);
   --white: white;
   --light-white: #f9f9f9;
+    --score-not-selected-background: #F6F6F6;
+    --score-selected-background: #CCEECC;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -322,4 +324,10 @@ h3 {
 .match-add-result-button {
   margin-top: 20px;
   float:right;
+}
+
+.score {
+    text-align: right;
+    font-size: 1.5em;
+    color: var(--header-color);
 }

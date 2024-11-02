@@ -196,20 +196,45 @@ export default function ScoreCalculatorPage() {
             <Typography variant="h4" gutterBottom>Poängräknare</Typography>
             <Box sx={{ marginBottom: "25px" }}>
                 <Typography variant="h6">Hand</Typography>
-                <Box sx={{ display: "flex", alignItems: "center", marginBottom: "8px", background: "#F6F6F6", padding: "10px" }}>
-                    <Slider value={flowers} onChange={handleFlowerChange} min={0} max={8} sx={{ width: "250px", marginRight: "15px" }} />
-                    <Typography>{flowers} blommor</Typography>
+                <Box sx={{
+                    display: "grid",
+                    gridTemplateColumns: "1fr 1fr 2fr",
+                    marginBottom: "20px",
+                    alignItems: "center",
+                    background: "var(--score-not-selected-background)",
+                    padding: "10px"
+                }}>
+                    <Slider value={flowers}
+                            onChange={handleFlowerChange}
+                            min={0}
+                            max={8}
+                            sx={{width: "250px",
+                                marginLeft: "20px",
+                                marginRight: "15px"}}/>
+                    <Typography style={{ marginLeft: "10px", fontSize: "1.5em", color: "var(--header-color)" }}>{flowers} blommor</Typography>
                     {flowerScore > 0 &&
-                        <span style={{ textAlign: "right" }}>
+                        <span style={{ textAlign: "right", fontSize: "1.5em", color: "var(--header-color)" }}>
                             {flowerScore + 'p'}
                         </span>}
                 </Box>
                 {combos.map((combo, index) => (
-                    <Box key={index} sx={{ display: "flex", alignItems: "center", marginBottom: "8px", background: "#F6F6F6", padding: "10px" }}>
-                        <FormControl sx={{ width: "280px", marginRight: "15px" }}>
-                            <InputLabel>Kombination {index + 1}</InputLabel>
+                    <Box key={index}
+                         sx={{
+                             display: "grid",
+                             gridTemplateColumns: "1fr 1fr 2fr",
+                             marginBottom: "10px",
+                             alignItems: "center",
+                             background: combo.name == "(Inget)" || combo.name == "(Inget par)" ? "var(--score-not-selected-background)" : "var(--score-selected-background)",
+                             padding: "10px"
+                         }}>
+                        <FormControl sx={{width: "280px", margin: "10px"}}>
+                            <InputLabel id={"combo-label-" + index}>Kombination {index + 1}</InputLabel>
                             {index < 4 ?
-                                <Select value={combo.name} onChange={(event) => handleComboChange(index, event)}>
+                                <Select value={combo.name}
+                                        labelId={"combo-label-" + index}
+                                        id={"combo-" + index}
+                                        label={"Kombination " + (index + 1)}
+                                        onChange={(event) => handleComboChange(index, event)}>
                                     <MenuItem value="(Inget)">(Inget)</MenuItem>
                                     <MenuItem disabled>------</MenuItem>
                                     <MenuItem value="Stege">Stege</MenuItem>
@@ -226,19 +251,24 @@ export default function ScoreCalculatorPage() {
                                     <MenuItem value="Fyrtal egen vind">Fyrtal egen vind</MenuItem>
                                     <MenuItem value="Fyrtal drakar">Fyrtal drakar</MenuItem>
                                 </Select> :
-                                <Select value={combo.name} onChange={(event) => handleComboChange(index, event)}>
-                                    <MenuItem value="(Inget)">(Inget)</MenuItem>
-                                    <MenuItem disabled>------</MenuItem>
+                                <Select value={combo.name}
+                                        labelId={"combo-label-" + index}
+                                        id={"combo-" + index}
+                                        label={"Kombination " + (index + 1)}
+                                        onChange={(event) => handleComboChange(index, event)}>
                                     <MenuItem value="(Inget par)">(Inget par)</MenuItem>
+                                    <MenuItem disabled>------</MenuItem>
                                     <MenuItem value="Annat par">Annat par</MenuItem>
                                     <MenuItem value="Par drakar">Par drakar</MenuItem>
                                     <MenuItem value="Par egen vind">Par egen vind</MenuItem>
                                 </Select>}
 
                         </FormControl>
-                        <FormControlLabel control={<Checkbox checked={combo.isHidden} onChange={(event) => handleHiddenChange(index, event)} />} label="Dold" />
+                        <FormControlLabel control={<Checkbox checked={combo.isHidden}
+                                                             onChange={(event) => handleHiddenChange(index, event)}/>}
+                                          label="Dold"/>
                         {comboScore[index] > 0 &&
-                        <span>
+                            <span style={{ textAlign: "right", fontSize: "1.5em", color: "var(--header-color)" }}>
                             {comboScore[index] + 'p'}
                         </span>}
                     </Box>
@@ -246,100 +276,193 @@ export default function ScoreCalculatorPage() {
             </Box>
             {isMahjong &&
                 <>
-                    <Box sx={{ marginBottom: "25px" }}>
+                <Box sx={{
+                    display: "grid",
+                    gridTemplateColumns: "1fr 2fr",
+                    marginBottom: "10px",
+                    alignItems: "center",
+                    background: "var(--score-not-selected-background)",
+                    padding: "20px"
+                }}>
                         <Typography variant="h6">Mahjong</Typography>
                         <div className="score">{mahjongScore + 'p'}</div>
                     </Box>
                     { selfTouchScore > 0 &&
-                    <Box sx={{ marginBottom: "25px" }}>
-                        <Typography variant="h6">Self touch</Typography>
+                        <Box sx={{
+                            display: "grid",
+                            gridTemplateColumns: "1fr 2fr",
+                            marginBottom: "10px",
+                            alignItems: "center",
+                            background: "var(--score-not-selected-background)",
+                            padding: "20px"
+                        }}>                        <Typography variant="h6">Self touch</Typography>
                         <div className="score">{selfTouchScore + 'p'}</div>
                     </Box>}
                     {noScorePoints > 0 &&
-                        <Box sx={{ marginBottom: "25px" }}>
-                            <Typography variant="h6">Ingen poäng mahjong</Typography>
+                        <Box sx={{
+                            display: "grid",
+                            gridTemplateColumns: "1fr 2fr",
+                            marginBottom: "10px",
+                            alignItems: "center",
+                            background: "var(--score-not-selected-background)",
+                            padding: "20px"
+                        }}>                            <Typography variant="h6">Ingen poäng mahjong</Typography>
                             <div className="score">{noScorePoints + 'p'}</div>
                         </Box>
                     }
                     {almostSelfTouchPoints > 0 &&
-                        <Box sx={{ marginBottom: "25px" }}>
-                            <Typography variant="h6">Nästan self touch</Typography>
+                        <Box sx={{
+                            display: "grid",
+                            gridTemplateColumns: "1fr 2fr",
+                            marginBottom: "10px",
+                            alignItems: "center",
+                            background: "var(--score-not-selected-background)",
+                            padding: "20px"
+                        }}>                            <Typography variant="h6">Nästan self touch</Typography>
                             <div className="score">{almostSelfTouchPoints + 'p'}</div>
                         </Box>
                     }
-                    <Box sx={{ marginBottom: "25px" }}>
-                        <FormControlLabel control={<Checkbox checked={isSelfTouch} onChange={(event) => setIsSelfTouch(event.target.checked)} />} label="Mahjong på dragen bricka (self touch)" />
+                    <Box sx={{
+                        display: "grid",
+                        gridTemplateColumns: "1fr 2fr",
+                        marginBottom: "10px",
+                        alignItems: "center",
+                        background: "var(--score-not-selected-background)",
+                        padding: "20px"
+                    }}>                        <FormControlLabel control={<Checkbox checked={isSelfTouch} onChange={(event) => setIsSelfTouch(event.target.checked)} />} label="Mahjong på dragen bricka (self touch)" />
                     </Box>
                 </>}
             <Box sx={{ marginBottom: "25px" }}>
                 <Typography variant="h6">Multiplikatorer</Typography>
             </Box>
             {isMahjong && <>
-                <Box sx={{ marginBottom: "25px" }}>
-                    <FormControlLabel control={<Checkbox checked={isFullStege} onChange={(event) => setIsFullStege(event.target.checked)} />} label="Stege 1-9 av en sort" />
+                <Box sx={{
+                    display: "grid",
+                    gridTemplateColumns: "1fr 2fr",
+                    marginBottom: "10px",
+                    alignItems: "center",
+                    background: "var(--score-not-selected-background)",
+                    padding: "20px"
+                }}>                    <FormControlLabel control={<Checkbox checked={isFullStege} onChange={(event) => setIsFullStege(event.target.checked)} />} label="Stege 1-9 av en sort" />
                     <FormControlLabel control={<Checkbox checked={isEnSort} onChange={(event) => setIsEnSort(event.target.checked)} />} label="En sort + vindar/drakar" />
                     <FormControlLabel control={<Checkbox checked={isEnSortEnbart} onChange={(event) => setIsEnSortEnbart(event.target.checked)} />} label="En sort enbart" />
                 </Box>
                 {noStegarMultipler > 1 &&
-                    <Box sx={{ marginBottom: "25px" }}>
-                        <Typography variant="h6">Inga stegar</Typography>
+                    <Box sx={{
+                        display: "grid",
+                        gridTemplateColumns: "1fr 2fr",
+                        marginBottom: "10px",
+                        alignItems: "center",
+                        background: "var(--score-not-selected-background)",
+                        padding: "20px"
+                    }}>                        <Typography variant="h6">Inga stegar</Typography>
                         <div className="score">{noStegarMultipler + 'X'}</div>
                     </Box>
                 }
                 {fullStegeMultipler > 1 &&
-                    <Box sx={{ marginBottom: "25px" }}>
-                        <Typography variant="h6">Komplett stege (1-9)</Typography>
+                    <Box sx={{
+                        display: "grid",
+                        gridTemplateColumns: "1fr 2fr",
+                        marginBottom: "10px",
+                        alignItems: "center",
+                        background: "var(--score-not-selected-background)",
+                        padding: "20px"
+                    }}>                        <Typography variant="h6">Komplett stege (1-9)</Typography>
                         <div className="score">{fullStegeMultipler + 'X'}</div>
                     </Box>
                 }
                 {oneKindMultipler > 1 &&
-                    <Box sx={{ marginBottom: "25px" }}>
-                        <Typography variant="h6">Enbart en sort</Typography>
+                    <Box sx={{
+                        display: "grid",
+                        gridTemplateColumns: "1fr 2fr",
+                        marginBottom: "10px",
+                        alignItems: "center",
+                        background: "var(--score-not-selected-background)",
+                        padding: "20px"
+                    }}>                        <Typography variant="h6">Enbart en sort</Typography>
                         <div className="score">{oneKindMultipler + 'X'}</div>
                     </Box>
                 }
                 {oneKindAndDragonsMultipler > 1 &&
-                    <Box sx={{ marginBottom: "25px" }}>
-                        <Typography variant="h6">Enbart end sort + (drakar/vindar)</Typography>
+                    <Box sx={{
+                        display: "grid",
+                        gridTemplateColumns: "1fr 2fr",
+                        marginBottom: "10px",
+                        alignItems: "center",
+                        background: "var(--score-not-selected-background)",
+                        padding: "20px"
+                    }}>                        <Typography variant="h6">Enbart end sort + (drakar/vindar)</Typography>
                         <div className="score">{oneKindAndDragonsMultipler + 'X'}</div>
                     </Box>
                 }
                 {allHiddenMultipler > 1 &&
-                    <Box sx={{ marginBottom: "25px" }}>
-                        <Typography variant="h6">Enbart dolda brickor</Typography>
+                    <Box sx={{
+                        display: "grid",
+                        gridTemplateColumns: "1fr 2fr",
+                        marginBottom: "10px",
+                        alignItems: "center",
+                        background: "var(--score-not-selected-background)",
+                        padding: "20px"
+                    }}>                        <Typography variant="h6">Enbart dolda brickor</Typography>
                         <div className="score">{allHiddenMultipler + 'X'}</div>
                     </Box>
                 }
 
             </>}
             {dragonsMultipler > 1 &&
-                <Box sx={{ marginBottom: "25px" }}>
+                <Box sx={{
+                    display: "grid",
+                    gridTemplateColumns: "1fr 2fr",
+                    marginBottom: "10px",
+                    alignItems: "center",
+                    background: "var(--score-not-selected-background)",
+                    padding: "20px"
+                }}>
                     <Typography variant="h6">Tretal/fyrtal drakar</Typography>
                     <div className="score">{dragonsMultipler + 'X'}</div>
                 </Box>
             }
             {windMultiplier > 1 &&
-                <Box sx={{ marginBottom: "25px" }}>
-                    <Typography variant="h6">Tretal/fyrtal eget vädersträck</Typography>
+                <Box sx={{
+                    display: "grid",
+                    gridTemplateColumns: "1fr 2fr",
+                    marginBottom: "10px",
+                    alignItems: "center",
+                    background: "var(--score-not-selected-background)",
+                    padding: "20px"
+                }}>                    <Typography variant="h6">Tretal/fyrtal eget vädersträck</Typography>
                     <div className="score">{windMultiplier + 'X'}</div>
                 </Box>
             }
             {threeHiddenMultipler > 1 &&
-                <Box sx={{ marginBottom: "25px" }}>
-                    <Typography variant="h6">Tre dolda tretal/fyrtal</Typography>
+                <Box sx={{
+                    display: "grid",
+                    gridTemplateColumns: "1fr 2fr",
+                    marginBottom: "10px",
+                    alignItems: "center",
+                    background: "var(--score-not-selected-background)",
+                    padding: "20px"
+                }}>                    <Typography variant="h6">Tre dolda tretal/fyrtal</Typography>
                     <div className="score">{threeHiddenMultipler + 'X'}</div>
                 </Box>
             }
 
-            <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", background: "#F6F6F6", padding: "10px" }}>
+            <Box sx={{
+                display: "grid",
+                gridTemplateColumns: "1fr 2fr",
+                marginBottom: "10px",
+                alignItems: "center",
+                background: "var(--score-not-selected-background)",
+                padding: "20px"
+            }}>
                 <Typography variant="h6">Total poäng</Typography>
                 {totalScore >= 300 ?
                     <>
-                        <Typography variant="h6">Limit hand! 300p ({totalScore}p)</Typography>
+                        <span className="score">Limit hand! 300p ({totalScore}p)</span>
                     </> :
-                <Typography variant="h6">{totalScore}p</Typography>}
+                <span className="score">{totalScore}p</span>}
             </Box>
-            <p>
+            <p style={{ marginTop: "20px", fontStyle: "italic"}}>
                 Extra X2 vid mahjong på sista brickan i spelet eller extrabricka vid fyrtal ej med
             </p>
         </Box>
