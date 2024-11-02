@@ -62,8 +62,7 @@ export default function ProfilePageClient({ session }: ComponentParams) {
 
     return (
         <div style={{ backgroundColor: "var(--background-color)"}}>
-            <h1 style={{paddingBottom: "10px" }}>Profil</h1>
-            <p style={{ paddingBottom: "10px" }}>Namn: {user?.name}</p>
+            <h1 style={{paddingBottom: "10px" }}>{user?.name}</h1>
             <div>
                 <div style={{paddingBottom: "20px"}}>Färg</div>
                 <RgbColorPicker color={color} onChange={setColor} />
