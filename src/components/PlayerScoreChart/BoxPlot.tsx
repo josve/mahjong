@@ -2,6 +2,7 @@ import ReactEcharts from "echarts-for-react";
 import React, { useState } from "react";
 import { registerTransform } from "echarts/core";
 import { aggregate } from "echarts-simple-transform";
+import {TextField, Button, Box, FormControl, InputLabel, Select, MenuItem} from "@mui/material";
 
 interface BoxPlotProps {
     readonly allHands: { [key: string]: number[] };
@@ -21,7 +22,7 @@ const BoxPlot: React.FC<BoxPlotProps> = ({
 
     const [selectedSeries, setSelectedSeries] = useState('allHands');
 
-    const handleSeriesChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    const handleSeriesChange = (event: any) => {
         setSelectedSeries(event.target.value);
     };
 
@@ -109,13 +110,24 @@ const BoxPlot: React.FC<BoxPlotProps> = ({
     };
 
     return (
-        <div>
-            <select value={selectedSeries} onChange={handleSeriesChange}>
-                <option value="allHands">Händer (med lag)</option>
-                <option value="allHandsNoTeams">Händer (utan lag)</option>
-                <option value="allScores">Poäng (med lag)</option>
-                <option value="allScoresNoTeams">Poäng (utan lag)</option>
-            </select>
+        <div style={{ paddingTop: "20px"}}>
+            <div style={{ paddingLeft: "20px"}}>
+            <FormControl>
+                <InputLabel id="data-label">Data</InputLabel>
+                <Select
+                    labelId="data-label"
+                    id="data-select"
+                    label="Data"
+                    value={selectedSeries}
+                    onChange={handleSeriesChange}
+                >
+                    <MenuItem value="allHands">Händer (med lag)</MenuItem>
+                    <MenuItem value="allHandsNoTeams">Händer (utan lag)</MenuItem>
+                    <MenuItem value="allScores">Poäng (med lag)</MenuItem>
+                    <MenuItem value="allScoresNoTeams">Poäng (utan lag)</MenuItem>
+                </Select>
+            </FormControl>
+            </div>
             <ReactEcharts
                 option={option}
                 style={{ height: "400px" }}

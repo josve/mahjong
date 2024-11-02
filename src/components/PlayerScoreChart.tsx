@@ -193,10 +193,10 @@ const PlayerScoreChart: React.FC<PlayerScoreChartProps> = ({
             </CustomTabPanel>
             <CustomTabPanel value={selectedTab} index={4}>
                 <BoxPlot
+                    allHands={allHands}
+                    allHandsNoTeams={allHandsNoTeams}
                     allScores={allScores}
                     allScoresNoTeams={allScoresNoTeams}
-                    allHands={allHands}
-                    allHands={allHandsNoTeams}
                     getPlayerColor={getPlayerColor}
                 />
             </CustomTabPanel>
