@@ -73,6 +73,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
             ...session.user,
             ...player,
             firstInitial,
+            playerId: player.PLAYER_ID,
             name: player.NAME,
             userColor: 'rgb(' + player.COLOR_RED + "," + player.COLOR_GREEN + "," + player.COLOR_BLUE +")", 
           };
