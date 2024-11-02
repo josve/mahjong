@@ -5,11 +5,13 @@ import { CircularProgress } from "@mui/material";
 import {capitalize, formatDate} from "@/lib/formatting";
 
 export default function MatchChartClient({
-  matchId,
-  autoReload,
-}: {
+                                           matchId,
+                                           autoReload,
+                                           showPreviousRoundScore,
+                                         }: {
   readonly matchId: string;
   readonly autoReload: boolean;
+  readonly showPreviousRoundScore: boolean;
 }) {
   const [data, setData] = useState<any>(null);
   const [lastRoundCount, setLastRoundCount] = useState<number>(0);
@@ -196,16 +198,30 @@ export default function MatchChartClient({
       ? `rgb(${teamColors[teamId].color_red}, ${teamColors[teamId].color_green}, ${teamColors[teamId].color_blue})`
       : "black"; // Default color if no color is found
 
-    const scores = teamHands[teamId].map((round: any) => ({
-      value: round.SCORE + 500,
-      name: round,
-      itemStyle: {
-        color: round.IS_WINNER ? "white" : "transparent",
-        borderColor: color, // Use line color
-        borderWidth: round.IS_WINNER ? 4 : 0,
-        fontWeight: "bold", // Make the text bold
-      },
-    }));
+
+    const allRoundsForTeam = teamHands[teamId];
+
+    const scores = allRoundsForTeam.map((round: any) => {
+
+      const currentRoundIndex = round.ROUND;
+      const winnerRoundIndex = showPreviousRoundScore ? currentRoundIndex + 1 : currentRoundIndex;
+      console.log(showPreviousRoundScore + ":" + currentRoundIndex + ":" + winnerRoundIndex);
+      const winnerRound = allRoundsForTeam[winnerRoundIndex];
+      console.log(round);
+      console.log(winnerRound);
+      const isWinner = winnerRound?.IS_WINNER;
+
+        return {
+          value: round.SCORE + 500,
+          name: round,
+          itemStyle: {
+            color: isWinner ? "white" : "transparent",
+            borderColor: color, // Use line color
+            borderWidth: isWinner ? 4 : 0,
+            fontWeight: "bold", // Make the text bold
+          }
+        };
+    });
 
     series.push({
       data: scores,
@@ -218,8 +234,10 @@ export default function MatchChartClient({
       },
       smooth: 0.4,
       symbol: "circle",
-      symbolSize: (value: any, params: any) =>
-        params.data.name.IS_WINNER ? 18 : 0, // Make the circles larger
+      symbolSize: (value: any, params: any) => {
+        console.log(params);
+        return params.data.itemStyle.borderWidth == 4 ? 18 : 0; // Make the circles larger
+      },
       endLabel: {
         show: true,
         position: "right",
