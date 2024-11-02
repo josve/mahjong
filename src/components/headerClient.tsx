@@ -61,24 +61,28 @@ export default function HeaderClient({ session }: { readonly session: any }) {
         <Box className="header-links header-text">
           <Link className="header-link"
             href="/"
+            title="matcher"
             passHref
           >
             matcher
           </Link>
           <Link className="header-link"
             href="/statistics"
+                title="statistik"
             passHref
           >
             statistik
           </Link>
           <Link className="header-link"
             href="/scoreboard"
+                title="poängtabell"
             passHref
           >
             poängtabell
           </Link>
           <Link className="header-link"
               href="/scorecalculator"
+                title="poängräknare"
               passHref
           >
             poängräknare
@@ -86,6 +90,7 @@ export default function HeaderClient({ session }: { readonly session: any }) {
       {!session?.user &&
           <Link className="header-link"
               href="/api/auth/signin"
+                title="Logga in"
               passHref
           >
             Logga in
@@ -95,6 +100,7 @@ export default function HeaderClient({ session }: { readonly session: any }) {
           <>
             <Link className="header-link"
                   href="/profile"
+                  title={session.user.name}
                   passHref
             >
               {session.user.name}
