@@ -205,10 +205,7 @@ export default function MatchChartClient({
 
       const currentRoundIndex = round.ROUND;
       const winnerRoundIndex = showPreviousRoundScore ? currentRoundIndex + 1 : currentRoundIndex;
-      console.log(showPreviousRoundScore + ":" + currentRoundIndex + ":" + winnerRoundIndex);
       const winnerRound = allRoundsForTeam[winnerRoundIndex];
-      console.log(round);
-      console.log(winnerRound);
       const isWinner = winnerRound?.IS_WINNER;
 
         return {
@@ -235,7 +232,6 @@ export default function MatchChartClient({
       smooth: 0.4,
       symbol: "circle",
       symbolSize: (value: any, params: any) => {
-        console.log(params);
         return params.data.itemStyle.borderWidth == 4 ? 18 : 0; // Make the circles larger
       },
       endLabel: {
@@ -265,29 +261,43 @@ export default function MatchChartClient({
           return ""; // Hide tooltip when hovering over pie chart
         }
 
-        if (params[0].dataIndex === 0) {
-          return "Matchen börjar";
-        }
+        const dataIndex = params[0].dataIndex;
+
+
+        const scoreIndex = showPreviousRoundScore ? dataIndex + 1 : dataIndex;
+
+        const scoreHands = hands.filter((hand: any) => hand.ROUND == scoreIndex);
+        const showScore = showPreviousRoundScore ? scoreHands.length === 4 : params[0].dataIndex !== 0 ;
+
 
         return params
           .map((param: any) => {
             const teamName = getTeamName(param.seriesName);
             if (teamName !== "Unknown Team") {
-              const windHand = param.data.name.WIND;
-              const hand = param.data.name.HAND + "p";
-              const handScore = param.data.name.HAND_SCORE;
-              const formattedHandScore =
-                handScore > 0 ? `+${handScore}` : handScore;
-              const isWinner = param.data.name.IS_WINNER;
-              const mahjongText = isWinner ? " mahjong" : "";
               const color = teamColors[param.seriesName]
                 ? `rgb(${teamColors[param.seriesName].color_red}, ${
                     teamColors[param.seriesName].color_green
                   }, ${teamColors[param.seriesName].color_blue})`
                 : "black";
-              return `<span style="display:inline-block;width:10px;height:10px;background-color:${color};margin-right:5px;"></span>${teamName}: ${
-                param.value
-              } (${windHand} ${hand}${mahjongText}, ${formattedHandScore})`;
+
+              if (showScore) {
+                const teamId = param.data.name.TEAM_ID;
+                const scoreHand = scoreHands.find((hand: any) => hand.TEAM_ID === teamId);
+                const windHand = scoreHand.WIND;
+                const hand = scoreHand.HAND + "p";
+                const handScore = scoreHand.HAND_SCORE;
+                const isWinner = scoreHand.IS_WINNER;
+                const mahjongText = isWinner ? " mahjong" : "";
+                const formattedHandScore =
+                    handScore > 0 ? `+${handScore}` : handScore;
+                return `<span style="display:inline-block;width:10px;height:10px;background-color:${color};margin-right:5px;"></span>${teamName}: ${
+                    param.value
+                } (${windHand} ${hand}${mahjongText}, ${formattedHandScore})`;
+              } else {
+                return `<span style="display:inline-block;width:10px;height:10px;background-color:${color};margin-right:5px;"></span>${teamName}: ${
+                    param.value
+                }`;
+              }
             }
             return null;
           })
