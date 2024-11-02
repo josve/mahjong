@@ -4,6 +4,7 @@ import PlayerScoresChart from "./PlayerScoreChart/PlayerScoresChart";
 import MahjongWinsChart from "./PlayerScoreChart/MahjongWinsChart";
 import HighRollerChart from "./PlayerScoreChart/HighRollerChart";
 import AverageHandTable from "./PlayerScoreChart/AverageHandTable";
+import BoxPlot from "./PlayerScoreChart/BoxPlot"
 import { Tabs, Tab, Box } from "@mui/material";
 
 interface PlayerScoreChartProps {
@@ -42,7 +43,7 @@ const PlayerScoreChart: React.FC<PlayerScoreChartProps> = ({
         setSelectedTab(newValue);
     };
 
-    const {playerScores, labels, mahjongWins, highRollerScores, averageHand, standardDeviations} =
+    const {playerScores, labels, mahjongWins, highRollerScores, averageHand, standardDeviations, allHands, allHandsNoTeams, allScores, allScoresNoTeams} =
         useMemo(() => {
             const scores: { [key: string]: number[] } = {};
             const labels: string[] = [];
@@ -51,6 +52,10 @@ const PlayerScoreChart: React.FC<PlayerScoreChartProps> = ({
             const totalHan: { [key: string]: number } = {};
             const handCount: { [key: string]: number } = {};
             const standardDeviations: { [key: string]: number } = {};
+            const allHands: { [key: string]: number[] } = {};
+            const allHandsNoTeams: { [key: string]: number[] } = {};
+            const allScores: { [key: string]: number[] } = {};
+            const allScoresNoTeams: { [key: string]: number[] } = {};
 
             let highRollerIndex = 0;
 
@@ -62,6 +67,10 @@ const PlayerScoreChart: React.FC<PlayerScoreChartProps> = ({
                 totalHan[player.name] = 0;
                 handCount[player.name] = 0;
                 standardDeviations[player.name] = 0;
+                allHands[player.name] = [];
+                allHandsNoTeams[player.name] = [];
+                allScores[player.name] = [];
+                allScoresNoTeams[player.name] = [];
             });
 
             // Sort matches by date
@@ -92,6 +101,12 @@ const PlayerScoreChart: React.FC<PlayerScoreChartProps> = ({
                         if (hand.IS_WINNER) {
                             wins[player.name]++;
                             totalHan[player.name] += hand.HAND;
+                        }
+                        allHands[player.name].push(hand.HAND);
+                        allScores[player.name].push(hand.HAND_SCORE);
+                        if (playerIds.length == 1) {
+                            allHandsNoTeams[player.name].push(hand.HAND);
+                            allScoresNoTeams[player.name].push(hand.HAND_SCORE);
                         }
                         handCount[player.name] += 1;
                         if (hand.HAND > 100) {
@@ -124,6 +139,10 @@ const PlayerScoreChart: React.FC<PlayerScoreChartProps> = ({
                 highRollerScores,
                 averageHand,
                 standardDeviations,
+                allHands,
+                allHandsNoTeams,
+                allScores,
+                allScoresNoTeams
             };
         }, [matches, teamIdToName, allPlayers, teamIdToPlayerIds]);
 
@@ -145,6 +164,7 @@ const PlayerScoreChart: React.FC<PlayerScoreChartProps> = ({
                 <Tab label="Andel mahjong" />
                 <Tab label="High Roller-ligan" />
                 <Tab label="Medelhänder" />
+                <Tab label="Distribution" />
             </Tabs>
             <CustomTabPanel value={selectedTab} index={0}>
                 <PlayerScoresChart
@@ -168,6 +188,15 @@ const PlayerScoreChart: React.FC<PlayerScoreChartProps> = ({
             <CustomTabPanel value={selectedTab} index={3}>
                 <AverageHandTable
                     averageHand={averageHand}
+                    getPlayerColor={getPlayerColor}
+                />
+            </CustomTabPanel>
+            <CustomTabPanel value={selectedTab} index={4}>
+                <BoxPlot
+                    allScores={allScores}
+                    allScoresNoTeams={allScoresNoTeams}
+                    allHands={allHands}
+                    allHands={allHandsNoTeams}
                     getPlayerColor={getPlayerColor}
                 />
             </CustomTabPanel>
