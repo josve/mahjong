@@ -46,9 +46,6 @@ const PlayerScoresChart: React.FC<PlayerScoresChartProps> = ({
 
   const scoreOptions = {
     animationDuration: "5000",
-    title: {
-      text: "Poäng",
-    },
     tooltip: {
       trigger: "axis",
     },

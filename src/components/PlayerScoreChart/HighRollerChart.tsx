@@ -22,8 +22,7 @@ const HighRollerChart: React.FC<HighRollerChartProps> = ({
   };
 
   return (
-      <div>
-        <h2 style={{ marginBottom: "10px" }}>High Roller-ligan (över 100)</h2>
+      <div style={{ paddingTop: "20px" }}>
         {Object.entries(highRollerScores).map(([player, scores]) => (
             <div
                 key={player}
@@ -72,6 +71,9 @@ const HighRollerChart: React.FC<HighRollerChartProps> = ({
               </div>
             </div>
         ))}
+          <div style={{ fontStyle: "italic", paddingTop: "20px" }}>
+              Streckade cirklar är från när man spelat i lag.
+          </div>
       </div>
   );
 };

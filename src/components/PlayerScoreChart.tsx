@@ -141,10 +141,10 @@ const PlayerScoreChart: React.FC<PlayerScoreChartProps> = ({
     return (
         <div>
             <Tabs value={selectedTab} onChange={handleTabChange}>
-                <Tab label="Player Scores" />
-                <Tab label="Mahjong Wins" />
-                <Tab label="High Roller" />
-                <Tab label="Average Hand" />
+                <Tab label="Poäng" />
+                <Tab label="Andel mahjong" />
+                <Tab label="High Roller-ligan" />
+                <Tab label="Medelhänder" />
             </Tabs>
             <CustomTabPanel value={selectedTab} index={0}>
                 <PlayerScoresChart
