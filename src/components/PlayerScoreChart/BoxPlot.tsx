@@ -1,5 +1,5 @@
 import ReactEcharts from "echarts-for-react";
-import React from "react";
+import React, { useState } from "react";
 import { registerTransform } from "echarts/core";
 import { aggregate } from "echarts-simple-transform";
 
@@ -19,8 +19,16 @@ const BoxPlot: React.FC<BoxPlotProps> = ({
                                              getPlayerColor,
                                          }) => {
 
+    const [selectedSeries, setSelectedSeries] = useState('allHands');
 
-    const seriesToUse = allHands;
+    const handleSeriesChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+        setSelectedSeries(event.target.value);
+    };
+
+    const seriesToUse = selectedSeries === 'allHands' ? allHands :
+                        selectedSeries === 'allHandsNoTeams' ? allHandsNoTeams :
+                        selectedSeries === 'allScores' ? allScores :
+                        allScoresNoTeams;
 
     const playerNames = Object.keys(seriesToUse);
     registerTransform(aggregate);
@@ -101,10 +109,18 @@ const BoxPlot: React.FC<BoxPlotProps> = ({
     };
 
     return (
-        <ReactEcharts
-            option={option}
-            style={{ height: "400px" }}
-        />
+        <div>
+            <select value={selectedSeries} onChange={handleSeriesChange}>
+                <option value="allHands">Händer (med lag)</option>
+                <option value="allHandsNoTeams">Händer (utan lag)</option>
+                <option value="allScores">Poäng (med lag)</option>
+                <option value="allScoresNoTeams">Poäng (utan lag)</option>
+            </select>
+            <ReactEcharts
+                option={option}
+                style={{ height: "400px" }}
+            />
+        </div>
     );
 
 };
