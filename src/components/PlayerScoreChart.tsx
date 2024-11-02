@@ -1,9 +1,10 @@
 "use client";
-import React, { useMemo } from "react";
+import React, { useMemo, useState } from "react";
 import PlayerScoresChart from "./PlayerScoreChart/PlayerScoresChart";
 import MahjongWinsChart from "./PlayerScoreChart/MahjongWinsChart";
 import HighRollerChart from "./PlayerScoreChart/HighRollerChart";
 import AverageHandTable from "./PlayerScoreChart/AverageHandTable";
+import { Tabs, Tab, Box } from "@mui/material";
 
 interface PlayerScoreChartProps {
   matches: any;
@@ -19,6 +20,15 @@ interface PlayerScoreChartProps {
   };
 }
 
+const CustomTabPanel = (props: { value: number; index: number; children: React.ReactNode }) => {
+  const { value, index, children } = props;
+  return (
+    <div role="tabpanel" hidden={value !== index}>
+      {value === index && <Box>{children}</Box>}
+    </div>
+  );
+};
+
 const PlayerScoreChart: React.FC<PlayerScoreChartProps> = ({
   matches,
   teamIdToName,
@@ -26,6 +36,12 @@ const PlayerScoreChart: React.FC<PlayerScoreChartProps> = ({
   teamIdToPlayerIds,
   playerColors,
 }) => {
+    const [selectedTab, setSelectedTab] = useState(0);
+
+    const handleTabChange = (event: React.SyntheticEvent, newValue: number) => {
+        setSelectedTab(newValue);
+    };
+
     const {playerScores, labels, mahjongWins, highRollerScores, averageHand, standardDeviations} =
         useMemo(() => {
             const scores: { [key: string]: number[] } = {};
@@ -124,23 +140,37 @@ const PlayerScoreChart: React.FC<PlayerScoreChartProps> = ({
 
     return (
         <div>
-            <PlayerScoresChart
-                playerScores={playerScores}
-                labels={labels}
-                getPlayerColor={getPlayerColor}
-            />
-            <MahjongWinsChart
-                mahjongWins={mahjongWins}
-                getPlayerColor={getPlayerColor}
-            />
-            <HighRollerChart
-                highRollerScores={highRollerScores}
-                getPlayerColor={getPlayerColor}
-            />
-            <AverageHandTable
-                averageHand={averageHand}
-                getPlayerColor={getPlayerColor}
-            />
+            <Tabs value={selectedTab} onChange={handleTabChange}>
+                <Tab label="Player Scores" />
+                <Tab label="Mahjong Wins" />
+                <Tab label="High Roller" />
+                <Tab label="Average Hand" />
+            </Tabs>
+            <CustomTabPanel value={selectedTab} index={0}>
+                <PlayerScoresChart
+                    playerScores={playerScores}
+                    labels={labels}
+                    getPlayerColor={getPlayerColor}
+                />
+            </CustomTabPanel>
+            <CustomTabPanel value={selectedTab} index={1}>
+                <MahjongWinsChart
+                    mahjongWins={mahjongWins}
+                    getPlayerColor={getPlayerColor}
+                />
+            </CustomTabPanel>
+            <CustomTabPanel value={selectedTab} index={2}>
+                <HighRollerChart
+                    highRollerScores={highRollerScores}
+                    getPlayerColor={getPlayerColor}
+                />
+            </CustomTabPanel>
+            <CustomTabPanel value={selectedTab} index={3}>
+                <AverageHandTable
+                    averageHand={averageHand}
+                    getPlayerColor={getPlayerColor}
+                />
+            </CustomTabPanel>
         </div>
     );
 };
