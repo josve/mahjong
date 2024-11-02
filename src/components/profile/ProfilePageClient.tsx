@@ -78,6 +78,14 @@ export default function ProfilePageClient({ session }: ComponentParams) {
             >
                 Uppdatera profil
             </Button>
+            <Button
+                variant="contained"
+                color="secondary"
+                href="/api/auth/signout"
+                style={{ marginTop: "20px" }}
+            >
+                Logga ut
+            </Button>
             <Snackbar
                 open={snackbarOpen}
                 autoHideDuration={6000}
