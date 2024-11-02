@@ -20,18 +20,9 @@ import { useState } from "react";
 
 export default function HeaderClient({ session }: { readonly session: any }) {
   const [menuOpen, setMenuOpen] = useState(false);
-  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 
   const handleMenuToggle = () => {
     setMenuOpen(!menuOpen);
-  };
-
-  const handleAvatarClick = (event: React.MouseEvent<HTMLElement>) => {
-    setAnchorEl(event.currentTarget);
-  };
-
-  const handleMenuClose = () => {
-    setAnchorEl(null);
   };
 
   return (
@@ -101,29 +92,14 @@ export default function HeaderClient({ session }: { readonly session: any }) {
           </Link>
       }
       {session?.user && (
-        <Box sx={{ display: "flex", alignItems: "center" }}>
-          <IconButton onClick={handleAvatarClick}>
-            <Avatar sx={{ bgcolor: "var(--strong-color)", marginRight: 2 }}>
-              {session.user.firstInitial}
-            </Avatar>
-          </IconButton>
-          <Menu
-            anchorEl={anchorEl}
-            open={Boolean(anchorEl)}
-            onClose={handleMenuClose}
-          >
-            <MenuItem onClick={handleMenuClose}>
-              <Link href="/profile" passHref>
-                Profil
-              </Link>
-            </MenuItem>
-            <MenuItem onClick={handleMenuClose}>
-              <Link href="/api/auth/signout" passHref>
-                Logga ut
-              </Link>
-            </MenuItem>
-          </Menu>
-        </Box>
+          <>
+            <Link className="header-link"
+                  href="/profile"
+                  passHref
+            >
+              {session.user.name}
+            </Link>
+          </>
       )}
         </Box>
         <IconButton
