@@ -1,6 +1,6 @@
 "use client"
 import React, { useState } from "react";
-import {Button, FormGroup, FormControlLabel, Switch, Snackbar, Alert } from "@mui/material";
+import {Box, Button, FormGroup, FormControlLabel, Switch, Snackbar, Alert } from "@mui/material";
 import { RgbColorPicker } from "react-colorful";
 
 interface ComponentParams {
@@ -78,6 +78,7 @@ export default function ProfilePageClient({ session }: ComponentParams) {
             >
                 Uppdatera profil
             </Button>
+            <Box sx={{ paddingTop: "10px"}}>
             <Button
                 variant="contained"
                 color="secondary"
@@ -86,6 +87,7 @@ export default function ProfilePageClient({ session }: ComponentParams) {
             >
                 Logga ut
             </Button>
+            </Box>
             <Snackbar
                 open={snackbarOpen}
                 autoHideDuration={6000}
