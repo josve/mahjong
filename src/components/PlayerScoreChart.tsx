@@ -1,11 +1,11 @@
 "use client";
-import React, { useMemo, useState } from "react";
+import React, { useMemo, useState, useEffect } from "react";
 import PlayerScoresChart from "./PlayerScoreChart/PlayerScoresChart";
 import MahjongWinsChart from "./PlayerScoreChart/MahjongWinsChart";
 import HighRollerChart from "./PlayerScoreChart/HighRollerChart";
 import AverageHandTable from "./PlayerScoreChart/AverageHandTable";
 import BoxPlot from "./PlayerScoreChart/BoxPlot"
-import { Tabs, Tab, Box } from "@mui/material";
+import { Tabs, Tab, Box, FormControl, InputLabel, Select, MenuItem } from "@mui/material";
 
 interface PlayerScoreChartProps {
   matches: any;
@@ -19,6 +19,7 @@ interface PlayerScoreChartProps {
       color_blue: number;
     };
   };
+  period: string;
 }
 
 const CustomTabPanel = (props: { value: number; index: number; children: React.ReactNode }) => {
@@ -36,12 +37,39 @@ const PlayerScoreChart: React.FC<PlayerScoreChartProps> = ({
   allPlayers,
   teamIdToPlayerIds,
   playerColors,
+  period,
 }) => {
     const [selectedTab, setSelectedTab] = useState(0);
+    const [filteredMatches, setFilteredMatches] = useState(matches);
 
     const handleTabChange = (event: React.SyntheticEvent, newValue: number) => {
         setSelectedTab(newValue);
     };
+
+    useEffect(() => {
+        const filterMatches = () => {
+            if (period === "all") {
+                return matches;
+            } else if (period === "new") {
+                // Filter matches for "New period"
+                return matches.filter((match: any) => {
+                    const matchDate = new Date(match.TIME);
+                    const newPeriodStartDate = new Date(); // Set the start date for the new period
+                    newPeriodStartDate.setFullYear(newPeriodStartDate.getFullYear() - 1); // Example: last 1 year
+                    return matchDate >= newPeriodStartDate;
+                });
+            } else if (period === "year") {
+                // Filter matches for "Current year"
+                return matches.filter((match: any) => {
+                    const matchDate = new Date(match.TIME);
+                    const currentYearStartDate = new Date(new Date().getFullYear(), 0, 1);
+                    return matchDate >= currentYearStartDate;
+                });
+            }
+        };
+
+        setFilteredMatches(filterMatches());
+    }, [period, matches]);
 
     const {playerScores, labels, mahjongWins, highRollerScores, averageHand, standardDeviations, allHands, allHandsNoTeams, allScores, allScoresNoTeams} =
         useMemo(() => {
@@ -74,7 +102,7 @@ const PlayerScoreChart: React.FC<PlayerScoreChartProps> = ({
             });
 
             // Sort matches by date
-            const sortedMatches = [...matches].sort(
+            const sortedMatches = [...filteredMatches].sort(
                 (a, b) => new Date(a.TIME).getTime() - new Date(b.TIME).getTime()
             );
 
@@ -144,7 +172,7 @@ const PlayerScoreChart: React.FC<PlayerScoreChartProps> = ({
                 allScores,
                 allScoresNoTeams
             };
-        }, [matches, teamIdToName, allPlayers, teamIdToPlayerIds]);
+        }, [filteredMatches, teamIdToName, allPlayers, teamIdToPlayerIds]);
 
     const playerNameToId = Object.fromEntries(
         allPlayers.map((player) => [player.name, player.id])

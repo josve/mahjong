@@ -6,9 +6,7 @@ interface StatisticsNavProps {
 
 const StatisticsNav: React.FC<StatisticsNavProps> = ({ currentPath }) => {
   const links = [
-    { path: "/statistics/all", label: "All tid" },
-    { path: "/statistics/new", label: "Ny tid" },
-    { path: "/statistics/year", label: "Nuvarande år" },
+    { path: "/statistics", label: "Statistik" },
   ];
 
   return (
