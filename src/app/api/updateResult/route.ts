@@ -6,9 +6,9 @@ export async function POST(req: NextRequest) {
   const body = await req.json();
   const { matchId, scores, round } = body;
 
-  try {
-    const connection = await Connection.getInstance().getConnection();
+  const connection = await Connection.getInstance().getConnection();
 
+  try {
     const [eastTeamResult]: any = await connection.query(
       "SELECT TEAM_ID as EAST_TEAM FROM Hands WHERE GAME_ID = ? AND ROUND = ? AND WIND = 'E' LIMIT 1",
       [matchId, round]
@@ -53,5 +53,7 @@ export async function POST(req: NextRequest) {
   } catch (error) {
     console.error('Error updating result:', error);
     return NextResponse.json({ message: 'Internal server error' }, { status: 500 });
+  } finally {
+    connection.release();
   }
 }
