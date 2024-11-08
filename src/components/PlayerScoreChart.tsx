@@ -54,8 +54,7 @@ const PlayerScoreChart: React.FC<PlayerScoreChartProps> = ({
                 // Filter matches for "New period"
                 return matches.filter((match: any) => {
                     const matchDate = new Date(match.TIME);
-                    const newPeriodStartDate = new Date(); // Set the start date for the new period
-                    newPeriodStartDate.setFullYear(newPeriodStartDate.getFullYear() - 1); // Example: last 1 year
+                    const newPeriodStartDate = new Date(2014, 10, 1);
                     return matchDate >= newPeriodStartDate;
                 });
             } else if (period === "year") {

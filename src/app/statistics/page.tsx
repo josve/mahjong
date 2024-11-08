@@ -1,10 +1,13 @@
+"use client"
 import React, { useEffect, useState } from "react";
 import PlayerScoreChart from "@/components/PlayerScoreChart";
-import { Select, MenuItem, FormControl, InputLabel } from "@mui/material";
+import { Box } from "@mui/material";
+import ToggleButton from '@mui/material/ToggleButton';
+import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
 
 export default function StatisticsPage() {
-  const [data, setData] = useState(null);
-  const [period, setPeriod] = useState("all");
+  const [data, setData]: any = useState(null);
+  const [period, setPeriod]: any = useState("all");
 
   useEffect(() => {
     const fetchData = async () => {
@@ -16,7 +19,7 @@ export default function StatisticsPage() {
     fetchData();
   }, []);
 
-  const handlePeriodChange = (event) => {
+  const handlePeriodChange = (event: any) => {
     setPeriod(event.target.value);
   };
 
@@ -26,27 +29,34 @@ export default function StatisticsPage() {
 
   return (
     <div>
-      <h1>Statistik</h1>
-      <FormControl>
-        <InputLabel id="period-select-label">Period</InputLabel>
-        <Select
-          labelId="period-select-label"
-          value={period}
-          onChange={handlePeriodChange}
+      <Box style={{ display: "grid", gridTemplateColumns: "1fr 1fr" }}>
+        <h1 style={{ justifySelf: "start" }}>Statistik</h1>
+        <ToggleButtonGroup
+            value={period}
+            style={{ justifySelf: "end" }}
+            exclusive
+            onChange={handlePeriodChange}
+            aria-label="Tid"
         >
-          <MenuItem value="all">All time</MenuItem>
-          <MenuItem value="new">New period</MenuItem>
-          <MenuItem value="year">Current year</MenuItem>
-        </Select>
-      </FormControl>
+          <ToggleButton value="all" aria-label="left aligned">
+            All tid
+          </ToggleButton>
+          <ToggleButton value="new" aria-label="centered">
+            Ny tid
+          </ToggleButton>
+          <ToggleButton value="year" aria-label="right aligned">
+            Nuvarande år
+          </ToggleButton>
+        </ToggleButtonGroup>
+      </Box>
       <PlayerScoreChart
-        matches={data.matches}
-        teamIdToName={data.teamIdToName}
-        allPlayers={data.allPlayers}
-        teamIdToPlayerIds={data.teamIdToPlayerIds}
-        playerColors={data.playerColors}
-        period={period}
-      />
+            matches={data.matches}
+            teamIdToName={data.teamIdToName}
+            allPlayers={data.allPlayers}
+            teamIdToPlayerIds={data.teamIdToPlayerIds}
+            playerColors={data.playerColors}
+            period={period}
+            />
     </div>
   );
 }
