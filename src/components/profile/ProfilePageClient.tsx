@@ -23,10 +23,6 @@ export default function ProfilePageClient({ session }: ComponentParams) {
     const [snackbarMessage, setSnackbarMessage] = useState("");
     const [snackbarSeverity, setSnackbarSeverity] = useState<"success" | "error">("success");
 
-    const handleColorChange = (color: any) => {
-        setColor(color.rgb);
-    };
-
     const handleCheckboxChange = (event: any) => {
         setShowPreviousRoundScore(event.target.checked);
     };

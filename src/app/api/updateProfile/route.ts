@@ -1,5 +1,4 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getSession } from 'next-auth/react';
 import Connection from '@/lib/connection';
 import { auth } from "@/auth";
 
@@ -10,16 +9,12 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
 
-  console.log(session);
-
   const { color_red, color_green, color_blue, show_previous_round_score } = await req.json();
   const playerId = (session.user as any).playerId;
 
   if (!playerId) {
     throw new Error("Incorrect playerId");
   }
-
-  console.log("Updating profile: " + playerId);
 
   const connection = await Connection.getInstance().getConnection();
   try {

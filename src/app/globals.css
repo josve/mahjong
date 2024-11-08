@@ -101,12 +101,6 @@ h3 {
   }
 }
 
-.selected-statistics {
-    text-decoration: underline;
-    font-weight: bold;
-    color: var(--header-color);
-}
-
 .header-bar {
 	height: 80px;
 	padding-top:14px;
@@ -298,10 +292,6 @@ h3 {
 
 .button:active {
 	background-color: var(--strong-color);
-}
-
-.create-match-button {
-  
 }
 
 @media (max-width: 768px) {

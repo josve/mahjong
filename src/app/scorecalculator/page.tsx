@@ -6,11 +6,11 @@ export default function ScoreCalculatorPage() {
     const [flowers, setFlowers] = useState(0);
 
     const [combos, setCombos] = useState([
-        { name: "(Inget)", isHidden: false },
-        { name: "(Inget)", isHidden: false },
-        { name: "(Inget)", isHidden: false },
-        { name: "(Inget)", isHidden: false },
-        { name: "(Inget par)", isHidden: false },
+        {name: "(Inget)", isHidden: false},
+        {name: "(Inget)", isHidden: false},
+        {name: "(Inget)", isHidden: false},
+        {name: "(Inget)", isHidden: false},
+        {name: "(Inget par)", isHidden: false},
     ]);
 
     const [isSelfTouch, setIsSelfTouch] = useState(false);
@@ -102,16 +102,16 @@ export default function ScoreCalculatorPage() {
 
     useEffect(() => {
         setFullStegeMultipler(isMahjong &&
-            isFullStege &&
+        isFullStege &&
         combos.filter((combo) => combo.name.includes("Stege")).length > 2
             ? 2 : 1);
-    }, [combos,isMahjong, isFullStege]);
+    }, [combos, isMahjong, isFullStege]);
 
     useEffect(() => {
         setNoStegarMultipler(isMahjong &&
         combos.filter((combo) => combo.name.includes("Stege")).length === 0
             ? 2 : 1);
-    }, [combos,isMahjong]);
+    }, [combos, isMahjong]);
 
     useEffect(() => {
         setAlmostSelfTouchPoints(
@@ -192,9 +192,9 @@ export default function ScoreCalculatorPage() {
     };
 
     return (
-        <Box >
+        <Box>
             <Typography variant="h4" gutterBottom>Poängräknare</Typography>
-            <Box sx={{ marginBottom: "25px" }}>
+            <Box sx={{marginBottom: "25px"}}>
                 <Typography variant="h6">Hand</Typography>
                 <Box sx={{
                     display: "grid",
@@ -208,12 +208,18 @@ export default function ScoreCalculatorPage() {
                             onChange={handleFlowerChange}
                             min={0}
                             max={8}
-                            sx={{width: "250px",
+                            sx={{
+                                width: "250px",
                                 marginLeft: "20px",
-                                marginRight: "15px"}}/>
-                    <Typography style={{ marginLeft: "10px", fontSize: "1.5em", color: "var(--header-color)" }}>{flowers} blommor</Typography>
+                                marginRight: "15px"
+                            }}/>
+                    <Typography style={{
+                        marginLeft: "10px",
+                        fontSize: "1.5em",
+                        color: "var(--header-color)"
+                    }}>{flowers} blommor</Typography>
                     {flowerScore > 0 &&
-                        <span style={{ textAlign: "right", fontSize: "1.5em", color: "var(--header-color)" }}>
+                        <span style={{textAlign: "right", fontSize: "1.5em", color: "var(--header-color)"}}>
                             {flowerScore + 'p'}
                         </span>}
                 </Box>
@@ -268,7 +274,7 @@ export default function ScoreCalculatorPage() {
                                                              onChange={(event) => handleHiddenChange(index, event)}/>}
                                           label="Dold"/>
                         {comboScore[index] > 0 &&
-                            <span style={{ textAlign: "right", fontSize: "1.5em", color: "var(--header-color)" }}>
+                            <span style={{textAlign: "right", fontSize: "1.5em", color: "var(--header-color)"}}>
                             {comboScore[index] + 'p'}
                         </span>}
                     </Box>
@@ -276,18 +282,18 @@ export default function ScoreCalculatorPage() {
             </Box>
             {isMahjong &&
                 <>
-                <Box sx={{
-                    display: "grid",
-                    gridTemplateColumns: "1fr 2fr",
-                    marginBottom: "10px",
-                    alignItems: "center",
-                    background: "var(--score-not-selected-background)",
-                    padding: "20px"
-                }}>
+                    <Box sx={{
+                        display: "grid",
+                        gridTemplateColumns: "1fr 2fr",
+                        marginBottom: "10px",
+                        alignItems: "center",
+                        background: "var(--score-not-selected-background)",
+                        padding: "20px"
+                    }}>
                         <Typography variant="h6">Mahjong</Typography>
                         <div className="score">{mahjongScore + 'p'}</div>
                     </Box>
-                    { selfTouchScore > 0 &&
+                    {selfTouchScore > 0 &&
                         <Box sx={{
                             display: "grid",
                             gridTemplateColumns: "1fr 2fr",
@@ -295,9 +301,9 @@ export default function ScoreCalculatorPage() {
                             alignItems: "center",
                             background: "var(--score-not-selected-background)",
                             padding: "20px"
-                        }}>                        <Typography variant="h6">Self touch</Typography>
-                        <div className="score">{selfTouchScore + 'p'}</div>
-                    </Box>}
+                        }}> <Typography variant="h6">Self touch</Typography>
+                            <div className="score">{selfTouchScore + 'p'}</div>
+                        </Box>}
                     {noScorePoints > 0 &&
                         <Box sx={{
                             display: "grid",
@@ -306,7 +312,7 @@ export default function ScoreCalculatorPage() {
                             alignItems: "center",
                             background: "var(--score-not-selected-background)",
                             padding: "20px"
-                        }}>                            <Typography variant="h6">Ingen poäng mahjong</Typography>
+                        }}> <Typography variant="h6">Ingen poäng mahjong</Typography>
                             <div className="score">{noScorePoints + 'p'}</div>
                         </Box>
                     }
@@ -318,7 +324,7 @@ export default function ScoreCalculatorPage() {
                             alignItems: "center",
                             background: "var(--score-not-selected-background)",
                             padding: "20px"
-                        }}>                            <Typography variant="h6">Nästan self touch</Typography>
+                        }}> <Typography variant="h6">Nästan self touch</Typography>
                             <div className="score">{almostSelfTouchPoints + 'p'}</div>
                         </Box>
                     }
@@ -329,10 +335,12 @@ export default function ScoreCalculatorPage() {
                         alignItems: "center",
                         background: "var(--score-not-selected-background)",
                         padding: "20px"
-                    }}>                        <FormControlLabel control={<Checkbox checked={isSelfTouch} onChange={(event) => setIsSelfTouch(event.target.checked)} />} label="Mahjong på dragen bricka (self touch)" />
+                    }}> <FormControlLabel control={<Checkbox checked={isSelfTouch}
+                                                             onChange={(event) => setIsSelfTouch(event.target.checked)}/>}
+                                          label="Mahjong på dragen bricka (self touch)"/>
                     </Box>
                 </>}
-            <Box sx={{ marginBottom: "25px" }}>
+            <Box sx={{marginBottom: "25px"}}>
                 <Typography variant="h6">Multiplikatorer</Typography>
             </Box>
             {isMahjong && <>
@@ -343,9 +351,15 @@ export default function ScoreCalculatorPage() {
                     alignItems: "center",
                     background: "var(--score-not-selected-background)",
                     padding: "20px"
-                }}>                    <FormControlLabel control={<Checkbox checked={isFullStege} onChange={(event) => setIsFullStege(event.target.checked)} />} label="Stege 1-9 av en sort" />
-                    <FormControlLabel control={<Checkbox checked={isEnSort} onChange={(event) => setIsEnSort(event.target.checked)} />} label="En sort + vindar/drakar" />
-                    <FormControlLabel control={<Checkbox checked={isEnSortEnbart} onChange={(event) => setIsEnSortEnbart(event.target.checked)} />} label="En sort enbart" />
+                }}> <FormControlLabel control={<Checkbox checked={isFullStege}
+                                                         onChange={(event) => setIsFullStege(event.target.checked)}/>}
+                                      label="Stege 1-9 av en sort"/>
+                    <FormControlLabel
+                        control={<Checkbox checked={isEnSort} onChange={(event) => setIsEnSort(event.target.checked)}/>}
+                        label="En sort + vindar/drakar"/>
+                    <FormControlLabel control={<Checkbox checked={isEnSortEnbart}
+                                                         onChange={(event) => setIsEnSortEnbart(event.target.checked)}/>}
+                                      label="En sort enbart"/>
                 </Box>
                 {noStegarMultipler > 1 &&
                     <Box sx={{
@@ -355,7 +369,7 @@ export default function ScoreCalculatorPage() {
                         alignItems: "center",
                         background: "var(--score-not-selected-background)",
                         padding: "20px"
-                    }}>                        <Typography variant="h6">Inga stegar</Typography>
+                    }}> <Typography variant="h6">Inga stegar</Typography>
                         <div className="score">{noStegarMultipler + 'X'}</div>
                     </Box>
                 }
@@ -367,7 +381,7 @@ export default function ScoreCalculatorPage() {
                         alignItems: "center",
                         background: "var(--score-not-selected-background)",
                         padding: "20px"
-                    }}>                        <Typography variant="h6">Komplett stege (1-9)</Typography>
+                    }}> <Typography variant="h6">Komplett stege (1-9)</Typography>
                         <div className="score">{fullStegeMultipler + 'X'}</div>
                     </Box>
                 }
@@ -379,7 +393,7 @@ export default function ScoreCalculatorPage() {
                         alignItems: "center",
                         background: "var(--score-not-selected-background)",
                         padding: "20px"
-                    }}>                        <Typography variant="h6">Enbart en sort</Typography>
+                    }}> <Typography variant="h6">Enbart en sort</Typography>
                         <div className="score">{oneKindMultipler + 'X'}</div>
                     </Box>
                 }
@@ -391,7 +405,7 @@ export default function ScoreCalculatorPage() {
                         alignItems: "center",
                         background: "var(--score-not-selected-background)",
                         padding: "20px"
-                    }}>                        <Typography variant="h6">Enbart end sort + (drakar/vindar)</Typography>
+                    }}> <Typography variant="h6">Enbart end sort + (drakar/vindar)</Typography>
                         <div className="score">{oneKindAndDragonsMultipler + 'X'}</div>
                     </Box>
                 }
@@ -403,7 +417,7 @@ export default function ScoreCalculatorPage() {
                         alignItems: "center",
                         background: "var(--score-not-selected-background)",
                         padding: "20px"
-                    }}>                        <Typography variant="h6">Enbart dolda brickor</Typography>
+                    }}> <Typography variant="h6">Enbart dolda brickor</Typography>
                         <div className="score">{allHiddenMultipler + 'X'}</div>
                     </Box>
                 }
@@ -430,7 +444,7 @@ export default function ScoreCalculatorPage() {
                     alignItems: "center",
                     background: "var(--score-not-selected-background)",
                     padding: "20px"
-                }}>                    <Typography variant="h6">Tretal/fyrtal eget vädersträck</Typography>
+                }}> <Typography variant="h6">Tretal/fyrtal eget vädersträck</Typography>
                     <div className="score">{windMultiplier + 'X'}</div>
                 </Box>
             }
@@ -442,7 +456,7 @@ export default function ScoreCalculatorPage() {
                     alignItems: "center",
                     background: "var(--score-not-selected-background)",
                     padding: "20px"
-                }}>                    <Typography variant="h6">Tre dolda tretal/fyrtal</Typography>
+                }}> <Typography variant="h6">Tre dolda tretal/fyrtal</Typography>
                     <div className="score">{threeHiddenMultipler + 'X'}</div>
                 </Box>
             }
@@ -457,12 +471,10 @@ export default function ScoreCalculatorPage() {
             }}>
                 <Typography variant="h6">Total poäng</Typography>
                 {totalScore >= 300 ?
-                    <>
-                        <span className="score">Limit hand! 300p ({totalScore}p)</span>
-                    </> :
-                <span className="score">{totalScore}p</span>}
+                    <span className="score">Limit hand! 300p ({totalScore}p)</span> :
+                    <span className="score">{totalScore}p</span>}
             </Box>
-            <p style={{ marginTop: "20px", fontStyle: "italic"}}>
+            <p style={{marginTop: "20px", fontStyle: "italic"}}>
                 Extra X2 vid mahjong på sista brickan i spelet eller extrabricka vid fyrtal ej med
             </p>
         </Box>

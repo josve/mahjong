@@ -5,7 +5,7 @@ import { registerTransform } from "echarts/core";
 // @ts-ignore
 import { aggregate } from "echarts-simple-transform";
 
-import {TextField, Button, Box, FormControl, InputLabel, Select, MenuItem} from "@mui/material";
+import { FormControl, InputLabel, Select, MenuItem} from "@mui/material";
 
 interface BoxPlotProps {
     readonly allHands: { [key: string]: number[] };

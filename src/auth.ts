@@ -7,11 +7,11 @@ import Connection from "@/lib/connection";
 function getProviders() {
     const providers = [];
 
-    if (!!process.env.AUTH_GOOGLE_ID) {
+    if (process.env.AUTH_GOOGLE_ID) {
         providers.push(Google);
     }
 
-    if (!!process.env.DEV_MOCK_PWD) {
+    if (process.env.DEV_MOCK_PWD) {
         // For testing allow people to login with a mock password
         const credentials = Credentials({
             credentials: {
@@ -19,7 +19,6 @@ function getProviders() {
                 password: {}
             },
             authorize: async (credentials: any) => {
-                let user = null;
                 if (process.env.DEV_MOCK_PWD !== credentials.password) {
                     throw new Error("No user found");
                 }
@@ -42,8 +41,6 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     async signIn({ user, account, profile, email, credentials }) {
       const connection = await Connection.getInstance().getConnection();
       try {
-        console.log(user);
-        console.log(profile);
         const [rows]: any = await connection.query(
           "SELECT * FROM PlayerEmails WHERE EMAIL = ?",
           [user.email]

@@ -11,9 +11,6 @@ import {
   List,
   ListItem,
   ListItemText,
-  Avatar,
-  Menu,
-  MenuItem,
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import { useState } from "react";
