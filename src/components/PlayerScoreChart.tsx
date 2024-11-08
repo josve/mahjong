@@ -5,7 +5,7 @@ import MahjongWinsChart from "./PlayerScoreChart/MahjongWinsChart";
 import HighRollerChart from "./PlayerScoreChart/HighRollerChart";
 import AverageHandTable from "./PlayerScoreChart/AverageHandTable";
 import BoxPlot from "./PlayerScoreChart/BoxPlot"
-import { Tabs, Tab, Box, FormControl, InputLabel, Select, MenuItem } from "@mui/material";
+import { Tabs, Tab, Box } from "@mui/material";
 
 interface PlayerScoreChartProps {
   matches: any;
