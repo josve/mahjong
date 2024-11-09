@@ -24,7 +24,7 @@ export default function HeaderClient({ session }: { readonly session: any }) {
       <Toolbar>
         <Box sx={{ display: "flex", alignItems: "center", flexGrow: 1 }}>
           <Link
-            href="/public"
+            href="/"
             passHref
           >
             <Box
@@ -46,7 +46,7 @@ export default function HeaderClient({ session }: { readonly session: any }) {
         </Box>
         <Box className="header-links header-text">
           <Link className="header-link"
-            href="/public"
+            href="/"
             title="matcher"
             passHref
           >
