@@ -1,4 +1,4 @@
-import HeaderClient from "@/components/headerClient";
+import HeaderClient from "@/components/header/headerClient";
 import { auth } from "@/auth"
 
 export default async function Header() {
