@@ -6,27 +6,16 @@ import {
   AppBar,
   Toolbar,
   Box,
-  IconButton,
-  Drawer,
-  List,
-  ListItem,
-  ListItemText,
 } from "@mui/material";
-import MenuIcon from "@mui/icons-material/Menu";
-import { useState } from "react";
 
 export default function HeaderClient({ session }: { readonly session: any }) {
-  const [menuOpen, setMenuOpen] = useState(false);
-
-  const handleMenuToggle = () => {
-    setMenuOpen(!menuOpen);
-  };
-
   return (
     <AppBar
       position="static"
       className="header-bar"
       sx={{
+        position: "sticky",
+        top: "0",
         background:
           "radial-gradient(circle farthest-corner at 100px 100px, var(--gradient-start) 0% , var(--gradient-end) 100%)",
           boxShadow: 0,
@@ -105,62 +94,7 @@ export default function HeaderClient({ session }: { readonly session: any }) {
           </>
       )}
         </Box>
-        <IconButton
-          edge="end"
-          color="inherit"
-          aria-label="menu"
-          onClick={handleMenuToggle}
-          sx={{ display: { xs: "block", md: "none" } }}
-        >
-          <MenuIcon />
-        </IconButton>
       </Toolbar>
-      <Drawer
-        anchor="right"
-        open={menuOpen}
-        onClose={handleMenuToggle}
-        sx={{ display: { xs: "block", md: "none" } }}
-      >
-        <List>
-          <ListItem
-            component={Link}
-            href="/"
-            onClick={handleMenuToggle}
-          >
-            <ListItemText primary="Matcher" />
-          </ListItem>
-          <ListItem
-            component={Link}
-            href="/statistics"
-            onClick={handleMenuToggle}
-          >
-            <ListItemText primary="Statistik" />
-          </ListItem>
-          <ListItem
-            component={Link}
-            href="/scoreboard"
-            onClick={handleMenuToggle}
-          >
-            <ListItemText primary="Poängtabell" />
-          </ListItem>
-          <ListItem
-              component={Link}
-              href="/scorecalculator"
-              onClick={handleMenuToggle}
-          >
-            <ListItemText primary="Poängräknare" />
-          </ListItem>
-          {session?.user && (
-            <ListItem
-              component={Link}
-              href="/profile"
-              onClick={handleMenuToggle}
-            >
-              <ListItemText primary="Profil" />
-            </ListItem>
-          )}
-        </List>
-      </Drawer>
     </AppBar>
   );
 }
