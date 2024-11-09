@@ -293,7 +293,7 @@ h3 {
 	background-color: var(--strong-color);
 }
 
-@media (max-width: 768px) {
+@media (max-width: 900px) {
   .create-match-button {
     width: 100%;
     padding: 15px;
@@ -321,3 +321,9 @@ h3 {
     color: var(--header-color);
 }
 
+.matches-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
