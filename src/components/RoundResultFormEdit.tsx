@@ -57,15 +57,15 @@ export default function RoundResultFormEdit({
     })
       .then((response) => response.json())
       .then((data) => {
-        setSnackbarMessage("Result updated successfully!");
+        setSnackbarMessage("Resultat är uppdaterat!");
         setSnackbarSeverity("success");
         setSnackbarOpen(true);
         setTimeout(() => {
           router.push(`/match/${matchId}/edit`);
-        }, 2000);
+        }, 1000);
       })
       .catch((error) => {
-        setSnackbarMessage("Failed to update result.");
+        setSnackbarMessage("Misslyckades med att uppdatera resultatet.");
         setSnackbarSeverity("error");
         setSnackbarOpen(true);
         console.error("Error:", error);
