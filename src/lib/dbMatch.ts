@@ -172,15 +172,10 @@ export async function getTeamDetails(): Promise<TeamIdToDetails> {
       GROUP BY Teams.TEAM_ID
     `);
 
-    const teamDetails: {
-      [key: string]: {
-        playerIds: string[];
-        teamName: string;
-        concatenatedName: string;
-      };
-    } = {};
+    const teamDetails: TeamIdToDetails = {};
     result.forEach((row: any) => {
       teamDetails[row.TEAM_ID] = {
+        id: row.TEAM_ID,
         playerIds: row.player_ids.split(","),
         teamName: row.team_name,
         concatenatedName: row.concatenated_name,
@@ -188,26 +183,6 @@ export async function getTeamDetails(): Promise<TeamIdToDetails> {
     });
 
     return teamDetails;
-  } finally {
-    connection.release();
-  }
-}
-
-export async function updateTeamName(teamId: string, teamName: string): Promise<void> {
-  const connection = await Connection.getInstance().getConnection();
-  try {
-    if (teamName === "") {
-      await connection.query(
-        `DELETE FROM TeamAttributes WHERE TEAM_ID = ? AND ATTRIBUTE = 'alias'`,
-        [teamId]
-      );
-    } else {
-      await connection.query(
-        `INSERT INTO TeamAttributes (TEAM_ID, ATTRIBUTE, VALUE) VALUES (?, 'alias', ?)
-         ON DUPLICATE KEY UPDATE VALUE = VALUES(VALUE)`,
-        [teamId, teamName]
-      );
-    }
   } finally {
     connection.release();
   }

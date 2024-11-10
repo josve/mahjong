@@ -19,11 +19,7 @@ export default function ProfilePageClient({ session, teamDetails, playerColors }
         g: user.COLOR_GREEN,
         b: user.COLOR_BLUE,
     });
-    const [userTeams, setUserTeams] = useState<{
-        playerIds: string[];
-        teamName: string;
-        concatenatedName: string;
-    }[]>([]);
+    const [userTeams, setUserTeams] = useState<TeamDetails[]>([]);
 
     const [showPreviousRoundScore, setShowPreviousRoundScore] = useState(
         user.SHOW_PREVIOUS_ROUND_SCORE
@@ -122,11 +118,11 @@ export default function ProfilePageClient({ session, teamDetails, playerColors }
             }),
         })
             .then(() => {
-                setSnackbarMessage("Team name updated successfully!");
+                setSnackbarMessage("Uppdaterade " + newTeamName + "!");
                 setSnackbarSeverity("success");
                 setSnackbarOpen(true);
             }).catch(() => {
-                setSnackbarMessage("Failed to update team name.");
+                setSnackbarMessage("Lyckades inte uppdatera: " + newTeamName);
                 setSnackbarSeverity("error");
                 setSnackbarOpen(true);
             })
@@ -152,7 +148,7 @@ export default function ProfilePageClient({ session, teamDetails, playerColors }
             <div style={{ paddingTop: "20px" }}>
                 <h2>Dina lag</h2>
                 {userTeams.map((team) => (
-                    <div key={team.teamName} style={{paddingTop: "20px"}}>
+                    <div key={team.id} style={{paddingTop: "20px"}}>
                         <h3>{team.teamName}</h3>
                         <div style={{
                             paddingTop: "10px",
@@ -177,6 +173,11 @@ export default function ProfilePageClient({ session, teamDetails, playerColors }
                                 backgroundColor: teamToColor[team.teamName],
                             }}></div>
                         </Box>
+                        <Box style={{
+                            display: "flex",
+                            justifyContent: "left",
+                            alignItems: "center",
+                        }}>
                         <TextField
                             label="Uppdatera lagnamn"
                             value={team.teamName}
@@ -186,10 +187,12 @@ export default function ProfilePageClient({ session, teamDetails, playerColors }
                         <Button
                             variant="contained"
                             color="primary"
-                            onClick={() => handleTeamNameSubmit(team.teamName, team.teamName)}
+                            style={{ marginLeft: "20px" }}
+                            onClick={() => handleTeamNameSubmit(team.id, team.teamName)}
                         >
-                            Uppdatera lagnamn
+                            Uppdatera
                         </Button>
+                        </Box>
                     </div>
                 ))}
             </div>

@@ -10,7 +10,7 @@ export async function POST(req: NextRequest) {
   }
 
   const { teamId, teamName } = await req.json();
-  const playerId = (session.user as any).playerId;
+  const playerId = session.user.playerId;
 
   if (!playerId) {
     return NextResponse.json({ error: 'Incorrect playerId' }, { status: 500 });
