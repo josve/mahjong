@@ -20,11 +20,6 @@ export async function generateMetadata(): Promise<Metadata> {
 export default function ScoreboardPage() {
   return (
     <Box
-      sx={{
-        padding: "40px",
-        maxWidth: "800px",
-        margin: "0 auto",
-      }}
     >
       <h1
         style={{

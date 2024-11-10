@@ -25,7 +25,7 @@ export default function StatisticsPage() {
   };
 
   if (!data) {
-    return <Box
+    return     <Box
         sx={{
           display: 'fixed',
           top: "0",

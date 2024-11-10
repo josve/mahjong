@@ -196,14 +196,7 @@ export default function ScoreCalculatorPage() {
             <Typography variant="h4" gutterBottom>Poängräknare</Typography>
             <Box sx={{marginBottom: "25px"}}>
                 <Typography variant="h6">Hand</Typography>
-                <Box sx={{
-                    display: "grid",
-                    gridTemplateColumns: "1fr 1fr 2fr",
-                    marginBottom: "20px",
-                    alignItems: "center",
-                    background: "var(--score-not-selected-background)",
-                    padding: "10px"
-                }}>
+                <Box className="score-calculator-row">
                     <Slider value={flowers}
                             onChange={handleFlowerChange}
                             min={0}
@@ -225,13 +218,9 @@ export default function ScoreCalculatorPage() {
                 </Box>
                 {combos.map((combo, index) => (
                     <Box key={index}
+                         className="score-calculator-row"
                          sx={{
-                             display: "grid",
-                             gridTemplateColumns: "1fr 1fr 2fr",
-                             marginBottom: "10px",
-                             alignItems: "center",
                              background: combo.name == "(Inget)" || combo.name == "(Inget par)" ? "var(--score-not-selected-background)" : "var(--score-selected-background)",
-                             padding: "10px"
                          }}>
                         <FormControl sx={{width: "280px", margin: "10px"}}>
                             <InputLabel id={"combo-label-" + index}>Kombination {index + 1}</InputLabel>
@@ -282,60 +271,29 @@ export default function ScoreCalculatorPage() {
             </Box>
             {isMahjong &&
                 <>
-                    <Box sx={{
-                        display: "grid",
-                        gridTemplateColumns: "1fr 2fr",
-                        marginBottom: "10px",
-                        alignItems: "center",
-                        background: "var(--score-not-selected-background)",
-                        padding: "20px"
-                    }}>
+                    <Box className="score-calculator-row-small">
                         <Typography variant="h6">Mahjong</Typography>
                         <div className="score">{mahjongScore + 'p'}</div>
                     </Box>
                     {selfTouchScore > 0 &&
-                        <Box sx={{
-                            display: "grid",
-                            gridTemplateColumns: "1fr 2fr",
-                            marginBottom: "10px",
-                            alignItems: "center",
-                            background: "var(--score-not-selected-background)",
-                            padding: "20px"
-                        }}> <Typography variant="h6">Self touch</Typography>
+                        <Box className="score-calculator-row-small">
+                            <Typography variant="h6">Self touch</Typography>
                             <div className="score">{selfTouchScore + 'p'}</div>
                         </Box>}
                     {noScorePoints > 0 &&
-                        <Box sx={{
-                            display: "grid",
-                            gridTemplateColumns: "1fr 2fr",
-                            marginBottom: "10px",
-                            alignItems: "center",
-                            background: "var(--score-not-selected-background)",
-                            padding: "20px"
-                        }}> <Typography variant="h6">Ingen poäng mahjong</Typography>
+                        <Box className="score-calculator-row-small">
+                            <Typography variant="h6">Ingen poäng mahjong</Typography>
                             <div className="score">{noScorePoints + 'p'}</div>
                         </Box>
                     }
                     {almostSelfTouchPoints > 0 &&
-                        <Box sx={{
-                            display: "grid",
-                            gridTemplateColumns: "1fr 2fr",
-                            marginBottom: "10px",
-                            alignItems: "center",
-                            background: "var(--score-not-selected-background)",
-                            padding: "20px"
-                        }}> <Typography variant="h6">Nästan self touch</Typography>
+                        <Box className="score-calculator-row-small">
+                            <Typography variant="h6">Nästan self touch</Typography>
                             <div className="score">{almostSelfTouchPoints + 'p'}</div>
                         </Box>
                     }
-                    <Box sx={{
-                        display: "grid",
-                        gridTemplateColumns: "1fr 2fr",
-                        marginBottom: "10px",
-                        alignItems: "center",
-                        background: "var(--score-not-selected-background)",
-                        padding: "20px"
-                    }}> <FormControlLabel control={<Checkbox checked={isSelfTouch}
+                    <Box className="score-calculator-row-small">
+                        <FormControlLabel control={<Checkbox checked={isSelfTouch}
                                                              onChange={(event) => setIsSelfTouch(event.target.checked)}/>}
                                           label="Mahjong på dragen bricka (self touch)"/>
                     </Box>
@@ -344,14 +302,8 @@ export default function ScoreCalculatorPage() {
                 <Typography variant="h6">Multiplikatorer</Typography>
             </Box>
             {isMahjong && <>
-                <Box sx={{
-                    display: "grid",
-                    gridTemplateColumns: "1fr 2fr",
-                    marginBottom: "10px",
-                    alignItems: "center",
-                    background: "var(--score-not-selected-background)",
-                    padding: "20px"
-                }}> <FormControlLabel control={<Checkbox checked={isFullStege}
+                <Box className="score-calculator-row-small">
+                    <FormControlLabel control={<Checkbox checked={isFullStege}
                                                          onChange={(event) => setIsFullStege(event.target.checked)}/>}
                                       label="Stege 1-9 av en sort"/>
                     <FormControlLabel
@@ -362,113 +314,57 @@ export default function ScoreCalculatorPage() {
                                       label="En sort enbart"/>
                 </Box>
                 {noStegarMultipler > 1 &&
-                    <Box sx={{
-                        display: "grid",
-                        gridTemplateColumns: "1fr 2fr",
-                        marginBottom: "10px",
-                        alignItems: "center",
-                        background: "var(--score-not-selected-background)",
-                        padding: "20px"
-                    }}> <Typography variant="h6">Inga stegar</Typography>
+                    <Box className="score-calculator-row-small">
+                        <Typography variant="h6">Inga stegar</Typography>
                         <div className="score">{noStegarMultipler + 'X'}</div>
                     </Box>
                 }
                 {fullStegeMultipler > 1 &&
-                    <Box sx={{
-                        display: "grid",
-                        gridTemplateColumns: "1fr 2fr",
-                        marginBottom: "10px",
-                        alignItems: "center",
-                        background: "var(--score-not-selected-background)",
-                        padding: "20px"
-                    }}> <Typography variant="h6">Komplett stege (1-9)</Typography>
+                    <Box className="score-calculator-row-small">
+                        <Typography variant="h6">Komplett stege (1-9)</Typography>
                         <div className="score">{fullStegeMultipler + 'X'}</div>
                     </Box>
                 }
                 {oneKindMultipler > 1 &&
-                    <Box sx={{
-                        display: "grid",
-                        gridTemplateColumns: "1fr 2fr",
-                        marginBottom: "10px",
-                        alignItems: "center",
-                        background: "var(--score-not-selected-background)",
-                        padding: "20px"
-                    }}> <Typography variant="h6">Enbart en sort</Typography>
+                    <Box className="score-calculator-row-small">
+                        <Typography variant="h6">Enbart en sort</Typography>
                         <div className="score">{oneKindMultipler + 'X'}</div>
                     </Box>
                 }
                 {oneKindAndDragonsMultipler > 1 &&
-                    <Box sx={{
-                        display: "grid",
-                        gridTemplateColumns: "1fr 2fr",
-                        marginBottom: "10px",
-                        alignItems: "center",
-                        background: "var(--score-not-selected-background)",
-                        padding: "20px"
-                    }}> <Typography variant="h6">Enbart end sort + (drakar/vindar)</Typography>
+                    <Box className="score-calculator-row-small">
+                        <Typography variant="h6">Enbart end sort + (drakar/vindar)</Typography>
                         <div className="score">{oneKindAndDragonsMultipler + 'X'}</div>
                     </Box>
                 }
                 {allHiddenMultipler > 1 &&
-                    <Box sx={{
-                        display: "grid",
-                        gridTemplateColumns: "1fr 2fr",
-                        marginBottom: "10px",
-                        alignItems: "center",
-                        background: "var(--score-not-selected-background)",
-                        padding: "20px"
-                    }}> <Typography variant="h6">Enbart dolda brickor</Typography>
+                    <Box className="score-calculator-row-small">
+                        <Typography variant="h6">Enbart dolda brickor</Typography>
                         <div className="score">{allHiddenMultipler + 'X'}</div>
                     </Box>
                 }
 
             </>}
             {dragonsMultipler > 1 &&
-                <Box sx={{
-                    display: "grid",
-                    gridTemplateColumns: "1fr 2fr",
-                    marginBottom: "10px",
-                    alignItems: "center",
-                    background: "var(--score-not-selected-background)",
-                    padding: "20px"
-                }}>
+                <Box className="score-calculator-row-small">
                     <Typography variant="h6">Tretal/fyrtal drakar</Typography>
                     <div className="score">{dragonsMultipler + 'X'}</div>
                 </Box>
             }
             {windMultiplier > 1 &&
-                <Box sx={{
-                    display: "grid",
-                    gridTemplateColumns: "1fr 2fr",
-                    marginBottom: "10px",
-                    alignItems: "center",
-                    background: "var(--score-not-selected-background)",
-                    padding: "20px"
-                }}> <Typography variant="h6">Tretal/fyrtal eget vädersträck</Typography>
+                <Box className="score-calculator-row-small">
+                    <Typography variant="h6">Tretal/fyrtal eget vädersträck</Typography>
                     <div className="score">{windMultiplier + 'X'}</div>
                 </Box>
             }
             {threeHiddenMultipler > 1 &&
-                <Box sx={{
-                    display: "grid",
-                    gridTemplateColumns: "1fr 2fr",
-                    marginBottom: "10px",
-                    alignItems: "center",
-                    background: "var(--score-not-selected-background)",
-                    padding: "20px"
-                }}> <Typography variant="h6">Tre dolda tretal/fyrtal</Typography>
+                <Box className="score-calculator-row-small">
+                    <Typography variant="h6">Tre dolda tretal/fyrtal</Typography>
                     <div className="score">{threeHiddenMultipler + 'X'}</div>
                 </Box>
             }
 
-            <Box sx={{
-                display: "grid",
-                gridTemplateColumns: "1fr 2fr",
-                marginBottom: "10px",
-                alignItems: "center",
-                background: "var(--score-not-selected-background)",
-                padding: "20px"
-            }}>
+            <Box className="score-calculator-row-small">
                 <Typography variant="h6">Total poäng</Typography>
                 {totalScore >= 300 ?
                     <span className="score">Limit hand! 300p ({totalScore}p)</span> :

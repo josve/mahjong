@@ -349,3 +349,43 @@ h3 {
         padding-bottom: 20px;
     }
 }
+
+.score-calculator-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr 2fr;
+    margin-bottom: 20px;
+    align-items: center;
+    background: var(--score-not-selected-background);
+    padding: 10px;
+}
+
+@media (max-width: 900px) {
+    .score-calculator-row {
+        grid-template-columns: 1fr;
+    }
+
+    .score-calculator-row > *:nth-child(1) {
+        grid-column: 1;
+        grid-row: 1; /* First item in the first row */
+    }
+
+    .score-calculator-row > *:nth-child(2),
+    .score-calculator-row > *:nth-child(3) {
+        grid-column: 1;
+        grid-row: 2; /* Second and third items in the second row */
+        margin-left: 0;
+    }
+
+    .score-calculator-row > *:nth-child(3) {
+        margin-right: 20px;
+    }
+}
+
+.score-calculator-row-small {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    margin-bottom: 20px;
+    align-items: center;
+    background: var(--score-not-selected-background);
+    padding: 10px;
+}
