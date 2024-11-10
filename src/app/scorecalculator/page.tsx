@@ -193,7 +193,9 @@ export default function ScoreCalculatorPage() {
 
     return (
         <Box>
-            <Typography variant="h4" gutterBottom>Poängräknare</Typography>
+            <h1 style={{ paddingBottom: "20px" }}>
+                Poängräknare
+            </h1>
             <Box sx={{marginBottom: "25px"}}>
                 <Typography variant="h6">Hand</Typography>
                 <Box className="score-calculator-row">
