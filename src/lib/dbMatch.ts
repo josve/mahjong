@@ -125,42 +125,6 @@ export async function getHandsByGameId(id: string): Promise<{
   }
 }
 
-export async function getTeamIdToNameNoAlias() {
-  const connection = await Connection.getInstance().getConnection();
-  try {
-    const [result]: any = await connection.query(
-      `SELECT COALESCE(GROUP_CONCAT(Players.NAME order by Players.NAME separator '+')) as NAME, Teams.TEAM_ID from Teams 
-     INNER JOIN 
-     Players 
-     ON 
-     Players.PLAYER_ID = Teams.PLAYER_ID 
-     GROUP BY Teams.TEAM_ID`
-    );
-
-    // Convert the result to an object with the team_id as the key and the name as the value
-    const teamIdToName = result.reduce((acc: any, row: any) => {
-      acc[row.TEAM_ID] = row.NAME;
-      return acc;
-    }, {});
-    return teamIdToName;
-  } finally {
-    connection.release();
-  }
-}
-
-export async function getPlayersForTeam(teamId: string): Promise<any[]> {
-  const connection = await Connection.getInstance().getConnection();
-  try {
-    const [players]: any = await connection.query(
-      "SELECT Players.NAME FROM Players INNER JOIN Teams ON Players.PLAYER_ID = Teams.PLAYER_ID WHERE Teams.TEAM_ID = ?",
-      [teamId]
-    );
-    return players;
-  } finally {
-    connection.release();
-  }
-}
-
 export async function getTeamIdToName() {
   const connection = await Connection.getInstance().getConnection();
   try {
