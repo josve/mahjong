@@ -16,7 +16,8 @@ export default function FooterClient({ session }: { readonly session: any }) {
 
   return (
       <Paper sx={{display: { xs: "block", md: "none" },
-          paddingBottom: "calc(0.5rem + env(safe-area-inset-bottom))",
+          paddingBottom: "calc(1.5rem + env(safe-area-inset-bottom))",
+            zIndex: "9000",
           position: 'fixed', bottom: 0, left: 0, right: 0}} elevation={3}>
         <BottomNavigation
             showLabels
