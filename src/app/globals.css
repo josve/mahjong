@@ -389,3 +389,50 @@ h3 {
     background: var(--score-not-selected-background);
     padding: 10px;
 }
+
+.score-board-row {
+    display: grid;
+    color: var(--header-color);
+    grid-template-columns: 2fr 1fr;
+    padding-bottom: 10px;
+    padding-top: 10px;
+}
+
+.score-board-row > *:nth-child(2) {
+    justify-self: right;
+    font-weight: bolder;
+}
+
+.score-board-section {
+    background-color: var(--light-white);
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.score-board-header {
+    margin-top: 40px;
+    border-bottom: 2px solid var(--header-color);
+    padding-bottom: 10px;
+}
+
+.score-board-section > table > thead > tr > th {
+    border: none;
+}
+
+.score-board-section > table > thead > * > * {
+    color: var(--header-color);
+}
+.score-board-section > table > tbody > tr > td {
+    color: var(--header-color);
+    border: none;
+}
+
+.score-board-section > table > tbody > tr > td:not(:first-child) {
+    font-weight: bold;
+}
+
+.score-board-section > table > tbody > tr > td:first-child {
+    padding-left: 0;
+}
