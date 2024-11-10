@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import Connection from '@/lib/connection';
 import { auth } from "@/auth";
+import {UpdateProfileResponse} from "@/types/api";
 
 export async function POST(req: NextRequest) {
   const session = await auth();
@@ -22,7 +23,10 @@ export async function POST(req: NextRequest) {
       `UPDATE Players SET COLOR_RED = ?, COLOR_GREEN = ?, COLOR_BLUE = ?, SHOW_PREVIOUS_ROUND_SCORE = ? WHERE PLAYER_ID = ?`,
       [color_red, color_green, color_blue, show_previous_round_score, playerId]
     );
-    return NextResponse.json({ success: true }, { status: 200 });
+
+    const data: UpdateProfileResponse = { success: true };
+
+    return NextResponse.json(data, { status: 200 });
   } catch (error) {
     console.error('Error updating profile:', error);
     return NextResponse.json({ error: 'Failed to update profile' }, { status: 500 });

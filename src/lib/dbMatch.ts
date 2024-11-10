@@ -7,7 +7,7 @@ import {
   IdToName,
   MatchWithIdx,
   SimplePlayer,
-  TeamIdTDetails,
+  TeamIdToDetails,
   TeamIdToPlayerIds,
   TotalStatistics
 } from "@/types/db";
@@ -157,7 +157,7 @@ export async function getTeamIdToPlayerIds(): Promise<TeamIdToPlayerIds> {
   }
 }
 
-export async function getTeamDetails(): Promise<TeamIdTDetails> {
+export async function getTeamDetails(): Promise<TeamIdToDetails> {
   const connection = await Connection.getInstance().getConnection();
   try {
     const [result]: any = await connection.query(`

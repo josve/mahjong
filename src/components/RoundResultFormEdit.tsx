@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from "react";
 import { TextField, Button, Box, Snackbar, Alert } from "@mui/material";
 import { useRouter } from "next/navigation";
+import {UpdateResultResponse} from "@/types/api";
 
 export default function RoundResultFormEdit({
   teamIdToName,
@@ -56,7 +57,7 @@ export default function RoundResultFormEdit({
       body: JSON.stringify({ ...formData, matchId, round }),
     })
       .then((response) => response.json())
-      .then((data) => {
+      .then((data: UpdateResultResponse) => {
         setSnackbarMessage("Resultat är uppdaterat!");
         setSnackbarSeverity("success");
         setSnackbarOpen(true);

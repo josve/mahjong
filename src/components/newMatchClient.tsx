@@ -11,18 +11,12 @@ import {
   Chip,
 } from "@mui/material";
 import { useRouter } from "next/navigation";
-import {MatchesResponse} from "@/types/api";
+import {MatchesResponse, TeamsResponse} from "@/types/api";
 
-interface Team {
-  id: string;
-  name: string;
-  concatenatedName: string;
-  playerIds: string[];
-}
 
 export default function NewMatchClient() {
-  const [teams, setTeams] = useState<Team[]>([]);
-  const [selectedTeams, setSelectedTeams] = useState<(Team | null)[]>([
+  const [teams, setTeams] = useState<TeamsResponse[]>([]);
+  const [selectedTeams, setSelectedTeams] = useState<(TeamsResponse | null)[]>([
     null,
     null,
     null,
@@ -35,13 +29,13 @@ export default function NewMatchClient() {
   useEffect(() => {
     const fetchTeams = async () => {
       const response = await fetch("/api/teams");
-      const data = await response.json();
+      const data: TeamsResponse[] = await response.json();
       setTeams(data);
     };
     fetchTeams();
   }, []);
 
-  const handleTeamChange = (index: number, value: Team | null) => {
+  const handleTeamChange = (index: number, value: TeamsResponse | null) => {
     const newSelectedTeams = [...selectedTeams];
     newSelectedTeams[index] = value;
     setSelectedTeams(newSelectedTeams);

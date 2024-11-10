@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import Connection from '@/lib/connection';
 import { auth } from "@/auth";
+import {UpdateResultResponse} from "@/types/api";
 
 export async function POST(req: NextRequest) {
 
@@ -58,7 +59,9 @@ export async function POST(req: NextRequest) {
       );
     }));
 
-    return NextResponse.json({ message: 'Result updated successfully' }, { status: 200 });
+    const data: UpdateResultResponse = { message: 'Result updated successfully' };
+
+    return NextResponse.json(data, { status: 200 });
   } catch (error) {
     console.error('Error updating result:', error);
     return NextResponse.json({ message: 'Internal server error' }, { status: 500 });

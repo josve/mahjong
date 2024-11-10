@@ -1,10 +1,12 @@
 import { NextResponse } from 'next/server';
 import { getTeamDetails } from '@/lib/dbMatch';
+import {TeamsResponse} from "@/types/api";
 
 export async function GET() {
   try {
     const teamDetails = await getTeamDetails();
-    const teams = Object.entries(teamDetails).map(([id, details]) => ({
+    const teams: TeamsResponse[]
+     = Object.entries(teamDetails).map(([id, details]) => ({
       id,
       name: details.teamName,
       concatenatedName: details.concatenatedName,

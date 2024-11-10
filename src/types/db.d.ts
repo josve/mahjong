@@ -54,7 +54,7 @@ export interface TeamIdToPlayerIds {
     [key: string]: string[];
 }
 
-export interface TeamIdTDetails {
+export interface TeamIdToDetails {
     [key: string]: {
         playerIds: string[];
         teamName: string;

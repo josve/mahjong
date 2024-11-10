@@ -23,3 +23,18 @@ export interface StatisticsResponse {
     playerColors: IdToColorMap;
     matches: GameWithHands[];
 }
+
+export interface TeamsResponse {
+    id: string;
+    name: string;
+    concatenatedName: string;
+    playerIds: string[];
+}
+
+export interface UpdateProfileResponse {
+    success: boolean;
+}
+
+export interface UpdateResultResponse  {
+    message: string;
+}
