@@ -125,7 +125,9 @@ export async function getHandsByGameId(id: string): Promise<{
   }
 }
 
-export async function getTeamIdToName() {
+export async function getTeamIdToName(): Promise<{
+  [teamId: string]: string
+}> {
   const connection = await Connection.getInstance().getConnection();
   try {
     const [result]: any = await connection.query(
@@ -144,12 +146,10 @@ export async function getTeamIdToName() {
     );
 
     // Convert the result to an object with the team_id as the key and the name as the value
-    const teamIdToName = result.reduce((acc: any, row: any) => {
+    return result.reduce((acc: any, row: any) => {
       acc[row.TEAM_ID] = row.NAME;
       return acc;
     }, {});
-
-    return teamIdToName;
   } finally {
     connection.release();
   }
