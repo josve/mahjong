@@ -6,10 +6,11 @@ import {
   TableRow,
   TableCell,
 } from "@mui/material";
+import {IdToNumber, PlayerNameToColor} from "@/types/components";
 
 interface AverageHandTableProps {
-  averageHand: { [key: string]: number };
-  getPlayerColor: (playerName: string) => string | undefined;
+  averageHand: IdToNumber;
+  getPlayerColor: PlayerNameToColor;
 }
 
 const AverageHandTable: React.FC<AverageHandTableProps> = ({

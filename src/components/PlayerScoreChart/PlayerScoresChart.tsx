@@ -1,10 +1,11 @@
 import React from "react";
 import ReactEcharts from "echarts-for-react";
+import {IdToNumbers, PlayerNameToColor} from "@/types/components";
 
 interface PlayerScoresChartProps {
-  playerScores: { [key: string]: number[] };
+  playerScores: IdToNumbers;
   labels: string[];
-  getPlayerColor: (playerName: string) => string | undefined;
+  getPlayerColor: PlayerNameToColor;
 }
 
 const PlayerScoresChart: React.FC<PlayerScoresChartProps> = ({

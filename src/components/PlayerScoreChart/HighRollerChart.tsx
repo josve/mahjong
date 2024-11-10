@@ -1,8 +1,9 @@
 import React from "react";
+import {HighRollerInfo, PlayerNameToColor} from "@/types/components";
 
 interface HighRollerChartProps {
-  highRollerScores: { [key: string]: [number, number, number, boolean][] };
-  getPlayerColor: (playerName: string) => string | undefined;
+  highRollerScores: HighRollerInfo;
+  getPlayerColor: PlayerNameToColor;
 }
 
 const HighRollerChart: React.FC<HighRollerChartProps> = ({

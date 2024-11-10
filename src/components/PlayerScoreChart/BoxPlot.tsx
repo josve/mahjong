@@ -6,13 +6,14 @@ import { registerTransform } from "echarts/core";
 import { aggregate } from "echarts-simple-transform";
 
 import { FormControl, InputLabel, Select, MenuItem} from "@mui/material";
+import {IdToNumbers, PlayerNameToColor} from "@/types/components";
 
 interface BoxPlotProps {
-    readonly allHands: { [key: string]: number[] };
-    readonly allHandsNoTeams: { [key: string]: number[] };
-    readonly allScores: { [key: string]: number[] };
-    readonly allScoresNoTeams: { [key: string]: number[] };
-    readonly getPlayerColor: (playerName: string) => string | undefined;
+    readonly allHands: IdToNumbers;
+    readonly allHandsNoTeams: IdToNumbers;
+    readonly allScores: IdToNumbers;
+    readonly allScoresNoTeams: IdToNumbers;
+    readonly getPlayerColor: PlayerNameToColor;
 }
 
 const BoxPlot: React.FC<BoxPlotProps> = ({

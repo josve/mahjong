@@ -1,9 +1,10 @@
 import React from "react";
 import ReactEcharts from "echarts-for-react";
+import {IdToNumber, PlayerNameToColor} from "@/types/components";
 
 interface MahjongWinsChartProps {
-  mahjongWins: { [key: string]: number };
-  getPlayerColor: (playerName: string) => string | undefined;
+  mahjongWins: IdToNumber;
+  getPlayerColor: PlayerNameToColor;
 }
 
 const MahjongWinsChart: React.FC<MahjongWinsChartProps> = ({
