@@ -8,7 +8,7 @@ export async function GET(req: NextRequest) {
     const teamIdToName = await getTeamIdToName();
     const teamIdToPlayerIds = await getTeamIdToPlayerIds();
     const playerColors = await getPlayerColors();
-    const matches = await fetchMatches("all tid");
+    const matches = await fetchMatches();
 
     const data = {
       allPlayers,
