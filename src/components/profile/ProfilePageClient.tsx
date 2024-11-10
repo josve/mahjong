@@ -12,7 +12,13 @@ interface ComponentParams {
             concatenatedName: string;
         };
     },
-    readonly playerColors: any
+    readonly playerColors: {
+        [player_id: string]: {
+            color_red: number;
+            color_green: number;
+            color_blue: number;
+        }
+    }
 }
 
 export default function ProfilePageClient({ session, teamDetails, playerColors }: ComponentParams) {

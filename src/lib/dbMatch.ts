@@ -48,9 +48,9 @@ export async function getMatchById(id: string): Promise<{
 
 export async function getTeamColors(): Promise<{
   [team_id: string]: {
-    color_red: string;
-    color_green: string;
-    color_blue: string;
+    color_red: number;
+    color_green: number;
+    color_blue: number;
   }
 }> {
   const connection = await Connection.getInstance().getConnection();
@@ -62,7 +62,7 @@ export async function getTeamColors(): Promise<{
     );
 
     // Convert the result to an object with the team_id as the key and the color as the value
-    const teamColors = result.reduce((acc: any, row: any) => {
+    return result.reduce((acc: any, row: any) => {
       acc[row.TEAM_ID] = {
         color_red: row.color_red,
         color_green: row.color_green,
@@ -70,14 +70,18 @@ export async function getTeamColors(): Promise<{
       };
       return acc;
     }, {});
-
-    return teamColors;
   } finally {
     connection.release();
   }
 }
 
-export async function getPlayerColors() {
+export async function getPlayerColors(): Promise<{
+  [player_id: string]: {
+    color_red: number;
+    color_green: number;
+    color_blue: number;
+  }
+}> {
   const connection = await Connection.getInstance().getConnection();
   try {
     const [result]: any = await connection.query(
@@ -85,7 +89,7 @@ export async function getPlayerColors() {
     );
 
     // Convert the result to an object with the player_id as the key and the color as the value
-    const playerColors = result.reduce((acc: any, row: any) => {
+    return result.reduce((acc: any, row: any) => {
       acc[row.PLAYER_ID] = {
         color_red: row.color_red,
         color_green: row.color_green,
@@ -93,8 +97,6 @@ export async function getPlayerColors() {
       };
       return acc;
     }, {});
-
-    return playerColors;
   } finally {
     connection.release();
   }
