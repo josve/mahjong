@@ -18,7 +18,18 @@ export async function getTotalStatistics() {
   }
 }
 
-export async function getMatchById(id: string): Promise<any> {
+export async function getMatchById(id: string): Promise<{
+  GAME_ID: string;
+  TIME: Date;
+  NAME: string;
+  COMMENT: string;
+  TEAM_ID_1: string;
+  TEAM_ID_2: string;
+  TEAM_ID_3: string;
+  TEAM_ID_4: string;
+  IS_TEST: boolean;
+  GAME_IDX: number;
+}> {
   const connection = await Connection.getInstance().getConnection();
   try {
     const [rows]: any = await connection.query(
