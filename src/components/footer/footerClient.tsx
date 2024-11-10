@@ -15,7 +15,9 @@ export default function FooterClient({ session }: { readonly session: any }) {
   const [value, setValue] = React.useState(0);
 
   return (
-      <Paper sx={{display: { xs: "block", md: "none" }, position: 'fixed', bottom: 0, left: 0, right: 0}} elevation={3}>
+      <Paper sx={{display: { xs: "block", md: "none" },
+          paddingBottom: "calc(0.5rem + env(safe-area-inset-bottom))",
+          position: 'fixed', bottom: 0, left: 0, right: 0}} elevation={3}>
         <BottomNavigation
             showLabels
             value={value}
