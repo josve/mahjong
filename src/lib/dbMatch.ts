@@ -102,7 +102,17 @@ export async function getPlayerColors(): Promise<{
   }
 }
 
-export async function getHandsByGameId(id: string): Promise<any> {
+export async function getHandsByGameId(id: string): Promise<{
+  ROUND: number;
+  GAME_ID: string;
+  TIME: Date;
+  HAND: number;
+  IS_WINNER: boolean;
+  WIND: string;
+  TEAM_ID: string;
+  HAND_SCORE: number;
+  IS_TEST: boolean;
+}[]> {
   const connection = await Connection.getInstance().getConnection();
   try {
     const [hands]: any = await connection.query(
