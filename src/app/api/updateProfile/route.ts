@@ -13,7 +13,7 @@ export async function POST(req: NextRequest) {
   const playerId = (session.user as any).playerId;
 
   if (!playerId) {
-    throw new Error("Incorrect playerId");
+    return NextResponse.json({ error: 'Incorrect playerId' }, { status: 500 });
   }
 
   const connection = await Connection.getInstance().getConnection();

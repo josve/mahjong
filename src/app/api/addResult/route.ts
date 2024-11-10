@@ -57,7 +57,7 @@ export async function POST(req: NextRequest) {
       const hand = scores[teamId];
       let handScore = calculateHandScore(teamIds, i, scores, hand, teamId, eastTeam, winner);
       const wind = windOrder[(i - eastIndex + 4) % 4];
-      
+
       await connection.query(
         'INSERT INTO Hands (GAME_ID, TEAM_ID, HAND, HAND_SCORE, IS_WINNER, WIND, ROUND, TIME) VALUES (?, ?, ?, ?, ?, ?, ?, ?)',
         [matchId, teamId, hand, handScore, teamId === winner, wind, newRound, new Date()]
