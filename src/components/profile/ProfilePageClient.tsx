@@ -5,10 +5,17 @@ import { RgbColorPicker } from "react-colorful";
 
 interface ComponentParams {
     readonly session: any,
-    readonly teamDetails: any
+    readonly teamDetails: {
+        [key: string]: {
+            playerIds: string[];
+            teamName: string;
+            concatenatedName: string;
+        };
+    },
+    readonly playerColors: any
 }
 
-export default function ProfilePageClient({ session, teamDetails }: ComponentParams) {
+export default function ProfilePageClient({ session, teamDetails, playerColors }: ComponentParams) {
     const user: any = session.user;
 
     const [color, setColor] = useState({
@@ -16,17 +23,52 @@ export default function ProfilePageClient({ session, teamDetails }: ComponentPar
         g: user.COLOR_GREEN,
         b: user.COLOR_BLUE,
     });
+    const [userTeams, setUserTeams] = useState<{
+        playerIds: string[];
+        teamName: string;
+        concatenatedName: string;
+    }[]>([]);
+
     const [showPreviousRoundScore, setShowPreviousRoundScore] = useState(
         user.SHOW_PREVIOUS_ROUND_SCORE
     );
+
+    const [teamToColor, setTeamToColor] = useState<{ [key: string]: string }>({});
+
+    useEffect(() => {
+        const teamToColor: { [key: string]: string } = {};
+        for (const team of userTeams) {
+            let red = 0;
+            let green = 0;
+            let blue = 0;
+            for (const playerId of team.playerIds) {
+                if (playerId === user.PLAYER_ID) {
+                    red += color.r;
+                    green += color.g;
+                    blue += color.b;
+                } else {
+                    red += playerColors[playerId].color_red;
+                    green += playerColors[playerId].color_green;
+                    blue += playerColors[playerId].color_blue;
+                }
+            }
+            red /= team.playerIds.length;
+            green /= team.playerIds.length;
+            blue /= team.playerIds.length;
+            teamToColor[team.teamName] = "rgb(" + red + "," + green + "," + blue + ")";
+        }
+
+        setTeamToColor(teamToColor);
+
+    }, [userTeams, playerColors, color]);
+
     const [snackbarOpen, setSnackbarOpen] = useState(false);
     const [snackbarMessage, setSnackbarMessage] = useState("");
     const [snackbarSeverity, setSnackbarSeverity] = useState<"success" | "error">("success");
-    const [userTeams, setUserTeams] = useState<any[]>([]);
 
     useEffect(() => {
         const teams = Object.values(teamDetails).filter((team: any) =>
-            team.playerIds.includes(user.PLAYER_ID)
+            team.playerIds.includes(user.PLAYER_ID) && team.playerIds.length > 1
         );
         setUserTeams(teams);
     }, [teamDetails, user.PLAYER_ID]);
@@ -81,25 +123,47 @@ export default function ProfilePageClient({ session, teamDetails }: ComponentPar
             >
                 Uppdatera profil
             </Button>
-            <Box sx={{ paddingTop: "10px"}}>
-            <Button
-                variant="contained"
-                color="secondary"
-                href="/api/auth/signout"
-                style={{ marginTop: "20px" }}
-            >
-                Logga ut
-            </Button>
-            </Box>
             <div style={{ paddingTop: "20px" }}>
                 <h2>Dina lag</h2>
                 {userTeams.map((team) => (
-                    <div key={team.teamName}>
+                    <div key={team.teamName} style={{paddingTop: "20px"}}>
                         <h3>{team.teamName}</h3>
-                        <p>Spelare: {team.concatenatedName}</p>
+                        <div style={{
+                            paddingTop: "10px",
+                        }}>
+                            Spelare: {team.concatenatedName}
+                        </div>
+                        <Box style={{
+                            display: "flex",
+                            justifyContent: "left",
+                            alignItems: "center",
+                            paddingTop: "10px",
+                            paddingBottom: "10px",
+                        }}>
+                            <span style={{paddingRight: "10px"}}>
+                            Färg:
+                            </span>
+                            <div style={{
+                                width: "30px",
+                                display: "inline-block",
+                                height: "30px",
+                                borderRadius: "50%",
+                                backgroundColor: teamToColor[team.teamName],
+                            }}></div>
+                        </Box>
                     </div>
                 ))}
             </div>
+            <Box sx={{paddingTop: "10px"}}>
+                <Button
+                    variant="contained"
+                    color="secondary"
+                    href="/api/auth/signout"
+                    style={{ marginTop: "20px" }}
+                >
+                    Logga ut
+                </Button>
+            </Box>
             <Snackbar
                 open={snackbarOpen}
                 autoHideDuration={6000}

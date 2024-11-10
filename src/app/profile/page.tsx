@@ -1,6 +1,6 @@
 import { auth } from "@/auth";
 import ProfilePageClient from "@/components/profile/ProfilePageClient";
-import { getTeamDetails } from "@/lib/dbMatch";
+import { getTeamDetails, getPlayerColors } from "@/lib/dbMatch";
 
 export default async function ProfilePage() {
   const session = await auth();
@@ -10,8 +10,11 @@ export default async function ProfilePage() {
   }
 
   const teamDetails = await getTeamDetails();
+  const playerColors = await getPlayerColors();
 
   return (
-    <ProfilePageClient session={session} teamDetails={teamDetails} />
+    <ProfilePageClient session={session}
+                       playerColors={playerColors}
+                       teamDetails={teamDetails} />
   );
 }
