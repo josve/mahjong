@@ -1,12 +1,18 @@
 "use server";
 
 import Connection from "@/lib/connection";
+import {
+  Hand,
+  IdToColorMap,
+  IdToName,
+  MatchWithIdx,
+  SimplePlayer,
+  TeamIdTDetails,
+  TeamIdToPlayerIds,
+  TotalStatistics
+} from "@/types/db";
 
-export async function getTotalStatistics(): Promise<{
-  totalMatches: number;
-  totalMahjongs: number;
-  totalRounds: number;
-}> {
+export async function getTotalStatistics(): Promise<TotalStatistics> {
   const connection = await Connection.getInstance().getConnection();
   try {
     const [result]: any = await connection.query(`
@@ -22,18 +28,7 @@ export async function getTotalStatistics(): Promise<{
   }
 }
 
-export async function getMatchById(id: string): Promise<{
-  GAME_ID: string;
-  TIME: Date;
-  NAME: string;
-  COMMENT: string;
-  TEAM_ID_1: string;
-  TEAM_ID_2: string;
-  TEAM_ID_3: string;
-  TEAM_ID_4: string;
-  IS_TEST: boolean;
-  GAME_IDX: number;
-}> {
+export async function getMatchById(id: string): Promise<MatchWithIdx> {
   const connection = await Connection.getInstance().getConnection();
   try {
     const [rows]: any = await connection.query(
@@ -46,13 +41,7 @@ export async function getMatchById(id: string): Promise<{
   }
 }
 
-export async function getTeamColors(): Promise<{
-  [team_id: string]: {
-    color_red: number;
-    color_green: number;
-    color_blue: number;
-  }
-}> {
+export async function getTeamColors(): Promise<IdToColorMap> {
   const connection = await Connection.getInstance().getConnection();
   try {
     const [result]: any = await connection.query(
@@ -75,13 +64,7 @@ export async function getTeamColors(): Promise<{
   }
 }
 
-export async function getPlayerColors(): Promise<{
-  [player_id: string]: {
-    color_red: number;
-    color_green: number;
-    color_blue: number;
-  }
-}> {
+export async function getPlayerColors(): Promise<IdToColorMap> {
   const connection = await Connection.getInstance().getConnection();
   try {
     const [result]: any = await connection.query(
@@ -102,17 +85,7 @@ export async function getPlayerColors(): Promise<{
   }
 }
 
-export async function getHandsByGameId(id: string): Promise<{
-  ROUND: number;
-  GAME_ID: string;
-  TIME: Date;
-  HAND: number;
-  IS_WINNER: boolean;
-  WIND: string;
-  TEAM_ID: string;
-  HAND_SCORE: number;
-  IS_TEST: boolean;
-}[]> {
+export async function getHandsByGameId(id: string): Promise<Hand[]> {
   const connection = await Connection.getInstance().getConnection();
   try {
     const [hands]: any = await connection.query(
@@ -125,9 +98,7 @@ export async function getHandsByGameId(id: string): Promise<{
   }
 }
 
-export async function getTeamIdToName(): Promise<{
-  [teamId: string]: string
-}> {
+export async function getTeamIdToName(): Promise<IdToName> {
   const connection = await Connection.getInstance().getConnection();
   try {
     const [result]: any = await connection.query(
@@ -155,7 +126,7 @@ export async function getTeamIdToName(): Promise<{
   }
 }
 
-export async function getAllPlayers(): Promise<{ id: string; name: string }[]> {
+export async function getAllPlayers(): Promise<SimplePlayer[]> {
   const connection = await Connection.getInstance().getConnection();
   try {
     const [result]: any = await connection.query(
@@ -167,9 +138,7 @@ export async function getAllPlayers(): Promise<{ id: string; name: string }[]> {
   }
 }
 
-export async function getTeamIdToPlayerIds(): Promise<{
-  [key: string]: string[];
-}> {
+export async function getTeamIdToPlayerIds(): Promise<TeamIdToPlayerIds> {
   const connection = await Connection.getInstance().getConnection();
   try {
     const [result]: any = await connection.query(
@@ -188,13 +157,7 @@ export async function getTeamIdToPlayerIds(): Promise<{
   }
 }
 
-export async function getTeamDetails(): Promise<{
-  [key: string]: {
-    playerIds: string[];
-    teamName: string;
-    concatenatedName: string;
-  };
-}> {
+export async function getTeamDetails(): Promise<TeamIdTDetails> {
   const connection = await Connection.getInstance().getConnection();
   try {
     const [result]: any = await connection.query(`
