@@ -1,6 +1,6 @@
 "use client"
 import React, { useState, useEffect } from "react";
-import {Box, Button, FormGroup, FormControlLabel, Switch, Snackbar, Alert } from "@mui/material";
+import {Box, Button, FormGroup, FormControlLabel, Switch, Snackbar, Alert, TextField } from "@mui/material";
 import { RgbColorPicker } from "react-colorful";
 import {IdToColorMap, TeamDetails, TeamIdToDetails} from "@/types/db";
 import {Session} from "next-auth";
@@ -102,6 +102,36 @@ export default function ProfilePageClient({ session, teamDetails, playerColors }
         setSnackbarOpen(false);
     };
 
+    const handleTeamNameChange = (teamName: string, newTeamName: string) => {
+        setUserTeams((prevTeams) =>
+            prevTeams.map((team) =>
+                team.teamName === teamName ? { ...team, teamName: newTeamName } : team
+            )
+        );
+    };
+
+    const handleTeamNameSubmit = (teamId: string, newTeamName: string) => {
+        fetch("/api/updateTeamName", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                teamId,
+                teamName: newTeamName,
+            }),
+        })
+            .then(() => {
+                setSnackbarMessage("Team name updated successfully!");
+                setSnackbarSeverity("success");
+                setSnackbarOpen(true);
+            }).catch(() => {
+                setSnackbarMessage("Failed to update team name.");
+                setSnackbarSeverity("error");
+                setSnackbarOpen(true);
+            })
+    };
+
     return (
         <div style={{ backgroundColor: "var(--background-color)"}}>
             <h1 style={{paddingBottom: "10px" }}>{user?.name}</h1>
@@ -147,6 +177,19 @@ export default function ProfilePageClient({ session, teamDetails, playerColors }
                                 backgroundColor: teamToColor[team.teamName],
                             }}></div>
                         </Box>
+                        <TextField
+                            label="Uppdatera lagnamn"
+                            value={team.teamName}
+                            onChange={(e) => handleTeamNameChange(team.teamName, e.target.value)}
+                            margin="normal"
+                        />
+                        <Button
+                            variant="contained"
+                            color="primary"
+                            onClick={() => handleTeamNameSubmit(team.teamName, team.teamName)}
+                        >
+                            Uppdatera lagnamn
+                        </Button>
                     </div>
                 ))}
             </div>

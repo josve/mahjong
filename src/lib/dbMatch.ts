@@ -192,3 +192,23 @@ export async function getTeamDetails(): Promise<TeamIdToDetails> {
     connection.release();
   }
 }
+
+export async function updateTeamName(teamId: string, teamName: string): Promise<void> {
+  const connection = await Connection.getInstance().getConnection();
+  try {
+    if (teamName === "") {
+      await connection.query(
+        `DELETE FROM TeamAttributes WHERE TEAM_ID = ? AND ATTRIBUTE = 'alias'`,
+        [teamId]
+      );
+    } else {
+      await connection.query(
+        `INSERT INTO TeamAttributes (TEAM_ID, ATTRIBUTE, VALUE) VALUES (?, 'alias', ?)
+         ON DUPLICATE KEY UPDATE VALUE = VALUES(VALUE)`,
+        [teamId, teamName]
+      );
+    }
+  } finally {
+    connection.release();
+  }
+}
