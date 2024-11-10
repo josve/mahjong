@@ -5,39 +5,39 @@
 }
 
 :root {
-  --background-color: white;
-  --label_text-color: #606060;
-  --strong-color: rgb(229,70,70);
-  --muted-color: #943030;
-  --grey-color: #909090;
-  --header-color: #943030;
-  --header-font-family: HelveticaNeueLight, Helvetica, tahoma, arial;
-  --gradient-start: rgb(229,70,70);
-  --gradient-end: rgb(117,62,39);
-  --match-item-color: rgb(148, 48, 48);
-  --grid-background-color: rgb(250,250,250);
-  --grid-background-hover-color: rgb(250,240,240);
-  --white: white;
-  --light-white: #f9f9f9;
+    --background-color: white;
+    --label_text-color: #606060;
+    --strong-color: rgb(229, 70, 70);
+    --muted-color: #943030;
+    --grey-color: #909090;
+    --header-color: #943030;
+    --header-font-family: HelveticaNeueLight, Helvetica, tahoma, arial;
+    --gradient-start: rgb(229, 70, 70);
+    --gradient-end: rgb(117, 62, 39);
+    --match-item-color: rgb(148, 48, 48);
+    --grid-background-color: rgb(250, 250, 250);
+    --grid-background-hover-color: rgb(250, 240, 240);
+    --white: white;
+    --light-white: #f9f9f9;
     --score-not-selected-background: #F6F6F6;
     --score-selected-background: #CCEECC;
 }
 
 @media (prefers-color-scheme: dark) {
-  :root {
-    --background-color: white;
-    --label_text-color: #606060;
-    --grey-color: #909090;
-    --header-color: #943030;
-    --header-font-family: HelveticaNeueLight, Helvetica, tahoma, arial;
-    --gradient-start: rgb(229,70,70);
-    --gradient-end: rgb(117,62,39);
-    --match-item-color: rgb(148, 48, 48);
-    --grid-background-color: rgb(250,250,250);
-    --grid-background-hover-color: rgb(250,240,240);
-    --white: white;
-    --light-white: #f9f9f9;
-  }
+    :root {
+        --background-color: white;
+        --label_text-color: #606060;
+        --grey-color: #909090;
+        --header-color: #943030;
+        --header-font-family: HelveticaNeueLight, Helvetica, tahoma, arial;
+        --gradient-start: rgb(229, 70, 70);
+        --gradient-end: rgb(117, 62, 39);
+        --match-item-color: rgb(148, 48, 48);
+        --grid-background-color: rgb(250, 250, 250);
+        --grid-background-hover-color: rgb(250, 240, 240);
+        --white: white;
+        --light-white: #f9f9f9;
+    }
 }
 
 html,
@@ -75,8 +75,7 @@ h3 {
   font-family: var(--header-font-family);
 }
 
-.label
-{
+.label {
 	color: var(--label_text-color); 
 	margin-bottom: 20px; 
 	text-align: left;
@@ -102,16 +101,16 @@ h3 {
 }
 
 .header-bar {
-	height: 80px;
-	padding-top:14px;
-	padding-left:6px;
-	padding-right:10px;
-	color: var(--white);
-  font-weight: 300;
-  text-align: left;
-  letter-spacing: 2px;
-  text-transform:uppercase;
-  font-size: 0.9em;
+    height: 80px;
+    padding-top: 14px;
+    padding-left: 6px;
+    padding-right: 10px;
+    color: var(--white);
+    font-weight: 300;
+    text-align: left;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    font-size: 0.9em;
 }
 
 .header-logo {
@@ -157,12 +156,9 @@ h3 {
     visibility: hidden;
 }
 
-
-
 .content-container {
 	padding-top: 20px;
 }
-
 
 .match-grid-item {
 	display:flex;
@@ -170,23 +166,22 @@ h3 {
 	margin-bottom: 15px;
 }
 
-
 .match-grid-item-number {
-	display:inline-block;
-	font-size: 26px;
-	font-weight: 400;
-	color: var(--white);
-	background-color: var(--label_text-color);
-	opacity: 0.2;
-	margin-right: 20px;
-	vertical-align:top;
-	line-height:90px;
-	text-align:center;
-	width: 90px;
-	height: 90px;
+    display: inline-block;
+    font-size: 26px;
+    font-weight: 400;
+    color: var(--white);
+    background-color: var(--label_text-color);
+    opacity: 0.2;
+    margin-right: 20px;
+    vertical-align: top;
+    line-height: 90px;
+    text-align: center;
+    width: 90px;
+    height: 90px;
     min-width: 90px;
     min-height: 90px;
-	border-radius: 45px;
+    border-radius: 45px;
 }
 
 @keyframes red_fade {
@@ -252,23 +247,6 @@ h3 {
 @media (max-width: 900px) {
   .header-links {
     display: none;
-  }
-}
-
-/* Styles for the Drawer component to ensure it covers the entire screen */
-.MuiDrawer-paper {
-  width: 100%;
-  max-width: 300px;
-}
-
-/* Styles for the MenuIcon component to position it correctly in the header */
-.MuiIconButton-root {
-  display: none;
-}
-
-@media (max-width: 900px) {
-  .MuiIconButton-root {
-    display: block;
   }
 }
 

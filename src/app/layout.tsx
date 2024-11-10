@@ -17,32 +17,32 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  return (
-    <html lang="en">
-    <body className={inter.className}>
-    <Header/>
-    <Container className="content-container">
-        <Box
-            sx={{
-                paddingTop: "70px",
-                minHeight: "calc(100vh + 100px)",
-                paddingBottom: "70px",
-                zIndex: -1000,
-                margin: "0 auto",
-                backgroundColor: "var(--white)",
-            }}
-        >
-            <Box 
-      sx={{
-        margin: "20px"
-      }}
-          >
-            {children}
-          </Box>
-          </Box>
+    return (
+        <html lang="en">
+        <body className={inter.className}>
+        <Header/>
+        <Container className="content-container">
+            <Box
+                sx={{
+                    paddingTop: "70px",
+                    minHeight: "calc(100vh + 100px)",
+                    paddingBottom: "70px",
+                    zIndex: -1000,
+                    margin: "0 auto",
+                    backgroundColor: "var(--white)",
+                }}
+            >
+                <Box
+                    sx={{
+                        margin: "20px"
+                    }}
+                >
+                    {children}
+                </Box>
+            </Box>
         </Container>
-        <Footer />
-      </body>
-    </html>
-  );
+        <Footer/>
+        </body>
+        </html>
+    );
 }
