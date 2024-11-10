@@ -2,6 +2,7 @@
 
 import React, { useState } from "react";
 import {TextField, Button, Box, FormControl, InputLabel, Select, MenuItem} from "@mui/material";
+import {AddResultResponse} from "@/types/api";
 
 export default function RoundResultFormAdd({
   teamIdToName,
@@ -63,7 +64,7 @@ export default function RoundResultFormAdd({
       body: JSON.stringify({ ...formData, matchId }),
     })
       .then((response) => response.json())
-      .then((data) => {
+      .then((data: AddResultResponse) => {
         setFormData({
           scores: {},
           eastTeam: "",

@@ -2,6 +2,7 @@ import {NextRequest, NextResponse} from 'next/server';
 import Connection from '@/lib/connection';
 import {PoolConnection} from "mysql2/promise";
 import { auth } from "@/auth";
+import {AddResultResponse} from "@/types/api";
 
 async function getNewRoundIndex(connection: PoolConnection, matchId: string) {
   const [latestRoundResult]: any = await connection.query(
@@ -63,7 +64,9 @@ export async function POST(req: NextRequest) {
         [matchId, teamId, hand, handScore, teamId === winner, wind, newRound, new Date()]
       );
     }
-    return NextResponse.json({ message: 'Results added successfully' }, { status: 200 });
+
+    const data: AddResultResponse = { message: 'Results added successfully' };
+    return NextResponse.json(data, { status: 200 });
   } catch (error) {
     return NextResponse.json({ error: 'Failed to add results' }, { status: 500 });
   } finally {

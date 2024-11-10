@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import Connection from "@/lib/connection";
 import { v4 as uuidv4 } from "uuid";
 import {auth} from "@/auth";
+import {MatchesResponse} from "@/types/api";
 
 export async function POST(request: Request) {
   const { teamIds, matchName, matchDescription } = await request.json();
@@ -44,7 +45,9 @@ export async function POST(request: Request) {
     // Commit the transaction
     await connection.commit();
 
-    return NextResponse.json({ success: true, gameId });
+    const data: MatchesResponse = { success: true, gameId };
+
+    return NextResponse.json(data);
   } catch (error) {
     // If an error occurs, rollback the transaction
     await connection.rollback();

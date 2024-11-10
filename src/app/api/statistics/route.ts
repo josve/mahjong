@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getAllPlayers, getTeamIdToName, getTeamIdToPlayerIds, getPlayerColors } from '@/lib/dbMatch';
 import fetchMatches from '@/lib/fetchMatches';
+import {StatisticsResponse} from "@/types/api";
 
 export async function GET(req: NextRequest) {
   try {
@@ -10,7 +11,7 @@ export async function GET(req: NextRequest) {
     const playerColors = await getPlayerColors();
     const matches = await fetchMatches();
 
-    const data = {
+    const data: StatisticsResponse = {
       allPlayers,
       teamIdToName,
       teamIdToPlayerIds,

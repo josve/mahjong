@@ -11,6 +11,7 @@ import {
   Chip,
 } from "@mui/material";
 import { useRouter } from "next/navigation";
+import {MatchesResponse} from "@/types/api";
 
 interface Team {
   id: string;
@@ -62,7 +63,7 @@ export default function NewMatchClient() {
         throw new Error("Failed to create match");
       }
 
-      const data = await response.json();
+      const data: MatchesResponse = await response.json();
       console.log("Match created successfully:", data);
 
       // Redirect to the new match page
