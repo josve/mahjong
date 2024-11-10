@@ -1,16 +1,14 @@
 //various shared formatting functions
 
 //returns a formatted date string based on timestamp, for example match time
-export function formatDate(time: any): string {
+export function formatDate(time: Date | string): string {
 	const date = new Date(time)
-	const string = date.toLocaleDateString("sv-SE",{
-  weekday: 'long',
-  year: 'numeric',
-  month: 'long',
-  day: 'numeric',
-})
-
-  return string
+	return date.toLocaleDateString("sv-SE", {
+		weekday: 'long',
+		year: 'numeric',
+		month: 'long',
+		day: 'numeric',
+	})
 }
 
 //make first letter capital
