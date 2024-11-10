@@ -4,6 +4,7 @@ import PlayerScoreChart from "@/components/PlayerScoreChart";
 import { Box } from "@mui/material";
 import ToggleButton from '@mui/material/ToggleButton';
 import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
+import { CircularProgress } from "@mui/material";
 
 export default function StatisticsPage() {
   const [data, setData]: any = useState(null);
@@ -24,7 +25,20 @@ export default function StatisticsPage() {
   };
 
   if (!data) {
-    return <div>Loading...</div>;
+    return <Box
+        sx={{
+          display: 'fixed',
+          top: "0",
+          left: "0",
+          margin: "0",
+          padding: "0",
+          justifyContent: 'center',
+          alignItems: 'center',
+          height: 'calc(100vh - 150px)',
+          width: 'calc(100vw - 50px)',
+        }}
+    ><CircularProgress/>
+    </Box>;
   }
 
   return (

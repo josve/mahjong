@@ -1,7 +1,7 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import ReactEcharts from "echarts-for-react";
-import { CircularProgress } from "@mui/material";
+import {Box, CircularProgress} from "@mui/material";
 import {capitalize, formatDate} from "@/lib/formatting";
 
 export default function MatchChartClient({
@@ -43,7 +43,20 @@ export default function MatchChartClient({
   }, [autoReload, matchId, lastRoundCount]);
 
   if (!data) {
-    return <CircularProgress />;
+    return <Box
+        sx={{
+          display: 'fixed',
+          top: "0",
+          left: "0",
+          margin: "0",
+          padding: "0",
+          justifyContent: 'center',
+          alignItems: 'center',
+          height: 'calc(100vh - 150px)',
+          width: 'calc(100vw - 50px)',
+        }}
+    ><CircularProgress/>
+    </Box>;
   }
 
   const { hands, teamIdToName, teamColors } = data;
