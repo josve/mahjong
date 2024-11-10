@@ -25,7 +25,7 @@ interface PlayerScoreChartProps {
 const CustomTabPanel = (props: { value: number; index: number; children: React.ReactNode }) => {
   const { value, index, children } = props;
   return (
-    <div role="tabpanel" hidden={value !== index}>
+    <div role="tabpanel" hidden={value !== index} style={{ paddingTop: "15px" }}>
       {value === index && <Box>{children}</Box>}
     </div>
   );
@@ -186,10 +186,13 @@ const PlayerScoreChart: React.FC<PlayerScoreChartProps> = ({
 
     return (
         <div>
-            <Tabs value={selectedTab} onChange={handleTabChange}>
+            <Tabs value={selectedTab}
+                  variant="scrollable"
+                  scrollButtons="auto"
+                  onChange={handleTabChange}>
                 <Tab label="Poäng" />
-                <Tab label="Andel mahjong" />
-                <Tab label="High Roller-ligan" />
+                <Tab label="Mahjong" />
+                <Tab label="High Roller" />
                 <Tab label="Medelhänder" />
                 <Tab label="Distribution" />
             </Tabs>

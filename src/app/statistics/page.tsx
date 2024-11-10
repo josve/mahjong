@@ -29,12 +29,12 @@ export default function StatisticsPage() {
 
   return (
     <div>
-      <Box style={{ display: "grid", gridTemplateColumns: "1fr 1fr" }}>
+      <Box className="statistics-header" style={{  }}>
         <h1 style={{ justifySelf: "start" }}>Statistik</h1>
         <ToggleButtonGroup
             value={period}
-            style={{ justifySelf: "end" }}
             exclusive
+            className="statistics-buttons"
             onChange={handlePeriodChange}
             aria-label="Tid"
         >

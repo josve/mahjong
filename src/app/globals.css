@@ -328,3 +328,24 @@ h3 {
     align-items: center;
     margin-bottom: 20px;
 }
+
+.statistics-buttons {
+    justify-self: end;
+}
+
+.statistics-header {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+}
+
+@media (max-width: 900px) {
+    .statistics-header {
+        grid-template-columns: 1fr;
+    }
+
+    .statistics-buttons {
+        justify-self: start;
+        padding-top: 20px;
+        padding-bottom: 20px;
+    }
+}
