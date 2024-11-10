@@ -1,11 +1,12 @@
 import React from "react";
 import RoundResultFormEdit from "./RoundResultFormEdit";
+import {Hand, IdToName} from "@/types/db";
 
 interface RoundDisplayProps {
   round: string;
-  hands: any[];
+  hands: Hand[];
   matchId: string;
-  teamIdToName: { [key: string]: string };
+  teamIdToName: IdToName;
 }
 
 const RoundDisplay: React.FC<RoundDisplayProps> = ({

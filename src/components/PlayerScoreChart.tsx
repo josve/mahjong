@@ -6,20 +6,16 @@ import HighRollerChart from "./PlayerScoreChart/HighRollerChart";
 import AverageHandTable from "./PlayerScoreChart/AverageHandTable";
 import BoxPlot from "./PlayerScoreChart/BoxPlot"
 import { Tabs, Tab, Box } from "@mui/material";
+import {GameWithHands, Hand, IdToColorMap, IdToName, SimplePlayer, TeamIdToPlayerIds} from "@/types/db";
+import {HighRollerInfo, IdToNumber, IdToNumbers} from "@/types/components";
 
 interface PlayerScoreChartProps {
-  matches: any;
-  teamIdToName: { [key: string]: string };
-  allPlayers: { id: string; name: string }[];
-  teamIdToPlayerIds: { [key: string]: string[] };
-  playerColors: {
-    [key: string]: {
-      color_red: number;
-      color_green: number;
-      color_blue: number;
-    };
-  };
-  period: string;
+  matches: GameWithHands[];
+  teamIdToName: IdToName;
+  allPlayers: SimplePlayer[];
+  teamIdToPlayerIds: TeamIdToPlayerIds;
+  playerColors: IdToColorMap;
+  period: "all" | "new" | "year";
 }
 
 const CustomTabPanel = (props: { value: number; index: number; children: React.ReactNode }) => {
@@ -40,7 +36,7 @@ const PlayerScoreChart: React.FC<PlayerScoreChartProps> = ({
   period,
 }) => {
     const [selectedTab, setSelectedTab] = useState(0);
-    const [filteredMatches, setFilteredMatches] = useState(matches);
+    const [filteredMatches, setFilteredMatches] = useState<GameWithHands[]>(matches);
 
     const handleTabChange = (event: React.SyntheticEvent, newValue: number) => {
         setSelectedTab(newValue);
@@ -52,19 +48,21 @@ const PlayerScoreChart: React.FC<PlayerScoreChartProps> = ({
                 return matches;
             } else if (period === "new") {
                 // Filter matches for "New period"
-                return matches.filter((match: any) => {
+                return matches.filter((match: GameWithHands) => {
                     const matchDate = new Date(match.TIME);
                     const newPeriodStartDate = new Date(2014, 10, 1);
                     return matchDate >= newPeriodStartDate;
-                });
+                })!;
             } else if (period === "year") {
                 // Filter matches for "Current year"
-                return matches.filter((match: any) => {
+                return matches.filter((match: GameWithHands) => {
                     const matchDate = new Date(match.TIME);
                     const currentYearStartDate = new Date(new Date().getFullYear(), 0, 1);
                     return matchDate >= currentYearStartDate;
-                });
+                })!;
             }
+
+            throw new Error("Okänd period");
         };
 
         setFilteredMatches(filterMatches());
@@ -72,17 +70,17 @@ const PlayerScoreChart: React.FC<PlayerScoreChartProps> = ({
 
     const {playerScores, labels, mahjongWins, highRollerScores, averageHand, standardDeviations, allHands, allHandsNoTeams, allScores, allScoresNoTeams} =
         useMemo(() => {
-            const scores: { [key: string]: number[] } = {};
+            const scores: IdToNumbers = {};
             const labels: string[] = [];
-            const wins: { [key: string]: number } = {};
-            const highRollerScores: { [key: string]: [number, number, number, boolean][] } = {}; // [gameIndex, score]
-            const totalHan: { [key: string]: number } = {};
-            const handCount: { [key: string]: number } = {};
-            const standardDeviations: { [key: string]: number } = {};
-            const allHands: { [key: string]: number[] } = {};
-            const allHandsNoTeams: { [key: string]: number[] } = {};
-            const allScores: { [key: string]: number[] } = {};
-            const allScoresNoTeams: { [key: string]: number[] } = {};
+            const wins: IdToNumber = {};
+            const highRollerScores: HighRollerInfo = {};
+            const totalHan: IdToNumber= {};
+            const handCount: IdToNumber = {};
+            const standardDeviations: IdToNumber = {};
+            const allHands: IdToNumbers = {};
+            const allHandsNoTeams: IdToNumbers = {};
+            const allScores: IdToNumbers = {};
+            const allScoresNoTeams: IdToNumbers = {};
 
             let highRollerIndex = 0;
 
@@ -119,7 +117,7 @@ const PlayerScoreChart: React.FC<PlayerScoreChartProps> = ({
                     );
                 });
 
-                match.hands.forEach((hand: any) => {
+                match.hands.forEach((hand: Hand) => {
                     const playerIds = teamIdToPlayerIds[hand.TEAM_ID]!;
                     const scorePerPlayer = hand.HAND_SCORE / playerIds.length;
                     playerIds.forEach((playerId: string) => {

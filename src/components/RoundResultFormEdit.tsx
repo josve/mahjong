@@ -1,21 +1,24 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
-import { TextField, Button, Box, Snackbar, Alert } from "@mui/material";
-import { useRouter } from "next/navigation";
+import React, {useEffect, useState} from "react";
+import {Alert, Box, Button, Snackbar, TextField} from "@mui/material";
+import {useRouter} from "next/navigation";
 import {UpdateResultResponse} from "@/types/api";
+import {Hand, IdToName} from "@/types/db";
+
+interface Props {
+  readonly teamIdToName: IdToName;
+  readonly matchId: string;
+  readonly hands: Hand[];
+  readonly round: string;
+}
 
 export default function RoundResultFormEdit({
   teamIdToName,
   matchId,
   hands,
   round,
-}: {
-  readonly teamIdToName: { [key: string]: string };
-  readonly matchId: string;
-  readonly hands: any[];
-  readonly round: string;
-}) {
+}: Props) {
   const router = useRouter();
   const [formData, setFormData] = useState<{ [key: string]: any }>({
     scores: {},
@@ -28,7 +31,7 @@ export default function RoundResultFormEdit({
     const initialScores = hands.reduce((acc, hand) => {
       acc[hand.TEAM_ID] = hand.HAND;
       return acc;
-    }, {} as { [key: string]: string });
+    }, {} as { [key: string]: number });
 
     setFormData((prevData) => ({
       ...prevData,
@@ -37,7 +40,7 @@ export default function RoundResultFormEdit({
   }, [teamIdToName]);
 
   const handleScoreChange = (e: any, teamId: string) => {
-    const { value } = e.target;
+    const {value} = e.target;
     setFormData((prevData) => ({
       ...prevData,
       scores: {
@@ -54,34 +57,33 @@ export default function RoundResultFormEdit({
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ ...formData, matchId, round }),
+      body: JSON.stringify({...formData, matchId, round}),
     })
-      .then((response) => response.json())
-      .then((data: UpdateResultResponse) => {
-        setSnackbarMessage("Resultat är uppdaterat!");
-        setSnackbarSeverity("success");
-        setSnackbarOpen(true);
-        setTimeout(() => {
-          router.push(`/match/${matchId}/edit`);
-        }, 1000);
-      })
-      .catch((error) => {
-        setSnackbarMessage("Misslyckades med att uppdatera resultatet.");
-        setSnackbarSeverity("error");
-        setSnackbarOpen(true);
-        console.error("Error:", error);
-      });
+        .then((response) => response.json())
+        .then((data: UpdateResultResponse) => {
+          setSnackbarMessage("Resultat är uppdaterat!");
+          setSnackbarSeverity("success");
+          setSnackbarOpen(true);
+          setTimeout(() => {
+            router.push(`/match/${matchId}/edit`);
+          }, 1000);
+        })
+        .catch((error) => {
+          setSnackbarMessage("Misslyckades med att uppdatera resultatet.");
+          setSnackbarSeverity("error");
+          setSnackbarOpen(true);
+          console.error("Error:", error);
+        });
   };
 
   const isFormValid = () => {
-    const allScoresEntered = Object.values(formData.scores).every(
-      (score) =>
-        score !== "" &&
-        score !== undefined &&
-        score !== null &&
-        Number(score) % 2 == 0
+    return Object.values(formData.scores).every(
+        (score) =>
+            score !== "" &&
+            score !== undefined &&
+            score !== null &&
+            Number(score) % 2 == 0
     );
-    return allScoresEntered;
   };
 
   const handleSnackbarClose = () => {
@@ -89,44 +91,44 @@ export default function RoundResultFormEdit({
   };
 
   return (
-    <Box
-      component="form"
-      onSubmit={handleSubmit}
-      sx={{ mt: 3 }}
-    >
-      <Box sx={{ display: "flex", gap: 2, flexWrap: "wrap" }}>
-        {Object.entries(teamIdToName).map(([teamId, teamName]) => (
-          <TextField
-            key={teamId}
-            label={`${teamName} poäng`}
-            type="number"
-            value={formData.scores[teamId] || ""}
-            onChange={(e) => handleScoreChange(e, teamId)}
-            margin="normal"
-            sx={{ flex: "1 1 200px" }}
-          />
-        ))}
-      </Box>
-      <Button
-        type="submit"
-        variant="contained"
-        disabled={!isFormValid()}
+      <Box
+          component="form"
+          onSubmit={handleSubmit}
+          sx={{mt: 3}}
       >
-        Ändra resultat
-      </Button>
-      <Snackbar
-        open={snackbarOpen}
-        autoHideDuration={6000}
-        onClose={handleSnackbarClose}
-      >
-        <Alert
-          onClose={handleSnackbarClose}
-          severity={snackbarSeverity}
-          sx={{ width: '100%' }}
+        <Box sx={{display: "flex", gap: 2, flexWrap: "wrap"}}>
+          {Object.entries(teamIdToName).map(([teamId, teamName]) => (
+              <TextField
+                  key={teamId}
+                  label={`${teamName} poäng`}
+                  type="number"
+                  value={formData.scores[teamId] || ""}
+                  onChange={(e) => handleScoreChange(e, teamId)}
+                  margin="normal"
+                  sx={{flex: "1 1 200px"}}
+              />
+          ))}
+        </Box>
+        <Button
+            type="submit"
+            variant="contained"
+            disabled={!isFormValid()}
         >
-          {snackbarMessage}
-        </Alert>
-      </Snackbar>
-    </Box>
+          Ändra resultat
+        </Button>
+        <Snackbar
+            open={snackbarOpen}
+            autoHideDuration={6000}
+            onClose={handleSnackbarClose}
+        >
+          <Alert
+              onClose={handleSnackbarClose}
+              severity={snackbarSeverity}
+              sx={{width: '100%'}}
+          >
+            {snackbarMessage}
+          </Alert>
+        </Snackbar>
+      </Box>
   );
 }
