@@ -2,27 +2,17 @@
 import React, { useState, useEffect } from "react";
 import {Box, Button, FormGroup, FormControlLabel, Switch, Snackbar, Alert } from "@mui/material";
 import { RgbColorPicker } from "react-colorful";
+import {IdToColorMap, TeamDetails, TeamIdToDetails} from "@/types/db";
+import {Session} from "next-auth";
 
 interface ComponentParams {
-    readonly session: any,
-    readonly teamDetails: {
-        [key: string]: {
-            playerIds: string[];
-            teamName: string;
-            concatenatedName: string;
-        };
-    },
-    readonly playerColors: {
-        [player_id: string]: {
-            color_red: number;
-            color_green: number;
-            color_blue: number;
-        }
-    }
+    readonly session: Session;
+    readonly teamDetails: TeamIdToDetails;
+    readonly playerColors: IdToColorMap;
 }
 
 export default function ProfilePageClient({ session, teamDetails, playerColors }: ComponentParams) {
-    const user: any = session.user;
+    const user = session.user;
 
     const [color, setColor] = useState({
         r: user.COLOR_RED,
@@ -73,7 +63,7 @@ export default function ProfilePageClient({ session, teamDetails, playerColors }
     const [snackbarSeverity, setSnackbarSeverity] = useState<"success" | "error">("success");
 
     useEffect(() => {
-        const teams = Object.values(teamDetails).filter((team: any) =>
+        const teams = Object.values(teamDetails).filter((team: TeamDetails) =>
             team.playerIds.includes(user.PLAYER_ID) && team.playerIds.length > 1
         );
         setUserTeams(teams);

@@ -54,12 +54,14 @@ export interface TeamIdToPlayerIds {
     [key: string]: string[];
 }
 
+export interface TeamDetails {
+    playerIds: string[];
+    teamName: string;
+    concatenatedName: string;
+}
+
 export interface TeamIdToDetails {
-    [key: string]: {
-        playerIds: string[];
-        teamName: string;
-        concatenatedName: string;
-    };
+    [key: string]: TeamDetails;
 }
 
 export interface Game {

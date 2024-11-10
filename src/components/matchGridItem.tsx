@@ -8,7 +8,11 @@ formatDate,
 capitalize 
 } from "@/lib/formatting";
 
-export default async function MatchGridItem({ id }: { readonly id: string }) {
+interface Props {
+    readonly id: string;
+}
+
+export default async function MatchGridItem({ id }: Props) {
     const match = await getMatchById(id);
     const hands = await getHandsByGameId(id);
 
