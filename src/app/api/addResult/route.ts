@@ -57,18 +57,14 @@ export async function POST(req: NextRequest) {
       const hand = scores[teamId];
       let handScore = calculateHandScore(teamIds, i, scores, hand, teamId, eastTeam, winner);
       const wind = windOrder[(i - eastIndex + 4) % 4];
-
-      console.log(`Inserting result for team ${teamId}: handScore=${handScore}, wind=${wind}, isWinner=${teamId === winner}`);
-
+      
       await connection.query(
         'INSERT INTO Hands (GAME_ID, TEAM_ID, HAND, HAND_SCORE, IS_WINNER, WIND, ROUND, TIME) VALUES (?, ?, ?, ?, ?, ?, ?, ?)',
         [matchId, teamId, hand, handScore, teamId === winner, wind, newRound, new Date()]
       );
     }
-    console.log('Results added successfully');
     return NextResponse.json({ message: 'Results added successfully' }, { status: 200 });
   } catch (error) {
-    console.error('Error adding results:', error);
     return NextResponse.json({ error: 'Failed to add results' }, { status: 500 });
   } finally {
     connection.release();
