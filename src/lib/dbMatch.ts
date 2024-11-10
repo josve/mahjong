@@ -2,7 +2,11 @@
 
 import Connection from "@/lib/connection";
 
-export async function getTotalStatistics() {
+export async function getTotalStatistics(): Promise<{
+  totalMatches: number;
+  totalMahjongs: number;
+  totalRounds: number;
+}> {
   const connection = await Connection.getInstance().getConnection();
   try {
     const [result]: any = await connection.query(`
