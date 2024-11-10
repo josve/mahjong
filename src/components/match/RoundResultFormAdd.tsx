@@ -3,12 +3,13 @@
 import React, { useState } from "react";
 import {TextField, Button, Box, FormControl, InputLabel, Select, MenuItem} from "@mui/material";
 import {AddResultResponse} from "@/types/api";
+import {IdToName} from "@/types/db";
 
 export default function RoundResultFormAdd({
   teamIdToName,
   matchId,
 }: {
-  readonly teamIdToName: { [key: string]: string };
+  readonly teamIdToName: IdToName;
   readonly matchId: string;
 }) {
   const [formData, setFormData] = useState<{ [key: string]: any }>({
@@ -17,8 +18,8 @@ export default function RoundResultFormAdd({
     winner: "-1",
   });
 
-  const handleScoreChange = (e: any, teamId: string) => {
-    const { value } = e.target;
+  const handleScoreChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>, teamId: string) => {
+    const {value} = e.target;
     setFormData((prevData) => ({
       ...prevData,
       scores: {
@@ -43,13 +44,13 @@ export default function RoundResultFormAdd({
   };
   const isFormValid = () => {
     const allScoresEntered = Object.entries(teamIdToName).every(([teamId, teamName]) => (
-      formData.scores[teamId] && formData.scores[teamName] != "" &&
-      formData.scores[teamId] !== undefined &&
-      formData.scores[teamId] !== null &&
-      Number(formData.scores[teamId]) % 2 == 0
+        formData.scores[teamId] && formData.scores[teamName] != "" &&
+        formData.scores[teamId] !== undefined &&
+        formData.scores[teamId] !== null &&
+        Number(formData.scores[teamId]) % 2 == 0
     ));
 
-      const eastTeamSelected = formData.eastTeam !== "";
+    const eastTeamSelected = formData.eastTeam !== "";
     const winnerSelected = String(formData.winner) !== "-1";
     return allScoresEntered && eastTeamSelected && winnerSelected;
   };
@@ -61,93 +62,93 @@ export default function RoundResultFormAdd({
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ ...formData, matchId }),
+      body: JSON.stringify({...formData, matchId}),
     })
-      .then((response) => response.json())
-      .then((data: AddResultResponse) => {
-        setFormData({
-          scores: {},
-          eastTeam: "",
-          winner: "-1",
+        .then((response) => response.json())
+        .then((data: AddResultResponse) => {
+          setFormData({
+            scores: {},
+            eastTeam: "",
+            winner: "-1",
+          });
+          window.location.reload();
+        })
+        .catch((error) => {
+          console.error("Error:", error);
         });
-        window.location.reload();
-      })
-      .catch((error) => {
-        console.error("Error:", error);
-      });
   };
 
   return (
-    <Box
-      component="form"
-      onSubmit={handleSubmit}
-      sx={{ mt: 3 }}
-    >
-      <Box sx={{ display: "flex", gap: 2, flexWrap: "wrap" }}>
-        {Object.entries(teamIdToName).map(([teamId, teamName]) => (
-          <TextField
-            key={teamId}
-            label={`Poäng - ${teamName}`}
-            type="number"
-            value={formData.scores[teamId] || ""}
-            onChange={(e) => handleScoreChange(e, teamId)}
-            margin="normal"
-            sx={{ flex: "1 1 200px" }}
-          />
-        ))}
-      </Box>
-      <Box sx={{ display: "grid", gap: 2, gridTemplateColumns: "1fr 1fr",  flexWrap: "wrap", marginTop: 2 }}>
-        <FormControl fullWidth>
-          <InputLabel id="east-label">Öst</InputLabel>
-          <Select
-              labelId="east-label"
-              id="east-select"
-              label="Öst"
-              value={formData.eastTeam}
-              onChange={handleEastTeamChange}
-          >
-            <MenuItem value="">Välj spelare i öst</MenuItem>
-            {Object.entries(teamIdToName).map(([teamId, teamName]) => (
-                <MenuItem
-                    key={teamId}
-                    value={teamId}
-                >
-                  {teamName}
-                </MenuItem>
-            ))}
-          </Select>
-        </FormControl>
-
-        <FormControl fullWidth>
-          <InputLabel id="winner-label">Vinnare</InputLabel>
-          <Select
-              labelId="winner-label"
-              id="winner-select"
-              label="Vinnare"
-              value={formData.winner}
-              onChange={handleWinnerChange}
-          >
-            <MenuItem value="-1">Välj vinnare</MenuItem>
-            <MenuItem value="">Ingen vinnare</MenuItem>
-            {Object.entries(teamIdToName).map(([teamId, teamName]) => (
-                <MenuItem
-                    key={teamId}
-                    value={teamId}
-                >
-                  {teamName}
-                </MenuItem>
-            ))}
-          </Select>
-        </FormControl>
-      </Box>
-      <Button
-        type="submit"
-        variant="contained"
-        className="button match-add-result-button"
-        disabled={!isFormValid()}
+      <Box
+          component="form"
+          onSubmit={handleSubmit}
+          sx={{mt: 3}}
       >
-        Lägg till resultat
-      </Button>
-    </Box>
+        <Box sx={{display: "flex", gap: 2, flexWrap: "wrap"}}>
+          {Object.entries(teamIdToName).map(([teamId, teamName]) => (
+              <TextField
+                  key={teamId}
+                  label={`Poäng - ${teamName}`}
+                  type="number"
+                  value={formData.scores[teamId] || ""}
+                  onChange={(e) => handleScoreChange(e, teamId)}
+                  margin="normal"
+                  sx={{flex: "1 1 200px"}}
+              />
+          ))}
+        </Box>
+        <Box sx={{display: "grid", gap: 2, gridTemplateColumns: "1fr 1fr", flexWrap: "wrap", marginTop: 2}}>
+          <FormControl fullWidth>
+            <InputLabel id="east-label">Öst</InputLabel>
+            <Select
+                labelId="east-label"
+                id="east-select"
+                label="Öst"
+                value={formData.eastTeam}
+                onChange={handleEastTeamChange}
+            >
+              <MenuItem value="">Välj spelare i öst</MenuItem>
+              {Object.entries(teamIdToName).map(([teamId, teamName]) => (
+                  <MenuItem
+                      key={teamId}
+                      value={teamId}
+                  >
+                    {teamName}
+                  </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+
+          <FormControl fullWidth>
+            <InputLabel id="winner-label">Vinnare</InputLabel>
+            <Select
+                labelId="winner-label"
+                id="winner-select"
+                label="Vinnare"
+                value={formData.winner}
+                onChange={handleWinnerChange}
+            >
+              <MenuItem value="-1">Välj vinnare</MenuItem>
+              <MenuItem value="">Ingen vinnare</MenuItem>
+              {Object.entries(teamIdToName).map(([teamId, teamName]) => (
+                  <MenuItem
+                      key={teamId}
+                      value={teamId}
+                  >
+                    {teamName}
+                  </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+        </Box>
+        <Button
+            type="submit"
+            variant="contained"
+            className="button match-add-result-button"
+            disabled={!isFormValid()}
+        >
+          Lägg till resultat
+        </Button>
+      </Box>
   );
 }

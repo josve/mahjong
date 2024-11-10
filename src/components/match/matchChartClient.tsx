@@ -1,19 +1,24 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, {useEffect, useState} from "react";
 import ReactEcharts from "echarts-for-react";
 import {Box, CircularProgress} from "@mui/material";
 import {capitalize, formatDate} from "@/lib/formatting";
 import {MatchChartResponse} from "@/types/api";
+import {Hand} from "@/types/db";
+import {HandWithScore} from "@/types/components";
+import {EChartsOption} from "echarts-for-react/src/types";
+
+interface Props {
+  readonly matchId: string;
+  readonly autoReload: boolean;
+  readonly showPreviousRoundScore: boolean;
+}
 
 export default function MatchChartClient({
                                            matchId,
                                            autoReload,
                                            showPreviousRoundScore,
-                                         }: {
-  readonly matchId: string;
-  readonly autoReload: boolean;
-  readonly showPreviousRoundScore: boolean;
-}) {
+                                         }: Props) {
   const [data, setData] = useState<MatchChartResponse | null>(null);
   const [lastRoundCount, setLastRoundCount] = useState<number>(0);
 
@@ -63,7 +68,9 @@ export default function MatchChartClient({
   const {hands, teamIdToName, teamColors} = data;
 
   // Get the hands for each team
-  const teamHands = hands.reduce((acc: any, hand: any) => {
+  const teamHands = hands.reduce((acc: {
+    [teamId: string]: HandWithScore[];
+  }, hand: Hand) => {
     acc[hand.TEAM_ID] = acc[hand.TEAM_ID] || [];
     acc[hand.TEAM_ID].push(hand);
     return acc;
@@ -95,7 +102,9 @@ export default function MatchChartClient({
   let series = [];
 
   // Calculate the percentage of wins for each player
-  const winCounts = hands.reduce((acc: any, hand: any) => {
+  const winCounts = hands.reduce((acc: {
+    [teamId: string]: number
+  }, hand: Hand) => {
     if (hand.IS_WINNER) {
       acc[hand.TEAM_ID] = (acc[hand.TEAM_ID] || 0) + 1;
     }
@@ -105,7 +114,7 @@ export default function MatchChartClient({
   // Add no-winner team for rounds with no IS_WINNER
   for (let i = 1; i < numRounds; i++) {
     const roundHands = hands.slice(i * 4, (i + 1) * 4);
-    const hasWinner = roundHands.some((hand: any) => hand.IS_WINNER);
+    const hasWinner = roundHands.some((hand: Hand) => hand.IS_WINNER);
     if (!hasWinner) {
       winCounts["no-winner"] = (winCounts["no-winner"] || 0) + 1;
     }
@@ -215,7 +224,7 @@ export default function MatchChartClient({
 
     const allRoundsForTeam = teamHands[teamId];
 
-    const scores = allRoundsForTeam.map((round: any) => {
+    const scores = allRoundsForTeam.map((round: HandWithScore) => {
 
       const currentRoundIndex = round.ROUND;
       const winnerRoundIndex = showPreviousRoundScore ? currentRoundIndex + 1 : currentRoundIndex;
@@ -223,7 +232,7 @@ export default function MatchChartClient({
       const isWinner = winnerRound?.IS_WINNER;
 
       return {
-        value: round.SCORE + 500,
+        value: (round.SCORE ? round.SCORE : 0) + 500,
         name: round,
         itemStyle: {
           color: isWinner ? "white" : "transparent",
@@ -245,7 +254,7 @@ export default function MatchChartClient({
       },
       smooth: 0.4,
       symbol: "circle",
-      symbolSize: (value: any, params: any) => {
+      symbolSize: (ignore: any, params: any) => {
         return params.data.itemStyle.borderWidth == 4 ? 18 : 0; // Make the circles larger
       },
       endLabel: {
@@ -266,7 +275,7 @@ export default function MatchChartClient({
     });
   }
 
-  const options = {
+  const options: EChartsOption = {
     animationDuration: "500",
     tooltip: {
       trigger: "axis",
@@ -280,7 +289,7 @@ export default function MatchChartClient({
 
         const scoreIndex = showPreviousRoundScore ? dataIndex + 1 : dataIndex;
 
-        const scoreHands = hands.filter((hand: any) => hand.ROUND == scoreIndex);
+        const scoreHands = hands.filter((hand: Hand) => hand.ROUND == scoreIndex);
         const showScore = showPreviousRoundScore ? scoreHands.length === 4 : params[0].dataIndex !== 0;
 
 
@@ -296,7 +305,7 @@ export default function MatchChartClient({
 
                 if (showScore) {
                   const teamId = param.data.name.TEAM_ID;
-                  const scoreHand = scoreHands.find((hand: any) => hand.TEAM_ID === teamId)!;
+                  const scoreHand = scoreHands.find((hand: Hand) => hand.TEAM_ID === teamId)!;
                   const windHand = scoreHand.WIND;
                   const hand = scoreHand.HAND + "p";
                   const handScore = scoreHand.HAND_SCORE;
@@ -344,11 +353,10 @@ export default function MatchChartClient({
     },
     yAxis: {
       type: "value",
-      min: (value: any) => {
-        const minValue = Math.min(0, Math.floor((value.min - 100) / 100) * 100);
-        return minValue;
+      min: (value: { min: number; }) => {
+        return Math.min(0, Math.floor((value.min - 100) / 100) * 100);
       },
-      max: (value: any) => {
+      max: (value: { min: number; max: number; }) => {
         const minValue = Math.min(0, Math.floor((value.min - 100) / 100) * 100);
         const maxValue = Math.ceil((value.max + 100) / 100) * 100;
         if (maxValue - minValue < 1000) {

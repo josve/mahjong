@@ -1,5 +1,6 @@
 import { getMatchById, getTeamIdToName } from "@/lib/dbMatch";
 import RoundResultFormAdd from "@/components/match/RoundResultFormAdd";
+import {IdToName} from "@/types/db";
 
 interface Props {
   readonly matchId: string;
@@ -14,7 +15,7 @@ export default async function RegisterResultControls({ matchId }: Props) {
     match.TEAM_ID_3,
     match.TEAM_ID_4,
   ];
-  const relevantTeams: any = Object.fromEntries(
+  const relevantTeams: IdToName = Object.fromEntries(
     Object.entries(teamIdToName).filter(([teamId]) =>
       relevantTeamIds.includes(teamId)
     )
