@@ -3,7 +3,6 @@ import MatchChart from "@/components/match/matchChart";
 import RegisterResultControls from "@/components/match/RegisterResultControls";
 import { Metadata } from "next";
 import {auth} from "@/auth";
-import {NextResponse} from "next/server";
 
 interface PageProps {
   readonly params: {

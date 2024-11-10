@@ -2,6 +2,7 @@ import { getMatchById, getHandsByGameId, getTeamIdToName } from "@/lib/dbMatch";
 import RoundDisplay from "@/components/RoundDisplay";
 import { Metadata } from "next";
 import {auth} from "@/auth";
+import {Hand, IdToName} from "@/types/db";
 
 interface PageProps {
   readonly params: {
@@ -38,7 +39,7 @@ export default async function EditPage({ params }: PageProps) {
     match.TEAM_ID_3,
     match.TEAM_ID_4,
   ];
-  const relevantTeams: any = Object.fromEntries(
+  const relevantTeams: IdToName = Object.fromEntries(
     Object.entries(teamIdToName).filter(([teamId]) =>
       relevantTeamIds.includes(teamId)
     )
@@ -48,7 +49,7 @@ export default async function EditPage({ params }: PageProps) {
   const isEditable =
     new Date().getTime() - matchDate.getTime() < 24 * 60 * 60 * 1000;
 
-  const rounds = hands.reduce((acc: any, hand: any) => {
+  const rounds = hands.reduce((acc: { [round: number]: Hand[]  }, hand) => {
     if (!acc[hand.ROUND]) {
       acc[hand.ROUND] = [];
     }
@@ -61,7 +62,7 @@ export default async function EditPage({ params }: PageProps) {
       <h1>Korrigera resultat för {match.NAME}</h1>
       {isEditable ? (
         Object.entries(rounds).map(
-          ([round, hands]: [string, any]) =>
+          ([round, hands]: [string, Hand[]]) =>
             round !== "0" && (
               <RoundDisplay
                 key={round}
