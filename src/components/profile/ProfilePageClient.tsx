@@ -1,14 +1,14 @@
 "use client"
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {Box, Button, FormGroup, FormControlLabel, Switch, Snackbar, Alert } from "@mui/material";
 import { RgbColorPicker } from "react-colorful";
 
 interface ComponentParams {
-    readonly session: any
+    readonly session: any,
+    readonly teamDetails: any
 }
 
-
-export default function ProfilePageClient({ session }: ComponentParams) {
+export default function ProfilePageClient({ session, teamDetails }: ComponentParams) {
     const user: any = session.user;
 
     const [color, setColor] = useState({
@@ -22,6 +22,14 @@ export default function ProfilePageClient({ session }: ComponentParams) {
     const [snackbarOpen, setSnackbarOpen] = useState(false);
     const [snackbarMessage, setSnackbarMessage] = useState("");
     const [snackbarSeverity, setSnackbarSeverity] = useState<"success" | "error">("success");
+    const [userTeams, setUserTeams] = useState<any[]>([]);
+
+    useEffect(() => {
+        const teams = Object.values(teamDetails).filter((team: any) =>
+            team.playerIds.includes(user.PLAYER_ID)
+        );
+        setUserTeams(teams);
+    }, [teamDetails, user.PLAYER_ID]);
 
     const handleCheckboxChange = (event: any) => {
         setShowPreviousRoundScore(event.target.checked);
@@ -83,6 +91,15 @@ export default function ProfilePageClient({ session }: ComponentParams) {
                 Logga ut
             </Button>
             </Box>
+            <div style={{ paddingTop: "20px" }}>
+                <h2>Dina lag</h2>
+                {userTeams.map((team) => (
+                    <div key={team.teamName}>
+                        <h3>{team.teamName}</h3>
+                        <p>Spelare: {team.concatenatedName}</p>
+                    </div>
+                ))}
+            </div>
             <Snackbar
                 open={snackbarOpen}
                 autoHideDuration={6000}
