@@ -3,9 +3,10 @@ import Credentials from "next-auth/providers/credentials"
 
 import Google from "next-auth/providers/google"
 import Connection from "@/lib/connection";
+import type {Provider} from "next-auth/providers";
 
-function getProviders() {
-    const providers = [];
+function getProviders(): Provider[] {
+    const providers: Provider[] = [];
 
     if (process.env.AUTH_GOOGLE_ID) {
         providers.push(Google);

@@ -10,19 +10,25 @@ import CalculateOutlinedIcon from '@mui/icons-material/CalculateOutlined';
 import TableChartOutlinedIcon from '@mui/icons-material/TableChartOutlined';
 import LoginOutlinedIcon from '@mui/icons-material/LoginOutlined';
 import Person2OutlinedIcon from '@mui/icons-material/Person2Outlined';
+import { Session } from 'next-auth';
 
-export default function FooterClient({ session }: { readonly session: any }) {
+export default function FooterClient({ session }: { readonly session: Session | null }) {
   const [value, setValue] = React.useState(0);
 
   return (
-      <Paper sx={{display: { xs: "block", md: "none" },
+      <Paper sx={{
+          display: {xs: "block", md: "none"},
           paddingBottom: "calc(1.5rem + env(safe-area-inset-bottom))",
-            zIndex: "9000",
-          position: 'fixed', bottom: 0, left: 0, right: 0}} elevation={3}>
+          zIndex: "9000",
+          position: 'fixed',
+          bottom: 0,
+          left: 0,
+          right: 0
+      }} elevation={3}>
         <BottomNavigation
             showLabels
             value={value}
-            onChange={(event: any, newValue: any) => {
+            onChange={(ignore, newValue: number) => {
               setValue(newValue);
             }}
             className="footer"
