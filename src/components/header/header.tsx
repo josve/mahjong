@@ -4,8 +4,7 @@ import { auth } from "@/auth"
 export default async function Header() {
     const session = await auth()
 
-
-  return (
-      <HeaderClient session={session}/>
-  );
+    return (
+        <HeaderClient session={session}/>
+    );
 }
