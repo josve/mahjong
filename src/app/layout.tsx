@@ -24,6 +24,10 @@ export default function RootLayout({
     <Container className="content-container">
         <Box
             sx={{
+                paddingTop: "70px",
+                minHeight: "calc(100vh + 100px)",
+                paddingBottom: "70px",
+                zIndex: -1000,
                 margin: "0 auto",
                 backgroundColor: "var(--white)",
             }}

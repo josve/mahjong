@@ -14,7 +14,7 @@ export default function HeaderClient({ session }: { readonly session: any }) {
       position="static"
       className="header-bar"
       sx={{
-        position: "sticky",
+        position: "fixed",
         top: "0",
         background:
           "radial-gradient(circle farthest-corner at 100px 100px, var(--gradient-start) 0% , var(--gradient-end) 100%)",
