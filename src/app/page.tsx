@@ -4,11 +4,18 @@ import Link from "next/link";
 import { Box } from "@mui/material";
 import Grid from '@mui/material/Grid2';
 import { getAllMatches} from "@/lib/fetchMatches";
+import {auth} from "@/auth";
 
 export const revalidate = 60;
 
 export default async function Home() {
     const matches = await getAllMatches();
+
+    let allowCreate = true;
+    if (process.env.REQUIRE_LOGIN) {
+        const session = await auth();
+        allowCreate = !!session && !!session.user;
+    }
 
     return (
         <>
@@ -16,7 +23,8 @@ export default async function Home() {
                 <h1>
                     Matcher
                 </h1>
-                <Box sx={{display: {xs: "none", ms: "block"}}}
+                {allowCreate &&
+                <Box sx={{display: {xs: "none", md: "block"}}}
                 >
                     <Link
                         href="/match/new"
@@ -24,7 +32,7 @@ export default async function Home() {
                     >
                         <button className="button create-match-button">Skapa ny match</button>
                     </Link>
-                </Box>
+                </Box>}
             </Box>
             <TotalStatisticsRow/>
             <Grid

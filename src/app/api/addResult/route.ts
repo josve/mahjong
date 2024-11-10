@@ -1,6 +1,7 @@
 import {NextRequest, NextResponse} from 'next/server';
 import Connection from '@/lib/connection';
 import {PoolConnection} from "mysql2/promise";
+import { auth } from "@/auth";
 
 async function getNewRoundIndex(connection: PoolConnection, matchId: string) {
   const [latestRoundResult]: any = await connection.query(
@@ -34,6 +35,14 @@ function calculateHandScore(teamIds: string[], i: number, scores: any, hand: any
 export async function POST(req: NextRequest) {
   const body = await req.json();
   const { scores, eastTeam, winner, matchId } = body;
+
+  if (process.env.REQUIRE_LOGIN) {
+    const session = await auth();
+
+    if (!session || !session.user) {
+      return NextResponse.json({error: 'Unauthorized'}, {status: 401});
+    }
+  }
 
   const windOrder = ['E', 'N', 'W', 'S'];
 

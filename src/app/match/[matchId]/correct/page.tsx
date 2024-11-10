@@ -1,6 +1,7 @@
 import { getMatchById, getHandsByGameId, getTeamIdToName } from "@/lib/dbMatch";
 import RoundDisplay from "@/components/RoundDisplay";
 import { Metadata } from "next";
+import {auth} from "@/auth";
 
 interface PageProps {
   readonly params: {
@@ -18,6 +19,15 @@ export async function generateMetadata({
 }
 
 export default async function EditPage({ params }: PageProps) {
+
+  if (process.env.REQUIRE_LOGIN) {
+    const session = await auth();
+
+    if (!session || !session.user) {
+      return <p>Du måste vara inloggad för att se denna sida.</p>;
+    }
+  }
+
   const match = await getMatchById(params.matchId);
   const hands = await getHandsByGameId(params.matchId);
 

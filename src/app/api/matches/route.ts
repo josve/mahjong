@@ -1,10 +1,19 @@
 import { NextResponse } from "next/server";
 import Connection from "@/lib/connection";
 import { v4 as uuidv4 } from "uuid";
+import {auth} from "@/auth";
 
 export async function POST(request: Request) {
   const { teamIds, matchName, matchDescription } = await request.json();
   const gameId = uuidv4();
+
+  if (process.env.REQUIRE_LOGIN) {
+    const session = await auth();
+
+    if (!session || !session.user) {
+      return NextResponse.json({error: 'Unauthorized'}, {status: 401});
+    }
+  }
 
   const connection = await Connection.getInstance().getConnection();
   try {

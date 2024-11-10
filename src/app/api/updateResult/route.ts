@@ -1,10 +1,19 @@
 import { NextRequest, NextResponse } from 'next/server';
 import Connection from '@/lib/connection';
+import { auth } from "@/auth";
 
 export async function POST(req: NextRequest) {
 
   const body = await req.json();
   const { matchId, scores, round } = body;
+
+  if (process.env.REQUIRE_LOGIN) {
+    const session = await auth();
+
+    if (!session || !session.user) {
+      return NextResponse.json({error: 'Unauthorized'}, {status: 401});
+    }
+  }
 
   const connection = await Connection.getInstance().getConnection();
 

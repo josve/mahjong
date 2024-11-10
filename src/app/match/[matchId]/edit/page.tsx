@@ -2,6 +2,8 @@ import { getMatchById } from "@/lib/dbMatch";
 import MatchChart from "@/components/match/matchChart";
 import RegisterResultControls from "@/components/match/RegisterResultControls";
 import { Metadata } from "next";
+import {auth} from "@/auth";
+import {NextResponse} from "next/server";
 
 interface PageProps {
   readonly params: {
@@ -19,6 +21,14 @@ export async function generateMetadata({
 }
 
 export default async function Page({ params }: PageProps) {
+    if (process.env.REQUIRE_LOGIN) {
+        const session = await auth();
+
+        if (!session || !session.user) {
+            return <p>Du måste vara inloggad för att se denna sida.</p>;
+        }
+    }
+
   return (
     <>
       <MatchChart
