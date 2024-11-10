@@ -55,6 +55,7 @@ export interface TeamIdToPlayerIds {
 }
 
 export interface TeamDetails {
+    id: string;
     playerIds: string[];
     teamName: string;
     concatenatedName: string;

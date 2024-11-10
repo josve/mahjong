@@ -172,15 +172,10 @@ export async function getTeamDetails(): Promise<TeamIdToDetails> {
       GROUP BY Teams.TEAM_ID
     `);
 
-    const teamDetails: {
-      [key: string]: {
-        playerIds: string[];
-        teamName: string;
-        concatenatedName: string;
-      };
-    } = {};
+    const teamDetails: TeamIdToDetails = {};
     result.forEach((row: any) => {
       teamDetails[row.TEAM_ID] = {
+        id: row.TEAM_ID,
         playerIds: row.player_ids.split(","),
         teamName: row.team_name,
         concatenatedName: row.concatenated_name,

@@ -1,6 +1,6 @@
 "use client"
 import React, { useState, useEffect } from "react";
-import {Box, Button, FormGroup, FormControlLabel, Switch, Snackbar, Alert } from "@mui/material";
+import {Box, Button, FormGroup, FormControlLabel, Switch, Snackbar, Alert, TextField } from "@mui/material";
 import { RgbColorPicker } from "react-colorful";
 import {IdToColorMap, TeamDetails, TeamIdToDetails} from "@/types/db";
 import {Session} from "next-auth";
@@ -19,11 +19,7 @@ export default function ProfilePageClient({ session, teamDetails, playerColors }
         g: user.COLOR_GREEN,
         b: user.COLOR_BLUE,
     });
-    const [userTeams, setUserTeams] = useState<{
-        playerIds: string[];
-        teamName: string;
-        concatenatedName: string;
-    }[]>([]);
+    const [userTeams, setUserTeams] = useState<TeamDetails[]>([]);
 
     const [showPreviousRoundScore, setShowPreviousRoundScore] = useState(
         user.SHOW_PREVIOUS_ROUND_SCORE
@@ -102,6 +98,36 @@ export default function ProfilePageClient({ session, teamDetails, playerColors }
         setSnackbarOpen(false);
     };
 
+    const handleTeamNameChange = (teamName: string, newTeamName: string) => {
+        setUserTeams((prevTeams) =>
+            prevTeams.map((team) =>
+                team.teamName === teamName ? { ...team, teamName: newTeamName } : team
+            )
+        );
+    };
+
+    const handleTeamNameSubmit = (teamId: string, newTeamName: string) => {
+        fetch("/api/updateTeamName", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                teamId,
+                teamName: newTeamName,
+            }),
+        })
+            .then(() => {
+                setSnackbarMessage("Uppdaterade " + newTeamName + "!");
+                setSnackbarSeverity("success");
+                setSnackbarOpen(true);
+            }).catch(() => {
+                setSnackbarMessage("Lyckades inte uppdatera: " + newTeamName);
+                setSnackbarSeverity("error");
+                setSnackbarOpen(true);
+            })
+    };
+
     return (
         <div style={{ backgroundColor: "var(--background-color)"}}>
             <h1 style={{paddingBottom: "10px" }}>{user?.name}</h1>
@@ -122,7 +148,7 @@ export default function ProfilePageClient({ session, teamDetails, playerColors }
             <div style={{ paddingTop: "20px" }}>
                 <h2>Dina lag</h2>
                 {userTeams.map((team) => (
-                    <div key={team.teamName} style={{paddingTop: "20px"}}>
+                    <div key={team.id} style={{paddingTop: "20px"}}>
                         <h3>{team.teamName}</h3>
                         <div style={{
                             paddingTop: "10px",
@@ -146,6 +172,26 @@ export default function ProfilePageClient({ session, teamDetails, playerColors }
                                 borderRadius: "50%",
                                 backgroundColor: teamToColor[team.teamName],
                             }}></div>
+                        </Box>
+                        <Box style={{
+                            display: "flex",
+                            justifyContent: "left",
+                            alignItems: "center",
+                        }}>
+                        <TextField
+                            label="Uppdatera lagnamn"
+                            value={team.teamName}
+                            onChange={(e) => handleTeamNameChange(team.teamName, e.target.value)}
+                            margin="normal"
+                        />
+                        <Button
+                            variant="contained"
+                            color="primary"
+                            style={{ marginLeft: "20px" }}
+                            onClick={() => handleTeamNameSubmit(team.id, team.teamName)}
+                        >
+                            Uppdatera
+                        </Button>
                         </Box>
                     </div>
                 ))}
