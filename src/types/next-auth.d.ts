@@ -7,6 +7,16 @@ declare module "next-auth" {
     interface Session {
         user: {
             SHOW_PREVIOUS_ROUND_SCORE: boolean;
+            PLAYER_ID: string;
+            NAME: string;
+            COLOR_RED: string;
+            COLOR_GREEN: string;
+            COLOR_BLUE: string;
+            IS_TEST: boolean;
+            userColor: string;
+            name: string;
+            playerId: string;
+            firstInitial: string;
         } & DefaultSession["user"]
     }
 }

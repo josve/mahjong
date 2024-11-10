@@ -61,3 +61,19 @@ export interface TeamIdTDetails {
         concatenatedName: string;
     };
 }
+
+export interface Game {
+    GAME_ID: string;
+    TIME: Date;
+    NAME: string;
+    COMMENT: string;
+    TEAM_ID_1: string;
+    TEAM_ID_2: string;
+    TEAM_ID_3: string;
+    TEAM_ID_4: string;
+    IS_TEST: boolean;
+}
+
+export interface GameWithHands extends Game {
+    hands: Hand[];
+}

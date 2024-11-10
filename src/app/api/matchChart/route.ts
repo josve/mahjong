@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import {getHandsByGameId, getTeamIdToName, getTeamColors, getMatchById} from '@/lib/dbMatch';
+import {MatchChartResponse} from "@/types/api";
 
 export async function GET(req: NextRequest) {
   const { searchParams } = new URL(req.url);
@@ -15,8 +16,7 @@ export async function GET(req: NextRequest) {
     const teamColors = await getTeamColors();
     const match = await getMatchById(matchId);
 
-
-    const data = {
+    const data: MatchChartResponse = {
       hands,
       teamIdToName,
       teamColors,

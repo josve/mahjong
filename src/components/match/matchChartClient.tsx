@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import ReactEcharts from "echarts-for-react";
 import {Box, CircularProgress} from "@mui/material";
 import {capitalize, formatDate} from "@/lib/formatting";
+import {MatchChartResponse} from "@/types/api";
 
 export default function MatchChartClient({
                                            matchId,
@@ -13,12 +14,12 @@ export default function MatchChartClient({
   readonly autoReload: boolean;
   readonly showPreviousRoundScore: boolean;
 }) {
-  const [data, setData] = useState<any>(null);
+  const [data, setData] = useState<MatchChartResponse | null>(null);
   const [lastRoundCount, setLastRoundCount] = useState<number>(0);
 
   const fetchData = async () => {
     const response = await fetch(`/api/matchChart?matchId=${matchId}`);
-    const data = await response.json();
+    const data: MatchChartResponse = await response.json();
     setData(data);
     setLastRoundCount(data.hands.length);
   };
@@ -31,7 +32,7 @@ export default function MatchChartClient({
     if (autoReload) {
       const interval = setInterval(async () => {
         const response = await fetch(`/api/matchChart?matchId=${matchId}`);
-        const newData = await response.json();
+        const newData: MatchChartResponse = await response.json();
         if (newData.hands.length > lastRoundCount) {
           setData(newData);
           setLastRoundCount(newData.hands.length);
@@ -59,7 +60,7 @@ export default function MatchChartClient({
     </Box>;
   }
 
-  const { hands, teamIdToName, teamColors } = data;
+  const {hands, teamIdToName, teamColors} = data;
 
   // Get the hands for each team
   const teamHands = hands.reduce((acc: any, hand: any) => {
@@ -83,8 +84,8 @@ export default function MatchChartClient({
   const roundsToShow = Math.max(15, numRounds + 5);
 
   // Initialize rounds starting from 1
-  const rounds = Array.from({ length: roundsToShow }, (_, i) =>
-    (i + 1).toString()
+  const rounds = Array.from({length: roundsToShow}, (_, i) =>
+      (i + 1).toString()
   );
 
   const getTeamName = (teamId: string) => {
@@ -116,33 +117,33 @@ export default function MatchChartClient({
     value: winCounts[teamId],
     name: teamId === "no-winner" ? "No Winner" : getTeamName(teamId),
     label: {
-    	color: teamColors[teamId],
+      color: teamColors[teamId],
     },
     itemStyle: {
-	  borderColor:"white",
-	  borderWidth:3,
+      borderColor: "white",
+      borderWidth: 3,
       color:
-        teamColors[teamId]
-          ? `rgb(${teamColors[teamId].color_red}, ${teamColors[teamId].color_green}, ${teamColors[teamId].color_blue})`
-          : "transparent", // Use transparent if no color is found
+          teamColors[teamId]
+              ? `rgb(${teamColors[teamId].color_red}, ${teamColors[teamId].color_green}, ${teamColors[teamId].color_blue})`
+              : "transparent", // Use transparent if no color is found
       formatter: (params: any) => {
         if (Array.isArray(params)) {
           return params
-            .map((param) => {
-              const teamName = getTeamName(param.seriesName);
-              if (teamName !== "Unknown Team") {
-                const windHand = param.data.name.WIND_HAND;
-                const handScore = param.data.name.HAND_SCORE;
-                const isWinner = param.data.name.IS_WINNER;
-                const mahjongText = isWinner ? " mahjong" : "";
-                return `${teamName}: ${
-                  param.value - 500
-                } (${windHand} HANDp${mahjongText}, ${handScore})`;
-              }
-              return null;
-            })
-            .filter((text) => text !== null)
-            .join("<br/>");
+              .map((param) => {
+                const teamName = getTeamName(param.seriesName);
+                if (teamName !== "Unknown Team") {
+                  const windHand = param.data.name.WIND_HAND;
+                  const handScore = param.data.name.HAND_SCORE;
+                  const isWinner = param.data.name.IS_WINNER;
+                  const mahjongText = isWinner ? " mahjong" : "";
+                  return `${teamName}: ${
+                      param.value - 500
+                  } (${windHand} HANDp${mahjongText}, ${handScore})`;
+                }
+                return null;
+              })
+              .filter((text) => text !== null)
+              .join("<br/>");
         } else {
           const teamName = getTeamName(params.name);
           const percentage = ((params.value / totalWins) * 100).toFixed(2);
@@ -208,8 +209,8 @@ export default function MatchChartClient({
 
   for (const teamId in teamHands) {
     const color = teamColors[teamId]
-      ? `rgb(${teamColors[teamId].color_red}, ${teamColors[teamId].color_green}, ${teamColors[teamId].color_blue})`
-      : "black"; // Default color if no color is found
+        ? `rgb(${teamColors[teamId].color_red}, ${teamColors[teamId].color_green}, ${teamColors[teamId].color_blue})`
+        : "black"; // Default color if no color is found
 
 
     const allRoundsForTeam = teamHands[teamId];
@@ -221,16 +222,16 @@ export default function MatchChartClient({
       const winnerRound = allRoundsForTeam[winnerRoundIndex];
       const isWinner = winnerRound?.IS_WINNER;
 
-        return {
-          value: round.SCORE + 500,
-          name: round,
-          itemStyle: {
-            color: isWinner ? "white" : "transparent",
-            borderColor: color, // Use line color
-            borderWidth: isWinner ? 4 : 0,
-            fontWeight: "bold", // Make the text bold
-          }
-        };
+      return {
+        value: round.SCORE + 500,
+        name: round,
+        itemStyle: {
+          color: isWinner ? "white" : "transparent",
+          borderColor: color, // Use line color
+          borderWidth: isWinner ? 4 : 0,
+          fontWeight: "bold", // Make the text bold
+        }
+      };
     });
 
     series.push({
@@ -280,42 +281,42 @@ export default function MatchChartClient({
         const scoreIndex = showPreviousRoundScore ? dataIndex + 1 : dataIndex;
 
         const scoreHands = hands.filter((hand: any) => hand.ROUND == scoreIndex);
-        const showScore = showPreviousRoundScore ? scoreHands.length === 4 : params[0].dataIndex !== 0 ;
+        const showScore = showPreviousRoundScore ? scoreHands.length === 4 : params[0].dataIndex !== 0;
 
 
         return params
-          .map((param: any) => {
-            const teamName = getTeamName(param.seriesName);
-            if (teamName !== "Unknown Team") {
-              const color = teamColors[param.seriesName]
-                ? `rgb(${teamColors[param.seriesName].color_red}, ${
-                    teamColors[param.seriesName].color_green
-                  }, ${teamColors[param.seriesName].color_blue})`
-                : "black";
+            .map((param: any) => {
+              const teamName = getTeamName(param.seriesName);
+              if (teamName !== "Unknown Team") {
+                const color = teamColors[param.seriesName]
+                    ? `rgb(${teamColors[param.seriesName].color_red}, ${
+                        teamColors[param.seriesName].color_green
+                    }, ${teamColors[param.seriesName].color_blue})`
+                    : "black";
 
-              if (showScore) {
-                const teamId = param.data.name.TEAM_ID;
-                const scoreHand = scoreHands.find((hand: any) => hand.TEAM_ID === teamId);
-                const windHand = scoreHand.WIND;
-                const hand = scoreHand.HAND + "p";
-                const handScore = scoreHand.HAND_SCORE;
-                const isWinner = scoreHand.IS_WINNER;
-                const mahjongText = isWinner ? " mahjong" : "";
-                const formattedHandScore =
-                    handScore > 0 ? `+${handScore}` : handScore;
-                return `<span style="display:inline-block;width:10px;height:10px;background-color:${color};margin-right:5px;"></span>${teamName}: ${
-                    param.value
-                } (${windHand} ${hand}${mahjongText}, ${formattedHandScore})`;
-              } else {
-                return `<span style="display:inline-block;width:10px;height:10px;background-color:${color};margin-right:5px;"></span>${teamName}: ${
-                    param.value
-                }`;
+                if (showScore) {
+                  const teamId = param.data.name.TEAM_ID;
+                  const scoreHand = scoreHands.find((hand: any) => hand.TEAM_ID === teamId)!;
+                  const windHand = scoreHand.WIND;
+                  const hand = scoreHand.HAND + "p";
+                  const handScore = scoreHand.HAND_SCORE;
+                  const isWinner = scoreHand.IS_WINNER;
+                  const mahjongText = isWinner ? " mahjong" : "";
+                  const formattedHandScore =
+                      handScore > 0 ? `+${handScore}` : handScore;
+                  return `<span style="display:inline-block;width:10px;height:10px;background-color:${color};margin-right:5px;"></span>${teamName}: ${
+                      param.value
+                  } (${windHand} ${hand}${mahjongText}, ${formattedHandScore})`;
+                } else {
+                  return `<span style="display:inline-block;width:10px;height:10px;background-color:${color};margin-right:5px;"></span>${teamName}: ${
+                      param.value
+                  }`;
+                }
               }
-            }
-            return null;
-          })
-          .filter((text: any) => text !== null)
-          .join("<br/>");
+              return null;
+            })
+            .filter((text: any) => text !== null)
+            .join("<br/>");
       },
     },
     grid: {
@@ -369,25 +370,25 @@ export default function MatchChartClient({
 
   return (
       <>
-      <div>
-        <div className="multi-title-header">
-          <h1>{data?.match?.NAME}</h1>
-          <h2 style={{textAlign: "left"}}>{numRounds} omgångar</h2>
+        <div>
+          <div className="multi-title-header">
+            <h1>{data?.match?.NAME}</h1>
+            <h2 style={{textAlign: "left"}}>{numRounds} omgångar</h2>
+          </div>
+          <div className="label">
+            {capitalize(formatDate(data?.match?.TIME))}
+          </div>
+          {data?.match?.COMMENT && (
+              <div className="label">
+                {data?.match?.COMMENT}
+              </div>
+          )}
         </div>
-        <div className="label">
-          {capitalize(formatDate(data?.match?.TIME))}
-        </div>
-        {data?.match?.COMMENT && (
-            <div className="label">
-              {data?.match?.COMMENT}
-            </div>
-        )}
-      </div>
 
-  <ReactEcharts
-      option={options}
-      style={{height: "600px"}}
-  />
+        <ReactEcharts
+            option={options}
+            style={{height: "600px"}}
+        />
       </>
   );
 }

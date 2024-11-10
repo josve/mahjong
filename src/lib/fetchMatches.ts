@@ -1,19 +1,11 @@
 import Connection from "@/lib/connection";
+import {Game, GameWithHands} from "@/types/db";
 
-export async function getAllMatches(): Promise<{
-  GAME_ID: string;
-  TIME: Date;
-  NAME: string;
-  COMMENT: string;
-  TEAM_ID_1: string;
-  TEAM_ID_2: string;
-  TEAM_ID_3: string;
-  TEAM_ID_4: string;
-}[]> {
+export async function getAllMatches(): Promise<Game[]> {
   const connection = await Connection.getInstance().getConnection(); // Get a connection
   try {
     const [matches]: any = await connection.query(
-        "SELECT GAME_ID, TIME, NAME, COMMENT, TEAM_ID_1, TEAM_ID_2, TEAM_ID_3, TEAM_ID_4 FROM Games WHERE IS_TEST = 0 ORDER BY TIME DESC"
+        "SELECT * FROM Games WHERE IS_TEST = 0 ORDER BY TIME DESC"
     );
     return matches;
   } finally {
@@ -21,28 +13,7 @@ export async function getAllMatches(): Promise<{
   }
 }
 
-export default async function fetchMatches(): Promise<{
-  GAME_ID: string;
-  TIME: Date;
-  NAME: string;
-  COMMENT: string;
-  TEAM_ID_1: string;
-  TEAM_ID_2: string;
-  TEAM_ID_3: string;
-  TEAM_ID_4: string;
-  IS_TEST: boolean;
-  hands: {
-    ROUND: number;
-    GAME_ID: string;
-    TIME: Date;
-    HAND: number;
-    IS_WINNER: boolean;
-    WIND: string;
-    TEAM_ID: string;
-    HAND_SCORE: number;
-    IS_TEST: boolean;
-  }[];
-}[]> {
+export default async function fetchMatches(): Promise<GameWithHands[]> {
   const connection = await Connection.getInstance().getConnection();
   try {
     let query = "SELECT * FROM Games WHERE IS_TEST = 0 ORDER BY TIME ASC";
