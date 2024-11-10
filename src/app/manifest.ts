@@ -7,8 +7,9 @@ export default function manifest(): MetadataRoute.Manifest {
         description: 'System for keeping track of mahjong scores',
         start_url: '/',
         display: 'standalone',
+        orientation: 'landscape',
         background_color: '#fff',
-        theme_color: 'rgb(229,70,70)',
+        theme_color: '#753e27',
         icons: [
             {
                 src: '/icon.png',
