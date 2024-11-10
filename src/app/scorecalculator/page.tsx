@@ -1,6 +1,6 @@
 "use client"
 import React, { useState, useEffect } from "react";
-import { Box, Typography, Slider, Select, MenuItem, Checkbox, FormControlLabel, FormControl, InputLabel } from "@mui/material";
+import { Box, Typography, Slider, Select, MenuItem, Checkbox, FormControlLabel, FormControl, InputLabel, SelectChangeEvent} from "@mui/material";
 
 export default function ScoreCalculatorPage() {
     const [flowers, setFlowers] = useState(0);
@@ -175,17 +175,17 @@ export default function ScoreCalculatorPage() {
         setFlowerScore(flowers * 4);
     }, [flowers]);
 
-    const handleFlowerChange = (event: any, newValue: any) => {
-        setFlowers(newValue);
+    const handleFlowerChange = (ignore: any, newValue: number | number[]) => {
+        setFlowers(newValue as number);
     };
 
-    const handleComboChange = (index: any, event: any) => {
+    const handleComboChange = (index: number, event: SelectChangeEvent<string>) => {
         const newCombos = [...combos];
         newCombos[index].name = event.target.value;
         setCombos(newCombos);
     };
 
-    const handleHiddenChange = (index: any, event: any) => {
+    const handleHiddenChange = (index: number, event: React.ChangeEvent<HTMLInputElement>) => {
         const newCombos = [...combos];
         newCombos[index].isHidden = event.target.checked;
         setCombos(newCombos);
