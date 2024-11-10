@@ -7,8 +7,13 @@ import {
   Toolbar,
   Box,
 } from "@mui/material";
+import {Session} from "next-auth";
 
-export default function HeaderClient({ session }: { readonly session: any }) {
+interface Props {
+  readonly session: Session | null;
+}
+
+export default function HeaderClient({ session }: Props) {
   return (
       <AppBar
           position="static"

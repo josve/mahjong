@@ -12,7 +12,11 @@ import LoginOutlinedIcon from '@mui/icons-material/LoginOutlined';
 import Person2OutlinedIcon from '@mui/icons-material/Person2Outlined';
 import { Session } from 'next-auth';
 
-export default function FooterClient({ session }: { readonly session: Session | null }) {
+interface Props {
+    readonly session: Session | null;
+}
+
+export default function FooterClient({ session }: Props) {
     const [value, setValue] = React.useState(0);
 
     return (
