@@ -46,7 +46,13 @@ export async function getMatchById(id: string): Promise<{
   }
 }
 
-export async function getTeamColors() {
+export async function getTeamColors(): Promise<{
+  [team_id: string]: {
+    color_red: string;
+    color_green: string;
+    color_blue: string;
+  }
+}> {
   const connection = await Connection.getInstance().getConnection();
   try {
     const [result]: any = await connection.query(
