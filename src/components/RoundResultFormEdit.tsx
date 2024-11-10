@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { TextField, Button, Box } from "@mui/material";
+import { TextField, Button, Box, Snackbar, Alert } from "@mui/material";
 import { useRouter } from "next/navigation";
 
 export default function RoundResultFormEdit({
@@ -19,6 +19,9 @@ export default function RoundResultFormEdit({
   const [formData, setFormData] = useState<{ [key: string]: any }>({
     scores: {},
   });
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState("");
+  const [snackbarSeverity, setSnackbarSeverity] = useState<"success" | "error">("success");
 
   useEffect(() => {
     const initialScores = hands.reduce((acc, hand) => {
@@ -54,10 +57,17 @@ export default function RoundResultFormEdit({
     })
       .then((response) => response.json())
       .then((data) => {
-        console.log("Success:", data);
-        router.push(`/match/${matchId}/edit`);
+        setSnackbarMessage("Result updated successfully!");
+        setSnackbarSeverity("success");
+        setSnackbarOpen(true);
+        setTimeout(() => {
+          router.push(`/match/${matchId}/edit`);
+        }, 2000);
       })
       .catch((error) => {
+        setSnackbarMessage("Failed to update result.");
+        setSnackbarSeverity("error");
+        setSnackbarOpen(true);
         console.error("Error:", error);
       });
   };
@@ -71,6 +81,10 @@ export default function RoundResultFormEdit({
         Number(score) % 2 == 0
     );
     return allScoresEntered;
+  };
+
+  const handleSnackbarClose = () => {
+    setSnackbarOpen(false);
   };
 
   return (
@@ -99,6 +113,19 @@ export default function RoundResultFormEdit({
       >
         Ändra resultat
       </Button>
+      <Snackbar
+        open={snackbarOpen}
+        autoHideDuration={6000}
+        onClose={handleSnackbarClose}
+      >
+        <Alert
+          onClose={handleSnackbarClose}
+          severity={snackbarSeverity}
+          sx={{ width: '100%' }}
+        >
+          {snackbarMessage}
+        </Alert>
+      </Snackbar>
     </Box>
   );
 }
