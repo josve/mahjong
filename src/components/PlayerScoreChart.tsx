@@ -105,8 +105,11 @@ const PlayerScoreChart: React.FC<PlayerScoreChartProps> = ({
 
             // Calculate scores, Mahjong wins, high roller scores, and average han
             sortedMatches.forEach((match, gameIndex) => {
-                const matchDate: any = new Date(match.TIME).getTime();
-                labels.push(matchDate);
+                const matchDate: Date = new Date(match.TIME);
+                const label = `${matchDate.getFullYear()}-${(matchDate.getMonth() + 1)
+                    .toString()
+                    .padStart(2, "0")}-${matchDate.getDate().toString().padStart(2, "0")}`;
+                labels.push(label);
 
                 // Initialize scores for this match
                 allPlayers.forEach((player) => {
