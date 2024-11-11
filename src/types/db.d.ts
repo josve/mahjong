@@ -50,6 +50,8 @@ export interface SimplePlayer {
  name: string
 }
 
+export interface PlayerOrTeam extends SimplePlayer {}
+
 export interface TeamIdToPlayerIds {
     [key: string]: string[];
 }

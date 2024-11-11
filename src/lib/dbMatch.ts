@@ -5,7 +5,7 @@ import {
   Hand,
   IdToColorMap,
   IdToName,
-  MatchWithIdx,
+  MatchWithIdx, PlayerOrTeam,
   SimplePlayer,
   TeamIdToDetails,
   TeamIdToPlayerIds,
@@ -36,6 +36,43 @@ export async function getMatchById(id: string): Promise<MatchWithIdx> {
       [id]
     );
     return rows[0];
+  } finally {
+    connection.release();
+  }
+}
+
+export async function getTeamAndPlayerColors(): Promise<IdToColorMap> {
+  const connection = await Connection.getInstance().getConnection();
+  try {
+    const [teamResult]: any = await connection.query(
+        `SELECT Teams.TEAM_ID, AVG(Players.color_red) as color_red, AVG(Players.color_green) as color_green, AVG(Players.color_blue) as color_blue FROM Teams 
+      INNER JOIN Players ON Players.PLAYER_ID = Teams.PLAYER_ID 
+      GROUP BY Teams.TEAM_ID`
+    );
+
+    const idToColorMap: IdToColorMap  = {};
+
+    for (const row of teamResult) {
+      idToColorMap[row.TEAM_ID] = {
+        color_red: row.color_red,
+        color_green: row.color_green,
+        color_blue: row.color_blue,
+      }
+    }
+
+    const [playerResult]: any = await connection.query(
+        "SELECT PLAYER_ID, color_red, color_green, color_blue FROM Players"
+    );
+
+    for (const row of playerResult) {
+      idToColorMap[row.TEAM_ID] = {
+        color_red: row.color_red,
+        color_green: row.color_green,
+        color_blue: row.color_blue,
+      }
+    }
+
+    return idToColorMap;
   } finally {
     connection.release();
   }
@@ -121,6 +158,29 @@ export async function getTeamIdToName(): Promise<IdToName> {
       acc[row.TEAM_ID] = row.NAME;
       return acc;
     }, {});
+  } finally {
+    connection.release();
+  }
+}
+
+export async function fetchAllTeamsAndPlayers(): Promise<PlayerOrTeam[]> {
+  const connection = await Connection.getInstance().getConnection();
+  try {
+    const [result]: any = await connection.query(
+        "SELECT DISTINCT Players.PLAYER_ID, Players.NAME FROM Players"
+    );
+    const players = result.map((row: any) => ({ id: row.PLAYER_ID, name: row.NAME }));
+    const [teamResult]: any = await connection.query(`
+      SELECT 
+        Teams.TEAM_ID,
+        COALESCE(MAX(TeamAttributes.VALUE), GROUP_CONCAT(Players.NAME ORDER BY Players.NAME SEPARATOR '+')) as NAME
+      FROM Teams
+      INNER JOIN Players ON Teams.PLAYER_ID = Players.PLAYER_ID
+      LEFT OUTER JOIN TeamAttributes ON TeamAttributes.TEAM_ID = Teams.TEAM_ID AND TeamAttributes.ATTRIBUTE = 'alias'
+      GROUP BY Teams.TEAM_ID
+    `);
+    const teams = teamResult.map((row: any) => ({ id: row.PLAYER_ID, name: row.NAME }));
+    return [...players, ...teams];
   } finally {
     connection.release();
   }

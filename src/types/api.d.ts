@@ -1,4 +1,13 @@
-import {GameWithHands, Hand, IdToColorMap, IdToName, MatchWithIdx, SimplePlayer, TeamIdToPlayerIds} from "@/types/db";
+import {
+    GameWithHands,
+    Hand,
+    IdToColorMap,
+    IdToName,
+    MatchWithIdx,
+    PlayerOrTeam,
+    SimplePlayer,
+    TeamIdToPlayerIds
+} from "@/types/db";
 
 export interface MatchChartResponse {
     hands: Hand[],
@@ -18,9 +27,11 @@ export interface AddResultResponse {
 
 export interface StatisticsResponse {
     allPlayers: SimplePlayer[];
+    allTeamsAndPlayers: PlayerOrTeam[];
     teamIdToName: IdToName;
     teamIdToPlayerIds: TeamIdToPlayerIds;
     playerColors: IdToColorMap;
+    teamAndPlayerColors: IdToColorMap;
     matches: GameWithHands[];
 }
 
