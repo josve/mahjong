@@ -9,6 +9,7 @@ import { Tabs, Tab, Box } from "@mui/material";
 import {GameWithHands, Hand, IdToColorMap, IdToName, SimplePlayer, TeamIdToPlayerIds} from "@/types/db";
 import {HighRollerInfo, IdToNumber, IdToNumbers, PeriodType} from "@/types/components";
 import {filterGames} from "@/lib/statsFilter";
+import {CustomTabPanel} from "@/components/CustomTabPanel";
 
 interface PlayerScoreChartProps {
   matches: GameWithHands[];
@@ -18,15 +19,6 @@ interface PlayerScoreChartProps {
   playerColors: IdToColorMap;
   period: PeriodType;
 }
-
-const CustomTabPanel = (props: { value: number; index: number; children: React.ReactNode }) => {
-  const { value, index, children } = props;
-  return (
-    <div role="tabpanel" hidden={value !== index} style={{ paddingTop: "15px" }}>
-      {value === index && <Box>{children}</Box>}
-    </div>
-  );
-};
 
 const PlayerScoreChart: React.FC<PlayerScoreChartProps> = ({
   matches,
