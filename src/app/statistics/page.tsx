@@ -70,6 +70,8 @@ export default function StatisticsPage() {
                 allPlayers={data.allPlayers}
                 teamIdToPlayerIds={data.teamIdToPlayerIds}
                 playerColors={data.playerColors}
+                allTeamsAndPlayers={data.allTeamsAndPlayers}
+                teamAndPlayerColors={data.teamAndPlayerColors}
                 period={period}
             />
         </div>

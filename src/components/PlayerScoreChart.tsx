@@ -6,7 +6,7 @@ import HighRollerChart from "./PlayerScoreChart/HighRollerChart";
 import AverageHandTable from "./PlayerScoreChart/AverageHandTable";
 import BoxPlot from "./PlayerScoreChart/BoxPlot"
 import { Tabs, Tab, Box } from "@mui/material";
-import {GameWithHands, Hand, IdToColorMap, IdToName, SimplePlayer, TeamIdToPlayerIds} from "@/types/db";
+import {GameWithHands, Hand, IdToColorMap, IdToName, PlayerOrTeam, SimplePlayer, TeamIdToPlayerIds} from "@/types/db";
 import {HighRollerInfo, IdToNumber, IdToNumbers, PeriodType} from "@/types/components";
 import {filterGames} from "@/lib/statsFilter";
 import {CustomTabPanel} from "@/components/CustomTabPanel";
@@ -18,16 +18,20 @@ interface PlayerScoreChartProps {
   teamIdToPlayerIds: TeamIdToPlayerIds;
   playerColors: IdToColorMap;
   period: PeriodType;
+  allTeamsAndPlayers: PlayerOrTeam[];
+  teamAndPlayerColors: IdToColorMap;
 }
 
 const PlayerScoreChart: React.FC<PlayerScoreChartProps> = ({
-  matches,
-  teamIdToName,
-  allPlayers,
-  teamIdToPlayerIds,
-  playerColors,
-  period,
-}) => {
+                                                               matches,
+                                                               teamIdToName,
+                                                               allPlayers,
+                                                               teamIdToPlayerIds,
+                                                               playerColors,
+                                                               period,
+                                                               allTeamsAndPlayers,
+                                                               teamAndPlayerColors
+                                                           }) => {
     const [selectedTab, setSelectedTab] = useState(0);
     const [filteredMatches, setFilteredMatches] = useState<GameWithHands[]>(matches);
 
