@@ -17,3 +17,5 @@ export type PlayerNameToColor = (playerName: string) => string | undefined;
 export interface HighRollerInfo {
     [key: string]: [number, number, number, boolean][]
 }
+
+export type PeriodType = "all" | "new" | "year";
