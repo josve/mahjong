@@ -1,22 +1,24 @@
 import React from "react";
 import ReactEcharts from "echarts-for-react";
 import {IdToNumber, PlayerNameToColor} from "@/types/components";
+import {MahjongStats} from "@/lib/statistics";
 
 interface MahjongWinsChartProps {
-  mahjongWins: IdToNumber;
-  getPlayerColor: PlayerNameToColor;
+  stats: MahjongStats;
 }
 
 const MahjongWinsChart: React.FC<MahjongWinsChartProps> = ({
-                                                             mahjongWins,
-                                                             getPlayerColor,
+                                                             stats
                                                            }) => {
 
-  const winsSeries = Object.entries(mahjongWins).map(([player, wins]) => ({
-    name: player,
-    value: wins,
+
+  const playerStats = stats.getNonTeamStats();
+
+  const winsSeries = playerStats.map((data) => ({
+    name: data.name,
+    value: data.wins,
     itemStyle: {
-      color: getPlayerColor(player),
+      color: data.color,
     },
   }));
 

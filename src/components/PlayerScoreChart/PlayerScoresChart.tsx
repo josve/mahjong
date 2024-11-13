@@ -1,49 +1,48 @@
 import React from "react";
 import ReactEcharts from "echarts-for-react";
-import {IdToNumbers, PlayerNameToColor} from "@/types/components";
+import {MahjongStats} from "@/lib/statistics";
 
 interface PlayerScoresChartProps {
-  playerScores: IdToNumbers;
-  labels: string[];
-  getPlayerColor: PlayerNameToColor;
+  stats: MahjongStats;
 }
 
 const PlayerScoresChart: React.FC<PlayerScoresChartProps> = ({
-                                                               playerScores,
-                                                               labels,
-                                                               getPlayerColor,
+                                                               stats,
                                                              }) => {
 
-  const scoreSeries = Object.entries(playerScores).map(([player, scores]) => ({
-    name: player,
+  const statsToUse = stats.getNonTeamStats();
+  console.log(statsToUse);
+
+  const scoreSeries = statsToUse.map((data) => ({
+    name: data.name,
     type: "line",
-    data: scores,
-    color: getPlayerColor(player),
+    data: data.scores,
+    color: data.color,
     smooth: true,
     lineStyle: {
       width: 2,
-      color: getPlayerColor(player),
+      color: data.color,
     },
     endLabel: {
       show: true,
       position: "right",
-      color: getPlayerColor(player),
+      color: data.color,
       fontSize: 14,
       fontWeight: "bold",
       backgroundColor: "white",
       textBorderColor: "white",
       formatter: (params: any) => {
-        if (params.dataIndex === scores.length - 1) {
-          return `${params.value} ${player}`;
+        if (params.dataIndex === data.scores.length - 1) {
+          return `${params.value} ${data.name}`;
         }
       },
     },
   }));
 
-  const toAdd = labels[labels.length - 1];
-  labels.push(toAdd);
-  labels.push(toAdd);
-  labels.push(toAdd);
+  const toAdd = stats.labels[stats.labels.length - 1];
+  stats.labels.push(toAdd);
+  stats.labels.push(toAdd);
+  stats.labels.push(toAdd);
 
   const scoreOptions = {
     animationDuration: "5000",
@@ -51,7 +50,7 @@ const PlayerScoresChart: React.FC<PlayerScoresChartProps> = ({
       trigger: "axis",
     },
     legend: {
-      data: Object.keys(playerScores),
+      data: statsToUse.map(item => item.name),
     },
     grid: {
       left: "3%",
@@ -62,7 +61,7 @@ const PlayerScoresChart: React.FC<PlayerScoresChartProps> = ({
     xAxis: {
       type: "category",
       boundaryGap: false,
-      data: labels,
+      data: stats.labels,
     },
     yAxis: {
       type: "value",

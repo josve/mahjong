@@ -21,12 +21,15 @@ export interface MatchWithIdx extends Match {
     GAME_IDX: number;
 }
 
+export interface PlayerColor {
+    color_red: number;
+    color_green: number;
+    color_blue: number;
+
+}
+
 export interface IdToColorMap {
-    [team_id: string]: {
-        color_red: number;
-        color_green: number;
-        color_blue: number;
-    }
+    [team_id: string]: PlayerColor
 }
 
 export interface Hand {

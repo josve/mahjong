@@ -65,7 +65,7 @@ export async function getTeamAndPlayerColors(): Promise<IdToColorMap> {
     );
 
     for (const row of playerResult) {
-      idToColorMap[row.TEAM_ID] = {
+      idToColorMap[row.PLAYER_ID] = {
         color_red: row.color_red,
         color_green: row.color_green,
         color_blue: row.color_blue,
@@ -179,7 +179,7 @@ export async function fetchAllTeamsAndPlayers(): Promise<PlayerOrTeam[]> {
       LEFT OUTER JOIN TeamAttributes ON TeamAttributes.TEAM_ID = Teams.TEAM_ID AND TeamAttributes.ATTRIBUTE = 'alias'
       GROUP BY Teams.TEAM_ID
     `);
-    const teams = teamResult.map((row: any) => ({ id: row.PLAYER_ID, name: row.NAME }));
+    const teams = teamResult.map((row: any) => ({ id: row.TEAM_ID, name: row.NAME }));
     return [...players, ...teams];
   } finally {
     connection.release();

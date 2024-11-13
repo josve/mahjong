@@ -1,14 +1,12 @@
 import React from "react";
-import {HighRollerInfo, PlayerNameToColor} from "@/types/components";
+import {MahjongStats} from "@/lib/statistics";
 
 interface HighRollerChartProps {
-  highRollerScores: HighRollerInfo;
-  getPlayerColor: PlayerNameToColor;
+    stats: MahjongStats;
 }
 
 const HighRollerChart: React.FC<HighRollerChartProps> = ({
-                                                           highRollerScores,
-                                                           getPlayerColor,
+                                                           stats
                                                          }) => {
 
   const getCircleSize = (score: number) => {
@@ -22,14 +20,16 @@ const HighRollerChart: React.FC<HighRollerChartProps> = ({
     );
   };
 
+  const playerStats = stats.getNonTeamStats();
+
   return (
       <div style={{ paddingTop: "20px" }}>
-        {Object.entries(highRollerScores).map(([player, scores]) => (
+        {playerStats.map((data) => (
             <div
-                key={player}
+                key={data.id}
                 style={{marginBottom: "20px"}}
             >
-              <h3>{player}</h3>
+              <h3>{data.name}</h3>
               <div style={{
                 marginTop: "10px",
                 display: "grid",
@@ -38,34 +38,34 @@ const HighRollerChart: React.FC<HighRollerChartProps> = ({
                 alignItems: "center",
                 gridTemplateColumns: "repeat(auto-fill, 30px)"
               }}>
-                {scores.map(([gameIndex, score, index, shared]) => (
+                {data.highRollers.map((highRoller) => (
                     <div
-                        key={index}
+                        key={highRoller.highRollerIndex}
                         style={{
-                          width: getCircleSize(score),
-                          height: getCircleSize(score),
+                          width: getCircleSize(highRoller.hand),
+                          height: getCircleSize(highRoller.hand),
                           borderRadius: "50%",
-                          ...(shared
+                          ...(highRoller.isTeam
                               ? {
                                 // Apply a pattern when 'shared' is true
                                 backgroundImage: `repeating-linear-gradient(
           120deg,
-          ${getPlayerColor(player)} 0%,
-          ${getPlayerColor(player)} 2px,
+          ${data.color} 0%,
+          ${data.color} 2px,
           #ffffff 4px,
           #ffffff 4px
         )`,
                               }
                               : {
                                 // Apply solid color when 'shared' is false
-                                backgroundColor: getPlayerColor(player),
+                                backgroundColor: data.color,
                               }),
                           display: "flex",
                           alignItems: "center",
                           justifyContent: "center",
                           margin: "0 5px",
                         }}
-                        title={`Spel #${gameIndex + 1}: ${score}`}
+                        title={`Spel #${highRoller.gameIndex + 1}: ${highRoller.hand}`}
                     >
                     </div>
                 ))}

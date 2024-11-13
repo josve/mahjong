@@ -7,21 +7,14 @@ import { aggregate } from "echarts-simple-transform";
 
 import { FormControl, InputLabel, Select, MenuItem} from "@mui/material";
 import {IdToNumbers, PlayerNameToColor} from "@/types/components";
+import {MahjongStats} from "@/lib/statistics";
 
 interface BoxPlotProps {
-    readonly allHands: IdToNumbers;
-    readonly allHandsNoTeams: IdToNumbers;
-    readonly allScores: IdToNumbers;
-    readonly allScoresNoTeams: IdToNumbers;
-    readonly getPlayerColor: PlayerNameToColor;
+    readonly stats: MahjongStats
 }
 
 const BoxPlot: React.FC<BoxPlotProps> = ({
-                                             allHands,
-                                             allHandsNoTeams,
-                                             allScores,
-                                             allScoresNoTeams,
-                                             getPlayerColor,
+                                             stats
                                          }) => {
 
     const [selectedSeries, setSelectedSeries] = useState('allHands');
@@ -30,21 +23,23 @@ const BoxPlot: React.FC<BoxPlotProps> = ({
         setSelectedSeries(event.target.value);
     };
 
-    const seriesToUse = selectedSeries === 'allHands' ? allHands :
-                        selectedSeries === 'allHandsNoTeams' ? allHandsNoTeams :
-                        selectedSeries === 'allScores' ? allScores :
-                        allScoresNoTeams;
-
-    const playerNames = Object.keys(seriesToUse);
     registerTransform(aggregate);
 
     const sourceData = [];
     sourceData.push(["Player","Score"]);
+
+    const playerData = stats.getNonTeamStats();
     const colors: any[] = [];
-    playerNames.forEach((playerName) => {
-        colors.push(getPlayerColor(playerName));
-        for (const hand of seriesToUse[playerName]) {
-            sourceData.push([playerName, hand]);
+
+    playerData.forEach((data) => {
+        const seriesToUse = selectedSeries === 'allHands' ? data.allHands :
+            selectedSeries === 'allHandsNoTeams' ? data.allHandsNoTeams :
+                selectedSeries === 'allScores' ? data.allScores :
+                    data.allScoresNoTeams;
+
+        colors.push(data.color);
+        for (const hand of seriesToUse) {
+            sourceData.push([data.name, hand]);
         }
     });
 

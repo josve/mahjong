@@ -6,38 +6,38 @@ import {
   TableRow,
   TableCell,
 } from "@mui/material";
-import {IdToNumber, PlayerNameToColor} from "@/types/components";
+import {MahjongStats} from "@/lib/statistics";
 
 interface AverageHandTableProps {
-  averageHand: IdToNumber;
-  getPlayerColor: PlayerNameToColor;
+    stats: MahjongStats;
 }
 
 const AverageHandTable: React.FC<AverageHandTableProps> = ({
-                                                             averageHand,
-                                                             getPlayerColor,
+                                                               stats,
                                                            }) => {
 
-  return (
-    <Table>
-      <TableHead>
-        <TableRow>
-          <TableCell>Spelare</TableCell>
-          <TableCell>Medelpoäng (omgång)</TableCell>
-        </TableRow>
-      </TableHead>
-      <TableBody>
-        {Object.entries(averageHand).map(([player, avgHand]) => (
-          <TableRow key={player}>
-            <TableCell style={{ color: getPlayerColor(player) }}>
-              {player}
-            </TableCell>
-            <TableCell>{avgHand.toFixed(2)}</TableCell>
-          </TableRow>
-        ))}
-      </TableBody>
-    </Table>
-  );
+    const nonTeams = stats.getNonTeamStats();
+
+    return (
+        <Table>
+            <TableHead>
+                <TableRow>
+                    <TableCell>Spelare</TableCell>
+                    <TableCell>Medelpoäng (omgång)</TableCell>
+                </TableRow>
+            </TableHead>
+            <TableBody>
+                {nonTeams.map((player) => (
+                    <TableRow key={player.id}>
+                        <TableCell style={{color: player.color}}>
+                            {player.name}
+                        </TableCell>
+                        <TableCell>{player.averageHand.toFixed(2)}</TableCell>
+                    </TableRow>
+                ))}
+            </TableBody>
+        </Table>
+    );
 };
 
 export default AverageHandTable;
