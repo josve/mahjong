@@ -105,6 +105,21 @@ const BoxPlot: React.FC<BoxPlotProps> = ({
                     tooltip: ['min', 'Q1', 'median', 'Q3', 'max']
                 }
             },
+            {
+                name: 'histogram',
+                type: 'bar',
+                datasetId: 'raw',
+                encode: {
+                    x: 'Score',
+                    y: 'Player',
+                    itemName: ['Player'],
+                    tooltip: ['Score']
+                },
+                barWidth: '50%',
+                itemStyle: {
+                    color: (params: any) => colors[params.dataIndex % colors.length],
+                },
+            },
         ]
     };
 
