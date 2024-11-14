@@ -18,7 +18,7 @@ export async function GET(req: NextRequest) {
     const playerColors = await getPlayerColors();
     const matches = await fetchMatches();
     const allTeamsAndPlayers = await fetchAllTeamsAndPlayers();
-    const teamAndPlayerColors = await getTeamAndPlayerColors();;
+    const teamAndPlayerColors = await getTeamAndPlayerColors();
 
     const data: StatisticsResponse = {
       allPlayers,
