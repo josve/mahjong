@@ -105,8 +105,6 @@ export class MahjongStats {
                     teamIdToPlayerIds[playerOrTeam.id] :
                     [];
             const color = teamAndPlayerColors[playerOrTeam.id];
-            console.log(playerOrTeam);
-            console.log(teamAndPlayerColors);
             const stringColor = `rgb(${color.color_red}, ${color.color_green}, ${color.color_blue})`;
             const playerData =  new PlayerData(playerOrTeam, playerIds, stringColor);
             this.idToPlayerData[playerOrTeam.id] = playerData;
@@ -114,15 +112,25 @@ export class MahjongStats {
         });
     }
 
-    public getNonTeamStats() {
+    public getDataToShow(showTeams: boolean = false) {
         const result = [];
         for (const playerOrTeam of this.playerDataList) {
             if (playerOrTeam.isPlayer()) {
                 result.push(playerOrTeam);
             }
+
+            if (showTeams &&
+                playerOrTeam.playerIds.length > 1 &&
+                playerOrTeam.numGames > 0) {
+                result.push(playerOrTeam);
+            }
         }
 
-        return result;
+        const sortedMatches = [...result].sort(
+            (a, b) => b.numGames - a.numGames
+        );
+
+        return sortedMatches.slice(0, 9);
     }
 
     private addLabel(game: GameWithHands) {

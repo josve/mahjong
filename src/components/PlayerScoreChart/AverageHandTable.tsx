@@ -10,13 +10,15 @@ import {MahjongStats} from "@/lib/statistics";
 
 interface AverageHandTableProps {
     stats: MahjongStats;
+    includeTeams: boolean;
 }
 
 const AverageHandTable: React.FC<AverageHandTableProps> = ({
                                                                stats,
+                                                               includeTeams
                                                            }) => {
 
-    const nonTeams = stats.getNonTeamStats();
+    const nonTeams = stats.getDataToShow(includeTeams);
 
     return (
         <Table>

@@ -6,15 +6,16 @@ import { registerTransform } from "echarts/core";
 import { aggregate } from "echarts-simple-transform";
 
 import { FormControl, InputLabel, Select, MenuItem} from "@mui/material";
-import {IdToNumbers, PlayerNameToColor} from "@/types/components";
 import {MahjongStats} from "@/lib/statistics";
 
 interface BoxPlotProps {
-    readonly stats: MahjongStats
+    readonly stats: MahjongStats;
+    readonly includeTeams: boolean;
 }
 
 const BoxPlot: React.FC<BoxPlotProps> = ({
-                                             stats
+                                             stats,
+                                             includeTeams
                                          }) => {
 
     const [selectedSeries, setSelectedSeries] = useState('allHands');
@@ -28,7 +29,7 @@ const BoxPlot: React.FC<BoxPlotProps> = ({
     const sourceData = [];
     sourceData.push(["Player","Score"]);
 
-    const playerData = stats.getNonTeamStats();
+    const playerData = stats.getDataToShow(includeTeams);
     const colors: any[] = [];
 
     playerData.forEach((data) => {

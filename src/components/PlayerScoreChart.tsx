@@ -11,7 +11,6 @@ import {
     IdToColorMap,
     IdToName,
     PlayerOrTeam,
-    SimplePlayer,
     TeamIdToPlayerIds
 } from "@/types/db";
 import {PeriodType} from "@/types/components";
@@ -22,12 +21,11 @@ import {MahjongStats} from "@/lib/statistics";
 interface PlayerScoreChartProps {
   matches: GameWithHands[];
   teamIdToName: IdToName;
-  allPlayers: SimplePlayer[];
   teamIdToPlayerIds: TeamIdToPlayerIds;
-  playerColors: IdToColorMap;
   period: PeriodType;
   allTeamsAndPlayers: PlayerOrTeam[];
   teamAndPlayerColors: IdToColorMap;
+  includeTeams: boolean;
 }
 
 const PlayerScoreChart: React.FC<PlayerScoreChartProps> = ({
@@ -35,7 +33,8 @@ const PlayerScoreChart: React.FC<PlayerScoreChartProps> = ({
                                                                teamIdToPlayerIds,
                                                                period,
                                                                allTeamsAndPlayers,
-                                                               teamAndPlayerColors
+                                                               teamAndPlayerColors,
+                                                               includeTeams
                                                            }) => {
     const [selectedTab, setSelectedTab] = useState(0);
     const [filteredMatches, setFilteredMatches] = useState<GameWithHands[]>(matches);
@@ -65,7 +64,7 @@ const PlayerScoreChart: React.FC<PlayerScoreChartProps> = ({
             stats.finish();
 
             return {stats};
-        }, [filteredMatches, teamIdToPlayerIds, allTeamsAndPlayers, teamAndPlayerColors]);
+        }, [filteredMatches, includeTeams, period, teamIdToPlayerIds, allTeamsAndPlayers, teamAndPlayerColors]);
 
     return (
         <div>
@@ -82,26 +81,31 @@ const PlayerScoreChart: React.FC<PlayerScoreChartProps> = ({
             <CustomTabPanel value={selectedTab} index={0}>
                 <PlayerScoresChart
                     stats={stats}
+                    includeTeams={includeTeams}
                 />
-            </CustomTabPanel>
+                    </CustomTabPanel>
             <CustomTabPanel value={selectedTab} index={1}>
                 <MahjongWinsChart
                     stats={stats}
+                    includeTeams={includeTeams}
                 />
             </CustomTabPanel>
             <CustomTabPanel value={selectedTab} index={2}>
                 <HighRollerChart
                     stats={stats}
+                    includeTeams={includeTeams}
                 />
             </CustomTabPanel>
             <CustomTabPanel value={selectedTab} index={3}>
                 <AverageHandTable
                     stats={stats}
+                    includeTeams={includeTeams}
                 />
             </CustomTabPanel>
             <CustomTabPanel value={selectedTab} index={4}>
                 <BoxPlot
                     stats={stats}
+                    includeTeams={includeTeams}
                 />
             </CustomTabPanel>
         </div>

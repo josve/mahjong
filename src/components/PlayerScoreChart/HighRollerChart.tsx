@@ -3,10 +3,12 @@ import {MahjongStats} from "@/lib/statistics";
 
 interface HighRollerChartProps {
     stats: MahjongStats;
+    readonly includeTeams: boolean;
 }
 
 const HighRollerChart: React.FC<HighRollerChartProps> = ({
-                                                           stats
+                                                           stats,
+                                                             includeTeams
                                                          }) => {
 
   const getCircleSize = (score: number) => {
@@ -20,7 +22,7 @@ const HighRollerChart: React.FC<HighRollerChartProps> = ({
     );
   };
 
-  const playerStats = stats.getNonTeamStats();
+  const playerStats = stats.getDataToShow(includeTeams);
 
   return (
       <div style={{ paddingTop: "20px" }}>
@@ -39,35 +41,39 @@ const HighRollerChart: React.FC<HighRollerChartProps> = ({
                 gridTemplateColumns: "repeat(auto-fill, 30px)"
               }}>
                 {data.highRollers.map((highRoller) => (
+                    <>
+                    {((!includeTeams || !highRoller.isTeam) || !data.isPlayer()) &&
                     <div
-                        key={highRoller.highRollerIndex}
-                        style={{
-                          width: getCircleSize(highRoller.hand),
-                          height: getCircleSize(highRoller.hand),
-                          borderRadius: "50%",
-                          ...(highRoller.isTeam
-                              ? {
-                                // Apply a pattern when 'shared' is true
-                                backgroundImage: `repeating-linear-gradient(
+                    key={highRoller.highRollerIndex}
+                  style={{
+                      width: getCircleSize(highRoller.hand),
+                      height: getCircleSize(highRoller.hand),
+                      borderRadius: "50%",
+                      ...(highRoller.isTeam
+                          ? {
+                              // Apply a pattern when 'shared' is true
+                              backgroundImage: `repeating-linear-gradient(
           120deg,
           ${data.color} 0%,
           ${data.color} 2px,
           #ffffff 4px,
           #ffffff 4px
         )`,
-                              }
-                              : {
-                                // Apply solid color when 'shared' is false
-                                backgroundColor: data.color,
-                              }),
-                          display: "flex",
-                          alignItems: "center",
-                          justifyContent: "center",
-                          margin: "0 5px",
-                        }}
-                        title={`Spel #${highRoller.gameIndex + 1}: ${highRoller.hand}`}
-                    >
-                    </div>
+                          }
+                          : {
+                              // Apply solid color when 'shared' is false
+                              backgroundColor: data.color,
+                          }),
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      margin: "0 5px",
+                  }}
+                  title={`Spel #${highRoller.gameIndex + 1}: ${highRoller.hand}`}
+              >
+              </div>
+                    }
+                    </>
                 ))}
               </div>
             </div>

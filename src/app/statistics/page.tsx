@@ -1,15 +1,16 @@
 "use client"
 import React, { useEffect, useState } from "react";
 import PlayerScoreChart from "@/components/PlayerScoreChart";
-import { Box } from "@mui/material";
+import {Box, FormControlLabel, FormGroup, Switch} from "@mui/material";
 import ToggleButton from '@mui/material/ToggleButton';
 import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
 import { CircularProgress } from "@mui/material";
-import {StatisticsResponse} from "@/types/api";
+import {StatisticsResponse, TeamsResponse} from "@/types/api";
 
 export default function StatisticsPage() {
     const [data, setData] = useState<StatisticsResponse | null>(null);
     const [period, setPeriod] = useState<"all" | "new" | "year">("all");
+    const [includeTeams, setIncludeTeams] = useState<boolean>(false);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -64,14 +65,18 @@ export default function StatisticsPage() {
                     </ToggleButton>
                 </ToggleButtonGroup>
             </Box>
-            <PlayerScoreChart
+            <FormGroup>
+                <FormControlLabel
+                    control={<Switch checked={includeTeams} onChange={() => {setIncludeTeams(!includeTeams);}}/>}
+                    label="Visa lag"/>
+            </FormGroup>
+                <PlayerScoreChart
                 matches={data.matches}
                 teamIdToName={data.teamIdToName}
-                allPlayers={data.allPlayers}
                 teamIdToPlayerIds={data.teamIdToPlayerIds}
-                playerColors={data.playerColors}
                 allTeamsAndPlayers={data.allTeamsAndPlayers}
                 teamAndPlayerColors={data.teamAndPlayerColors}
+                includeTeams={includeTeams}
                 period={period}
             />
         </div>

@@ -26,11 +26,9 @@ export interface AddResultResponse {
 }
 
 export interface StatisticsResponse {
-    allPlayers: SimplePlayer[];
     allTeamsAndPlayers: PlayerOrTeam[];
     teamIdToName: IdToName;
     teamIdToPlayerIds: TeamIdToPlayerIds;
-    playerColors: IdToColorMap;
     teamAndPlayerColors: IdToColorMap;
     matches: GameWithHands[];
 }

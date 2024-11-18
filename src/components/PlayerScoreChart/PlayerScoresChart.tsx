@@ -1,48 +1,27 @@
-import React from "react";
+import React, {useEffect, useState} from "react";
 import ReactEcharts from "echarts-for-react";
 import {MahjongStats} from "@/lib/statistics";
 
 interface PlayerScoresChartProps {
   stats: MahjongStats;
+  includeTeams: boolean;
 }
 
 const PlayerScoresChart: React.FC<PlayerScoresChartProps> = ({
                                                                stats,
+    includeTeams
                                                              }) => {
 
-  const statsToUse = stats.getNonTeamStats();
-  console.log(statsToUse);
 
-  const scoreSeries = statsToUse.map((data) => ({
-    name: data.name,
-    type: "line",
-    data: data.scores,
-    color: data.color,
-    smooth: true,
-    lineStyle: {
-      width: 2,
-      color: data.color,
-    },
-    endLabel: {
-      show: true,
-      position: "right",
-      color: data.color,
-      fontSize: 14,
-      fontWeight: "bold",
-      backgroundColor: "white",
-      textBorderColor: "white",
-      formatter: (params: any) => {
-        if (params.dataIndex === data.scores.length - 1) {
-          return `${params.value} ${data.name}`;
-        }
-      },
-    },
-  }));
-
+  const statsToUse = stats.getDataToShow(includeTeams);
   const toAdd = stats.labels[stats.labels.length - 1];
-  stats.labels.push(toAdd);
-  stats.labels.push(toAdd);
-  stats.labels.push(toAdd);
+  const currentLabels = [];
+  for (const label of stats.labels) {
+    currentLabels.push(label);
+  }
+  currentLabels.push(toAdd);
+  currentLabels.push(toAdd);
+  currentLabels.push(toAdd);
 
   const scoreOptions = {
     animationDuration: "5000",
@@ -61,20 +40,43 @@ const PlayerScoresChart: React.FC<PlayerScoresChartProps> = ({
     xAxis: {
       type: "category",
       boundaryGap: false,
-      data: stats.labels,
+      data: currentLabels,
     },
     yAxis: {
       type: "value",
     },
-    series: scoreSeries,
+    series: statsToUse.map((data) => ({
+      name: data.name,
+      type: "line",
+      data: data.scores,
+      color: data.color,
+      smooth: true,
+      lineStyle: {
+        width: 2,
+        color: data.color,
+      },
+      endLabel: {
+        show: true,
+        position: "right",
+        color: data.color,
+        fontSize: 14,
+        fontWeight: "bold",
+        backgroundColor: "white",
+        textBorderColor: "white",
+        formatter: (params: any) => {
+          if (params.dataIndex === data.scores.length - 1) {
+            return `${params.value} ${data.name}`;
+          }
+        },
+      },
+    })),
   };
 
-  return (
-    <ReactEcharts
+
+  return (<ReactEcharts
       option={scoreOptions}
-      style={{ height: "400px", paddingBottom: "20px" }}
-    />
-  );
+      style={{height: "800px", paddingBottom: "20px"}}
+  />);
 };
 
 export default PlayerScoresChart;

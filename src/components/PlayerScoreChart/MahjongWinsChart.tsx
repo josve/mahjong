@@ -5,14 +5,16 @@ import {MahjongStats} from "@/lib/statistics";
 
 interface MahjongWinsChartProps {
   stats: MahjongStats;
+  includeTeams: boolean;
 }
 
 const MahjongWinsChart: React.FC<MahjongWinsChartProps> = ({
-                                                             stats
+                                                             stats,
+                                                             includeTeams
                                                            }) => {
 
 
-  const playerStats = stats.getNonTeamStats();
+  const playerStats = stats.getDataToShow(includeTeams);
 
   const winsSeries = playerStats.map((data) => ({
     name: data.name,
