@@ -219,11 +219,14 @@ h3 {
 }
 
 .match-list-item-name {
-  font-size: 26px;
-  display: block;
-  margin: 5px 0;
-  text-align: left;
-  color: var(--match-item-color);
+    font-size: 26px;
+    display: block;
+    margin: 5px 0;
+    text-align: left;
+    color: var(--match-item-color);
+    max-width: 50vw;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .match-grid-item:hover .match-list-item-name {

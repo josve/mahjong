@@ -7,6 +7,7 @@ import {
 formatDate, 
 capitalize 
 } from "@/lib/formatting";
+import {Box} from "@mui/material";
 
 interface Props {
     readonly id: string;
@@ -38,23 +39,26 @@ export default async function MatchGridItem({ id }: Props) {
     <div className="match-grid-item">
      <div className="match-grid-item-number">
         #{match.GAME_IDX}
-      </div> 
-    <div className="match-grid-item-content">
-    <div className="match-grid-item-rounds">
-        {numberOfRounds} omgångar
-      </div> 
-      <div className="match-grid-item-time label">
-        {capitalize(formatDate(time))} ({timeString})
       </div>
-           
-      <div className="match-list-item-name">
-        {name}
-      </div>
-      <p className="match-round-info label">
-        {match.COMMENT}
-      </p>
+        <div className="match-grid-item-content">
+            <div className="match-grid-item-rounds">
+                {numberOfRounds} omgångar
+            </div>
+            <Box className="match-grid-item-time label" sx={{ display: { xs: "none", sm: "block" } }}>
+                {capitalize(formatDate(time))} ({timeString})
+            </Box>
+            <Box className="match-grid-item-time label" sx={{ display: { xs: "block", sm: "none" } }}>
+                {capitalize(formatDate(time))}
+            </Box>
+
+            <div className="match-list-item-name">
+                {name}
+            </div>
+            <p className="match-round-info label">
+                {match.COMMENT}
+            </p>
+        </div>
     </div>
-    </div>
-    </Link>
+  </Link>
   );
 }
