@@ -166,6 +166,10 @@ h3 {
 	margin-bottom: 15px;
 }
 
+.MuiPopover-root {
+    z-index: 999999 !important;
+}
+
 .match-grid-item-number {
     display: inline-block;
     font-size: 26px;
