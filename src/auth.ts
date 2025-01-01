@@ -4,9 +4,15 @@ import Credentials from "next-auth/providers/credentials"
 import Google from "next-auth/providers/google"
 import Connection from "@/lib/connection";
 import type {Provider} from "next-auth/providers";
+import GitHub from "next-auth/providers/github"
 
 function getProviders(): Provider[] {
     const providers: Provider[] = [];
+
+
+    if (process.env.AUTH_GITHUB_ID) {
+        providers.push(GitHub);
+    }
 
     if (process.env.AUTH_GOOGLE_ID) {
         providers.push(Google);
