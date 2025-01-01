@@ -44,6 +44,10 @@ function getProviders(): Provider[] {
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
   providers: getProviders(),
+    theme: {
+        logo: "/icon.png",
+        brandColor: "#753e27"
+    },
   callbacks: {
     async signIn({ user, account, profile, email, credentials }) {
       const connection = await Connection.getInstance().getConnection();
