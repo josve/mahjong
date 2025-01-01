@@ -4,10 +4,11 @@ import ReactEcharts from "echarts-for-react";
 import {Box, CircularProgress} from "@mui/material";
 import {capitalize, formatDate} from "@/lib/formatting";
 import {MatchChartResponse} from "@/types/api";
-import {Hand, PlayerOrTeam, TeamIdToPlayerIds} from "@/types/db";
+import {Hand, TeamIdToPlayerIds} from "@/types/db";
 import {HandWithScore} from "@/types/components";
 import {EChartsOption} from "echarts-for-react/src/types";
 import Confetti from 'react-confetti'
+import LastRoundDisplay from "@/components/match/LastRoundDisplay";
 
 interface Props {
   readonly matchId: string;
@@ -29,17 +30,26 @@ export default function MatchChartClient({
   const [data, setData] = useState<MatchChartResponse | null>(null);
   const [lastRoundCount, setLastRoundCount] = useState<number>(0);
   const [showConfetti, setShowConfetti] = useState<boolean>(false);
+  const [handsToShow, setHandsToShow] = useState<Hand[]>([]);
 
   useEffect(() => {
-    if (isEditable && data && data.hands.length > 4) {
-      let index = data.hands.length - 1;
+    if (data && data.hands.length > 4) {
+      const hands = [];
+      for (let index = data.hands.length - 4; index < data.hands.length; ++index) {
+        hands.push(data.hands[index]);
+      }
+      setHandsToShow(hands);
+    }
+
+  }, [data]);
+
+  useEffect(() => {
+    if (isEditable && handsToShow) {
       let winner: string | null = null;
-      for (let j = 0; j < 4; ++j) {
-        const hand = data.hands[index];
+      for (const hand of handsToShow) {
         if (hand.IS_WINNER) {
           winner = hand.TEAM_ID;
         }
-        index --;
       }
       if (winner) {
         let showConfetti = false;
@@ -58,7 +68,7 @@ export default function MatchChartClient({
         setShowConfetti(showConfetti);
       }
     }
-  }, [data]);
+  }, [handsToShow]);
 
   const fetchData = async () => {
     const response = await fetch(`/api/matchChart?matchId=${matchId}`);
@@ -435,6 +445,8 @@ export default function MatchChartClient({
               </div>
           )}
         </div>
+
+        {handsToShow && (<LastRoundDisplay teamIdToName={data.teamIdToName} hands={handsToShow}/>)}
 
         <ReactEcharts
             option={options}
