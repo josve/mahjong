@@ -33,6 +33,7 @@ export default async function Page({ params }: PageProps) {
       <MatchChart
         matchId={params.matchId}
         autoReload={false}
+        isEditable={true}
       />
       <RegisterResultControls matchId={params.matchId} />
     </>
