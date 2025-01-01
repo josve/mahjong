@@ -1,6 +1,6 @@
 import { auth } from "@/auth";
 import MatchChartClient from "@/components/match/matchChartClient";
-import {fetchAllTeamsAndPlayers, getTeamIdToPlayerIds} from "@/lib/dbMatch";
+import {getTeamIdToPlayerIds} from "@/lib/dbMatch";
 
 interface PageProps {
   readonly matchId: string;

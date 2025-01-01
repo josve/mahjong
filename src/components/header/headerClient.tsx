@@ -45,7 +45,7 @@ export default function HeaderClient({ session }: Props) {
                 />
                 <div className="header-title">
                   <span style={{fontWeight: "700"}}>Mahjong</span> Master System
-                  4.1
+                  4.2
                 </div>
               </Box>
             </Link>
