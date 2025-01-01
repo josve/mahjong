@@ -4,23 +4,61 @@ import ReactEcharts from "echarts-for-react";
 import {Box, CircularProgress} from "@mui/material";
 import {capitalize, formatDate} from "@/lib/formatting";
 import {MatchChartResponse} from "@/types/api";
-import {Hand} from "@/types/db";
+import {Hand, PlayerOrTeam, TeamIdToPlayerIds} from "@/types/db";
 import {HandWithScore} from "@/types/components";
 import {EChartsOption} from "echarts-for-react/src/types";
+import Confetti from 'react-confetti'
 
 interface Props {
   readonly matchId: string;
   readonly autoReload: boolean;
   readonly showPreviousRoundScore: boolean;
+  readonly teamIdToPlayerIds: TeamIdToPlayerIds;
+  readonly playerId: string | undefined;
+  readonly isEditable: boolean;
 }
 
 export default function MatchChartClient({
                                            matchId,
                                            autoReload,
                                            showPreviousRoundScore,
+                                           teamIdToPlayerIds,
+                                           playerId,
+                                           isEditable,
                                          }: Props) {
   const [data, setData] = useState<MatchChartResponse | null>(null);
   const [lastRoundCount, setLastRoundCount] = useState<number>(0);
+  const [showConfetti, setShowConfetti] = useState<boolean>(false);
+
+  useEffect(() => {
+    if (isEditable && data && data.hands.length > 4) {
+      let index = data.hands.length - 1;
+      let winner: string | null = null;
+      for (let j = 0; j < 4; ++j) {
+        const hand = data.hands[index];
+        if (hand.IS_WINNER) {
+          winner = hand.TEAM_ID;
+        }
+        index --;
+      }
+      if (winner) {
+        let showConfetti = false;
+        if (winner == playerId) {
+          showConfetti = true;
+        } else {
+          const playerIds = teamIdToPlayerIds[winner];
+          if (playerIds) {
+            for (const teamPlayerId of playerIds) {
+              if (teamPlayerId == playerId) {
+                showConfetti = true;
+              }
+            }
+          }
+        }
+        setShowConfetti(showConfetti);
+      }
+    }
+  }, [data]);
 
   const fetchData = async () => {
     const response = await fetch(`/api/matchChart?matchId=${matchId}`);
@@ -378,6 +416,11 @@ export default function MatchChartClient({
 
   return (
       <>
+        {showConfetti && (
+          <Confetti
+              recycle={false}
+          />)}
+
         <div>
           <div className="multi-title-header">
             <h1>{data?.match?.NAME}</h1>

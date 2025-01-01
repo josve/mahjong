@@ -35,6 +35,7 @@ export default async function Page({ params }: PageProps) {
     <>
       <MatchChart
         matchId={params.matchId}
+        isEditable={isEditable}
         autoReload={true}
       />
       {isEditable && (
