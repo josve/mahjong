@@ -5,8 +5,8 @@ import {
   Hand,
   IdToColorMap,
   IdToName,
-  MatchWithIdx, PlayerOrTeam,
-  SimplePlayer,
+  MatchWithIdx,
+  PlayerOrTeam,
   TeamIdToDetails,
   TeamIdToPlayerIds,
   TotalStatistics
@@ -16,11 +16,11 @@ export async function getTotalStatistics(): Promise<TotalStatistics> {
   const connection = await Connection.getInstance().getConnection();
   try {
     const [result]: any = await connection.query(`
-      SELECT 
-        COUNT(DISTINCT Games.GAME_ID) as totalMatches,
-        SUM(CASE WHEN IS_WINNER = 1 THEN 1 ELSE 0 END) as totalMahjongs,
-        COUNT(distinct concat(ROUND, Games.GAME_ID)) as totalRounds
-      FROM Hands INNER JOIN Games ON Hands.GAME_ID = Games.GAME_ID
+      SELECT COUNT(DISTINCT Games.GAME_ID)                as totalMatches,
+             SUM(IF(IS_WINNER = 1, 1, 0))                 as totalMahjongs,
+             COUNT(distinct concat(ROUND, Games.GAME_ID)) as totalRounds
+      FROM Hands
+             INNER JOIN Games ON Hands.GAME_ID = Games.GAME_ID
     `);
     return result[0];
   } finally {
@@ -126,7 +126,7 @@ export async function getHandsByGameId(id: string): Promise<Hand[]> {
   const connection = await Connection.getInstance().getConnection();
   try {
     const [hands]: any = await connection.query(
-      `SELECT * FROM Hands WHERE GAME_ID = ? ORDER BY ROUND ASC`,
+      `SELECT * FROM Hands WHERE GAME_ID = ? ORDER BY ROUND`,
       [id]
     );
     return hands;
@@ -181,18 +181,6 @@ export async function fetchAllTeamsAndPlayers(): Promise<PlayerOrTeam[]> {
     `);
     const teams = teamResult.map((row: any) => ({ id: row.TEAM_ID, name: row.NAME }));
     return [...players, ...teams];
-  } finally {
-    connection.release();
-  }
-}
-
-export async function getAllPlayers(): Promise<SimplePlayer[]> {
-  const connection = await Connection.getInstance().getConnection();
-  try {
-    const [result]: any = await connection.query(
-      "SELECT DISTINCT Players.PLAYER_ID, Players.NAME FROM Players"
-    );
-    return result.map((row: any) => ({ id: row.PLAYER_ID, name: row.NAME }));
   } finally {
     connection.release();
   }

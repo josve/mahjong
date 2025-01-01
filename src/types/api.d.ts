@@ -5,7 +5,6 @@ import {
     IdToName,
     MatchWithIdx,
     PlayerOrTeam,
-    SimplePlayer,
     TeamIdToPlayerIds
 } from "@/types/db";
 

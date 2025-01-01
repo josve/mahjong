@@ -65,7 +65,7 @@ export default function ScoreCalculatorPage() {
         combos.filter((combo) =>
             combo.name.includes("Tretal egen vind") ||
             combo.name.includes("Fyrtal egen vind"))
-            .forEach(combo => scoreMultiplier *= 2);
+            .forEach(_combo => scoreMultiplier *= 2);
 
         setWindMultiplier(scoreMultiplier);
     }, [combos]);
@@ -76,7 +76,7 @@ export default function ScoreCalculatorPage() {
         combos.filter((combo) =>
             combo.name.includes("Tretal drakar") ||
             combo.name.includes("Fyrtal drakar"))
-            .forEach(combo => scoreMultiplier *= 2);
+            .forEach(_combo => scoreMultiplier *= 2);
 
         setDragonsMultipler(scoreMultiplier);
     }, [combos]);

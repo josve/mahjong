@@ -16,14 +16,14 @@ export async function getAllMatches(): Promise<Game[]> {
 export default async function fetchMatches(): Promise<GameWithHands[]> {
   const connection = await Connection.getInstance().getConnection();
   try {
-    let query = "SELECT * FROM Games WHERE IS_TEST = 0 ORDER BY TIME ASC";
+    let query = "SELECT * FROM Games WHERE IS_TEST = 0 ORDER BY TIME";
 
     const [games]: any = await connection.query(query);
 
     // Fetch hands for each game
     for (const game of games) {
       const [hands] = await connection.query(
-        "SELECT * FROM Hands WHERE GAME_ID = ? ORDER BY ROUND ASC",
+        "SELECT * FROM Hands WHERE GAME_ID = ? ORDER BY ROUND",
         [game.GAME_ID]
       );
       game.hands = hands;

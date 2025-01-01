@@ -95,7 +95,7 @@ export default function HeaderClient({ session }: Props) {
                         title={session.user.name}
                         passHref
                   >
-                    {session.user.name}
+                    {session.user.name ?? 'Spelare'}
                   </Link>
                 </>
             )}

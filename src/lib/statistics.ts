@@ -1,5 +1,4 @@
-import {GameWithHands, Hand, IdToColorMap, PlayerColor, PlayerOrTeam, TeamIdToPlayerIds} from "@/types/db";
-import {Simulate} from "react-dom/test-utils";
+import {GameWithHands, Hand, IdToColorMap, PlayerOrTeam, TeamIdToPlayerIds} from "@/types/db";
 
 export interface HighRollerInfo {
     gameIndex: number;
@@ -43,12 +42,12 @@ export class PlayerData {
         return this.playerIds.length === 0;
     }
 
-    public initGame(game: GameWithHands) {
+    public initGame(_game: GameWithHands) {
         // Initialize scores for this match
         this.scores.push(this.scores.length > 0 ? this.scores[this.scores.length - 1] : 0);
     }
 
-    public addGame(game: GameWithHands) {
+    public addGame(_game: GameWithHands) {
         this.numGames++;
     }
 
