@@ -6,6 +6,10 @@ import {
 } from "@/lib/formatting";
 import {Box} from "@mui/material";
 import {Hand, MatchWithIdx} from "@/types/db";
+import { motion } from "motion/react"; // Import motion
+
+const MotionDiv = motion.div;
+const MotionBox = motion(Box);
 
 interface Props {
     readonly match: MatchWithIdx;
@@ -13,7 +17,7 @@ interface Props {
     readonly id: string;
 }
 
-export default async function MatchGridItemClient({ match, hands, id }: Props) {
+export default function MatchGridItemClient({ match, hands, id }: Props) {
 
     const name = match.NAME;
     const time = match.TIME;
@@ -34,7 +38,15 @@ export default async function MatchGridItemClient({ match, hands, id }: Props) {
 
     return (
         <Link href={`/match/${id}`}>
-            <div className="match-grid-item">
+            {/* Animated Match Grid Item */}
+            <MotionDiv
+                className="match-grid-item"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+                transition={{ duration: 0.5, ease: "easeOut" }}
+            >
                 <div className="match-grid-item-number">
                     #{match.GAME_IDX}
                 </div>
@@ -42,12 +54,24 @@ export default async function MatchGridItemClient({ match, hands, id }: Props) {
                     <div className="match-grid-item-rounds">
                         {numberOfRounds} omgångar
                     </div>
-                    <Box className="match-grid-item-time label" sx={{ display: { xs: "none", sm: "block" } }}>
+                    <MotionBox
+                        className="match-grid-item-time label"
+                        sx={{ display: { xs: "none", sm: "block" } }}
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        transition={{ delay: 0.2, duration: 0.5 }}
+                    >
                         {capitalize(formatDate(time))} ({timeString})
-                    </Box>
-                    <Box className="match-grid-item-time label" sx={{ display: { xs: "block", sm: "none" } }}>
+                    </MotionBox>
+                    <MotionBox
+                        className="match-grid-item-time label"
+                        sx={{ display: { xs: "block", sm: "none" } }}
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        transition={{ delay: 0.2, duration: 0.5 }}
+                    >
                         {capitalize(formatDate(time))}
-                    </Box>
+                    </MotionBox>
 
                     <div className="match-list-item-name">
                         {name}
@@ -56,7 +80,7 @@ export default async function MatchGridItemClient({ match, hands, id }: Props) {
                         {match.COMMENT}
                     </p>
                 </div>
-            </div>
+            </MotionDiv>
         </Link>
     );
 }
