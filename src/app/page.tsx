@@ -1,5 +1,5 @@
-import MatchGridItem from "@/components/matchGridItem";
-import TotalStatisticsRow from "@/components/totalStatisticsRow";
+import MatchGridItem from "@/components/matches/matchGridItem";
+import TotalStatisticsRow from "@/components/matches/totalStatisticsRow";
 import Link from "next/link";
 import { Box } from "@mui/material";
 import Grid from '@mui/material/Grid2';
