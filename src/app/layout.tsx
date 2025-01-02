@@ -4,8 +4,9 @@ import "./globals.css";
 import Header from "@/components/header/header";
 import Footer from "@/components/footer/footer";
 import { Container, Box } from "@mui/material";
-
-const inter = Inter({ subsets: ["latin"] });
+import { ThemeProvider, CssBaseline } from "@mui/material";
+import theme from "@/lib/theme";
+import Providers from "@/components/Providers";
 
 export const metadata: Metadata = {
   title: "Mahjong Master System 4.0",
@@ -19,29 +20,30 @@ export default function RootLayout({
 }>) {
     return (
         <html lang="en">
-        <body className={inter.className}>
-        <Header/>
-        <Container className="content-container">
-            <Box
-                sx={{
-                    paddingTop: "70px",
-                    minHeight: "calc(100vh + 100px)",
-                    paddingBottom: "70px",
-                    zIndex: -1000,
-                    margin: "0 auto",
-                    backgroundColor: "var(--white)",
-                }}
-            >
+        <body>
+        <Providers>
+            <Header/>
+            <Container className="content-container">
                 <Box
                     sx={{
-                        margin: "20px"
+                        paddingTop: "70px",
+                        minHeight: "calc(100vh + 100px)",
+                        paddingBottom: "70px",
+                        zIndex: -1000,
+                        margin: "0 auto",
+                        backgroundColor: "var(--white)",
                     }}
                 >
-                    {children}
+                    <Box
+                        sx={{
+                            margin: "20px"
+                        }}
+                    >
+                        {children}
+                    </Box>
                 </Box>
-            </Box>
-        </Container>
-        <Footer/>
+            </Container>
+        </Providers>
         </body>
         </html>
     );
