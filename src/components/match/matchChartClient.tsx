@@ -1,7 +1,7 @@
 "use client";
 import React, {useEffect, useState} from "react";
 import ReactEcharts from "echarts-for-react";
-import {Box, CircularProgress} from "@mui/material";
+import {Box, Button, CircularProgress, Typography} from "@mui/material";
 import {capitalize, formatDate} from "@/lib/formatting";
 import {MatchChartResponse} from "@/types/api";
 import {Hand, TeamIdToPlayerIds} from "@/types/db";
@@ -31,6 +31,30 @@ export default function MatchChartClient({
   const [lastRoundCount, setLastRoundCount] = useState<number>(0);
   const [showConfetti, setShowConfetti] = useState<boolean>(false);
   const [handsToShow, setHandsToShow] = useState<Hand[]>([]);
+  const [showAllRounds, setShowAllRounds] = useState<boolean>(false);
+  const [allHandsExceptFirst, setAllHandsExceptFirst] = useState<Hand[][]>([]);
+
+  const toggleShowAllRounds = () => {
+    setShowAllRounds(!showAllRounds);
+  };
+
+  useEffect(() => {
+    if (data && data.hands.length > 4) {
+      const result: Hand[][] = [];
+      let hands = [];
+      for (let index = 4; index < data.hands.length; ++index) {
+        hands.push(data.hands[index]);
+        if (hands.length == 4) {
+          result.push(hands);
+          hands = [];
+        }
+      }
+      console.log(result);
+      result.reverse();
+      setAllHandsExceptFirst(result);
+    }
+
+  }, [data]);
 
   useEffect(() => {
     if (data && data.hands.length > 4) {
@@ -446,12 +470,24 @@ export default function MatchChartClient({
           )}
         </div>
 
-        {handsToShow && (<LastRoundDisplay teamIdToName={data.teamIdToName} hands={handsToShow}/>)}
-
         <ReactEcharts
             option={options}
             style={{height: "600px"}}
         />
+        {handsToShow && !showAllRounds && (<>
+          <Typography variant="h5" style={{ paddingTop: 20 }}>Senaste omgången</Typography>
+              <LastRoundDisplay teamIdToName={data.teamIdToName} hands={handsToShow}/>
+              <Button style={{ marginTop: 20 }} variant="outlined" onClick={toggleShowAllRounds}>Visa alla omgångar</Button>
+              </>)}
+        {handsToShow && showAllRounds && (<>
+          <Typography variant="h5" style={{ paddingTop: 20 }}>Alla omgångar</Typography>
+          {allHandsExceptFirst.map(((round) => (
+              <Box style={{ paddingTop: 10}}>
+                <LastRoundDisplay teamIdToName={data.teamIdToName} hands={round}/>
+              </Box>
+          )))}
+          <Button style={{ marginTop: 20 }} variant="outlined" onClick={toggleShowAllRounds}>Visa bara senaste omgången</Button>
+        </>)}
       </>
   );
 }
