@@ -38,34 +38,49 @@ export default function MatchChartClient({
     setShowAllRounds(!showAllRounds);
   };
 
-  useEffect(() => {
-    if (data && data.hands.length > 4) {
-      const result: Hand[][] = [];
-      let hands = [];
-      for (let index = 4; index < data.hands.length; ++index) {
-        hands.push(data.hands[index]);
-        if (hands.length == 4) {
-          result.push(hands);
-          hands = [];
+        useEffect(() => {
+            const hands = data?.hands;
+                    if (hands && hands.length > 4) {
+            // Exclude the first 4 hands
+            const handsToProcess = hands.slice(4);
+
+            // Function to sort a ROUND by TEAM_ID
+            const sortByPlayerId = (a: Hand, b: Hand) => {
+                if (a.TEAM_ID < b.TEAM_ID) return -1;
+                if (a.TEAM_ID > b.TEAM_ID) return 1;
+                return 0;
+            };
+
+            const result: Hand[][] = [];
+
+            // Process hands in batches of 4 (each ROUND)
+            for (let i = 0; i < handsToProcess.length; i += 4) {
+                // Slice out a ROUND (4 hands)
+                const round = handsToProcess.slice(i, i + 4);
+
+                // Sort the ROUND by TEAM_ID
+                const sortedRound = [...round].sort(sortByPlayerId);
+
+                // Push the sorted ROUND into the result
+                result.push(sortedRound);
+            }
+
+            // Reverse the result array if needed
+            result.reverse();
+
+            // Update the state
+            setAllHandsExceptFirst(result);
         }
-      }
-      console.log(result);
-      result.reverse();
-      setAllHandsExceptFirst(result);
-    }
+    }, [data]);
 
-  }, [data]);
 
   useEffect(() => {
-    if (data && data.hands.length > 4) {
-      const hands = [];
-      for (let index = data.hands.length - 4; index < data.hands.length; ++index) {
-        hands.push(data.hands[index]);
-      }
-      setHandsToShow(hands);
+
+    if (allHandsExceptFirst && allHandsExceptFirst.length > 0) {
+      setHandsToShow(allHandsExceptFirst[0]);
     }
 
-  }, [data]);
+  }, [allHandsExceptFirst]);
 
   useEffect(() => {
     if (isEditable && handsToShow) {
