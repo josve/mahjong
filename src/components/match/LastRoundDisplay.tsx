@@ -1,4 +1,4 @@
-// components/LastRoundDisplay.tsx
+"use client";
 
 import React from 'react';
 import { Hand, IdToName } from '@/types/db';
@@ -10,6 +10,35 @@ import {
     Tooltip,
 } from '@mui/material';
 import { CheckCircle, LocalFireDepartment } from '@mui/icons-material';
+import { motion } from "motion/react"; // Import motion
+
+// Create motion-enhanced components
+const MotionGrid = motion(Grid);
+const MotionBox = motion(Box);
+
+// Define animation variants
+const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+        opacity: 1,
+        transition: {
+            staggerChildren: 0.1,
+            delayChildren: 0.2,
+        },
+    },
+};
+
+const itemVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: { opacity: 1, y: 0 },
+    hover: {
+        scale: 1.05,
+        transition: {
+            duration: 0.3,
+            ease: "easeInOut",
+        },
+    },
+};
 
 interface Props {
     readonly teamIdToName: IdToName;
@@ -27,15 +56,40 @@ const windIcon = (wind: string) => {
 };
 
 export default function LastRoundDisplay({ teamIdToName, hands }: Props) {
+
+    let highestScore = -100000;
+    let highestScorePlayer = undefined;
+    for (const hand of hands) {
+        if (hand.HAND_SCORE > highestScore) {
+            highestScore = hand.HAND_SCORE;
+            highestScorePlayer = hand.TEAM_ID;
+        }
+    }
+
     return (
         <>
-            <Grid container spacing={2}>
+            <MotionGrid
+                container
+                spacing={2}
+                variants={containerVariants}
+                initial="hidden"
+                animate="visible"
+            >
                 {hands.map((hand) => {
                     const isWinner = hand.IS_WINNER;
                     const isHighroller = hand.HAND >= 100;
+                    const hasHighestWin = highestScorePlayer == hand.TEAM_ID;
                     return (
-                        <Grid item xs={12} sm={6} md={3} key={hand.TEAM_ID}>
-                            <Box
+                        <MotionGrid
+                            item
+                            xs={12}
+                            sm={6}
+                            md={3}
+                            key={hand.TEAM_ID}
+                            variants={itemVariants}
+                            whileHover="hover"
+                        >
+                            <MotionBox
                                 sx={{
                                     border: isWinner ? '2px solid #4caf50' : '1px solid #e0e0e0',
                                     borderRadius: 2,
@@ -44,10 +98,14 @@ export default function LastRoundDisplay({ teamIdToName, hands }: Props) {
                                     position: 'relative',
                                     backgroundColor: isWinner ? '#e8f5e9' : 'transparent',
                                 }}
+                                initial={{ scale: 1 }}
+                                animate={{ scale: 1 }}
+                                whileHover={{ scale: 1.05 }}
+                                transition={{ type: "spring", stiffness: 300, damping: 20 }}
                             >
                                 {/* Vinnareikon */}
-                                {isWinner ? (
-                                    <Tooltip title="Vinnare">
+                                {hasHighestWin ? (
+                                    <Tooltip title="Högsta poäng">
                                         <CheckCircle
                                             color="success"
                                             sx={{ position: 'absolute', top: 8, right: 8 }}
@@ -93,11 +151,11 @@ export default function LastRoundDisplay({ teamIdToName, hands }: Props) {
                                         }}
                                     />
                                 )}
-                            </Box>
-                        </Grid>
+                            </MotionBox>
+                        </MotionGrid>
                     );
                 })}
-            </Grid>
+            </MotionGrid>
         </>
     );
 }
