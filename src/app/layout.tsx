@@ -1,11 +1,8 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
 import "./globals.css";
 import Header from "@/components/header/header";
 import Footer from "@/components/footer/footer";
 import { Container, Box } from "@mui/material";
-import { ThemeProvider, CssBaseline } from "@mui/material";
-import theme from "@/lib/theme";
 import Providers from "@/components/Providers";
 
 export const metadata: Metadata = {
@@ -43,6 +40,7 @@ export default function RootLayout({
                     </Box>
                 </Box>
             </Container>
+            <Footer/>
         </Providers>
         </body>
         </html>
