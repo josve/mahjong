@@ -420,13 +420,3 @@ h3 {
 .score-board-section > table > tbody > tr > td:first-child {
     padding-left: 0;
 }
-
-.match-grid-item {
-    position: relative;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-
-.match-grid-item:hover {
-    transform: scale(1.1);
-    z-index: 10; 
-}
