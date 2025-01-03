@@ -1,10 +1,10 @@
 "use client";
 import React, { useMemo, useState, useEffect } from "react";
-import PlayerScoresChart from "./PlayerScoreChart/PlayerScoresChart";
-import MahjongWinsChart from "./PlayerScoreChart/MahjongWinsChart";
-import HighRollerChart from "./PlayerScoreChart/HighRollerChart";
-import AverageHandTable from "./PlayerScoreChart/AverageHandTable";
-import BoxPlot from "./PlayerScoreChart/BoxPlot"
+import PlayerScoresChart from "./PlayerScoresChart";
+import MahjongWinsChart from "./MahjongWinsChart";
+import HighRollerChart from "./HighRollerChart";
+import AverageHandTable from "./AverageHandTable";
+import BoxPlot from "./BoxPlot"
 import { Tabs, Tab } from "@mui/material";
 import {
     GameWithHands,

@@ -1,6 +1,5 @@
 import React from "react";
 import ReactEcharts from "echarts-for-react";
-import {IdToNumber, PlayerNameToColor} from "@/types/components";
 import {MahjongStats} from "@/lib/statistics";
 
 interface MahjongWinsChartProps {
