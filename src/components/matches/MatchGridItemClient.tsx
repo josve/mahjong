@@ -25,6 +25,11 @@ const StyledCard = styled(Card)(({ theme }) => ({
     backgroundColor: '#ffffff', // Ensures the card background is white
 }));
 
+interface TeamScore {
+    team: string;
+    score: number;
+}
+
 export default function MatchGridItemClient({ index, match, idToName }: Props) {
 
     const hands = match.hands;
@@ -42,15 +47,13 @@ export default function MatchGridItemClient({ index, match, idToName }: Props) {
         scores[hand.TEAM_ID] += hand.HAND_SCORE;
     }
 
-    let bestScore = 0;
-    let winnerTeam: string | undefined = undefined;
-    for (const team of teams) {
-        const score = scores[team];
-        if (score > bestScore) {
-            bestScore = score;
-            winnerTeam = team;
-        }
-    }
+    const teamScores: TeamScore[] = teams.map(team => ({
+        team,
+        score: scores[team] || 0, // Default to 0 if the score is undefined
+    }));
+
+    // Sort the array in descending order based on the score
+    teamScores.sort((a, b) => b.score - a.score);
 
     // Generate a string with the time for the first and last rounds like (19:28-21:42)
     const firstRound = hands.length > 4 ? hands[4].TIME : hands[0].TIME;
@@ -88,11 +91,12 @@ export default function MatchGridItemClient({ index, match, idToName }: Props) {
                             </Typography>
                         </Box>
 
-                        {winnerTeam && (
-                            <Typography variant="body2" color="text.secondary" mt={1}>
-                                <strong>{idToName[winnerTeam]}</strong>: {bestScore}
+                        {teamScores.map((teamScore) => (
+                            <Typography key={teamScore.team} variant="body2" color="text.secondary" mt={1}>
+                                <strong>{idToName[teamScore.team]}</strong>: {teamScore.score}
                             </Typography>
-                        )}
+
+                        ))}
                         {match.COMMENT && (
                             <Typography variant="body2" color="text.secondary" mt={1}>
                                 {match.COMMENT}
