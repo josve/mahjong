@@ -10,7 +10,10 @@ import {
     Tooltip,
 } from '@mui/material';
 import { CheckCircle, LocalFireDepartment } from '@mui/icons-material';
-import { motion } from "motion/react"; // Import motion
+import { motion } from "motion/react";
+import {Round} from "@/components/match/matchChartClient"; // Import motion
+import CastleIcon from '@mui/icons-material/Castle';
+import { orange } from '@mui/material/colors';
 
 // Create motion-enhanced components
 const MotionGrid = motion(Grid);
@@ -42,7 +45,7 @@ const itemVariants = {
 
 interface Props {
     readonly teamIdToName: IdToName;
-    readonly hands: Hand[];
+    readonly round: Round;
 }
 
 const windIcon = (wind: string) => {
@@ -55,7 +58,10 @@ const windIcon = (wind: string) => {
     return windMap[wind] || wind;
 };
 
-export default function LastRoundDisplay({ teamIdToName, hands }: Props) {
+export default function LastRoundDisplay({ teamIdToName, round }: Props) {
+    const hands = round.hands;
+    const maxHand = round.maxHand;
+    const maxScore = round.maxScore;
 
     let highestScore = -100000;
     let highestScorePlayer = undefined;
@@ -76,8 +82,24 @@ export default function LastRoundDisplay({ teamIdToName, hands }: Props) {
                 animate="visible"
             >
                 {hands.map((hand) => {
+
+                    let oldHand: Hand | undefined = undefined;
+                    if (round.previousHand) {
+                        for (const prevHand of round.previousHand) {
+                            if (prevHand.TEAM_ID === hand.TEAM_ID) {
+                                oldHand = prevHand;
+                            }
+                        }
+                    }
+
+                    const hogmod = oldHand && oldHand.WIND == 'E' && hand.WIND == 'E';
+
                     const isWinner = hand.IS_WINNER;
                     const isHighroller = hand.HAND >= 100;
+
+                    const isBestHand = !isHighroller && hand.HAND == maxHand;
+                    const isBestScore = !isHighroller && !isBestHand && hand.HAND_SCORE == maxScore;
+
                     const hasHighestWin = highestScorePlayer == hand.TEAM_ID;
                     return (
                         <MotionGrid
@@ -137,13 +159,54 @@ export default function LastRoundDisplay({ teamIdToName, hands }: Props) {
                                     Resultat: {hand.HAND_SCORE}
                                 </Typography>
 
-                                {/* Highroller Chip */}
                                 {isHighroller && (
                                     <Chip
                                         label="Highroller"
                                         color="secondary"
                                         size="small"
                                         icon={<LocalFireDepartment />}
+                                        sx={{
+                                            position: 'absolute',
+                                            bottom: 8,
+                                            right: 8,
+                                        }}
+                                    />
+                                )}
+
+                                {isBestHand && (
+                                    <Chip
+                                        label="Bästa hand"
+                                        color="primary"
+                                        size="small"
+                                        icon={<LocalFireDepartment />}
+                                        sx={{
+                                            position: 'absolute',
+                                            bottom: 8,
+                                            right: 8,
+                                        }}
+                                    />
+                                )}
+
+                                {isBestScore && (
+                                    <Chip
+                                        label="Störst vinst"
+                                        color="primary"
+                                        size="small"
+                                        icon={<LocalFireDepartment />}
+                                        sx={{
+                                            position: 'absolute',
+                                            bottom: 8,
+                                            right: 8,
+                                        }}
+                                    />
+                                )}
+
+                                {hogmod && (
+                                    <Chip
+                                        label="Högmod"
+                                        color="warning"
+                                        size="small"
+                                        icon={<CastleIcon />}
                                         sx={{
                                             position: 'absolute',
                                             bottom: 8,

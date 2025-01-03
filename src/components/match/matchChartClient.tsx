@@ -19,6 +19,13 @@ interface Props {
   readonly isEditable: boolean;
 }
 
+export interface Round {
+  hands: Hand[];
+  previousHand?: Hand[];
+  maxHand: number;
+  maxScore: number;
+}
+
 export default function MatchChartClient({
                                            matchId,
                                            autoReload,
@@ -30,48 +37,68 @@ export default function MatchChartClient({
   const [data, setData] = useState<MatchChartResponse | null>(null);
   const [lastRoundCount, setLastRoundCount] = useState<number>(0);
   const [showConfetti, setShowConfetti] = useState<boolean>(false);
-  const [handsToShow, setHandsToShow] = useState<Hand[]>([]);
+  const [handsToShow, setHandsToShow] = useState<Round>({hands: [], maxHand: 0, maxScore: 0});
   const [showAllRounds, setShowAllRounds] = useState<boolean>(false);
-  const [allHandsExceptFirst, setAllHandsExceptFirst] = useState<Hand[][]>([]);
+  const [allHandsExceptFirst, setAllHandsExceptFirst] = useState<Round[]>([]);
 
   const toggleShowAllRounds = () => {
     setShowAllRounds(!showAllRounds);
   };
 
-        useEffect(() => {
-            const hands = data?.hands;
-                    if (hands && hands.length > 4) {
-            // Exclude the first 4 hands
-            const handsToProcess = hands.slice(4);
+  useEffect(() => {
+    const hands = data?.hands;
+    if (hands && hands.length > 4) {
+      // Exclude the first 4 hands
+      const handsToProcess = hands.slice(4);
 
-            // Function to sort a ROUND by TEAM_ID
-            const sortByPlayerId = (a: Hand, b: Hand) => {
-                if (a.TEAM_ID < b.TEAM_ID) return -1;
-                if (a.TEAM_ID > b.TEAM_ID) return 1;
-                return 0;
-            };
-
-            const result: Hand[][] = [];
-
-            // Process hands in batches of 4 (each ROUND)
-            for (let i = 0; i < handsToProcess.length; i += 4) {
-                // Slice out a ROUND (4 hands)
-                const round = handsToProcess.slice(i, i + 4);
-
-                // Sort the ROUND by TEAM_ID
-                const sortedRound = [...round].sort(sortByPlayerId);
-
-                // Push the sorted ROUND into the result
-                result.push(sortedRound);
-            }
-
-            // Reverse the result array if needed
-            result.reverse();
-
-            // Update the state
-            setAllHandsExceptFirst(result);
+      let maxHand = 0;
+      let maxScore = 0;
+      for (const hand of handsToProcess) {
+        if (hand.HAND > maxHand) {
+          maxHand = hand.HAND;
         }
-    }, [data]);
+        if (hand.HAND_SCORE > maxScore) {
+          maxScore = hand.HAND_SCORE;
+        }
+      }
+
+      // Function to sort a ROUND by TEAM_ID
+      const sortByPlayerId = (a: Hand, b: Hand) => {
+        if (a.TEAM_ID < b.TEAM_ID) return -1;
+        if (a.TEAM_ID > b.TEAM_ID) return 1;
+        return 0;
+      };
+
+      const result: Round[] = [];
+
+      let prevHand: Hand[] | undefined = undefined;
+
+      // Process hands in batches of 4 (each ROUND)
+      for (let i = 0; i < handsToProcess.length; i += 4) {
+        // Slice out a ROUND (4 hands)
+        const round = handsToProcess.slice(i, i + 4);
+
+        // Sort the ROUND by TEAM_ID
+        const sortedRound = [...round].sort(sortByPlayerId);
+
+        // Push the sorted ROUND into the result
+        result.push({
+          hands: sortedRound,
+          previousHand: prevHand,
+          maxScore: maxScore,
+          maxHand: maxHand,
+        });
+
+        prevHand = sortedRound;
+      }
+
+      // Reverse the result array if needed
+      result.reverse();
+
+      // Update the state
+      setAllHandsExceptFirst(result);
+    }
+  }, [data]);
 
 
   useEffect(() => {
@@ -85,7 +112,7 @@ export default function MatchChartClient({
   useEffect(() => {
     if (isEditable && handsToShow) {
       let winner: string | null = null;
-      for (const hand of handsToShow) {
+      for (const hand of handsToShow.hands) {
         if (hand.IS_WINNER) {
           winner = hand.TEAM_ID;
         }
@@ -466,9 +493,9 @@ export default function MatchChartClient({
   return (
       <>
         {showConfetti && (
-          <Confetti
-              recycle={false}
-          />)}
+            <Confetti
+                recycle={false}
+            />)}
 
         <div>
           <div className="multi-title-header">
@@ -489,19 +516,20 @@ export default function MatchChartClient({
             option={options}
             style={{height: "600px"}}
         />
-        {handsToShow && !showAllRounds && (<>
-          <Typography variant="h5" style={{ paddingTop: 20 }}>Senaste omgången</Typography>
-              <LastRoundDisplay teamIdToName={data.teamIdToName} hands={handsToShow}/>
-              <Button style={{ marginTop: 20 }} variant="outlined" onClick={toggleShowAllRounds}>Visa alla omgångar</Button>
-              </>)}
-        {handsToShow && showAllRounds && (<>
-          <Typography variant="h5" style={{ paddingTop: 20 }}>Alla omgångar</Typography>
+        {handsToShow && handsToShow.hands.length > 0 && !showAllRounds && (<>
+          <Typography variant="h5" style={{paddingTop: 30}}>Senaste omgången</Typography>
+          <LastRoundDisplay teamIdToName={data.teamIdToName} round={handsToShow}/>
+          <Button style={{marginTop: 20}} variant="outlined" onClick={toggleShowAllRounds}>Visa alla omgångar</Button>
+        </>)}
+        {handsToShow && handsToShow.hands.length > 0 && showAllRounds && (<>
+          <Typography variant="h5" style={{paddingTop: 30}}>Alla omgångar</Typography>
           {allHandsExceptFirst.map(((round) => (
-              <Box style={{ paddingTop: 10}}>
-                <LastRoundDisplay teamIdToName={data.teamIdToName} hands={round}/>
+              <Box style={{paddingTop: 10}}>
+                <LastRoundDisplay teamIdToName={data.teamIdToName} round={round}/>
               </Box>
           )))}
-          <Button style={{ marginTop: 20 }} variant="outlined" onClick={toggleShowAllRounds}>Visa bara senaste omgången</Button>
+          <Button style={{marginTop: 20}} variant="outlined" onClick={toggleShowAllRounds}>Visa bara senaste
+            omgången</Button>
         </>)}
       </>
   );
