@@ -6,11 +6,13 @@ import fetchMatches, { getAllMatches} from "@/lib/fetchMatches";
 import {auth} from "@/auth";
 import {GameWithHands} from "@/types/db";
 import MatchGridItemClient from "@/components/matches/MatchGridItemClient";
+import {getTeamIdToName} from "@/lib/dbMatch";
 
 export const revalidate = 60;
 
 export default async function Home() {
     const matches = await fetchMatches(true);
+    const idToName = await getTeamIdToName();
     const numMatches = matches.length;
 
     let allowCreate = true;
@@ -49,7 +51,7 @@ export default async function Home() {
                         key={match.GAME_ID}
                     >
                         {" "}
-                        <MatchGridItemClient index={numMatches - index} match={match}/>
+                        <MatchGridItemClient index={numMatches - index} idToName={idToName} match={match}/>
                     </Grid>
                 ))}
             </Grid>
