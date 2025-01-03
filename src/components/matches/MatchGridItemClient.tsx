@@ -11,9 +11,13 @@ import {
     CardContent,
     Typography,
     CardActionArea,
-    styled
+    styled,
+    Chip
 } from "@mui/material";
 import { GameWithHands, IdToName } from "@/types/db";
+import {LocalFireDepartment} from "@mui/icons-material";
+import React from "react";
+import NotificationsIcon from '@mui/icons-material/Notifications';
 
 interface Props {
     readonly match: GameWithHands;
@@ -23,6 +27,7 @@ interface Props {
 
 const StyledCard = styled(Card)(({ theme }) => ({
     backgroundColor: '#ffffff', // Ensures the card background is white
+    position: 'relative', // To position the active indicator absolutely within the card
 }));
 
 interface TeamScore {
@@ -40,10 +45,17 @@ export default function MatchGridItemClient({ index, match, idToName }: Props) {
 
     const teams = [match.TEAM_ID_1, match.TEAM_ID_2, match.TEAM_ID_3, match.TEAM_ID_4];
 
+    let hasLimitHand = false;
+
     for (const hand of match.hands) {
         if (!scores.hasOwnProperty(hand.TEAM_ID)) {
             scores[hand.TEAM_ID] = 500;
         }
+
+        if (hand.HAND === 300) {
+            hasLimitHand = true;
+        }
+
         scores[hand.TEAM_ID] += hand.HAND_SCORE;
     }
 
@@ -68,6 +80,9 @@ export default function MatchGridItemClient({ index, match, idToName }: Props) {
     const timeString = `${formatTime(new Date(firstRound))}-${formatTime(
         new Date(lastRound)
     )}`;
+
+    const isActive =
+        new Date().getTime() - match.TIME.getTime() < 24 * 60 * 60 * 1000;
 
     return (
         <Link href={`/match/${match.GAME_ID}`} passHref legacyBehavior>
@@ -95,7 +110,6 @@ export default function MatchGridItemClient({ index, match, idToName }: Props) {
                             <Typography key={teamScore.team} variant="body2" color="text.secondary" mt={1}>
                                 <strong>{idToName[teamScore.team]}</strong>: {teamScore.score}
                             </Typography>
-
                         ))}
                         {match.COMMENT && (
                             <Typography variant="body2" color="text.secondary" mt={1}>
@@ -103,6 +117,34 @@ export default function MatchGridItemClient({ index, match, idToName }: Props) {
                             </Typography>
                         )}
                     </CardContent>
+
+                    {hasLimitHand && (
+                        <Chip
+                            label="Limit hand"
+                            color="error"
+                            size="small"
+                            icon={<LocalFireDepartment />}
+                            sx={{
+                                position: 'absolute',
+                                bottom: 8,
+                                right: 8,
+                            }}
+                        />
+                    )}
+
+                    {isActive && (
+                        <Chip
+                            label="Aktiv match"
+                            color="primary"
+                            size="small"
+                            icon={<NotificationsIcon/>}
+                            sx={{
+                                position: 'absolute',
+                                bottom: 8,
+                                right: 8,
+                            }}
+                        />
+                    )}
                 </StyledCard>
             </CardActionArea>
         </Link>

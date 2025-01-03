@@ -161,8 +161,8 @@ export default function LastRoundDisplay({ teamIdToName, round }: Props) {
 
                                 {isHighroller && (
                                     <Chip
-                                        label="Highroller"
-                                        color="secondary"
+                                        label={hand.HAND === 300 ? 'Limit hand' : 'Highroller'}
+                                        color={hand.HAND === 300 ? 'error' : 'secondary'}
                                         size="small"
                                         icon={<LocalFireDepartment />}
                                         sx={{
