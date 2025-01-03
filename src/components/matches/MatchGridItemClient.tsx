@@ -4,16 +4,16 @@ import {
     capitalize
 } from "@/lib/formatting";
 import {Box} from "@mui/material";
-import {Hand, MatchWithIdx} from "@/types/db";
+import {GameWithHands} from "@/types/db";
 
 interface Props {
-    readonly match: MatchWithIdx;
-    readonly hands: Hand[];
-    readonly id: string;
+    readonly match: GameWithHands;
+    readonly index: number;
 }
 
-export default function MatchGridItemClient({ match, hands, id }: Props) {
+export default function MatchGridItemClient({ index, match }: Props) {
 
+    const hands = match.hands;
     const name = match.NAME;
     const time = match.TIME;
 
@@ -32,12 +32,12 @@ export default function MatchGridItemClient({ match, hands, id }: Props) {
     )}`;
 
     return (
-        <Link href={`/match/${id}`}>
+        <Link href={`/match/${match.GAME_ID}`}>
             <Box
                 className="match-grid-item"
             >
                 <div className="match-grid-item-number">
-                    #{match.GAME_IDX}
+                    #{index}
                 </div>
                 <div className="match-grid-item-content">
                     <div className="match-grid-item-rounds">
@@ -47,11 +47,6 @@ export default function MatchGridItemClient({ match, hands, id }: Props) {
                         className="match-grid-item-time label"
                     >
                         {capitalize(formatDate(time))} ({timeString})
-                    </Box>
-                    <Box
-                        className="match-grid-item-time label"
-                    >
-                        {capitalize(formatDate(time))}
                     </Box>
 
                     <div className="match-list-item-name">

@@ -13,10 +13,11 @@ export async function getAllMatches(): Promise<Game[]> {
   }
 }
 
-export default async function fetchMatches(): Promise<GameWithHands[]> {
+export default async function fetchMatches(desc: boolean = false): Promise<GameWithHands[]> {
   const connection = await Connection.getInstance().getConnection();
   try {
-    let query = "SELECT * FROM Games WHERE IS_TEST = 0 ORDER BY TIME";
+    let query = "SELECT * FROM Games WHERE IS_TEST = 0 ORDER BY TIME " + (desc ? "DESC" : "ASC");
+
 
     const [games]: any = await connection.query(query);
 

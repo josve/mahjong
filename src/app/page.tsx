@@ -1,15 +1,17 @@
-import MatchGridItem from "@/components/matches/matchGridItem";
 import TotalStatisticsRow from "@/components/matches/totalStatisticsRow";
 import Link from "next/link";
 import { Box } from "@mui/material";
 import Grid from '@mui/material/Grid2';
-import { getAllMatches} from "@/lib/fetchMatches";
+import fetchMatches, { getAllMatches} from "@/lib/fetchMatches";
 import {auth} from "@/auth";
+import {GameWithHands} from "@/types/db";
+import MatchGridItemClient from "@/components/matches/MatchGridItemClient";
 
 export const revalidate = 60;
 
 export default async function Home() {
-    const matches = await getAllMatches();
+    const matches = await fetchMatches(true);
+    const numMatches = matches.length;
 
     let allowCreate = true;
     if (process.env.REQUIRE_LOGIN) {
@@ -41,13 +43,13 @@ export default async function Home() {
                 sx={{marginTop: "20px"}}
             >
                 {" "}
-                {matches.map((match: { GAME_ID: string }) => (
+                {matches.map((match: GameWithHands, index) => (
                     <Grid
                         size={{ xs: 12, sm: 6}}
                         key={match.GAME_ID}
                     >
                         {" "}
-                        <MatchGridItem id={match.GAME_ID}/>
+                        <MatchGridItemClient index={numMatches - index} match={match}/>
                     </Grid>
                 ))}
             </Grid>
