@@ -517,12 +517,12 @@ export default function MatchChartClient({
             style={{height: "600px"}}
         />
         {handsToShow && handsToShow.hands.length > 0 && !showAllRounds && (<>
-          <Typography variant="h5" style={{paddingTop: 30}}>Senaste omgången</Typography>
+          <Typography variant="h5" style={{paddingTop: 30, paddingBottom: 10}}>Senaste omgången</Typography>
           <LastRoundDisplay teamIdToName={data.teamIdToName} round={handsToShow}/>
           <Button style={{marginTop: 20}} variant="outlined" onClick={toggleShowAllRounds}>Visa alla omgångar</Button>
         </>)}
         {handsToShow && handsToShow.hands.length > 0 && showAllRounds && (<>
-          <Typography variant="h5" style={{paddingTop: 30}}>Alla omgångar</Typography>
+          <Typography variant="h5" style={{paddingTop: 30, paddingBottom: 10}}>Alla omgångar</Typography>
           {allHandsExceptFirst.map(((round) => (
               <Box style={{paddingTop: 10}}>
                 <LastRoundDisplay teamIdToName={data.teamIdToName} round={round}/>

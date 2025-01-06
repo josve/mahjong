@@ -6,7 +6,7 @@ import {UpdateResultResponse} from "@/types/api";
 export async function POST(req: NextRequest) {
 
   const body = await req.json();
-  const { matchId, scores, round } = body;
+  const { matchId, scores, round, eastTeam, winner } = body;
 
   if (process.env.REQUIRE_LOGIN) {
     const session = await auth();
@@ -15,28 +15,17 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({error: 'Unauthorized'}, {status: 401});
     }
   }
-
+  
   const connection = await Connection.getInstance().getConnection();
+  const windOrder = ['E', 'N', 'W', 'S'];
 
   try {
-    const [eastTeamResult]: any = await connection.query(
-      "SELECT TEAM_ID as EAST_TEAM FROM Hands WHERE GAME_ID = ? AND ROUND = ? AND WIND = 'E' LIMIT 1",
-      [matchId, round]
-    );
-
-    const eastTeam = eastTeamResult[0]?.EAST_TEAM;
-
-    const [winnerResult]: any = await connection.query(
-      "SELECT TEAM_ID as WINNER FROM Hands WHERE GAME_ID = ? AND ROUND = ? AND IS_WINNER = TRUE LIMIT 1",
-      [matchId, round]
-    );
-    const winner = winnerResult[0]?.WINNER || null;
-
     const teamIds = Object.keys(scores);
 
     await Promise.all(teamIds.map(async (teamId, i) => {
       let handScore = 0;
       const hand = scores[teamId];
+      const eastIndex = teamIds.indexOf(eastTeam);
 
       for (let j = 0; j < teamIds.length; j++) {
         if (i !== j) {
@@ -53,9 +42,11 @@ export async function POST(req: NextRequest) {
         }
       }
 
+      const wind = windOrder[(i - eastIndex + 4) % 4];
+
       await connection.query(
-        "UPDATE Hands SET HAND = ?, HAND_SCORE = ? WHERE GAME_ID = ? AND ROUND = ? AND TEAM_ID = ?",
-        [hand, handScore, matchId, round, teamId]
+        "UPDATE Hands SET HAND = ?, HAND_SCORE = ?, IS_WINNER = ?, WIND = ?  WHERE GAME_ID = ? AND ROUND = ? AND TEAM_ID = ?",
+        [hand, handScore, teamId === winner, wind, matchId, round, teamId]
       );
     }));
 
