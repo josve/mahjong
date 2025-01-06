@@ -1,16 +1,16 @@
+// components/FooterClient.tsx
+
 "use client";
 
 import React from "react";
-import { BottomNavigation, BottomNavigationAction } from "@mui/material";
-import Paper from '@mui/material/Paper';
+import {
+    BottomNavigation,
+    BottomNavigationAction,
+} from "@mui/material";
+import Paper from "@mui/material/Paper";
 import Link from "next/link";
-import CasinoOutlinedIcon from '@mui/icons-material/CasinoOutlined';
-import TrendingUpOutlinedIcon from '@mui/icons-material/TrendingUpOutlined';
-import CalculateOutlinedIcon from '@mui/icons-material/CalculateOutlined';
-import TableChartOutlinedIcon from '@mui/icons-material/TableChartOutlined';
-import LoginOutlinedIcon from '@mui/icons-material/LoginOutlined';
-import Person2OutlinedIcon from '@mui/icons-material/Person2Outlined';
-import { Session } from 'next-auth';
+import { Session } from "next-auth";
+import { getNavigationItems, NavigationItem } from "@/lib/navigationItems";
 
 interface Props {
     readonly session: Session | null;
@@ -18,17 +18,28 @@ interface Props {
 
 export default function FooterClient({ session }: Props) {
     const [value, setValue] = React.useState(0);
+    const navigationItems: NavigationItem[] = getNavigationItems(session);
+
+    // Filter items to include both authenticated and guest links
+    const visibleItems = navigationItems.filter((item) =>
+        item.auth === "both" ||
+        (item.auth === "authenticated" && session?.user) ||
+        (item.auth === "guest" && !session?.user)
+    );
 
     return (
-        <Paper sx={{
-            display: {xs: "block", md: "none"},
-            paddingBottom: "calc(1.5rem + env(safe-area-inset-bottom))",
-            zIndex: "9000",
-            position: 'fixed',
-            bottom: 0,
-            left: 0,
-            right: 0
-        }} elevation={3}>
+        <Paper
+            sx={{
+                display: { xs: "block", md: "none" },
+                paddingBottom: "calc(1.5rem + env(safe-area-inset-bottom))",
+                zIndex: "9000",
+                position: "fixed",
+                bottom: 0,
+                left: 0,
+                right: 0,
+            }}
+            elevation={3}
+        >
             <BottomNavigation
                 showLabels
                 value={value}
@@ -37,46 +48,15 @@ export default function FooterClient({ session }: Props) {
                 }}
                 className="footer"
             >
-                <BottomNavigationAction
-                    label="Matcher"
-                    icon={<CasinoOutlinedIcon/>}
-                    component={Link}
-                    href="/"
-                />
-                <BottomNavigationAction
-                    label="Statistik"
-                    icon={<TrendingUpOutlinedIcon/>}
-                    component={Link}
-                    href="/statistics"
-                />
-                <BottomNavigationAction
-                    label="Poängtabell"
-                    icon={<TableChartOutlinedIcon/>}
-                    component={Link}
-                    href="/scoreboard"
-                />
-                <BottomNavigationAction
-                    label="Poängräknare"
-                    icon={<CalculateOutlinedIcon/>}
-                    component={Link}
-                    href="/scorecalculator"
-                />
-                {!session?.user &&
+                {visibleItems.map((item, index) => (
                     <BottomNavigationAction
-                        label="Logga in"
-                        icon={<LoginOutlinedIcon/>}
+                        key={item.label}
+                        label={item.label}
+                        icon={<item.icon/>}
                         component={Link}
-                        href="/api/auth/signin"
+                        href={item.href}
                     />
-                }
-                {session?.user && (
-                    <BottomNavigationAction
-                        label={session.user.name}
-                        icon={<Person2OutlinedIcon/>}
-                        component={Link}
-                        href="/profile"
-                    />
-                )}
+                ))}
             </BottomNavigation>
         </Paper>
     );

@@ -85,3 +85,10 @@ export interface Game {
 export interface GameWithHands extends Game {
     hands: Hand[];
 }
+
+export interface UpcomingGame {
+    id: number;
+    game_time: Date;
+    meeting_link?: string | null; // Nullable field
+    created_at: Date;
+}
