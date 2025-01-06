@@ -2,22 +2,25 @@ import TotalStatisticsRow from "@/components/matches/totalStatisticsRow";
 import Link from "next/link";
 import { Box } from "@mui/material";
 import Grid from '@mui/material/Grid2';
-import fetchMatches, { getAllMatches} from "@/lib/fetchMatches";
+import fetchMatches from "@/lib/fetchMatches";
 import {auth} from "@/auth";
 import {GameWithHands} from "@/types/db";
 import MatchGridItemClient from "@/components/matches/MatchGridItemClient";
 import {getTeamIdToName} from "@/lib/dbMatch";
+import {getNextUpcomingGame} from "@/lib/db/upcomingGame";
+import UpcomingGameCard from "@/components/matches/UpcomingGameCard";
 
 export const revalidate = 60;
 
 export default async function Home() {
     const matches = await fetchMatches(true);
     const idToName = await getTeamIdToName();
+    const upcomingGame = await getNextUpcomingGame();
     const numMatches = matches.length;
 
+    const session = await auth();
     let allowCreate = true;
     if (process.env.REQUIRE_LOGIN) {
-        const session = await auth();
         allowCreate = !!session && !!session.user;
     }
 
@@ -44,6 +47,12 @@ export default async function Home() {
                 spacing={3}
                 sx={{marginTop: "20px"}}
             >
+                {upcomingGame && (
+                    <Grid  size={{ xs: 12, sm: 6}} key={`upcoming-game-${upcomingGame.id}`}>
+                        <UpcomingGameCard session={session} upcomingGame={upcomingGame} />
+                    </Grid>
+                )}
+
                 {" "}
                 {matches.map((match: GameWithHands, index) => (
                     <Grid
