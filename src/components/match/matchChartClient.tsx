@@ -551,7 +551,7 @@ export default function MatchChartClient({
           <LastRoundDisplay teamIdToName={data.teamIdToName} round={handsToShow}/>
           <Button style={{marginTop: 20}} variant="outlined" onClick={toggleShowAllRounds}>Visa alla omgångar</Button>
 
-          {true && (
+          {isEditable && (
               <Box mt={2}>
                 <Button
                     variant="contained"
