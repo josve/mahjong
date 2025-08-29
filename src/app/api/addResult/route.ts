@@ -3,6 +3,7 @@ import Connection from '@/lib/connection';
 import {PoolConnection} from "mysql2/promise";
 import { auth } from "@/auth";
 import {AddResultResponse} from "@/types/api";
+import {generateRoundComment} from "@/lib/openai";
 
 async function getNewRoundIndex(connection: PoolConnection, matchId: string) {
   const [latestRoundResult]: any = await connection.query(
@@ -64,6 +65,8 @@ export async function POST(req: NextRequest) {
         [matchId, teamId, hand, handScore, teamId === winner, wind, newRound, new Date()]
       );
     }
+
+    await generateRoundComment(matchId, newRound);
 
     const data: AddResultResponse = { message: 'Results added successfully' };
     return NextResponse.json(data, { status: 200 });

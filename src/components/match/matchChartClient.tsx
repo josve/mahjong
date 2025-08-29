@@ -1,7 +1,7 @@
 "use client";
 import React, {useEffect, useState} from "react";
 import ReactEcharts from "echarts-for-react";
-import {Box, Button, CircularProgress, Typography} from "@mui/material";
+import {Alert, Box, Button, CircularProgress, Typography} from "@mui/material";
 import {capitalize, formatDate} from "@/lib/formatting";
 import {MatchChartResponse} from "@/types/api";
 import {Hand, TeamIdToPlayerIds} from "@/types/db";
@@ -40,6 +40,9 @@ export default function MatchChartClient({
   const [handsToShow, setHandsToShow] = useState<Round>({hands: [], maxHand: 0, maxScore: 0});
   const [showAllRounds, setShowAllRounds] = useState<boolean>(false);
   const [allHandsExceptFirst, setAllHandsExceptFirst] = useState<Round[]>([]);
+  const [roundComment, setRoundComment] = useState<string | null>(null);
+  const [isGeneratingComment, setIsGeneratingComment] = useState<boolean>(false);
+  const [generateError, setGenerateError] = useState<string | null>(null);
 
   const toggleShowAllRounds = () => {
     setShowAllRounds(!showAllRounds);
@@ -135,6 +138,33 @@ export default function MatchChartClient({
       }
     }
   }, [handsToShow]);
+
+  const handleGenerateComment = async () => {
+    try {
+      setIsGeneratingComment(true);
+      setGenerateError(null);
+      setRoundComment(null);
+
+      // NOTE: adjust the URL if your route lives elsewhere
+      const res = await fetch(`/api/roundComment`, {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({ matchId }),
+      });
+
+      if (!res.ok) {
+        const msg = (await res.json().catch(() => null))?.error ?? "Kunde inte generera kommentar.";
+        throw new Error(msg);
+      }
+
+      const json: any = await res.json();
+      setRoundComment(json.comment);
+    } catch (e: any) {
+      setGenerateError(e?.message ?? "Ett fel uppstod.");
+    } finally {
+      setIsGeneratingComment(false);
+    }
+  };
 
   const fetchData = async () => {
     const response = await fetch(`/api/matchChart?matchId=${matchId}`);
@@ -520,6 +550,41 @@ export default function MatchChartClient({
           <Typography variant="h5" style={{paddingTop: 30, paddingBottom: 10}}>Senaste omgången</Typography>
           <LastRoundDisplay teamIdToName={data.teamIdToName} round={handsToShow}/>
           <Button style={{marginTop: 20}} variant="outlined" onClick={toggleShowAllRounds}>Visa alla omgångar</Button>
+
+          {true && (
+              <Box mt={2}>
+                <Button
+                    variant="contained"
+                    onClick={handleGenerateComment}
+                    disabled={isGeneratingComment}
+                >
+                  {isGeneratingComment ? (
+                      <>
+                        <CircularProgress size={18} sx={{mr: 1}} />
+                        Genererar…
+                      </>
+                  ) : (
+                      "Generera kommentar om omgången"
+                  )}
+                </Button>
+
+                {generateError && (
+                    <Box mt={2}>
+                      <Alert severity="error">{generateError}</Alert>
+                    </Box>
+                )}
+
+                {roundComment && (
+                    <Box mt={2}>
+                      <Typography variant="subtitle1" fontWeight={700}>
+                        Kommentar
+                      </Typography>
+                      <Typography variant="body1">{roundComment}</Typography>
+                    </Box>
+                )}
+              </Box>
+          )}
+
         </>)}
         {handsToShow && handsToShow.hands.length > 0 && showAllRounds && (<>
           <Typography variant="h5" style={{paddingTop: 30, paddingBottom: 10}}>Alla omgångar</Typography>
