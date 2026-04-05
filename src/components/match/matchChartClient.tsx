@@ -24,6 +24,7 @@ export interface Round {
   previousHand?: Hand[];
   maxHand: number;
   maxScore: number;
+  eastStreaks?: { [teamId: string]: number };
 }
 
 export default function MatchChartClient({
@@ -75,6 +76,7 @@ export default function MatchChartClient({
       const result: Round[] = [];
 
       let prevHand: Hand[] | undefined = undefined;
+      const teamEastStreak: { [teamId: string]: number } = {};
 
       // Process hands in batches of 4 (each ROUND)
       for (let i = 0; i < handsToProcess.length; i += 4) {
@@ -84,12 +86,22 @@ export default function MatchChartClient({
         // Sort the ROUND by TEAM_ID
         const sortedRound = [...round].sort(sortByPlayerId);
 
+        // Track east streaks per team
+        for (const hand of sortedRound) {
+          if (hand.WIND === 'E') {
+            teamEastStreak[hand.TEAM_ID] = (teamEastStreak[hand.TEAM_ID] || 0) + 1;
+          } else {
+            teamEastStreak[hand.TEAM_ID] = 0;
+          }
+        }
+
         // Push the sorted ROUND into the result
         result.push({
           hands: sortedRound,
           previousHand: prevHand,
           maxScore: maxScore,
           maxHand: maxHand,
+          eastStreaks: { ...teamEastStreak },
         });
 
         prevHand = sortedRound;
