@@ -211,7 +211,7 @@ export class MahjongStats {
             if (!roundMap.has(hand.ROUND)) roundMap.set(hand.ROUND, []);
             roundMap.get(hand.ROUND)!.push(hand);
         }
-        const rounds = [...roundMap.keys()].sort((a, b) => a - b);
+        const rounds = Array.from(roundMap.keys()).sort((a, b) => a - b);
 
         const teamEastStreak = new Map<string, number>();
 
