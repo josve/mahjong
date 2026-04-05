@@ -14,6 +14,7 @@ import { motion } from "motion/react";
 import {Round} from "@/components/match/matchChartClient"; // Import motion
 import CastleIcon from '@mui/icons-material/Castle';
 import { orange } from '@mui/material/colors';
+import {getHogmodLabel} from "@/lib/hogmodLabels";
 
 // Create motion-enhanced components
 const MotionGrid = motion(Grid);
@@ -92,7 +93,8 @@ export default function LastRoundDisplay({ teamIdToName, round }: Props) {
                         }
                     }
 
-                    const hogmod = oldHand && oldHand.WIND == 'E' && hand.WIND == 'E';
+                    const eastStreak = round.eastStreaks?.[hand.TEAM_ID] || 0;
+                    const hogmod = eastStreak >= 2;
 
                     const isWinner = hand.IS_WINNER;
                     const isHighroller = hand.HAND >= 100;
@@ -203,7 +205,7 @@ export default function LastRoundDisplay({ teamIdToName, round }: Props) {
 
                                 {hogmod && (
                                     <Chip
-                                        label="Högmod"
+                                        label={getHogmodLabel(eastStreak)}
                                         color="warning"
                                         size="small"
                                         icon={<CastleIcon />}

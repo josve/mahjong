@@ -5,6 +5,7 @@ import MahjongWinsChart from "./MahjongWinsChart";
 import HighRollerChart from "./HighRollerChart";
 import AverageHandTable from "./AverageHandTable";
 import BoxPlot from "./BoxPlot"
+import HogmodChart from "./HogmodChart"
 import { Tabs, Tab } from "@mui/material";
 import {
     GameWithHands,
@@ -77,6 +78,7 @@ const PlayerScoreChart: React.FC<PlayerScoreChartProps> = ({
                 <Tab label="High Roller" />
                 <Tab label="Medelhänder" />
                 <Tab label="Distribution" />
+                <Tab label="Högmod" />
             </Tabs>
             <CustomTabPanel value={selectedTab} index={0}>
                 <PlayerScoresChart
@@ -104,6 +106,12 @@ const PlayerScoreChart: React.FC<PlayerScoreChartProps> = ({
             </CustomTabPanel>
             <CustomTabPanel value={selectedTab} index={4}>
                 <BoxPlot
+                    stats={stats}
+                    includeTeams={includeTeams}
+                />
+            </CustomTabPanel>
+            <CustomTabPanel value={selectedTab} index={5}>
+                <HogmodChart
                     stats={stats}
                     includeTeams={includeTeams}
                 />

@@ -7,6 +7,13 @@ export interface HighRollerInfo {
     isTeam: boolean;
 }
 
+export interface HogmodInfo {
+    gameIndex: number;
+    streakLength: number;
+    hogmodIndex: string;
+    isTeam: boolean;
+}
+
 function uuidv4() {
     return "10000000-1000-4000-8000-100000000000".replace(/[018]/g, c =>
         (+c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> +c / 4).toString(16)
@@ -26,6 +33,9 @@ export class PlayerData {
     public allScores: number[] = [];
     public allScoresNoTeams: number[] = [];
     public highRollers: HighRollerInfo[] = [];
+    public hogmodCount: number = 0;
+    public hogmodStreaks: HogmodInfo[] = [];
+    public longestHogmodStreak: number = 0;
     public averageHand: number = 0;
     public playerIds: string[];
     public color: string;
@@ -72,6 +82,19 @@ export class PlayerData {
                 highRollerIndex: uuidv4(),
                 isTeam: isPartOfTeam
             });
+        }
+    }
+
+    public addHogmod(gameIndex: number, streakLength: number, isTeam: boolean) {
+        this.hogmodCount++;
+        this.hogmodStreaks.push({
+            gameIndex,
+            streakLength,
+            hogmodIndex: uuidv4(),
+            isTeam,
+        });
+        if (streakLength > this.longestHogmodStreak) {
+            this.longestHogmodStreak = streakLength;
         }
     }
 
@@ -178,6 +201,41 @@ export class MahjongStats {
             });
             teamData.addHand(gameIndex, hand, false);
         });
+
+        this.processHogmod(game, gameIndex);
+    }
+
+    private processHogmod(game: GameWithHands, gameIndex: number) {
+        const roundMap = new Map<number, Hand[]>();
+        for (const hand of game.hands) {
+            if (!roundMap.has(hand.ROUND)) roundMap.set(hand.ROUND, []);
+            roundMap.get(hand.ROUND)!.push(hand);
+        }
+        const rounds = [...roundMap.keys()].sort((a, b) => a - b);
+
+        const teamEastStreak = new Map<string, number>();
+
+        for (const roundNum of rounds) {
+            const handsInRound = roundMap.get(roundNum)!;
+            for (const hand of handsInRound) {
+                const prevStreak = teamEastStreak.get(hand.TEAM_ID) || 0;
+                if (hand.WIND === 'E') {
+                    const newStreak = prevStreak + 1;
+                    teamEastStreak.set(hand.TEAM_ID, newStreak);
+                    if (newStreak >= 2) {
+                        const teamData = this.idToPlayerData[hand.TEAM_ID];
+                        teamData.addHogmod(gameIndex, newStreak, false);
+                        for (const playerId of teamData.playerIds) {
+                            this.idToPlayerData[playerId].addHogmod(
+                                gameIndex, newStreak, teamData.playerIds.length > 1
+                            );
+                        }
+                    }
+                } else {
+                    teamEastStreak.set(hand.TEAM_ID, 0);
+                }
+            }
+        }
     }
 
     public finish() {
