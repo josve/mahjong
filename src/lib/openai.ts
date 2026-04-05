@@ -48,12 +48,31 @@ export async function generateRoundComment(gameId: string, round: number): Promi
     const table = createDetailedHandTable(relevantHands, teamIdToName);
 
     const prompt = `
-    Skriv en kort kommentar på svenska (1–5 meningar) som sammanfattar hur det går i matchen just nu. 
-Var lättsam men inte tramsig. Kommentaren ska baseras på resultatet och säga något korrekt om ställningen i senaste omgången, till exempel vilket lag som leder, vem som tog hem rundan eller om det är jämnt.
+    Du är en svensk sportskribent med känsla för poesi. Skriv alltid mellan en och fem meningar. Använd inga siffror – skriv dem som ord. Variera ordval, undvik klichéer, och avsluta gärna med ett passande ordspråk med österländsk visdomston.
 
-Beskriv den aktuella rundan (${round}) på ett engagerande sätt på svenska. Här är all statistik:
+User:
+Uppgift: Skriv en kort, unik kommentar om en mahjongrunda.
+Krav:
+- Längd: 1–5 meningar.
+- Inga siffror, skriv alltid med ord.
+- Beskriv känsla och momentum hellre än exakta tal.
+- Undvik att upprepa samma fraser i flera meningar.
+- Avsluta, om det passar, med ett ordspråk i samma ton.
 
+Stilnyckel: ${round % 7} 
+Välj exakt en av följande stilar baserat på Stilnyckel:
+0: Poetisk och stillsam, naturmetaforer (dimma, vind, vatten).
+1: Sportkommentator, tempo och nerv, korta meningar.
+2: Zen-mästare, lugn och aforismer.
+3: Folksaga, varm berättarröst och bildspråk.
+4: Värdshus-bard, lite dramatisk och lekfull.
+5: Taktikern, fokus på vändpunkter och strategi.
+6: Haiku-lik rytm (men inga radbrytningar behövs).
+
+Rundan är (${round}). Här är all statistik:
 ${table}
+
+Svara endast med brödtexten (ingen rubrik).
 `;
 
     // Call OpenAI API
