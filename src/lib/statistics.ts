@@ -14,6 +14,36 @@ export interface HogmodInfo {
     isTeam: boolean;
 }
 
+export interface StorvinnareInfo {
+    gameIndex: number;
+    streakLength: number;
+    storvinnareIndex: string;
+    isTeam: boolean;
+}
+
+export interface JarnhandInfo {
+    gameIndex: number;
+    streakLength: number;
+    jarnhandIndex: string;
+    isTeam: boolean;
+}
+
+export interface ComebackInfo {
+    gameIndex: number;
+    lowestPosition: number;
+    deficit: number;
+    comebackIndex: string;
+    isTeam: boolean;
+}
+
+export interface WindRecord {
+    E: number;
+    N: number;
+    W: number;
+    S: number;
+    [key: string]: number;
+}
+
 function uuidv4() {
     return "10000000-1000-4000-8000-100000000000".replace(/[018]/g, c =>
         (+c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> +c / 4).toString(16)
@@ -36,6 +66,15 @@ export class PlayerData {
     public hogmodCount: number = 0;
     public hogmodStreaks: HogmodInfo[] = [];
     public longestHogmodStreak: number = 0;
+    public storvinnareCount: number = 0;
+    public storvinnareStreaks: StorvinnareInfo[] = [];
+    public longestStorvinnareStreak: number = 0;
+    public jarnhandCount: number = 0;
+    public jarnhandStreaks: JarnhandInfo[] = [];
+    public longestJarnhandStreak: number = 0;
+    public comebackGames: ComebackInfo[] = [];
+    public windWins: WindRecord = { E: 0, N: 0, W: 0, S: 0 };
+    public windHands: WindRecord = { E: 0, N: 0, W: 0, S: 0 };
     public averageHand: number = 0;
     public playerIds: string[];
     public color: string;
@@ -75,6 +114,12 @@ export class PlayerData {
             this.allScoresNoTeams.push(hand.HAND_SCORE);
         }
         this.numHands++;
+        if (hand.WIND in this.windHands) {
+            this.windHands[hand.WIND]++;
+            if (hand.IS_WINNER) {
+                this.windWins[hand.WIND]++;
+            }
+        }
         if (hand.HAND > 100) {
             this.highRollers.push({
                 gameIndex: gameIndex,
@@ -96,6 +141,42 @@ export class PlayerData {
         if (streakLength > this.longestHogmodStreak) {
             this.longestHogmodStreak = streakLength;
         }
+    }
+
+    public addStorvinnare(gameIndex: number, streakLength: number, isTeam: boolean) {
+        this.storvinnareCount++;
+        this.storvinnareStreaks.push({
+            gameIndex,
+            streakLength,
+            storvinnareIndex: uuidv4(),
+            isTeam,
+        });
+        if (streakLength > this.longestStorvinnareStreak) {
+            this.longestStorvinnareStreak = streakLength;
+        }
+    }
+
+    public addJarnhand(gameIndex: number, streakLength: number, isTeam: boolean) {
+        this.jarnhandCount++;
+        this.jarnhandStreaks.push({
+            gameIndex,
+            streakLength,
+            jarnhandIndex: uuidv4(),
+            isTeam,
+        });
+        if (streakLength > this.longestJarnhandStreak) {
+            this.longestJarnhandStreak = streakLength;
+        }
+    }
+
+    public addComeback(gameIndex: number, lowestPosition: number, deficit: number, isTeam: boolean) {
+        this.comebackGames.push({
+            gameIndex,
+            lowestPosition,
+            deficit,
+            comebackIndex: uuidv4(),
+            isTeam,
+        });
     }
 
     public finish() {
@@ -203,6 +284,9 @@ export class MahjongStats {
         });
 
         this.processHogmod(game, gameIndex);
+        this.processStorvinnare(game, gameIndex);
+        this.processJarnhand(game, gameIndex);
+        this.processComeback(game, gameIndex);
     }
 
     private processHogmod(game: GameWithHands, gameIndex: number) {
@@ -238,9 +322,130 @@ export class MahjongStats {
         }
     }
 
+    private processStorvinnare(game: GameWithHands, gameIndex: number) {
+        const roundMap = new Map<number, Hand[]>();
+        for (const hand of game.hands) {
+            if (!roundMap.has(hand.ROUND)) roundMap.set(hand.ROUND, []);
+            roundMap.get(hand.ROUND)!.push(hand);
+        }
+        const rounds = [...roundMap.keys()].sort((a, b) => a - b);
+
+        const teamWinStreak = new Map<string, number>();
+
+        for (const roundNum of rounds) {
+            const handsInRound = roundMap.get(roundNum)!;
+            for (const hand of handsInRound) {
+                const prevStreak = teamWinStreak.get(hand.TEAM_ID) || 0;
+                if (hand.IS_WINNER) {
+                    const newStreak = prevStreak + 1;
+                    teamWinStreak.set(hand.TEAM_ID, newStreak);
+                    if (newStreak >= 2) {
+                        const teamData = this.idToPlayerData[hand.TEAM_ID];
+                        teamData.addStorvinnare(gameIndex, newStreak, false);
+                        for (const playerId of teamData.playerIds) {
+                            this.idToPlayerData[playerId].addStorvinnare(
+                                gameIndex, newStreak, teamData.playerIds.length > 1
+                            );
+                        }
+                    }
+                } else {
+                    teamWinStreak.set(hand.TEAM_ID, 0);
+                }
+            }
+        }
+    }
+
+    private processJarnhand(game: GameWithHands, gameIndex: number) {
+        const roundMap = new Map<number, Hand[]>();
+        for (const hand of game.hands) {
+            if (!roundMap.has(hand.ROUND)) roundMap.set(hand.ROUND, []);
+            roundMap.get(hand.ROUND)!.push(hand);
+        }
+        const rounds = [...roundMap.keys()].sort((a, b) => a - b);
+
+        const teamPositiveStreak = new Map<string, number>();
+
+        for (const roundNum of rounds) {
+            const handsInRound = roundMap.get(roundNum)!;
+            for (const hand of handsInRound) {
+                const prevStreak = teamPositiveStreak.get(hand.TEAM_ID) || 0;
+                if (hand.HAND_SCORE > 0) {
+                    const newStreak = prevStreak + 1;
+                    teamPositiveStreak.set(hand.TEAM_ID, newStreak);
+                    if (newStreak >= 3) {
+                        const teamData = this.idToPlayerData[hand.TEAM_ID];
+                        teamData.addJarnhand(gameIndex, newStreak, false);
+                        for (const playerId of teamData.playerIds) {
+                            this.idToPlayerData[playerId].addJarnhand(
+                                gameIndex, newStreak, teamData.playerIds.length > 1
+                            );
+                        }
+                    }
+                } else {
+                    teamPositiveStreak.set(hand.TEAM_ID, 0);
+                }
+            }
+        }
+    }
+
+    private processComeback(game: GameWithHands, gameIndex: number) {
+        const roundMap = new Map<number, Hand[]>();
+        for (const hand of game.hands) {
+            if (!roundMap.has(hand.ROUND)) roundMap.set(hand.ROUND, []);
+            roundMap.get(hand.ROUND)!.push(hand);
+        }
+        const rounds = [...roundMap.keys()].sort((a, b) => a - b);
+
+        const teamIds = [game.TEAM_ID_1, game.TEAM_ID_2, game.TEAM_ID_3, game.TEAM_ID_4];
+        const cumulativeScores = new Map<string, number>();
+        const wasInLast = new Map<string, boolean>();
+        const maxDeficit = new Map<string, number>();
+
+        for (const teamId of teamIds) {
+            cumulativeScores.set(teamId, 0);
+            wasInLast.set(teamId, false);
+            maxDeficit.set(teamId, 0);
+        }
+
+        for (const roundNum of rounds) {
+            const handsInRound = roundMap.get(roundNum)!;
+            for (const hand of handsInRound) {
+                cumulativeScores.set(hand.TEAM_ID,
+                    (cumulativeScores.get(hand.TEAM_ID) || 0) + hand.HAND_SCORE);
+            }
+
+            // Determine positions after this round
+            const sorted = [...cumulativeScores.entries()]
+                .sort((a, b) => b[1] - a[1]);
+            const lastTeamId = sorted[sorted.length - 1][0];
+            const leaderScore = sorted[0][1];
+            const lastScore = sorted[sorted.length - 1][1];
+
+            wasInLast.set(lastTeamId, true);
+            const currentDeficit = leaderScore - lastScore;
+            if (currentDeficit > (maxDeficit.get(lastTeamId) || 0)) {
+                maxDeficit.set(lastTeamId, currentDeficit);
+            }
+        }
+
+        // Find winner (highest cumulative score at end)
+        const finalSorted = [...cumulativeScores.entries()]
+            .sort((a, b) => b[1] - a[1]);
+        const winnerTeamId = finalSorted[0][0];
+
+        if (wasInLast.get(winnerTeamId)) {
+            const deficit = maxDeficit.get(winnerTeamId) || 0;
+            const teamData = this.idToPlayerData[winnerTeamId];
+            teamData.addComeback(gameIndex, teamIds.length, deficit, false);
+            for (const playerId of teamData.playerIds) {
+                this.idToPlayerData[playerId].addComeback(
+                    gameIndex, teamIds.length, deficit, teamData.playerIds.length > 1
+                );
+            }
+        }
+    }
+
     public finish() {
         Object.values(this.idToPlayerData).forEach((data) => { data.finish(); })
     }
-
-
 }
