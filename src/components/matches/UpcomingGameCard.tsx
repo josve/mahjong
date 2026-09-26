@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { UpcomingGame } from "@/types/db";
+import { TeamDetails, UpcomingGame } from "@/types/db";
 import {
     Card,
     CardContent,
@@ -19,6 +19,7 @@ import {generateICS} from "@/lib/ics"; // Ensure these utilities are available
 interface UpcomingGameCardProps {
     upcomingGame: UpcomingGame;
     session: Session | null;
+    suggestedTeams?: TeamDetails[];
 }
 
 const StyledCard = styled(Card)(({ theme }) => ({
@@ -26,7 +27,7 @@ const StyledCard = styled(Card)(({ theme }) => ({
     position: 'relative',
 }));
 
-export default function UpcomingGameCard({ upcomingGame, session }: UpcomingGameCardProps) {
+export default function UpcomingGameCard({ upcomingGame, session, suggestedTeams = [] }: UpcomingGameCardProps) {
     const gameTime = new Date(upcomingGame.game_time);
     const endTime = new Date(gameTime.getTime() + 4 * 60 * 60 * 1000);
 
@@ -76,6 +77,19 @@ export default function UpcomingGameCard({ upcomingGame, session }: UpcomingGame
                         {formattedDate} ({timeString})
                     </Typography>
                 </Box>
+                {suggestedTeams.length > 0 && (
+                    <Box>
+                        <Typography variant="subtitle2" sx={{ color: "text.secondary" }}>
+                            Föreslagna lag
+                        </Typography>
+                        {suggestedTeams.map((team) => (
+                            <Typography key={team.id} variant="body2">
+                                {team.teamName}
+                                {team.teamName !== team.concatenatedName && ` (${team.concatenatedName})`}
+                            </Typography>
+                        ))}
+                    </Box>
+                )}
             </CardContent>
             {upcomingGame.meeting_link && session && (
                 <CardActions>
