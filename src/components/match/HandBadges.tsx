@@ -2,6 +2,7 @@ import React from "react";
 import { Box, Chip, ChipProps } from "@mui/material";
 import { LocalFireDepartment } from "@mui/icons-material";
 import CastleIcon from '@mui/icons-material/Castle';
+import DirectionsRunIcon from '@mui/icons-material/DirectionsRun';
 import { Hand } from "@/types/db";
 import { Round } from "@/components/match/matchChartClient";
 import { getHogmodLabel } from "@/lib/hogmodLabels";
@@ -28,6 +29,14 @@ export interface HandBadgeDefinition {
 }
 
 const isHighroller = ({ hand }: HandBadgeContext) => hand.HAND >= HIGHROLLER_HAND;
+
+/**
+ * The team won as east in the previous round but did not stay east in this round.
+ */
+const isFegis = ({ hand, round }: HandBadgeContext) => {
+    const previous = round.previousHand?.find(prev => prev.TEAM_ID === hand.TEAM_ID);
+    return !!previous && previous.WIND === 'E' && !!previous.IS_WINNER && hand.WIND !== 'E';
+};
 
 const isBestHand = (context: HandBadgeContext) =>
     !isHighroller(context) && context.hand.HAND == context.round.maxHand;
@@ -73,6 +82,13 @@ export const HAND_BADGES: readonly HandBadgeDefinition[] = [
         color: "warning",
         icon: <CastleIcon />,
         applies: ({ eastStreak }) => eastStreak >= HOGMOD_STREAK,
+    },
+    {
+        id: "fegis",
+        label: "Fegis",
+        color: "info",
+        icon: <DirectionsRunIcon />,
+        applies: isFegis,
     },
 ];
 
