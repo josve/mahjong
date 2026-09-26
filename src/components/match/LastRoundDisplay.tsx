@@ -6,15 +6,12 @@ import {
     Typography,
     Grid,
     Box,
-    Chip,
     Tooltip,
 } from '@mui/material';
-import { CheckCircle, LocalFireDepartment } from '@mui/icons-material';
+import { CheckCircle } from '@mui/icons-material';
 import { motion } from "motion/react";
 import {Round} from "@/components/match/matchChartClient"; // Import motion
-import CastleIcon from '@mui/icons-material/Castle';
-import { orange } from '@mui/material/colors';
-import {getHogmodLabel} from "@/lib/hogmodLabels";
+import HandBadges from "@/components/match/HandBadges";
 
 // Create motion-enhanced components
 const MotionGrid = motion(Grid);
@@ -61,8 +58,6 @@ const windIcon = (wind: string) => {
 
 export default function LastRoundDisplay({ teamIdToName, round }: Props) {
     const hands = round.hands;
-    const maxHand = round.maxHand;
-    const maxScore = round.maxScore;
 
     let highestScore = -100000;
     let highestScorePlayer = undefined;
@@ -93,14 +88,7 @@ export default function LastRoundDisplay({ teamIdToName, round }: Props) {
                         }
                     }
 
-                    const eastStreak = round.eastStreaks?.[hand.TEAM_ID] || 0;
-                    const hogmod = eastStreak >= 2;
-
                     const isWinner = hand.IS_WINNER;
-                    const isHighroller = hand.HAND >= 100;
-
-                    const isBestHand = !isHighroller && hand.HAND == maxHand;
-                    const isBestScore = !isHighroller && !isBestHand && hand.HAND_SCORE == maxScore;
 
                     const hasHighestWin = highestScorePlayer == hand.TEAM_ID;
                     return (
@@ -160,53 +148,7 @@ export default function LastRoundDisplay({ teamIdToName, round }: Props) {
                                     Resultat: {hand.HAND_SCORE}
                                 </Typography>
 
-                                {(isHighroller || isBestHand || isBestScore || hogmod) && (
-                                    <Box
-                                        sx={{
-                                            display: 'flex',
-                                            flexWrap: 'wrap',
-                                            justifyContent: 'flex-end',
-                                            gap: 0.5,
-                                            mt: 1,
-                                        }}
-                                    >
-                                        {isHighroller && (
-                                            <Chip
-                                                label={hand.HAND === 300 ? 'Limit hand' : 'Highroller'}
-                                                color={hand.HAND === 300 ? 'error' : 'secondary'}
-                                                size="small"
-                                                icon={<LocalFireDepartment />}
-                                            />
-                                        )}
-
-                                        {isBestHand && (
-                                            <Chip
-                                                label="Bästa hand"
-                                                color="primary"
-                                                size="small"
-                                                icon={<LocalFireDepartment />}
-                                            />
-                                        )}
-
-                                        {isBestScore && (
-                                            <Chip
-                                                label="Störst vinst"
-                                                color="primary"
-                                                size="small"
-                                                icon={<LocalFireDepartment />}
-                                            />
-                                        )}
-
-                                        {hogmod && (
-                                            <Chip
-                                                label={getHogmodLabel(eastStreak)}
-                                                color="warning"
-                                                size="small"
-                                                icon={<CastleIcon />}
-                                            />
-                                        )}
-                                    </Box>
-                                )}
+                                <HandBadges hand={hand} round={round} />
                             </MotionBox>
                         </MotionGrid>
                     );
