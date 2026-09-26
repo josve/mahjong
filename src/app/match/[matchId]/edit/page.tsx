@@ -5,21 +5,23 @@ import { Metadata } from "next";
 import {auth} from "@/auth";
 
 interface PageProps {
-  readonly params: {
+  readonly params: Promise<{
     readonly matchId: string;
-  };
+  }>;
 }
 
 export async function generateMetadata({
   params,
 }: PageProps): Promise<Metadata> {
-  const match = await getMatchById(params.matchId);
+  const { matchId } = await params;
+  const match = await getMatchById(matchId);
   return {
     title: `${match.NAME} - Mahjong Master System`,
   };
 }
 
 export default async function Page({ params }: PageProps) {
+  const { matchId } = await params;
     if (process.env.REQUIRE_LOGIN) {
         const session = await auth();
 
@@ -31,11 +33,11 @@ export default async function Page({ params }: PageProps) {
   return (
     <>
       <MatchChart
-        matchId={params.matchId}
+        matchId={matchId}
         autoReload={false}
         isEditable={true}
       />
-      <RegisterResultControls matchId={params.matchId} />
+      <RegisterResultControls matchId={matchId} />
     </>
   );
 }

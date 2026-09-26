@@ -2,10 +2,10 @@ import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@/auth";
 import { updateUpcomingGame, deleteUpcomingGame } from "@/lib/db/upcomingGame";
 
-export async function PUT(req: NextRequest, { params }: { params: { id: string } }) {
+export async function PUT(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
     const body = await req.json();
     const { gameTime, meetingLink } = body;
-    const gameId = parseInt(params.id, 10);
+    const gameId = parseInt((await params).id, 10);
 
     if (process.env.REQUIRE_LOGIN) {
         const session = await auth();
@@ -33,8 +33,8 @@ export async function PUT(req: NextRequest, { params }: { params: { id: string }
     }
 }
 
-export async function DELETE(req: NextRequest, { params }: { params: { id: string } }) {
-    const gameId = parseInt(params.id, 10);
+export async function DELETE(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
+    const gameId = parseInt((await params).id, 10);
 
     if (process.env.REQUIRE_LOGIN) {
         const session = await auth();

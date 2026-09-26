@@ -5,21 +5,23 @@ import {auth} from "@/auth";
 import {Hand, IdToName} from "@/types/db";
 
 interface PageProps {
-  readonly params: {
+  readonly params: Promise<{
     readonly matchId: string;
-  };
+  }>;
 }
 
 export async function generateMetadata({
   params,
 }: PageProps): Promise<Metadata> {
-  const match = await getMatchById(params.matchId);
+  const { matchId } = await params;
+  const match = await getMatchById(matchId);
   return {
     title: `Korrigera resultat för ${match.NAME} - Mahjong Master System`,
   };
 }
 
 export default async function EditPage({ params }: PageProps) {
+  const { matchId } = await params;
 
   if (process.env.REQUIRE_LOGIN) {
     const session = await auth();
@@ -29,8 +31,8 @@ export default async function EditPage({ params }: PageProps) {
     }
   }
 
-  const match = await getMatchById(params.matchId);
-  const hands = await getHandsByGameId(params.matchId);
+  const match = await getMatchById(matchId);
+  const hands = await getHandsByGameId(matchId);
 
   const teamIdToName = await getTeamIdToName();
   const relevantTeamIds = [
@@ -68,7 +70,7 @@ export default async function EditPage({ params }: PageProps) {
                 key={round}
                 round={round}
                 hands={hands}
-                matchId={params.matchId}
+                matchId={matchId}
                 teamIdToName={relevantTeams}
               />
             )

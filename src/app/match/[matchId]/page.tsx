@@ -4,22 +4,24 @@ import { Metadata } from "next";
 import {auth} from "@/auth";
 
 interface PageProps {
-  readonly params: {
+  readonly params: Promise<{
     readonly matchId: string;
-  };
+  }>;
 }
 
 export async function generateMetadata({
   params,
 }: PageProps): Promise<Metadata> {
-  const match = await getMatchById(params.matchId);
+  const { matchId } = await params;
+  const match = await getMatchById(matchId);
   return {
     title: `${match.NAME} - Mahjong Master System`,
   };
 }
 
 export default async function Page({ params }: PageProps) {
-  const match = await getMatchById(params.matchId);
+  const { matchId } = await params;
+  const match = await getMatchById(matchId);
 
   const matchDate = new Date(match.TIME);
   const isEditable =
@@ -34,7 +36,7 @@ export default async function Page({ params }: PageProps) {
   return (
     <>
       <MatchChart
-        matchId={params.matchId}
+        matchId={matchId}
         isEditable={isEditable}
         autoReload={true}
       />
@@ -42,7 +44,7 @@ export default async function Page({ params }: PageProps) {
         <div className="match-buttons-container">
           {allowRegister &&
           <a
-            href={`/match/${params.matchId}/edit`}
+            href={`/match/${matchId}/edit`}
             className="button"
           >
             Registrera resultat
