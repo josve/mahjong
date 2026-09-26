@@ -297,6 +297,8 @@ export const upcomingGames: UpcomingGame[] = [
     {id: 3, game_time: new Date(now + 31 * DAY), meeting_link: "https://meet.example.com/mahjong-2", created_at: new Date(now)},
 ];
 
+export const playerEmails: string[] = ["anna@example.com", "anna.work@example.com"];
+
 export const session: Session = {
     expires: new Date(now + 30 * DAY).toISOString(),
     user: {

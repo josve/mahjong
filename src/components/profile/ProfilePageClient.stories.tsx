@@ -1,6 +1,6 @@
 import type {Meta, StoryObj} from "@storybook/nextjs-vite";
 import ProfilePageClient from "@/components/profile/ProfilePageClient";
-import {playerColors, session, teamDetails} from "@/stories/fixtures";
+import {playerColors, playerEmails, session, teamDetails} from "@/stories/fixtures";
 
 const meta = {
     title: "Components/Profile/ProfilePageClient",
@@ -9,6 +9,7 @@ const meta = {
         session,
         teamDetails,
         playerColors,
+        emails: playerEmails,
     },
 } satisfies Meta<typeof ProfilePageClient>;
 
@@ -24,5 +25,6 @@ export const PlayerWithoutTeams: Story = {
             user: {...session.user, PLAYER_ID: "p5", playerId: "p5", NAME: "Erik", name: "Erik", firstInitial: "E",
                 COLOR_RED: 140, COLOR_GREEN: 80, COLOR_BLUE: 190, SHOW_PREVIOUS_ROUND_SCORE: true},
         },
+        emails: ["erik@example.com"],
     },
 };

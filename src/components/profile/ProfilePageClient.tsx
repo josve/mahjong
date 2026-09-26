@@ -9,9 +9,10 @@ interface ComponentParams {
     readonly session: Session;
     readonly teamDetails: TeamIdToDetails;
     readonly playerColors: IdToColorMap;
+    readonly emails: string[];
 }
 
-export default function ProfilePageClient({ session, teamDetails, playerColors }: ComponentParams) {
+export default function ProfilePageClient({ session, teamDetails, playerColors, emails }: ComponentParams) {
     const user = session.user;
 
     const [color, setColor] = useState({
@@ -131,6 +132,18 @@ export default function ProfilePageClient({ session, teamDetails, playerColors }
     return (
         <div style={{ backgroundColor: "var(--background-color)"}}>
             <h1 style={{paddingBottom: "10px" }}>{user?.name}</h1>
+            <div style={{paddingBottom: "20px"}}>
+                <div style={{paddingBottom: "10px"}}>Kopplade e-postadresser</div>
+                {emails.length > 0 ? (
+                    <ul style={{margin: 0}}>
+                        {emails.map((email) => (
+                            <li key={email}>{email}</li>
+                        ))}
+                    </ul>
+                ) : (
+                    <div>Inga e-postadresser kopplade.</div>
+                )}
+            </div>
             <div>
                 <div style={{paddingBottom: "20px"}}>Färg</div>
                 <RgbColorPicker color={color} onChange={setColor} />

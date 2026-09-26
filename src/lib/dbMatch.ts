@@ -122,6 +122,19 @@ export async function getPlayerColors(): Promise<IdToColorMap> {
   }
 }
 
+export async function getPlayerEmails(playerId: string): Promise<string[]> {
+  const connection = await Connection.getInstance().getConnection();
+  try {
+    const [rows]: any = await connection.query(
+      "SELECT EMAIL FROM PlayerEmails WHERE PLAYER_ID = ? ORDER BY EMAIL",
+      [playerId]
+    );
+    return rows.map((row: any) => row.EMAIL);
+  } finally {
+    connection.release();
+  }
+}
+
 export async function getHandsByGameId(id: string): Promise<Hand[]> {
   const connection = await Connection.getInstance().getConnection();
   try {

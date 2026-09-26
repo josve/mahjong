@@ -4,6 +4,7 @@ import {
   allTeamsAndPlayers,
   matches,
   playerColors,
+  playerEmails,
   teamAndPlayerColors,
   teamDetails,
   teamIdToName,
@@ -19,6 +20,7 @@ export const getMatchById = fn(async (id: string) => toMatchWithIdx(findMatch(id
 export const getTeamAndPlayerColors = fn(async () => teamAndPlayerColors).mockName("getTeamAndPlayerColors");
 export const getTeamColors = fn(async () => teamAndPlayerColors).mockName("getTeamColors");
 export const getPlayerColors = fn(async () => playerColors).mockName("getPlayerColors");
+export const getPlayerEmails = fn(async (_playerId: string) => playerEmails).mockName("getPlayerEmails");
 export const getHandsByGameId = fn(async (id: string) => findMatch(id).hands).mockName("getHandsByGameId");
 export const getTeamIdToName = fn(async () => teamIdToName).mockName("getTeamIdToName");
 export const fetchAllTeamsAndPlayers = fn(async () => allTeamsAndPlayers).mockName("fetchAllTeamsAndPlayers");
