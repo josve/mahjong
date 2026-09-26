@@ -19,12 +19,6 @@ export const defaultFetchMocks: FetchMock[] = [
     {url: "/api/updateResult", method: "POST", response: {message: "Result updated"}},
     {url: "/api/updateProfile", method: "POST", response: {success: true}},
     {url: "/api/updateTeamName", method: "POST", response: {success: true}},
-    {
-        url: "/api/roundComment",
-        method: "POST",
-        delay: 800,
-        response: {comment: "Björn satt som öst i tre omgångar i rad – högmodet är på väg att ta över bordet!"},
-    },
     {url: "/api/upcomingGames", method: "POST", response: {id: 99}},
     {url: /^\/api\/upcomingGames\/\d+/, response: {success: true}},
 ];

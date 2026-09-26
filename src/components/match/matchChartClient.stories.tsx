@@ -38,11 +38,3 @@ export const Loading: Story = {
         fetchMocks: [{url: "/api/matchChart", delay: Infinity}],
     },
 };
-
-export const CommentFails: Story = {
-    parameters: {
-        fetchMocks: [
-            {url: "/api/roundComment", method: "POST", status: 500, response: {error: "OpenAI svarade inte."}},
-        ],
-    },
-};
