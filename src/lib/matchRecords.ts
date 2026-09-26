@@ -14,6 +14,7 @@ export interface MatchRecords {
     readonly biggestLoss: number | null;
     readonly fewestRounds: number | null;
     readonly mostRounds: number | null;
+    readonly longestEastStreak: number | null;
 }
 
 export interface MatchStats {
@@ -22,6 +23,12 @@ export interface MatchStats {
     readonly biggestWin: number;
     readonly biggestLoss: number;
     readonly rounds: number;
+    /** Final score difference between the winning team and the runner-up. */
+    readonly finalMargin: number;
+    /** The furthest the eventual winner was behind the leader after any round. */
+    readonly winnerMaxDeficit: number;
+    /** Most consecutive rounds a single team stayed east. */
+    readonly longestEastStreak: number;
 }
 
 export function isActiveMatch(match: GameWithHands): boolean {
@@ -41,13 +48,34 @@ export function getMatchStats(match: GameWithHands): MatchStats | null {
     }
     const scores = [...finalScores.values()];
     const handScores = played.map(hand => hand.HAND_SCORE);
+    const ranked = [...finalScores.entries()].sort((a, b) => b[1] - a[1]);
+    const winnerId = ranked[0][0];
+
+    const roundNumbers = [...new Set(played.map(hand => hand.ROUND))].sort((a, b) => a - b);
+    const runningScores = new Map<string, number>([...finalScores.keys()].map(teamId => [teamId, STARTING_SCORE]));
+    const eastStreaks = new Map<string, number>();
+    let winnerMaxDeficit = 0;
+    let longestEastStreak = 0;
+    for (const round of roundNumbers) {
+        for (const hand of played.filter(hand => hand.ROUND === round)) {
+            runningScores.set(hand.TEAM_ID, runningScores.get(hand.TEAM_ID)! + hand.HAND_SCORE);
+            const streak = hand.WIND === 'E' ? (eastStreaks.get(hand.TEAM_ID) ?? 0) + 1 : 0;
+            eastStreaks.set(hand.TEAM_ID, streak);
+            longestEastStreak = Math.max(longestEastStreak, streak);
+        }
+        const leader = Math.max(...runningScores.values());
+        winnerMaxDeficit = Math.max(winnerMaxDeficit, leader - runningScores.get(winnerId)!);
+    }
 
     return {
         highestScore: Math.max(...scores),
         lowestScore: Math.min(...scores),
         biggestWin: Math.max(...handScores),
         biggestLoss: Math.min(...handScores),
-        rounds: new Set(played.map(hand => hand.ROUND)).size,
+        rounds: roundNumbers.length,
+        finalMargin: ranked.length > 1 ? ranked[0][1] - ranked[1][1] : 0,
+        winnerMaxDeficit,
+        longestEastStreak,
     };
 }
 
@@ -69,5 +97,6 @@ export function computeMatchRecords(matches: readonly GameWithHands[]): MatchRec
         biggestLoss: extreme(stats.map(s => s.stats.biggestLoss), Math.min),
         fewestRounds: extreme(finished.map(s => s.stats.rounds), Math.min),
         mostRounds: extreme(stats.map(s => s.stats.rounds), Math.max),
+        longestEastStreak: extreme(stats.map(s => s.stats.longestEastStreak), Math.max),
     };
 }
