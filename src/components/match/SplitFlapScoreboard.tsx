@@ -50,9 +50,9 @@ function Flap({char, width, delay = 0}: { readonly char: string; readonly width:
             height: width * 1.45,
             margin: "0 1.5px",
             perspective: 200,
-            background: "#1e1e1e",
+            background: "linear-gradient(#fafafa, #ececec)",
             borderRadius: 4,
-            boxShadow: "inset 0 -2px 0 rgba(0,0,0,0.6), 0 1px 2px rgba(0,0,0,0.5)",
+            boxShadow: "inset 0 -2px 0 rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.15)",
             overflow: "hidden",
             verticalAlign: "middle",
         }}>
@@ -66,7 +66,7 @@ function Flap({char, width, delay = 0}: { readonly char: string; readonly width:
                     style={{
                         position: "absolute", inset: 0,
                         display: "flex", alignItems: "center", justifyContent: "center",
-                        color: "#f4f1e8",
+                        color: "#333",
                         fontSize: width * 0.95,
                         fontWeight: 700,
                         fontFamily: "'Helvetica Neue', Arial, sans-serif",
@@ -75,7 +75,7 @@ function Flap({char, width, delay = 0}: { readonly char: string; readonly width:
                     {char}
                 </motion.span>
             </AnimatePresence>
-            <span style={{position: "absolute", left: 0, right: 0, top: "50%", height: 1, background: "rgba(0,0,0,0.85)"}}/>
+            <span style={{position: "absolute", left: 0, right: 0, top: "50%", height: 1, background: "rgba(0,0,0,0.12)"}}/>
         </span>
     );
 }
@@ -94,16 +94,16 @@ export default function SplitFlapScoreboard({teams, round}: Props) {
 
     return (
         <div style={{
-            background: "linear-gradient(#2b2b2b, #151515)",
+            background: "#fff",
+            border: "1px solid #eee",
             borderRadius: 10,
             padding: small ? "10px 10px" : "14px 16px",
             margin: "16px 0",
-            color: "#f4f1e8",
+            color: "#444",
             fontFamily: "'Helvetica Neue', Arial, sans-serif",
-            boxShadow: "0 10px 24px rgba(0,0,0,0.3)",
             overflowX: "auto",
         }}>
-            <div style={{display: "flex", justifyContent: "space-between", marginBottom: 10, fontSize: 12, letterSpacing: "0.2em", color: "#f5c400"}}>
+            <div style={{display: "flex", justifyContent: "space-between", marginBottom: 10, fontSize: 12, letterSpacing: "0.2em", color: "var(--header-color)"}}>
                 <span>STÄLLNING</span>
                 <span>{round > 0 ? `OMGÅNG ${round}` : "START"}</span>
             </div>
@@ -129,7 +129,7 @@ export default function SplitFlapScoreboard({teams, round}: Props) {
                     </span>
                     <span style={{
                         width: small ? 40 : 52, textAlign: "right", fontSize: small ? 12 : 14, fontWeight: 700, flexShrink: 0,
-                        color: team.delta > 0 ? "#6be38a" : team.delta < 0 ? "#ff7070" : "#999",
+                        color: team.delta > 0 ? "#2e7d32" : team.delta < 0 ? "#c62828" : "#999",
                     }}>
                         {round > 0 ? formatDelta(team.delta) : ""}
                     </span>
