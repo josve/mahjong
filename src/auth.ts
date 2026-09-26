@@ -6,6 +6,25 @@ import Connection from "@/lib/connection";
 import type {Provider} from "next-auth/providers";
 import GitHub from "next-auth/providers/github"
 
+// GitHub profiles have no email_verified claim, so ask the API whether the address is verified.
+async function isGitHubEmailVerified(accessToken: string | undefined, email: string | null | undefined): Promise<boolean> {
+    if (!accessToken || !email) {
+        return false;
+    }
+    const res = await fetch("https://api.github.com/user/emails", {
+        headers: {
+            Authorization: `Bearer ${accessToken}`,
+            "User-Agent": "authjs",
+        },
+    });
+    if (!res.ok) {
+        console.warn("GitHub email lookup failed", res.status);
+        return false;
+    }
+    const emails: { email: string, verified: boolean }[] = await res.json();
+    return emails.some(e => e.verified && e.email.toLowerCase() === email.toLowerCase());
+}
+
 function getProviders(): Provider[] {
     const providers: Provider[] = [];
 
@@ -56,9 +75,18 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           "SELECT * FROM PlayerEmails WHERE EMAIL = ?",
           [user.email]
         );
-        if (rows.length > 0 && (profile?.email_verified || process.env.DEV_ALLOW_INSECURE_EMAIL)) {
+        const verified = account?.provider === "github"
+          ? await isGitHubEmailVerified(account.access_token, user.email)
+          : !!profile?.email_verified;
+        if (rows.length > 0 && (verified || process.env.DEV_ALLOW_INSECURE_EMAIL)) {
           return true;
         } else {
+          console.warn("signIn denied", {
+            email: user.email,
+            provider: account?.provider,
+            verified,
+            knownEmail: rows.length > 0,
+          });
           return false;
         }
       } finally {
