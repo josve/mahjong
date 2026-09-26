@@ -6,7 +6,7 @@ import LoginOutlinedIcon from "@mui/icons-material/LoginOutlined";
 import Person2OutlinedIcon from "@mui/icons-material/Person2Outlined";
 import AlarmIcon from '@mui/icons-material/Alarm';
 import { Session } from "next-auth";
-import {SvgIconComponent} from "@mui/icons-material";
+import type {SvgIconComponent} from "@mui/icons-material";
 
 export interface NavigationItem {
     label: string;

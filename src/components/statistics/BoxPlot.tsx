@@ -5,7 +5,10 @@ import { registerTransform } from "echarts/core";
 // @ts-ignore
 import { aggregate } from "echarts-simple-transform";
 
-import { FormControl, InputLabel, Select, MenuItem} from "@mui/material";
+import FormControl from "@mui/material/FormControl";
+import InputLabel from "@mui/material/InputLabel";
+import Select from "@mui/material/Select";
+import MenuItem from "@mui/material/MenuItem";
 import {MahjongStats} from "@/lib/statistics";
 
 interface BoxPlotProps {
