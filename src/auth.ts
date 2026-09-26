@@ -56,11 +56,19 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           "SELECT * FROM PlayerEmails WHERE EMAIL = ?",
           [user.email]
         );
-        if (rows.length > 0 && (profile?.email_verified || process.env.DEV_ALLOW_INSECURE_EMAIL)) {
-          return true;
-        } else {
+        if (rows.length === 0) {
+          console.warn(`[auth] Sign-in denied: email ${user.email} (provider ${account?.provider}) not found in PlayerEmails`);
           return false;
         }
+        // GitHub only exposes the account's primary email, which we trust as verified
+        const emailTrusted = account?.provider === "github"
+          || profile?.email_verified
+          || process.env.DEV_ALLOW_INSECURE_EMAIL;
+        if (!emailTrusted) {
+          console.warn(`[auth] Sign-in denied: email ${user.email} (provider ${account?.provider}) is not verified`);
+          return false;
+        }
+        return true;
       } finally {
         connection.release();
       }
