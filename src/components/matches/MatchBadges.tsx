@@ -8,10 +8,19 @@ import TrendingUpIcon from '@mui/icons-material/TrendingUp';
 import TrendingDownIcon from '@mui/icons-material/TrendingDown';
 import BoltIcon from '@mui/icons-material/Bolt';
 import HourglassBottomIcon from '@mui/icons-material/HourglassBottom';
+import UndoIcon from '@mui/icons-material/Undo';
+import SportsScoreIcon from '@mui/icons-material/SportsScore';
+import CastleIcon from '@mui/icons-material/Castle';
 import { GameWithHands } from "@/types/db";
 import { getMatchStats, isActiveMatch, MatchRecords, MatchStats } from "@/lib/matchRecords";
 
 const LIMIT_HAND = 300;
+/** How far behind the leader the eventual winner must have been to count as a comeback. */
+const COMEBACK_DEFICIT = 500;
+/** Final margins below this between the winner and the runner-up make a thriller. */
+const THRILLER_MARGIN = 20;
+/** Shortest east streak that counts as Högmod, and so the shortest one that can be a record. */
+const HOGMOD_STREAK = 2;
 
 interface BadgeContext {
     readonly stats: MatchStats | null;
@@ -87,6 +96,31 @@ export const MATCH_BADGES: readonly MatchBadgeDefinition[] = [
         color: "info",
         icon: <HourglassBottomIcon />,
         applies: (_, { stats, records }) => !!stats && stats.rounds === records.mostRounds,
+    },
+    {
+        id: "comeback",
+        label: "Comeback",
+        color: "success",
+        icon: <UndoIcon />,
+        applies: (match, { stats }) =>
+            !!stats && !isActiveMatch(match) && stats.winnerMaxDeficit >= COMEBACK_DEFICIT,
+    },
+    {
+        id: "thriller",
+        label: "Rysare",
+        color: "secondary",
+        icon: <SportsScoreIcon />,
+        applies: (match, { stats }) =>
+            !!stats && !isActiveMatch(match) && stats.finalMargin < THRILLER_MARGIN,
+    },
+    {
+        id: "hogmod-record",
+        label: "Högmodsrekord",
+        color: "warning",
+        icon: <CastleIcon />,
+        applies: (_, { stats, records }) =>
+            !!stats && stats.longestEastStreak >= HOGMOD_STREAK
+            && stats.longestEastStreak === records.longestEastStreak,
     },
 ];
 
