@@ -2,17 +2,28 @@ import React from "react";
 import { Box, Chip, ChipProps } from "@mui/material";
 import { LocalFireDepartment } from "@mui/icons-material";
 import NotificationsIcon from '@mui/icons-material/Notifications';
+import EmojiEventsIcon from '@mui/icons-material/EmojiEvents';
+import SouthIcon from '@mui/icons-material/South';
+import TrendingUpIcon from '@mui/icons-material/TrendingUp';
+import TrendingDownIcon from '@mui/icons-material/TrendingDown';
+import BoltIcon from '@mui/icons-material/Bolt';
+import HourglassBottomIcon from '@mui/icons-material/HourglassBottom';
 import { GameWithHands } from "@/types/db";
+import { getMatchStats, isActiveMatch, MatchRecords, MatchStats } from "@/lib/matchRecords";
 
-const ACTIVE_MATCH_WINDOW_MS = 24 * 60 * 60 * 1000;
 const LIMIT_HAND = 300;
+
+interface BadgeContext {
+    readonly stats: MatchStats | null;
+    readonly records: MatchRecords;
+}
 
 export interface MatchBadgeDefinition {
     readonly id: string;
     readonly label: string;
     readonly color: ChipProps["color"];
     readonly icon: React.ReactElement;
-    readonly applies: (match: GameWithHands) => boolean;
+    readonly applies: (match: GameWithHands, context: BadgeContext) => boolean;
 }
 
 /**
@@ -32,16 +43,61 @@ export const MATCH_BADGES: readonly MatchBadgeDefinition[] = [
         label: "Aktiv match",
         color: "primary",
         icon: <NotificationsIcon />,
-        applies: (match) => Date.now() - match.TIME.getTime() < ACTIVE_MATCH_WINDOW_MS,
+        applies: (match) => isActiveMatch(match),
+    },
+    {
+        id: "highest-score",
+        label: "Högsta poäng",
+        color: "success",
+        icon: <EmojiEventsIcon />,
+        applies: (_, { stats, records }) => !!stats && stats.highestScore === records.highestScore,
+    },
+    {
+        id: "lowest-score",
+        label: "Lägsta poäng",
+        color: "warning",
+        icon: <SouthIcon />,
+        applies: (_, { stats, records }) => !!stats && stats.lowestScore === records.lowestScore,
+    },
+    {
+        id: "biggest-win",
+        label: "Största vinst",
+        color: "success",
+        icon: <TrendingUpIcon />,
+        applies: (_, { stats, records }) => !!stats && stats.biggestWin === records.biggestWin,
+    },
+    {
+        id: "biggest-loss",
+        label: "Största förlust",
+        color: "warning",
+        icon: <TrendingDownIcon />,
+        applies: (_, { stats, records }) => !!stats && stats.biggestLoss === records.biggestLoss,
+    },
+    {
+        id: "shortest-match",
+        label: "Kortast match",
+        color: "info",
+        icon: <BoltIcon />,
+        applies: (match, { stats, records }) =>
+            !!stats && !isActiveMatch(match) && stats.rounds === records.fewestRounds,
+    },
+    {
+        id: "longest-match",
+        label: "Längst match",
+        color: "info",
+        icon: <HourglassBottomIcon />,
+        applies: (_, { stats, records }) => !!stats && stats.rounds === records.mostRounds,
     },
 ];
 
 interface Props {
     readonly match: GameWithHands;
+    readonly records: MatchRecords;
 }
 
-export default function MatchBadges({ match }: Props) {
-    const badges = MATCH_BADGES.filter(badge => badge.applies(match));
+export default function MatchBadges({ match, records }: Props) {
+    const context: BadgeContext = { stats: getMatchStats(match), records };
+    const badges = MATCH_BADGES.filter(badge => badge.applies(match, context));
 
     if (badges.length === 0) {
         return null;
