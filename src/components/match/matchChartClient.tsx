@@ -9,6 +9,7 @@ import {HandWithScore} from "@/types/components";
 import {EChartsOption} from "echarts-for-react/src/types";
 import Confetti from 'react-confetti'
 import LastRoundDisplay from "@/components/match/LastRoundDisplay";
+import SplitFlapScoreboard, {scoreboardTeams} from "@/components/match/SplitFlapScoreboard";
 
 interface Props {
   readonly matchId: string;
@@ -541,6 +542,11 @@ export default function MatchChartClient({
               </div>
           )}
         </div>
+
+        <SplitFlapScoreboard
+            teams={scoreboardTeams(hands, teamIdToName, teamColors)}
+            round={Math.max(0, ...hands.map((hand: Hand) => hand.ROUND))}
+        />
 
         <ReactEcharts
             option={options}
