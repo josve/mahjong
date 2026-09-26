@@ -10,7 +10,7 @@ import {
   Container,
 } from "@mui/material";
 import { useRouter } from "next/navigation";
-import {MatchesResponse, TeamsResponse} from "@/types/api";
+import {MatchesResponse, SuggestedTeamsResponse, TeamsResponse} from "@/types/api";
 
 
 export default function NewMatchClient() {
@@ -30,6 +30,25 @@ export default function NewMatchClient() {
       const response = await fetch("/api/teams");
       const data: TeamsResponse[] = await response.json();
       setTeams(data);
+
+      // Pre-fill the teams with a suggestion based on the latest matches
+      try {
+        const suggestionResponse = await fetch("/api/suggestedTeams");
+        if (!suggestionResponse.ok) {
+          return;
+        }
+        const suggestion: SuggestedTeamsResponse = await suggestionResponse.json();
+        const suggestedTeams = suggestion.teamIds.map(
+          (id) => data.find((team) => team.id === id) ?? null
+        );
+        if (suggestedTeams.length === 4 && suggestedTeams.every(Boolean)) {
+          setSelectedTeams((current) =>
+            current.every((team) => team === null) ? suggestedTeams : current
+          );
+        }
+      } catch (error) {
+        console.error("Error fetching suggested teams:", error);
+      }
     };
     fetchTeams();
   }, []);
