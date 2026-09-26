@@ -1,6 +1,7 @@
 import type {Meta, StoryObj} from "@storybook/nextjs-vite";
 import MatchGridItemClient from "@/components/matches/MatchGridItemClient";
-import {activeMatch, limitHandMatch, oldMatch, teamIdToName} from "@/stories/fixtures";
+import {activeMatch, limitHandMatch, matches, oldMatch, teamIdToName} from "@/stories/fixtures";
+import {computeMatchRecords} from "@/lib/matchRecords";
 
 const meta = {
     title: "Components/Matches/MatchGridItemClient",
@@ -10,6 +11,7 @@ const meta = {
         index: 10,
         match: oldMatch,
         idToName: teamIdToName,
+        records: computeMatchRecords(matches),
     },
 } satisfies Meta<typeof MatchGridItemClient>;
 

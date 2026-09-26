@@ -16,11 +16,13 @@ import {
 import { GameWithHands, IdToName } from "@/types/db";
 import React from "react";
 import MatchBadges from "@/components/matches/MatchBadges";
+import { MatchRecords } from "@/lib/matchRecords";
 
 interface Props {
     readonly match: GameWithHands;
     readonly index: number;
     readonly idToName: IdToName;
+    readonly records: MatchRecords;
 }
 
 const StyledCard = styled(Card)(({ theme }) => ({
@@ -33,7 +35,7 @@ interface TeamScore {
     score: number;
 }
 
-export default function MatchGridItemClient({ index, match, idToName }: Props) {
+export default function MatchGridItemClient({ index, match, idToName, records }: Props) {
 
     const hands = match.hands;
     const name = match.NAME;
@@ -132,7 +134,7 @@ export default function MatchGridItemClient({ index, match, idToName }: Props) {
                         )}
                     </CardContent>
 
-                    <MatchBadges match={match} />
+                    <MatchBadges match={match} records={records} />
                 </StyledCard>
             </CardActionArea>
         </Link>

@@ -10,6 +10,7 @@ import {getTeamDetails, getTeamIdToName} from "@/lib/dbMatch";
 import {suggestTeams} from "@/lib/teamSuggestion";
 import {getNextUpcomingGame} from "@/lib/db/upcomingGame";
 import UpcomingGameCard from "@/components/matches/UpcomingGameCard";
+import {computeMatchRecords} from "@/lib/matchRecords";
 
 export const revalidate = 60;
 
@@ -20,6 +21,7 @@ export default async function Home() {
     const teamDetails = upcomingGame ? await getTeamDetails() : {};
     const suggestedTeams = suggestTeams(matches, teamDetails).map((teamId) => teamDetails[teamId]);
     const numMatches = matches.length;
+    const records = computeMatchRecords(matches);
 
     const session = await auth();
     let allowCreate = true;
@@ -63,7 +65,7 @@ export default async function Home() {
                         key={match.GAME_ID}
                     >
                         {" "}
-                        <MatchGridItemClient index={numMatches - index} idToName={idToName} match={match}/>
+                        <MatchGridItemClient index={numMatches - index} idToName={idToName} match={match} records={records}/>
                     </Grid>
                 ))}
             </Grid>
