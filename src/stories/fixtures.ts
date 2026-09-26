@@ -267,7 +267,17 @@ export function roundFor(game: GameWithHands, round: number, eastStreak = 0): Ro
         maxHand: Math.max(...played.map((hand) => hand.HAND)),
         maxScore: Math.max(...played.map((hand) => hand.HAND_SCORE)),
         eastStreaks: east ? {[east.TEAM_ID]: eastStreak} : {},
+        previousTotals: totalsAfter(game, round - 1),
+        totals: totalsAfter(game, round),
     };
+}
+
+function totalsAfter(game: GameWithHands, round: number): { [teamId: string]: number } {
+    const totals: { [teamId: string]: number } = {};
+    for (const hand of game.hands.filter((hand) => hand.ROUND <= round)) {
+        totals[hand.TEAM_ID] = (totals[hand.TEAM_ID] ?? 500) + hand.HAND_SCORE;
+    }
+    return totals;
 }
 
 export const totalStatistics: TotalStatistics = {

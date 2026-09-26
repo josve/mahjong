@@ -25,7 +25,13 @@ export interface Round {
   maxHand: number;
   maxScore: number;
   eastStreaks?: { [teamId: string]: number };
+  /** Each team's total score before this round was played. */
+  previousTotals?: { [teamId: string]: number };
+  /** Each team's total score after this round was played. */
+  totals?: { [teamId: string]: number };
 }
+
+const STARTING_SCORE = 500;
 
 export default function MatchChartClient({
                                            matchId,
@@ -74,6 +80,10 @@ export default function MatchChartClient({
 
       let prevHand: Hand[] | undefined = undefined;
       const teamEastStreak: { [teamId: string]: number } = {};
+      const teamTotals: { [teamId: string]: number } = {};
+      for (const hand of hands.slice(0, 4)) {
+        teamTotals[hand.TEAM_ID] = (teamTotals[hand.TEAM_ID] ?? STARTING_SCORE) + hand.HAND_SCORE;
+      }
 
       // Process hands in batches of 4 (each ROUND)
       for (let i = 0; i < handsToProcess.length; i += 4) {
@@ -92,6 +102,12 @@ export default function MatchChartClient({
           }
         }
 
+        // Track running totals per team
+        const previousTotals = { ...teamTotals };
+        for (const hand of sortedRound) {
+          teamTotals[hand.TEAM_ID] = (teamTotals[hand.TEAM_ID] ?? STARTING_SCORE) + hand.HAND_SCORE;
+        }
+
         // Push the sorted ROUND into the result
         result.push({
           hands: sortedRound,
@@ -99,6 +115,8 @@ export default function MatchChartClient({
           maxScore: maxScore,
           maxHand: maxHand,
           eastStreaks: { ...teamEastStreak },
+          previousTotals,
+          totals: { ...teamTotals },
         });
 
         prevHand = sortedRound;
