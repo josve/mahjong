@@ -3,6 +3,12 @@ import { Box, Chip, ChipProps } from "@mui/material";
 import { LocalFireDepartment } from "@mui/icons-material";
 import CastleIcon from '@mui/icons-material/Castle';
 import DirectionsRunIcon from '@mui/icons-material/DirectionsRun';
+import GavelIcon from '@mui/icons-material/Gavel';
+import MasksIcon from '@mui/icons-material/Masks';
+import WaterDropIcon from '@mui/icons-material/WaterDrop';
+import MilitaryTechIcon from '@mui/icons-material/MilitaryTech';
+import TrendingDownIcon from '@mui/icons-material/TrendingDown';
+import MoneyOffIcon from '@mui/icons-material/MoneyOff';
 import { Hand } from "@/types/db";
 import { Round } from "@/components/match/matchChartClient";
 import { getHogmodLabel } from "@/lib/hogmodLabels";
@@ -10,6 +16,8 @@ import { getHogmodLabel } from "@/lib/hogmodLabels";
 const LIMIT_HAND = 300;
 const HIGHROLLER_HAND = 100;
 const HOGMOD_STREAK = 2;
+/** A round's biggest loss must be larger than this to count as a Blodbad. */
+const BLODBAD_LOSS = 100;
 
 /**
  * Everything a badge may need to decide whether it applies to a hand.
@@ -36,6 +44,66 @@ const isHighroller = ({ hand }: HandBadgeContext) => hand.HAND >= HIGHROLLER_HAN
 const isFegis = ({ hand, round }: HandBadgeContext) => {
     const previous = round.previousHand?.find(prev => prev.TEAM_ID === hand.TEAM_ID);
     return !!previous && previous.WIND === 'E' && !!previous.IS_WINNER && hand.WIND !== 'E';
+};
+
+/**
+ * The team won while another team was in a Högmod streak as east, ending that streak.
+ */
+const isKungamordare = ({ hand, round }: HandBadgeContext) =>
+    !!hand.IS_WINNER && hand.WIND !== 'E'
+    && round.hands.some(other =>
+        other.WIND === 'E' && (round.eastStreaks?.[other.TEAM_ID] || 0) >= HOGMOD_STREAK);
+
+/**
+ * The team did not win the round but still gained points.
+ */
+const isSmygvinst = ({ hand }: HandBadgeContext) => !hand.IS_WINNER && hand.HAND_SCORE > 0;
+
+/**
+ * The team took the biggest loss of the round, and it was a big one.
+ */
+const isBlodbad = ({ hand, round }: HandBadgeContext) =>
+    -hand.HAND_SCORE > BLODBAD_LOSS
+    && hand.HAND_SCORE === Math.min(...round.hands.map(other => other.HAND_SCORE));
+
+/** The team strictly ahead of all others, or undefined when the top is shared. */
+const soleLeader = (totals: { [teamId: string]: number }) => {
+    const ranked = Object.entries(totals).sort((a, b) => b[1] - a[1]);
+    return ranked.length > 1 && ranked[0][1] > ranked[1][1] ? ranked[0][0] : undefined;
+};
+
+/** The team strictly behind all others, or undefined when the bottom is shared. */
+const soleLast = (totals: { [teamId: string]: number }) => {
+    const ranked = Object.entries(totals).sort((a, b) => a[1] - b[1]);
+    return ranked.length > 1 && ranked[0][1] < ranked[1][1] ? ranked[0][0] : undefined;
+};
+
+/**
+ * The team took the lead from another team that was leading before the round.
+ */
+const isTronskifte = ({ hand, round }: HandBadgeContext) => {
+    if (!round.previousTotals || !round.totals) {
+        return false;
+    }
+    const previousLeader = soleLeader(round.previousTotals);
+    return !!previousLeader && previousLeader !== hand.TEAM_ID && soleLeader(round.totals) === hand.TEAM_ID;
+};
+
+/**
+ * The team went from sole leader to sole last in a single round.
+ */
+const isFrittFall = ({ hand, round }: HandBadgeContext) =>
+    !!round.previousTotals && !!round.totals
+    && soleLeader(round.previousTotals) === hand.TEAM_ID
+    && soleLast(round.totals) === hand.TEAM_ID;
+
+/**
+ * The team's total dropped below zero in this round.
+ */
+const isKonkurs = ({ hand, round }: HandBadgeContext) => {
+    const before = round.previousTotals?.[hand.TEAM_ID];
+    const after = round.totals?.[hand.TEAM_ID];
+    return before !== undefined && after !== undefined && before >= 0 && after < 0;
 };
 
 const isBestHand = (context: HandBadgeContext) =>
@@ -89,6 +157,48 @@ export const HAND_BADGES: readonly HandBadgeDefinition[] = [
         color: "info",
         icon: <DirectionsRunIcon />,
         applies: isFegis,
+    },
+    {
+        id: "kungamordare",
+        label: "Kungamördare",
+        color: "error",
+        icon: <GavelIcon />,
+        applies: isKungamordare,
+    },
+    {
+        id: "smygvinst",
+        label: "Smygvinst",
+        color: "success",
+        icon: <MasksIcon />,
+        applies: isSmygvinst,
+    },
+    {
+        id: "blodbad",
+        label: "Blodbad",
+        color: "error",
+        icon: <WaterDropIcon />,
+        applies: isBlodbad,
+    },
+    {
+        id: "tronskifte",
+        label: "Tronskifte",
+        color: "warning",
+        icon: <MilitaryTechIcon />,
+        applies: isTronskifte,
+    },
+    {
+        id: "fritt-fall",
+        label: "Fritt fall",
+        color: "secondary",
+        icon: <TrendingDownIcon />,
+        applies: isFrittFall,
+    },
+    {
+        id: "konkurs",
+        label: "Konkurs",
+        color: "error",
+        icon: <MoneyOffIcon />,
+        applies: isKonkurs,
     },
 ];
 
