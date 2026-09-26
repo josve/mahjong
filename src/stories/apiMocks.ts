@@ -1,7 +1,8 @@
 // Default responses for the app's API routes, installed for every story in .storybook/preview.tsx.
 // Stories can add or override responses with the `fetchMocks` parameter.
 import type {FetchMock} from "@/stories/fetchMock";
-import {matchChartResponse, matches, teamsResponse} from "@/stories/fixtures";
+import {matchChartResponse, matches, matchesDesc, teamDetails, teamsResponse} from "@/stories/fixtures";
+import {suggestTeams} from "@/lib/teamSuggestion";
 
 export const matchChartMock: FetchMock = {
     url: "/api/matchChart",
@@ -14,6 +15,7 @@ export const matchChartMock: FetchMock = {
 export const defaultFetchMocks: FetchMock[] = [
     matchChartMock,
     {url: "/api/teams", response: teamsResponse},
+    {url: "/api/suggestedTeams", response: {teamIds: suggestTeams(matchesDesc, teamDetails)}},
     {url: "/api/matches", method: "POST", response: {success: true, gameId: "game-new"}},
     {url: "/api/addResult", method: "POST", response: {message: "Result added"}},
     {url: "/api/updateResult", method: "POST", response: {message: "Result updated"}},

@@ -46,3 +46,7 @@ export interface UpdateProfileResponse {
 export interface UpdateResultResponse  {
     message: string;
 }
+
+export interface SuggestedTeamsResponse {
+    teamIds: string[];
+}
