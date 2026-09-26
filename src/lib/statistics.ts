@@ -328,7 +328,7 @@ export class MahjongStats {
             if (!roundMap.has(hand.ROUND)) roundMap.set(hand.ROUND, []);
             roundMap.get(hand.ROUND)!.push(hand);
         }
-        const rounds = [...roundMap.keys()].sort((a, b) => a - b);
+        const rounds = Array.from(roundMap.keys()).sort((a, b) => a - b);
 
         const teamWinStreak = new Map<string, number>();
 
@@ -361,7 +361,7 @@ export class MahjongStats {
             if (!roundMap.has(hand.ROUND)) roundMap.set(hand.ROUND, []);
             roundMap.get(hand.ROUND)!.push(hand);
         }
-        const rounds = [...roundMap.keys()].sort((a, b) => a - b);
+        const rounds = Array.from(roundMap.keys()).sort((a, b) => a - b);
 
         const teamPositiveStreak = new Map<string, number>();
 
@@ -394,7 +394,7 @@ export class MahjongStats {
             if (!roundMap.has(hand.ROUND)) roundMap.set(hand.ROUND, []);
             roundMap.get(hand.ROUND)!.push(hand);
         }
-        const rounds = [...roundMap.keys()].sort((a, b) => a - b);
+        const rounds = Array.from(roundMap.keys()).sort((a, b) => a - b);
 
         const teamIds = [game.TEAM_ID_1, game.TEAM_ID_2, game.TEAM_ID_3, game.TEAM_ID_4];
         const cumulativeScores = new Map<string, number>();
@@ -415,7 +415,7 @@ export class MahjongStats {
             }
 
             // Determine positions after this round
-            const sorted = [...cumulativeScores.entries()]
+            const sorted = Array.from(cumulativeScores)
                 .sort((a, b) => b[1] - a[1]);
             const lastTeamId = sorted[sorted.length - 1][0];
             const leaderScore = sorted[0][1];
@@ -429,7 +429,7 @@ export class MahjongStats {
         }
 
         // Find winner (highest cumulative score at end)
-        const finalSorted = [...cumulativeScores.entries()]
+        const finalSorted = Array.from(cumulativeScores)
             .sort((a, b) => b[1] - a[1]);
         const winnerTeamId = finalSorted[0][0];
 
