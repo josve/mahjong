@@ -6,7 +6,8 @@ import fetchMatches from "@/lib/fetchMatches";
 import {auth} from "@/auth";
 import {GameWithHands} from "@/types/db";
 import MatchGridItemClient from "@/components/matches/MatchGridItemClient";
-import {getTeamIdToName} from "@/lib/dbMatch";
+import {getTeamDetails, getTeamIdToName} from "@/lib/dbMatch";
+import {suggestTeams} from "@/lib/teamSuggestion";
 import {getNextUpcomingGame} from "@/lib/db/upcomingGame";
 import UpcomingGameCard from "@/components/matches/UpcomingGameCard";
 
@@ -16,6 +17,8 @@ export default async function Home() {
     const matches = await fetchMatches(true);
     const idToName = await getTeamIdToName();
     const upcomingGame = await getNextUpcomingGame();
+    const teamDetails = upcomingGame ? await getTeamDetails() : {};
+    const suggestedTeams = suggestTeams(matches, teamDetails).map((teamId) => teamDetails[teamId]);
     const numMatches = matches.length;
 
     const session = await auth();
@@ -49,7 +52,7 @@ export default async function Home() {
             >
                 {upcomingGame && (
                     <Grid  size={{ xs: 12, sm: 6}} key={`upcoming-game-${upcomingGame.id}`}>
-                        <UpcomingGameCard session={session} upcomingGame={upcomingGame} />
+                        <UpcomingGameCard session={session} upcomingGame={upcomingGame} suggestedTeams={suggestedTeams} />
                     </Grid>
                 )}
 

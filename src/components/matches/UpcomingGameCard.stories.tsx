@@ -1,6 +1,6 @@
 import type {Meta, StoryObj} from "@storybook/nextjs-vite";
 import UpcomingGameCard from "@/components/matches/UpcomingGameCard";
-import {session, upcomingGames} from "@/stories/fixtures";
+import {session, teamDetails, upcomingGames} from "@/stories/fixtures";
 
 const meta = {
     title: "Components/Matches/UpcomingGameCard",
@@ -23,4 +23,8 @@ export const LoggedOut: Story = {
 
 export const WithoutMeetingLink: Story = {
     args: {upcomingGame: upcomingGames[1]},
+};
+
+export const WithSuggestedTeams: Story = {
+    args: {suggestedTeams: ["t-ab", "t3", "t4", "t5"].map((teamId) => teamDetails[teamId])},
 };
