@@ -160,60 +160,52 @@ export default function LastRoundDisplay({ teamIdToName, round }: Props) {
                                     Resultat: {hand.HAND_SCORE}
                                 </Typography>
 
-                                {isHighroller && (
-                                    <Chip
-                                        label={hand.HAND === 300 ? 'Limit hand' : 'Highroller'}
-                                        color={hand.HAND === 300 ? 'error' : 'secondary'}
-                                        size="small"
-                                        icon={<LocalFireDepartment />}
+                                {(isHighroller || isBestHand || isBestScore || hogmod) && (
+                                    <Box
                                         sx={{
-                                            position: 'absolute',
-                                            bottom: 8,
-                                            right: 8,
+                                            display: 'flex',
+                                            flexWrap: 'wrap',
+                                            justifyContent: 'flex-end',
+                                            gap: 0.5,
+                                            mt: 1,
                                         }}
-                                    />
-                                )}
+                                    >
+                                        {isHighroller && (
+                                            <Chip
+                                                label={hand.HAND === 300 ? 'Limit hand' : 'Highroller'}
+                                                color={hand.HAND === 300 ? 'error' : 'secondary'}
+                                                size="small"
+                                                icon={<LocalFireDepartment />}
+                                            />
+                                        )}
 
-                                {isBestHand && (
-                                    <Chip
-                                        label="Bästa hand"
-                                        color="primary"
-                                        size="small"
-                                        icon={<LocalFireDepartment />}
-                                        sx={{
-                                            position: 'absolute',
-                                            bottom: 8,
-                                            right: 8,
-                                        }}
-                                    />
-                                )}
+                                        {isBestHand && (
+                                            <Chip
+                                                label="Bästa hand"
+                                                color="primary"
+                                                size="small"
+                                                icon={<LocalFireDepartment />}
+                                            />
+                                        )}
 
-                                {isBestScore && (
-                                    <Chip
-                                        label="Störst vinst"
-                                        color="primary"
-                                        size="small"
-                                        icon={<LocalFireDepartment />}
-                                        sx={{
-                                            position: 'absolute',
-                                            bottom: 8,
-                                            right: 8,
-                                        }}
-                                    />
-                                )}
+                                        {isBestScore && (
+                                            <Chip
+                                                label="Störst vinst"
+                                                color="primary"
+                                                size="small"
+                                                icon={<LocalFireDepartment />}
+                                            />
+                                        )}
 
-                                {hogmod && (
-                                    <Chip
-                                        label={getHogmodLabel(eastStreak)}
-                                        color="warning"
-                                        size="small"
-                                        icon={<CastleIcon />}
-                                        sx={{
-                                            position: 'absolute',
-                                            bottom: 8,
-                                            right: 8,
-                                        }}
-                                    />
+                                        {hogmod && (
+                                            <Chip
+                                                label={getHogmodLabel(eastStreak)}
+                                                color="warning"
+                                                size="small"
+                                                icon={<CastleIcon />}
+                                            />
+                                        )}
+                                    </Box>
                                 )}
                             </MotionBox>
                         </MotionGrid>
