@@ -11,13 +11,11 @@ import {
     CardContent,
     Typography,
     CardActionArea,
-    styled,
-    Chip
+    styled
 } from "@mui/material";
 import { GameWithHands, IdToName } from "@/types/db";
-import {LocalFireDepartment} from "@mui/icons-material";
 import React from "react";
-import NotificationsIcon from '@mui/icons-material/Notifications';
+import MatchBadges from "@/components/matches/MatchBadges";
 
 interface Props {
     readonly match: GameWithHands;
@@ -45,15 +43,9 @@ export default function MatchGridItemClient({ index, match, idToName }: Props) {
 
     const teams = [match.TEAM_ID_1, match.TEAM_ID_2, match.TEAM_ID_3, match.TEAM_ID_4];
 
-    let hasLimitHand = false;
-
     for (const hand of match.hands) {
         if (!scores.hasOwnProperty(hand.TEAM_ID)) {
             scores[hand.TEAM_ID] = 500;
-        }
-
-        if (hand.HAND === 300) {
-            hasLimitHand = true;
         }
 
         scores[hand.TEAM_ID] += hand.HAND_SCORE;
@@ -80,9 +72,6 @@ export default function MatchGridItemClient({ index, match, idToName }: Props) {
     const timeString = `${formatTime(new Date(firstRound))}-${formatTime(
         new Date(lastRound)
     )}`;
-
-    const isActive =
-        new Date().getTime() - match.TIME.getTime() < 24 * 60 * 60 * 1000;
 
     return (
         <Link href={`/match/${match.GAME_ID}`} passHref legacyBehavior>
@@ -143,33 +132,7 @@ export default function MatchGridItemClient({ index, match, idToName }: Props) {
                         )}
                     </CardContent>
 
-                    {hasLimitHand && (
-                        <Chip
-                            label="Limit hand"
-                            color="error"
-                            size="small"
-                            icon={<LocalFireDepartment />}
-                            sx={{
-                                position: 'absolute',
-                                bottom: 8,
-                                right: 8,
-                            }}
-                        />
-                    )}
-
-                    {isActive && (
-                        <Chip
-                            label="Aktiv match"
-                            color="primary"
-                            size="small"
-                            icon={<NotificationsIcon/>}
-                            sx={{
-                                position: 'absolute',
-                                bottom: 8,
-                                right: 8,
-                            }}
-                        />
-                    )}
+                    <MatchBadges match={match} />
                 </StyledCard>
             </CardActionArea>
         </Link>
