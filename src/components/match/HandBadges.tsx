@@ -55,9 +55,15 @@ const isKungamordare = ({ hand, round }: HandBadgeContext) =>
         other.WIND === 'E' && (round.eastStreaks?.[other.TEAM_ID] || 0) >= HOGMOD_STREAK);
 
 /**
- * The team did not win the round but still gained points.
+ * The team did not win the round but still gained more points than the winner.
  */
-const isSmygvinst = ({ hand }: HandBadgeContext) => !hand.IS_WINNER && hand.HAND_SCORE > 0;
+const isSmygvinst = ({ hand, round }: HandBadgeContext) => {
+    if (hand.IS_WINNER || hand.HAND_SCORE <= 0) {
+        return false;
+    }
+    const winner = round.hands.find(other => other.IS_WINNER);
+    return !!winner && hand.HAND_SCORE > winner.HAND_SCORE;
+};
 
 /**
  * The team took the biggest loss of the round, and it was a big one.
