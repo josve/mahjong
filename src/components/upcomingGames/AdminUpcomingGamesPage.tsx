@@ -168,14 +168,18 @@ export default function AdminUpcomingGamesPage({
                     Skapa en ny kommande match
                 </Typography>
 
-                <Stack direction="row" spacing={2} alignItems="center">
+                <Stack direction="row" spacing={2} sx={{
+                    alignItems: "center"
+                }}>
                     <TextField
                         label="Datum"
                         type="datetime-local"
                         value={newGameTime}
                         onChange={(e) => setNewGameTime(e.target.value)}
-                        InputLabelProps={{
-                            shrink: true,
+                        slotProps={{
+                            inputLabel: {
+                                shrink: true,
+                            }
                         }}
                     />
                     <TextField

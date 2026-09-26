@@ -8,7 +8,6 @@ import {
   Box,
   Typography,
   Container,
-  Chip,
 } from "@mui/material";
 import { useRouter } from "next/navigation";
 import {MatchesResponse, TeamsResponse} from "@/types/api";
@@ -152,15 +151,6 @@ export default function NewMatchClient() {
                   required
                 />
               )}
-              renderTags={(value, getTagProps) =>
-                value.map((option, index) => (
-                  <Chip
-                    label={option.name}
-                    {...getTagProps({ index })}
-                    key={option.id}
-                  />
-                ))
-              }
             />
           ))}
           <Button className="button"

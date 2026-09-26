@@ -60,11 +60,19 @@ export default function UpcomingGameCard({ upcomingGame, session }: UpcomingGame
     return (
         <StyledCard className="upcoming-game-card">
             <CardContent>
-                <Box display="flex" justifyContent="space-between" alignItems="center" mb={2}>
+                <Box
+                    sx={{
+                        display: "flex",
+                        justifyContent: "space-between",
+                        alignItems: "center",
+                        mb: 2
+                    }}>
                     <Typography variant="h6" component="div">
                         Nästa match
                     </Typography>
-                    <Typography variant="body2" color="text.secondary">
+                    <Typography variant="body2" sx={{
+                        color: "text.secondary"
+                    }}>
                         {formattedDate} ({timeString})
                     </Typography>
                 </Box>

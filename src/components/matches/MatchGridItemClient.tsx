@@ -90,7 +90,13 @@ export default function MatchGridItemClient({ index, match, idToName }: Props) {
                 <StyledCard className="match-grid-card">
                     <CardContent>
                         {/* 2. Combined Header Row: Index, Game Name, and Rounds */}
-                        <Box display="flex" justifyContent="space-between" alignItems="center" mb={2}>
+                        <Box
+                            sx={{
+                                display: "flex",
+                                justifyContent: "space-between",
+                                alignItems: "center",
+                                mb: 2
+                            }}>
                             <Typography variant="h6" component="div">
                                 #{index} {name}
                             </Typography>
@@ -100,19 +106,38 @@ export default function MatchGridItemClient({ index, match, idToName }: Props) {
                         </Box>
 
                         {/* Row for "time" */}
-                        <Box display="flex" justifyContent="flex-start" alignItems="center" mb={1}>
-                            <Typography variant="body2" color="text.secondary">
+                        <Box
+                            sx={{
+                                display: "flex",
+                                justifyContent: "flex-start",
+                                alignItems: "center",
+                                mb: 1
+                            }}>
+                            <Typography variant="body2" sx={{
+                                color: "text.secondary"
+                            }}>
                                 {capitalize(formatDate(time))} ({timeString})
                             </Typography>
                         </Box>
 
                         {teamScores.map((teamScore) => (
-                            <Typography key={teamScore.team} variant="body2" color="text.secondary" mt={1}>
+                            <Typography
+                                key={teamScore.team}
+                                variant="body2"
+                                sx={{
+                                    color: "text.secondary",
+                                    mt: 1
+                                }}>
                                 <strong>{idToName[teamScore.team]}</strong>: {teamScore.score}
                             </Typography>
                         ))}
                         {match.COMMENT && (
-                            <Typography variant="body2" color="text.secondary" mt={1}>
+                            <Typography
+                                variant="body2"
+                                sx={{
+                                    color: "text.secondary",
+                                    mt: 1
+                                }}>
                                 {match.COMMENT}
                             </Typography>
                         )}

@@ -105,10 +105,7 @@ export default function LastRoundDisplay({ teamIdToName, round }: Props) {
                     const hasHighestWin = highestScorePlayer == hand.TEAM_ID;
                     return (
                         <MotionGrid
-                            item
-                            xs={12}
-                            sm={6}
-                            md={3}
+                            size={{ xs: 12, sm: 6, md: 3 }}
                             key={hand.TEAM_ID}
                             variants={itemVariants}
                             whileHover="hover"
@@ -143,7 +140,9 @@ export default function LastRoundDisplay({ teamIdToName, round }: Props) {
                                 </Typography>
 
                                 {/* Vind */}
-                                <Typography variant="body2" color="text.secondary">
+                                <Typography variant="body2" sx={{
+                                    color: "text.secondary"
+                                }}>
                                     {windIcon(hand.WIND)}
                                 </Typography>
 

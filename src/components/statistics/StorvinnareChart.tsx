@@ -2,7 +2,7 @@ import React from "react";
 import {MahjongStats} from "@/lib/statistics";
 import {getStorvinnareLabel} from "@/lib/storvinnareLabels";
 import EmojiEventsIcon from '@mui/icons-material/EmojiEvents';
-import {Tooltip} from "@mui/material";
+import Tooltip from "@mui/material/Tooltip";
 
 interface StorvinnareChartProps {
     stats: MahjongStats;

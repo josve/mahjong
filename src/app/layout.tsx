@@ -2,7 +2,8 @@ import type { Metadata } from "next";
 import "./globals.css";
 import Header from "@/components/header/header";
 import Footer from "@/components/footer/footer";
-import { Container, Box } from "@mui/material";
+import Container from "@mui/material/Container";
+import Box from "@mui/material/Box";
 import Providers from "@/components/Providers";
 
 export const metadata: Metadata = {

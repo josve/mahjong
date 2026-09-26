@@ -2,7 +2,7 @@ import React from "react";
 import {MahjongStats} from "@/lib/statistics";
 import {getJarnhandLabel} from "@/lib/jarnhandLabels";
 import ShieldIcon from '@mui/icons-material/Shield';
-import {Tooltip} from "@mui/material";
+import Tooltip from "@mui/material/Tooltip";
 
 interface JarnhandChartProps {
     stats: MahjongStats;

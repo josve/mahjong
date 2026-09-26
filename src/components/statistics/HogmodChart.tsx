@@ -2,7 +2,7 @@ import React from "react";
 import {MahjongStats} from "@/lib/statistics";
 import {getHogmodLabel} from "@/lib/hogmodLabels";
 import CastleIcon from '@mui/icons-material/Castle';
-import {Tooltip} from "@mui/material";
+import Tooltip from "@mui/material/Tooltip";
 
 interface HogmodChartProps {
     stats: MahjongStats;

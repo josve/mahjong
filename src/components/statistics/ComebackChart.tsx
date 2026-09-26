@@ -1,7 +1,7 @@
 import React from "react";
 import {MahjongStats} from "@/lib/statistics";
 import TrendingUpIcon from '@mui/icons-material/TrendingUp';
-import {Tooltip} from "@mui/material";
+import Tooltip from "@mui/material/Tooltip";
 
 interface ComebackChartProps {
     stats: MahjongStats;

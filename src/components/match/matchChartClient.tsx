@@ -564,7 +564,7 @@ export default function MatchChartClient({
           <Button style={{marginTop: 20}} variant="outlined" onClick={toggleShowAllRounds}>Visa alla omgångar</Button>
 
           {isEditable && (
-              <Box mt={2}>
+              <Box sx={{mt: 2}}>
                 <Button
                     variant="contained"
                     onClick={handleGenerateComment}
@@ -581,14 +581,14 @@ export default function MatchChartClient({
                 </Button>
 
                 {generateError && (
-                    <Box mt={2}>
+                    <Box sx={{mt: 2}}>
                       <Alert severity="error">{generateError}</Alert>
                     </Box>
                 )}
 
                 {roundComment && (
-                    <Box mt={2}>
-                      <Typography variant="subtitle1" fontWeight={700}>
+                    <Box sx={{mt: 2}}>
+                      <Typography variant="subtitle1" sx={{fontWeight: 700}}>
                         Kommentar
                       </Typography>
                       <Typography variant="body1">{roundComment}</Typography>
