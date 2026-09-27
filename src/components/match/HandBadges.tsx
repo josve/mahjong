@@ -10,7 +10,7 @@ import MilitaryTechIcon from '@mui/icons-material/MilitaryTech';
 import TrendingDownIcon from '@mui/icons-material/TrendingDown';
 import MoneyOffIcon from '@mui/icons-material/MoneyOff';
 import { Hand } from "@/types/db";
-import { Round } from "@/components/match/matchChartClient";
+import { Round } from "@/lib/rounds";
 import { getHogmodLabel } from "@/lib/hogmodLabels";
 
 const LIMIT_HAND = 300;
@@ -208,18 +208,28 @@ export const HAND_BADGES: readonly HandBadgeDefinition[] = [
     },
 ];
 
+/** The badges a hand earned in a round, in display order. */
+export function getHandBadges(hand: Hand, round: Round): HandBadgeDefinition[] {
+    const context = createHandBadgeContext(hand, round);
+    return HAND_BADGES.filter(badge => badge.applies(context));
+}
+
+function createHandBadgeContext(hand: Hand, round: Round): HandBadgeContext {
+    return {
+        hand,
+        round,
+        eastStreak: round.eastStreaks?.[hand.TEAM_ID] || 0,
+    };
+}
+
 interface Props {
     readonly hand: Hand;
     readonly round: Round;
 }
 
 export default function HandBadges({ hand, round }: Props) {
-    const context: HandBadgeContext = {
-        hand,
-        round,
-        eastStreak: round.eastStreaks?.[hand.TEAM_ID] || 0,
-    };
-    const badges = HAND_BADGES.filter(badge => badge.applies(context));
+    const context = createHandBadgeContext(hand, round);
+    const badges = getHandBadges(hand, round);
 
     if (badges.length === 0) {
         return null;

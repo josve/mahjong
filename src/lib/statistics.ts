@@ -1,4 +1,6 @@
 import {GameWithHands, Hand, IdToColorMap, PlayerOrTeam, TeamIdToPlayerIds} from "@/types/db";
+import {buildRounds} from "@/lib/rounds";
+import {getHandBadges} from "@/components/match/HandBadges";
 
 export interface HighRollerInfo {
     gameIndex: number;
@@ -73,6 +75,8 @@ export class PlayerData {
     public jarnhandStreaks: JarnhandInfo[] = [];
     public longestJarnhandStreak: number = 0;
     public comebackGames: ComebackInfo[] = [];
+    /** How many times each hand badge was earned, keyed by badge id. */
+    public handBadgeCounts: { [badgeId: string]: number } = {};
     public windWins: WindRecord = { E: 0, N: 0, W: 0, S: 0 };
     public windHands: WindRecord = { E: 0, N: 0, W: 0, S: 0 };
     public averageHand: number = 0;
@@ -177,6 +181,10 @@ export class PlayerData {
             comebackIndex: uuidv4(),
             isTeam,
         });
+    }
+
+    public addHandBadge(badgeId: string) {
+        this.handBadgeCounts[badgeId] = (this.handBadgeCounts[badgeId] ?? 0) + 1;
     }
 
     public finish() {
@@ -287,6 +295,21 @@ export class MahjongStats {
         this.processStorvinnare(game, gameIndex);
         this.processJarnhand(game, gameIndex);
         this.processComeback(game, gameIndex);
+        this.processHandBadges(game);
+    }
+
+    private processHandBadges(game: GameWithHands) {
+        for (const round of buildRounds(game.hands)) {
+            for (const hand of round.hands) {
+                const teamData = this.idToPlayerData[hand.TEAM_ID];
+                for (const badge of getHandBadges(hand, round)) {
+                    teamData.addHandBadge(badge.id);
+                    for (const playerId of teamData.playerIds) {
+                        this.idToPlayerData[playerId].addHandBadge(badge.id);
+                    }
+                }
+            }
+        }
     }
 
     private processHogmod(game: GameWithHands, gameIndex: number) {

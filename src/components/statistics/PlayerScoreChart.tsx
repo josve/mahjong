@@ -10,6 +10,7 @@ import StorvinnareChart from "./StorvinnareChart"
 import JarnhandChart from "./JarnhandChart"
 import ComebackChart from "./ComebackChart"
 import WindStatsChart from "./WindStatsChart"
+import HandBadgesTable from "./HandBadgesTable"
 import { Tabs, Tab } from "@mui/material";
 import {
     GameWithHands,
@@ -87,6 +88,7 @@ const PlayerScoreChart: React.FC<PlayerScoreChartProps> = ({
                 <Tab label="Järnhand" />
                 <Tab label="Comeback" />
                 <Tab label="Vindposition" />
+                <Tab label="Badges" />
             </Tabs>
             <CustomTabPanel value={selectedTab} index={0}>
                 <PlayerScoresChart
@@ -144,6 +146,12 @@ const PlayerScoreChart: React.FC<PlayerScoreChartProps> = ({
             </CustomTabPanel>
             <CustomTabPanel value={selectedTab} index={9}>
                 <WindStatsChart
+                    stats={stats}
+                    includeTeams={includeTeams}
+                />
+            </CustomTabPanel>
+            <CustomTabPanel value={selectedTab} index={10}>
+                <HandBadgesTable
                     stats={stats}
                     includeTeams={includeTeams}
                 />
