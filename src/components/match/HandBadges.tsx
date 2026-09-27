@@ -9,13 +9,19 @@ import WaterDropIcon from '@mui/icons-material/WaterDrop';
 import MilitaryTechIcon from '@mui/icons-material/MilitaryTech';
 import TrendingDownIcon from '@mui/icons-material/TrendingDown';
 import MoneyOffIcon from '@mui/icons-material/MoneyOff';
+import EmojiEventsIcon from '@mui/icons-material/EmojiEvents';
+import ShieldIcon from '@mui/icons-material/Shield';
 import { Hand } from "@/types/db";
 import { Round } from "@/lib/rounds";
 import { getHogmodLabel } from "@/lib/hogmodLabels";
+import { getStorvinnareLabel } from "@/lib/storvinnareLabels";
+import { getJarnhandLabel } from "@/lib/jarnhandLabels";
 
 const LIMIT_HAND = 300;
 const HIGHROLLER_HAND = 100;
 const HOGMOD_STREAK = 2;
+const STORVINNARE_STREAK = 2;
+const JARNHAND_STREAK = 3;
 /** A round's biggest loss must be larger than this to count as a Blodbad. */
 const BLODBAD_LOSS = 100;
 
@@ -26,6 +32,8 @@ export interface HandBadgeContext {
     readonly hand: Hand;
     readonly round: Round;
     readonly eastStreak: number;
+    readonly winStreak: number;
+    readonly positiveStreak: number;
 }
 
 export interface HandBadgeDefinition {
@@ -34,6 +42,8 @@ export interface HandBadgeDefinition {
     readonly color: ChipProps["color"];
     readonly icon: React.ReactElement;
     readonly applies: (context: HandBadgeContext) => boolean;
+    /** For streak badges: how many rounds long the streak is. */
+    readonly streak?: (context: HandBadgeContext) => number;
 }
 
 const isHighroller = ({ hand }: HandBadgeContext) => hand.HAND >= HIGHROLLER_HAND;
@@ -156,6 +166,23 @@ export const HAND_BADGES: readonly HandBadgeDefinition[] = [
         color: "warning",
         icon: <CastleIcon />,
         applies: ({ eastStreak }) => eastStreak >= HOGMOD_STREAK,
+        streak: ({ eastStreak }) => eastStreak,
+    },
+    {
+        id: "storvinnare",
+        label: ({ winStreak }) => getStorvinnareLabel(winStreak),
+        color: "success",
+        icon: <EmojiEventsIcon />,
+        applies: ({ winStreak }) => winStreak >= STORVINNARE_STREAK,
+        streak: ({ winStreak }) => winStreak,
+    },
+    {
+        id: "jarnhand",
+        label: ({ positiveStreak }) => getJarnhandLabel(positiveStreak),
+        color: "success",
+        icon: <ShieldIcon />,
+        applies: ({ positiveStreak }) => positiveStreak >= JARNHAND_STREAK,
+        streak: ({ positiveStreak }) => positiveStreak,
     },
     {
         id: "fegis",
@@ -214,11 +241,13 @@ export function getHandBadges(hand: Hand, round: Round): HandBadgeDefinition[] {
     return HAND_BADGES.filter(badge => badge.applies(context));
 }
 
-function createHandBadgeContext(hand: Hand, round: Round): HandBadgeContext {
+export function createHandBadgeContext(hand: Hand, round: Round): HandBadgeContext {
     return {
         hand,
         round,
         eastStreak: round.eastStreaks?.[hand.TEAM_ID] || 0,
+        winStreak: round.winStreaks?.[hand.TEAM_ID] || 0,
+        positiveStreak: round.positiveStreaks?.[hand.TEAM_ID] || 0,
     };
 }
 

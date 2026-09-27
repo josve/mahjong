@@ -5,7 +5,7 @@ import TableBody from "@mui/material/TableBody";
 import TableRow from "@mui/material/TableRow";
 import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
-import {Chip} from "@mui/material";
+import {Chip, Typography} from "@mui/material";
 import {MahjongStats} from "@/lib/statistics";
 import {HAND_BADGES} from "@/components/match/HandBadges";
 
@@ -17,6 +17,8 @@ interface HandBadgesTableProps {
 /** Column headers for badges whose label depends on the hand. */
 const DYNAMIC_LABELS: { [badgeId: string]: string } = {
     hogmod: "Högmod",
+    storvinnare: "Storvinnare",
+    jarnhand: "Järnhand",
 };
 
 const HandBadgesTable: React.FC<HandBadgesTableProps> = ({
@@ -55,12 +57,18 @@ const HandBadgesTable: React.FC<HandBadgesTableProps> = ({
                             </TableCell>
                             {HAND_BADGES.map(badge => {
                                 const count = player.handBadgeCounts[badge.id] ?? 0;
+                                const longestStreak = player.longestBadgeStreaks[badge.id];
                                 return (
                                     <TableCell
                                         key={badge.id}
                                         align="center"
                                         sx={{color: count === 0 ? 'text.disabled' : undefined}}>
                                         {count}
+                                        {longestStreak !== undefined && (
+                                            <Typography variant="caption" color="text.secondary" sx={{display: "block"}}>
+                                                längsta {longestStreak}
+                                            </Typography>
+                                        )}
                                     </TableCell>
                                 );
                             })}

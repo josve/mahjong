@@ -8,6 +8,10 @@ export interface Round {
     maxHand: number;
     maxScore: number;
     eastStreaks?: { [teamId: string]: number };
+    /** Consecutive rounds each team has won, including this one. */
+    winStreaks?: { [teamId: string]: number };
+    /** Consecutive rounds each team has scored above zero, including this one. */
+    positiveStreaks?: { [teamId: string]: number };
     /** Each team's total score before this round was played. */
     previousTotals?: { [teamId: string]: number };
     /** Each team's total score after this round was played. */
@@ -38,6 +42,8 @@ export function buildRounds(hands: readonly Hand[]): Round[] {
     const result: Round[] = [];
     let prevHand: Hand[] | undefined = undefined;
     const teamEastStreak: { [teamId: string]: number } = {};
+    const teamWinStreak: { [teamId: string]: number } = {};
+    const teamPositiveStreak: { [teamId: string]: number } = {};
     const teamTotals: { [teamId: string]: number } = {};
     for (const hand of hands.slice(0, 4)) {
         teamTotals[hand.TEAM_ID] = (teamTotals[hand.TEAM_ID] ?? STARTING_SCORE) + hand.HAND_SCORE;
@@ -48,6 +54,8 @@ export function buildRounds(hands: readonly Hand[]): Round[] {
 
         for (const hand of sortedRound) {
             teamEastStreak[hand.TEAM_ID] = hand.WIND === 'E' ? (teamEastStreak[hand.TEAM_ID] || 0) + 1 : 0;
+            teamWinStreak[hand.TEAM_ID] = hand.IS_WINNER ? (teamWinStreak[hand.TEAM_ID] || 0) + 1 : 0;
+            teamPositiveStreak[hand.TEAM_ID] = hand.HAND_SCORE > 0 ? (teamPositiveStreak[hand.TEAM_ID] || 0) + 1 : 0;
         }
 
         const previousTotals = {...teamTotals};
@@ -61,6 +69,8 @@ export function buildRounds(hands: readonly Hand[]): Round[] {
             maxScore,
             maxHand,
             eastStreaks: {...teamEastStreak},
+            winStreaks: {...teamWinStreak},
+            positiveStreaks: {...teamPositiveStreak},
             previousTotals,
             totals: {...teamTotals},
         });
