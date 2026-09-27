@@ -10,6 +10,7 @@ import {EChartsOption} from "echarts-for-react/src/types";
 import Confetti from 'react-confetti'
 import LastRoundDisplay from "@/components/match/LastRoundDisplay";
 import SplitFlapScoreboard, {scoreboardTeams} from "@/components/match/SplitFlapScoreboard";
+import {buildRounds, Round} from "@/lib/rounds";
 
 interface Props {
   readonly matchId: string;
@@ -20,19 +21,7 @@ interface Props {
   readonly isEditable: boolean;
 }
 
-export interface Round {
-  hands: Hand[];
-  previousHand?: Hand[];
-  maxHand: number;
-  maxScore: number;
-  eastStreaks?: { [teamId: string]: number };
-  /** Each team's total score before this round was played. */
-  previousTotals?: { [teamId: string]: number };
-  /** Each team's total score after this round was played. */
-  totals?: { [teamId: string]: number };
-}
-
-const STARTING_SCORE = 500;
+export type { Round };
 
 export default function MatchChartClient({
                                            matchId,
@@ -56,72 +45,7 @@ export default function MatchChartClient({
   useEffect(() => {
     const hands = data?.hands;
     if (hands && hands.length > 4) {
-      // Exclude the first 4 hands
-      const handsToProcess = hands.slice(4);
-
-      let maxHand = 0;
-      let maxScore = 0;
-      for (const hand of handsToProcess) {
-        if (hand.HAND > maxHand) {
-          maxHand = hand.HAND;
-        }
-        if (hand.HAND_SCORE > maxScore) {
-          maxScore = hand.HAND_SCORE;
-        }
-      }
-
-      // Function to sort a ROUND by TEAM_ID
-      const sortByPlayerId = (a: Hand, b: Hand) => {
-        if (a.TEAM_ID < b.TEAM_ID) return -1;
-        if (a.TEAM_ID > b.TEAM_ID) return 1;
-        return 0;
-      };
-
-      const result: Round[] = [];
-
-      let prevHand: Hand[] | undefined = undefined;
-      const teamEastStreak: { [teamId: string]: number } = {};
-      const teamTotals: { [teamId: string]: number } = {};
-      for (const hand of hands.slice(0, 4)) {
-        teamTotals[hand.TEAM_ID] = (teamTotals[hand.TEAM_ID] ?? STARTING_SCORE) + hand.HAND_SCORE;
-      }
-
-      // Process hands in batches of 4 (each ROUND)
-      for (let i = 0; i < handsToProcess.length; i += 4) {
-        // Slice out a ROUND (4 hands)
-        const round = handsToProcess.slice(i, i + 4);
-
-        // Sort the ROUND by TEAM_ID
-        const sortedRound = [...round].sort(sortByPlayerId);
-
-        // Track east streaks per team
-        for (const hand of sortedRound) {
-          if (hand.WIND === 'E') {
-            teamEastStreak[hand.TEAM_ID] = (teamEastStreak[hand.TEAM_ID] || 0) + 1;
-          } else {
-            teamEastStreak[hand.TEAM_ID] = 0;
-          }
-        }
-
-        // Track running totals per team
-        const previousTotals = { ...teamTotals };
-        for (const hand of sortedRound) {
-          teamTotals[hand.TEAM_ID] = (teamTotals[hand.TEAM_ID] ?? STARTING_SCORE) + hand.HAND_SCORE;
-        }
-
-        // Push the sorted ROUND into the result
-        result.push({
-          hands: sortedRound,
-          previousHand: prevHand,
-          maxScore: maxScore,
-          maxHand: maxHand,
-          eastStreaks: { ...teamEastStreak },
-          previousTotals,
-          totals: { ...teamTotals },
-        });
-
-        prevHand = sortedRound;
-      }
+      const result = buildRounds(hands);
 
       // Reverse the result array if needed
       result.reverse();

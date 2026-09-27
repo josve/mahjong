@@ -1,15 +1,15 @@
 import type {Meta, StoryObj} from "@storybook/nextjs-vite";
-import HogmodChart from "@/components/statistics/HogmodChart";
+import HandBadgesTable from "@/components/statistics/HandBadgesTable";
 import {createStats} from "@/stories/fixtures";
 
 const meta = {
-    title: "Components/Statistics/HogmodChart",
-    component: HogmodChart,
+    title: "Components/Statistics/HandBadgesTable",
+    component: HandBadgesTable,
     args: {
         stats: createStats(),
         includeTeams: false,
     },
-} satisfies Meta<typeof HogmodChart>;
+} satisfies Meta<typeof HandBadgesTable>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;

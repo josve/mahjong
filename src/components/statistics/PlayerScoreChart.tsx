@@ -5,11 +5,9 @@ import MahjongWinsChart from "./MahjongWinsChart";
 import HighRollerChart from "./HighRollerChart";
 import AverageHandTable from "./AverageHandTable";
 import BoxPlot from "./BoxPlot"
-import HogmodChart from "./HogmodChart"
-import StorvinnareChart from "./StorvinnareChart"
-import JarnhandChart from "./JarnhandChart"
 import ComebackChart from "./ComebackChart"
 import WindStatsChart from "./WindStatsChart"
+import HandBadgesTable from "./HandBadgesTable"
 import { Tabs, Tab } from "@mui/material";
 import {
     GameWithHands,
@@ -82,11 +80,9 @@ const PlayerScoreChart: React.FC<PlayerScoreChartProps> = ({
                 <Tab label="High Roller" />
                 <Tab label="Medelhänder" />
                 <Tab label="Distribution" />
-                <Tab label="Högmod" />
-                <Tab label="Storvinnare" />
-                <Tab label="Järnhand" />
                 <Tab label="Comeback" />
                 <Tab label="Vindposition" />
+                <Tab label="Badges" />
             </Tabs>
             <CustomTabPanel value={selectedTab} index={0}>
                 <PlayerScoresChart
@@ -119,31 +115,19 @@ const PlayerScoreChart: React.FC<PlayerScoreChartProps> = ({
                 />
             </CustomTabPanel>
             <CustomTabPanel value={selectedTab} index={5}>
-                <HogmodChart
-                    stats={stats}
-                    includeTeams={includeTeams}
-                />
-            </CustomTabPanel>
-            <CustomTabPanel value={selectedTab} index={6}>
-                <StorvinnareChart
-                    stats={stats}
-                    includeTeams={includeTeams}
-                />
-            </CustomTabPanel>
-            <CustomTabPanel value={selectedTab} index={7}>
-                <JarnhandChart
-                    stats={stats}
-                    includeTeams={includeTeams}
-                />
-            </CustomTabPanel>
-            <CustomTabPanel value={selectedTab} index={8}>
                 <ComebackChart
                     stats={stats}
                     includeTeams={includeTeams}
                 />
             </CustomTabPanel>
-            <CustomTabPanel value={selectedTab} index={9}>
+            <CustomTabPanel value={selectedTab} index={6}>
                 <WindStatsChart
+                    stats={stats}
+                    includeTeams={includeTeams}
+                />
+            </CustomTabPanel>
+            <CustomTabPanel value={selectedTab} index={7}>
+                <HandBadgesTable
                     stats={stats}
                     includeTeams={includeTeams}
                 />
