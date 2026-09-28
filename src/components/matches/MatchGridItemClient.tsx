@@ -30,6 +30,9 @@ interface Props {
 const StyledCard = styled(Card)(({ theme }) => ({
     backgroundColor: '#ffffff', // Ensures the card background is white
     position: 'relative', // To position the active indicator absolutely within the card
+    height: '100%', // Fill the grid cell so cards in the same row get equal height
+    display: 'flex',
+    flexDirection: 'column',
 }));
 
 export default function MatchGridItemClient({ index, match, idToName, records, colors }: Props) {
@@ -54,9 +57,9 @@ export default function MatchGridItemClient({ index, match, idToName, records, c
 
     return (
         <Link href={`/match/${match.GAME_ID}`} passHref legacyBehavior>
-            <CardActionArea component="a">
+            <CardActionArea component="a" sx={{ height: "100%" }}>
                 <StyledCard className="match-grid-card">
-                    <CardContent>
+                    <CardContent sx={{ flexGrow: 1 }}>
                         {/* 2. Combined Header Row: Index, Game Name, and Rounds */}
                         <Box
                             sx={{
