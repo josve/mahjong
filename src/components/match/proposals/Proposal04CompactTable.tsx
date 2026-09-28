@@ -1,11 +1,12 @@
 import React from "react";
-import {Box, Table, TableBody, TableCell, TableHead, TableRow, Tooltip, Typography} from "@mui/material";
+import {Box, Table, TableBody, TableCell, TableHead, TableRow, Typography} from "@mui/material";
 import EmojiEventsIcon from "@mui/icons-material/EmojiEvents";
-import {byRank, getPlayerResults, ProposalProps, scoreColor, signed} from "./playerResultData";
+import {getPlayerResults, ProposalProps, scoreColor, signed} from "./playerResultData";
+import ProposalBadges from "./ProposalBadges";
 
-/** Proposal 4: a dense table row per team. Fits mobile and makes "Alla omgångar" much shorter. */
+/** Proposal 4: a dense table row per team, in the same order as today. Fits mobile and makes "Alla omgångar" much shorter. */
 export default function Proposal04CompactTable(props: ProposalProps) {
-    const results = getPlayerResults(props).sort(byRank);
+    const results = getPlayerResults(props);
     return (
         <Box sx={{border: "1px solid #e0e0e0", borderRadius: 2, overflow: "hidden"}}>
             <Table size="small">
@@ -36,13 +37,7 @@ export default function Proposal04CompactTable(props: ProposalProps) {
                             <TableCell align="right" sx={{fontWeight: 700, color: scoreColor(r.handScore)}}>{signed(r.handScore)}</TableCell>
                             <TableCell align="right">{r.totalAfter}</TableCell>
                             <TableCell>
-                                <Box sx={{display: "flex", gap: 0.5}}>
-                                    {r.badges.map(b => (
-                                        <Tooltip key={b.id} title={b.label}>
-                                            <Box sx={{display: "flex", color: `${b.color}.main`, "& svg": {fontSize: 18}}}>{b.icon}</Box>
-                                        </Tooltip>
-                                    ))}
-                                </Box>
+                                <ProposalBadges badges={r.badges} justify="flex-start" mt={0}/>
                             </TableCell>
                         </TableRow>
                     ))}

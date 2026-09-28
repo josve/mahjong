@@ -1,6 +1,7 @@
 import React from "react";
 import {Box, Typography} from "@mui/material";
 import {getPlayerResults, PlayerResult, ProposalProps, signed} from "./playerResultData";
+import ProposalBadges from "./ProposalBadges";
 
 /** Where each wind sits around the table, seen from East. */
 const SEAT: { [wind: string]: React.CSSProperties } = {
@@ -21,6 +22,7 @@ function Seat({r}: { r: PlayerResult }) {
             <Typography sx={{fontWeight: 700}}>{r.name}</Typography>
             <Typography sx={{fontSize: 22, fontWeight: 800, color: r.handScore >= 0 ? "#2e7d32" : "#c62828"}}>{signed(r.handScore)}</Typography>
             <Typography variant="caption" color="text.secondary">{r.hand}p · {r.totalAfter}</Typography>
+            <ProposalBadges badges={r.badges} justify="center"/>
         </Box>
     );
 }
@@ -31,8 +33,8 @@ export default function Proposal09Table(props: ProposalProps) {
     const winner = results.find(r => r.isWinner);
     return (
         <Box sx={{
-            display: "grid", gridTemplateColumns: "1fr 1.2fr 1fr", gridTemplateRows: "auto 140px auto", gap: 1,
-            p: 2, borderRadius: 4, maxWidth: 640, mx: "auto",
+            display: "grid", gridTemplateColumns: "1fr 1.2fr 1fr", gridTemplateRows: "auto minmax(140px, auto) auto", gap: 1,
+            p: 2, borderRadius: 4, maxWidth: 720, mx: "auto",
             background: "radial-gradient(circle at center, #2f7d55, #1b4d34)",
             border: "10px solid #6b3f22",
         }}>

@@ -1,6 +1,7 @@
 import React from "react";
 import {Avatar, Box, Chip, Grid, Stack, Typography} from "@mui/material";
 import {getPlayerResults, ProposalProps, scoreColor, signed} from "./playerResultData";
+import ProposalBadges from "./ProposalBadges";
 
 /** Proposal 3: the team colours from the match chart tie the cards to the chart lines above. */
 export default function Proposal03TeamColors(props: ProposalProps) {
@@ -33,6 +34,7 @@ export default function Proposal03TeamColors(props: ProposalProps) {
                                     <Typography variant="h5" sx={{fontWeight: 700, color: scoreColor(r.handScore)}}>{signed(r.handScore)}</Typography>
                                 </Box>
                             </Stack>
+                            <ProposalBadges badges={r.badges}/>
                         </Box>
                     </Box>
                 </Grid>

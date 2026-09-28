@@ -1,6 +1,7 @@
 import React from "react";
 import {Box, Grid, Stack, Typography} from "@mui/material";
 import {getPlayerResults, ProposalProps, scoreColor, signed} from "./playerResultData";
+import ProposalBadges from "./ProposalBadges";
 
 const WIDTH = 200;
 const HEIGHT = 48;
@@ -42,6 +43,7 @@ export default function Proposal07Sparkline(props: ProposalProps) {
                                 {signed(r.handScore)} <Typography component="span" variant="caption" color="text.secondary">({r.hand}p)</Typography>
                             </Typography>
                         </Stack>
+                        <ProposalBadges badges={r.badges}/>
                     </Box>
                 </Grid>
             ))}

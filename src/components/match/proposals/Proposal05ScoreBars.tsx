@@ -1,10 +1,11 @@
 import React from "react";
 import {Box, Stack, Typography} from "@mui/material";
 import {getPlayerResults, ProposalProps, SCORE_GREEN, SCORE_RED, signed} from "./playerResultData";
+import ProposalBadges from "./ProposalBadges";
 
 /** Proposal 5: diverging bars show at a glance who won and who paid, and how much. */
 export default function Proposal05ScoreBars(props: ProposalProps) {
-    const results = getPlayerResults(props).sort((a, b) => b.handScore - a.handScore);
+    const results = getPlayerResults(props);
     const max = Math.max(1, ...results.map(r => Math.abs(r.handScore)));
     return (
         <Stack spacing={1.25} sx={{border: "1px solid #e0e0e0", borderRadius: 2, p: 2}}>
@@ -31,6 +32,11 @@ export default function Proposal05ScoreBars(props: ProposalProps) {
                         <Typography sx={{fontWeight: 700, textAlign: "right", color: positive ? SCORE_GREEN : SCORE_RED}}>
                             {signed(r.handScore)}
                         </Typography>
+                        {r.badges.length > 0 && (
+                            <Box sx={{gridColumn: "2 / 4", mt: -1}}>
+                                <ProposalBadges badges={r.badges} justify="flex-start" mt={0}/>
+                            </Box>
+                        )}
                     </Box>
                 );
             })}

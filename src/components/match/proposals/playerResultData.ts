@@ -47,7 +47,6 @@ export interface PlayerResult {
 
 const WIND_NAMES: { [wind: string]: string } = {E: "Öst", S: "Syd", W: "Väst", N: "Norr"};
 const WIND_CHARS: { [wind: string]: string } = {E: "東", S: "南", W: "西", N: "北"};
-export const WIND_ORDER = ["E", "S", "W", "N"];
 
 const FALLBACK_COLORS = ["#e54646", "#3478c8", "#3caa5a", "#e6a028"];
 
@@ -107,8 +106,6 @@ export function getPlayerResults({teamIdToName, round, colors, rounds}: Proposal
     });
 }
 
-export const byRank = (a: PlayerResult, b: PlayerResult) => a.rankAfter - b.rankAfter || b.totalAfter - a.totalAfter;
-export const byWind = (a: PlayerResult, b: PlayerResult) => WIND_ORDER.indexOf(a.wind) - WIND_ORDER.indexOf(b.wind);
 
 export const signed = (value: number) => (value > 0 ? `+${value}` : `${value}`);
 

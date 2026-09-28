@@ -1,10 +1,11 @@
 import React from "react";
 import {Box, Chip, Grid, Typography} from "@mui/material";
-import {byWind, getPlayerResults, ProposalProps, scoreColor, signed} from "./playerResultData";
+import {getPlayerResults, ProposalProps, scoreColor, signed} from "./playerResultData";
+import ProposalBadges from "./ProposalBadges";
 
-/** Proposal 2: every card is headed by a mahjong tile with the player's wind, ordered East, South, West, North. */
+/** Proposal 2: every card is headed by a mahjong tile with the player's wind. */
 export default function Proposal02WindTiles(props: ProposalProps) {
-    const results = getPlayerResults(props).sort(byWind);
+    const results = getPlayerResults(props);
     return (
         <Grid container spacing={2}>
             {results.map(r => (
@@ -35,6 +36,7 @@ export default function Proposal02WindTiles(props: ProposalProps) {
                                 Hand {r.hand}p · totalt {r.totalAfter}
                             </Typography>
                             {r.isWinner && <Chip label="Mahjong!" size="small" sx={{mt: 0.5, bgcolor: "#c9a227", color: "white", fontWeight: 700}}/>}
+                            <ProposalBadges badges={r.badges} justify="flex-start"/>
                         </Box>
                     </Box>
                 </Grid>

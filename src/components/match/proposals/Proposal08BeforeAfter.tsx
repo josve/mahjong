@@ -5,6 +5,7 @@ import {Box, Grid, Stack, Typography} from "@mui/material";
 import {animate, motion, useMotionValue, useTransform} from "motion/react";
 import EastIcon from "@mui/icons-material/East";
 import {getPlayerResults, ProposalProps, scoreColor, signed} from "./playerResultData";
+import ProposalBadges from "./ProposalBadges";
 
 function CountUp({from, to}: { from: number, to: number }) {
     const value = useMotionValue(from);
@@ -43,6 +44,7 @@ export default function Proposal08BeforeAfter(props: ProposalProps) {
                             <Typography component="span" variant="body2" sx={{ml: 1, color: scoreColor(0)}}>
                                 hand {r.hand}p{r.isWinner ? " · mahjong" : ""}
                             </Typography>
+                            <ProposalBadges badges={r.badges}/>
                         </Box>
                     </motion.div>
                 </Grid>

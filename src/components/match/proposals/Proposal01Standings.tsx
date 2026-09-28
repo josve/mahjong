@@ -3,7 +3,8 @@ import {Box, Grid, Stack, Typography} from "@mui/material";
 import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
 import ArrowDownwardIcon from "@mui/icons-material/ArrowDownward";
 import RemoveIcon from "@mui/icons-material/Remove";
-import {byRank, getPlayerResults, ProposalProps, scoreColor, signed} from "./playerResultData";
+import {getPlayerResults, ProposalProps, scoreColor, signed} from "./playerResultData";
+import ProposalBadges from "./ProposalBadges";
 
 function Movement({before, after}: { before: number, after: number }) {
     if (after < before) {
@@ -15,9 +16,9 @@ function Movement({before, after}: { before: number, after: number }) {
     return <RemoveIcon fontSize="small" sx={{color: "text.disabled"}}/>;
 }
 
-/** Proposal 1: the cards are ordered by placing, with the total as the main number and how the placing changed. */
+/** Proposal 1: the total is the main number, with the placing and how it changed. */
 export default function Proposal01Standings(props: ProposalProps) {
-    const results = getPlayerResults(props).sort(byRank);
+    const results = getPlayerResults(props);
     return (
         <Grid container spacing={2}>
             {results.map(r => (
@@ -38,6 +39,7 @@ export default function Proposal01Standings(props: ProposalProps) {
                             <Typography variant="caption" color="text.secondary">
                                 {r.windName} · hand {r.hand}p{r.isWinner ? " · mahjong" : ""}
                             </Typography>
+                            <ProposalBadges badges={r.badges}/>
                         </Box>
                     </Box>
                 </Grid>

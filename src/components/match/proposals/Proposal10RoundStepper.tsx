@@ -5,10 +5,11 @@ import {Box, Chip, Grid, IconButton, Slider, Stack, Typography} from "@mui/mater
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import {getPlayerResults, ProposalProps, scoreColor, signed} from "./playerResultData";
+import ProposalBadges from "./ProposalBadges";
 
 /**
  * Proposal 10: one widget with arrows and a slider to step through all rounds, instead of the long
- * "Visa alla omgångar" list. The badges get their own footer so they never cover the score.
+ * "Visa alla omgångar" list.
  */
 export default function Proposal10RoundStepper(props: ProposalProps) {
     const rounds = props.rounds ?? [props.round];
@@ -33,15 +34,10 @@ export default function Proposal10RoundStepper(props: ProposalProps) {
                         <Typography variant="h6">{r.name}</Typography>
                         <Typography sx={{fontSize: 26, fontWeight: 700, color: scoreColor(r.handScore)}}>{signed(r.handScore)}</Typography>
                         <Typography variant="body2" color="text.secondary">{r.hand}p · totalt {r.totalAfter}</Typography>
+                        <ProposalBadges badges={r.badges} justify="flex-start"/>
                     </Grid>
                 ))}
             </Grid>
-            <Stack direction="row" spacing={1} sx={{px: 2, py: 1.5, borderTop: "1px solid #e0e0e0", flexWrap: "wrap", minHeight: 48}} useFlexGap>
-                {results.flatMap(r => r.badges.map(b => (
-                    <Chip key={`${r.teamId}-${b.id}`} icon={b.icon} color={b.color} size="small" label={`${r.name}: ${b.label}`}/>
-                )))}
-                {results.every(r => r.badges.length === 0) && <Typography variant="body2" color="text.secondary">Inga märken denna omgång</Typography>}
-            </Stack>
         </Box>
     );
 }
