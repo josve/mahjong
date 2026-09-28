@@ -140,9 +140,8 @@ export default function MatchBadges({ match, records }: Props) {
     return (
         <Box
             sx={{
-                position: 'absolute',
-                bottom: 8,
-                right: 8,
+                px: 2,
+                pb: 2,
                 display: 'flex',
                 flexWrap: 'wrap',
                 justifyContent: 'flex-end',

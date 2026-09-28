@@ -13,9 +13,10 @@ import {
     CardActionArea,
     styled
 } from "@mui/material";
-import { GameWithHands, IdToName } from "@/types/db";
+import { GameWithHands, IdToColorMap, IdToName } from "@/types/db";
 import React from "react";
 import MatchBadges from "@/components/matches/MatchBadges";
+import MatchSparkline from "@/components/matches/MatchSparkline";
 import { MatchRecords } from "@/lib/matchRecords";
 
 interface Props {
@@ -23,6 +24,7 @@ interface Props {
     readonly index: number;
     readonly idToName: IdToName;
     readonly records: MatchRecords;
+    readonly colors?: IdToColorMap;
 }
 
 const StyledCard = styled(Card)(({ theme }) => ({
@@ -30,36 +32,11 @@ const StyledCard = styled(Card)(({ theme }) => ({
     position: 'relative', // To position the active indicator absolutely within the card
 }));
 
-interface TeamScore {
-    team: string;
-    score: number;
-}
-
-export default function MatchGridItemClient({ index, match, idToName, records }: Props) {
+export default function MatchGridItemClient({ index, match, idToName, records, colors }: Props) {
 
     const hands = match.hands;
     const name = match.NAME;
     const time = match.TIME;
-
-    const scores: { [key: string]: number } = {};
-
-    const teams = [match.TEAM_ID_1, match.TEAM_ID_2, match.TEAM_ID_3, match.TEAM_ID_4];
-
-    for (const hand of match.hands) {
-        if (!scores.hasOwnProperty(hand.TEAM_ID)) {
-            scores[hand.TEAM_ID] = 500;
-        }
-
-        scores[hand.TEAM_ID] += hand.HAND_SCORE;
-    }
-
-    const teamScores: TeamScore[] = teams.map(team => ({
-        team,
-        score: scores[team] || 0, // Default to 0 if the score is undefined
-    }));
-
-    // Sort the array in descending order based on the score
-    teamScores.sort((a, b) => b.score - a.score);
 
     // Generate a string with the time for the first and last rounds like (19:28-21:42)
     const firstRound = hands.length > 4 ? hands[4].TIME : hands[0].TIME;
@@ -111,17 +88,7 @@ export default function MatchGridItemClient({ index, match, idToName, records }:
                             </Typography>
                         </Box>
 
-                        {teamScores.map((teamScore) => (
-                            <Typography
-                                key={teamScore.team}
-                                variant="body2"
-                                sx={{
-                                    color: "text.secondary",
-                                    mt: 1
-                                }}>
-                                <strong>{idToName[teamScore.team]}</strong>: {teamScore.score}
-                            </Typography>
-                        ))}
+                        <MatchSparkline match={match} idToName={idToName} colors={colors} />
                         {match.COMMENT && (
                             <Typography
                                 variant="body2"
