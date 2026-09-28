@@ -59,7 +59,7 @@ export default function UpcomingGameCard({ upcomingGame, session, suggestedTeams
     const formattedDate = capitalize(formatDate(gameTime));
 
     return (
-        <StyledCard className="upcoming-game-card">
+        <StyledCard className="upcoming-game-card" sx={{ height: "100%" }}>
             <CardContent>
                 <Box
                     sx={{
