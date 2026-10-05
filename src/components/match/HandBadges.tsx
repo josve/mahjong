@@ -5,7 +5,6 @@ import CastleIcon from '@mui/icons-material/Castle';
 import GavelIcon from '@mui/icons-material/Gavel';
 import MasksIcon from '@mui/icons-material/Masks';
 import MilitaryTechIcon from '@mui/icons-material/MilitaryTech';
-import TrendingDownIcon from '@mui/icons-material/TrendingDown';
 import CelebrationIcon from '@mui/icons-material/Celebration';
 import RocketLaunchIcon from '@mui/icons-material/RocketLaunch';
 import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome';
@@ -110,14 +109,6 @@ const isTronskifte = ({ hand, round }: HandBadgeContext) => {
     const previousLeader = soleLeader(round.previousTotals);
     return !!previousLeader && previousLeader !== hand.TEAM_ID && soleLeader(round.totals) === hand.TEAM_ID;
 };
-
-/**
- * The team went from sole leader to sole last in a single round.
- */
-const isFrittFall = ({ hand, round }: HandBadgeContext) =>
-    !!round.previousTotals && !!round.totals
-    && soleLeader(round.previousTotals) === hand.TEAM_ID
-    && soleLast(round.totals) === hand.TEAM_ID;
 
 /**
  * The team went from sole last to sole leader in a single round.
@@ -232,13 +223,6 @@ export const HAND_BADGES: readonly HandBadgeDefinition[] = [
         color: "warning",
         icon: <MilitaryTechIcon />,
         applies: isTronskifte,
-    },
-    {
-        id: "fritt-fall",
-        label: "Fritt fall",
-        color: "secondary",
-        icon: <TrendingDownIcon />,
-        applies: isFrittFall,
     },
     {
         id: "raketen",
