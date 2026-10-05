@@ -121,7 +121,7 @@ const isRaketen = ({ hand, round }: HandBadgeContext) =>
 /**
  * The team's total climbed from below zero back to zero or above in this round.
  */
-const isFagelFenix = ({ hand, round }: HandBadgeContext) => {
+const isAteruppstandelse = ({ hand, round }: HandBadgeContext) => {
     const before = round.previousTotals?.[hand.TEAM_ID];
     const after = round.totals?.[hand.TEAM_ID];
     return before !== undefined && after !== undefined && before < 0 && after >= 0;
@@ -232,11 +232,11 @@ export const HAND_BADGES: readonly HandBadgeDefinition[] = [
         applies: isRaketen,
     },
     {
-        id: "fagel-fenix",
-        label: "Fågel Fenix",
+        id: "ateruppstandelse",
+        label: "Återuppståndelse",
         color: "warning",
         icon: <AutoAwesomeIcon />,
-        applies: isFagelFenix,
+        applies: isAteruppstandelse,
     },
 ];
 
