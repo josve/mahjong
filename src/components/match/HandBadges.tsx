@@ -2,7 +2,6 @@ import React from "react";
 import { Box, Chip, ChipProps } from "@mui/material";
 import { LocalFireDepartment } from "@mui/icons-material";
 import CastleIcon from '@mui/icons-material/Castle';
-import GavelIcon from '@mui/icons-material/Gavel';
 import MasksIcon from '@mui/icons-material/Masks';
 import MilitaryTechIcon from '@mui/icons-material/MilitaryTech';
 import CelebrationIcon from '@mui/icons-material/Celebration';
@@ -49,14 +48,6 @@ export interface HandBadgeDefinition {
 }
 
 const isHighroller = ({ hand }: HandBadgeContext) => hand.HAND >= HIGHROLLER_HAND;
-
-/**
- * The team won while another team was in a Högmod streak as east, ending that streak.
- */
-const isKungamordare = ({ hand, round }: HandBadgeContext) =>
-    !!hand.IS_WINNER && hand.WIND !== 'E'
-    && round.hands.some(other =>
-        other.WIND === 'E' && (round.eastStreaks?.[other.TEAM_ID] || 0) >= HOGMOD_STREAK);
 
 /**
  * The team did not win the round but still gained more points than the winner.
@@ -188,13 +179,6 @@ export const HAND_BADGES: readonly HandBadgeDefinition[] = [
         icon: <ShieldIcon />,
         applies: ({ positiveStreak }) => positiveStreak >= JARNHAND_STREAK,
         streak: ({ positiveStreak }) => positiveStreak,
-    },
-    {
-        id: "kungamordare",
-        label: "Kungamördare",
-        color: "error",
-        icon: <GavelIcon />,
-        applies: isKungamordare,
     },
     {
         id: "smygvinst",
