@@ -6,6 +6,7 @@ import MasksIcon from '@mui/icons-material/Masks';
 import MilitaryTechIcon from '@mui/icons-material/MilitaryTech';
 import CelebrationIcon from '@mui/icons-material/Celebration';
 import RocketLaunchIcon from '@mui/icons-material/RocketLaunch';
+import StairsIcon from '@mui/icons-material/Stairs';
 import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome';
 import SportsMmaIcon from '@mui/icons-material/SportsMma';
 import EmojiEventsIcon from '@mui/icons-material/EmojiEvents';
@@ -23,6 +24,8 @@ const STORVINNARE_STREAK = 2;
 const JARNHAND_STREAK = 3;
 /** How many rounds a team must have gone without a win for its next win to count as Äntligen. */
 const ANTLIGEN_WINLESS = 3;
+/** How many places a team must climb in the standings in one round to count as Klättraren. */
+const KLATTRAREN_PLACES = 2;
 /** The previous round's biggest loss must be larger than this for a win to count as Revansch. */
 const REVANSCH_LOSS = 100;
 
@@ -108,6 +111,22 @@ const isRaketen = ({ hand, round }: HandBadgeContext) =>
     !!round.previousTotals && !!round.totals
     && soleLast(round.previousTotals) === hand.TEAM_ID
     && soleLeader(round.totals) === hand.TEAM_ID;
+
+/** The team's place in the standings, where 1 is first and shared totals share a place. */
+const placeOf = (totals: { [teamId: string]: number }, teamId: string) =>
+    1 + Object.values(totals).filter(total => total > totals[teamId]).length;
+
+/**
+ * The team climbed several places in the standings in a single round.
+ * Going all the way from sole last to sole leader is Raketen instead.
+ */
+const isKlattraren = (context: HandBadgeContext) => {
+    const { hand, round } = context;
+    if (!round.previousTotals || !round.totals || isRaketen(context)) {
+        return false;
+    }
+    return placeOf(round.previousTotals, hand.TEAM_ID) - placeOf(round.totals, hand.TEAM_ID) >= KLATTRAREN_PLACES;
+};
 
 /**
  * The team's total climbed from below zero back to zero or above in this round.
@@ -214,6 +233,13 @@ export const HAND_BADGES: readonly HandBadgeDefinition[] = [
         color: "primary",
         icon: <RocketLaunchIcon />,
         applies: isRaketen,
+    },
+    {
+        id: "klattraren",
+        label: "Klättraren",
+        color: "info",
+        icon: <StairsIcon />,
+        applies: isKlattraren,
     },
     {
         id: "ateruppstandelse",
