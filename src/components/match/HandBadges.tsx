@@ -2,13 +2,14 @@ import React from "react";
 import { Box, Chip, ChipProps } from "@mui/material";
 import { LocalFireDepartment } from "@mui/icons-material";
 import CastleIcon from '@mui/icons-material/Castle';
-import DirectionsRunIcon from '@mui/icons-material/DirectionsRun';
 import GavelIcon from '@mui/icons-material/Gavel';
 import MasksIcon from '@mui/icons-material/Masks';
-import WaterDropIcon from '@mui/icons-material/WaterDrop';
 import MilitaryTechIcon from '@mui/icons-material/MilitaryTech';
 import TrendingDownIcon from '@mui/icons-material/TrendingDown';
-import MoneyOffIcon from '@mui/icons-material/MoneyOff';
+import CelebrationIcon from '@mui/icons-material/Celebration';
+import RocketLaunchIcon from '@mui/icons-material/RocketLaunch';
+import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome';
+import SportsMmaIcon from '@mui/icons-material/SportsMma';
 import EmojiEventsIcon from '@mui/icons-material/EmojiEvents';
 import ShieldIcon from '@mui/icons-material/Shield';
 import { Hand } from "@/types/db";
@@ -22,8 +23,10 @@ const HIGHROLLER_HAND = 100;
 const HOGMOD_STREAK = 2;
 const STORVINNARE_STREAK = 2;
 const JARNHAND_STREAK = 3;
-/** A round's biggest loss must be larger than this to count as a Blodbad. */
-const BLODBAD_LOSS = 100;
+/** How many rounds a team must have gone without a win for its next win to count as Äntligen. */
+const ANTLIGEN_WINLESS = 3;
+/** The previous round's biggest loss must be larger than this for a win to count as Revansch. */
+const REVANSCH_LOSS = 100;
 
 /**
  * Everything a badge may need to decide whether it applies to a hand.
@@ -49,14 +52,6 @@ export interface HandBadgeDefinition {
 const isHighroller = ({ hand }: HandBadgeContext) => hand.HAND >= HIGHROLLER_HAND;
 
 /**
- * The team won as east in the previous round but did not stay east in this round.
- */
-const isFegis = ({ hand, round }: HandBadgeContext) => {
-    const previous = round.previousHand?.find(prev => prev.TEAM_ID === hand.TEAM_ID);
-    return !!previous && previous.WIND === 'E' && !!previous.IS_WINNER && hand.WIND !== 'E';
-};
-
-/**
  * The team won while another team was in a Högmod streak as east, ending that streak.
  */
 const isKungamordare = ({ hand, round }: HandBadgeContext) =>
@@ -76,11 +71,22 @@ const isSmygvinst = ({ hand, round }: HandBadgeContext) => {
 };
 
 /**
- * The team took the biggest loss of the round, and it was a big one.
+ * The team won after having gone several rounds in a row without a win.
  */
-const isBlodbad = ({ hand, round }: HandBadgeContext) =>
-    -hand.HAND_SCORE > BLODBAD_LOSS
-    && hand.HAND_SCORE === Math.min(...round.hands.map(other => other.HAND_SCORE));
+const isAntligen = ({ hand, round }: HandBadgeContext) =>
+    !!hand.IS_WINNER && (round.previousWinlessStreaks?.[hand.TEAM_ID] || 0) >= ANTLIGEN_WINLESS;
+
+/**
+ * The team won right after taking the biggest loss of the previous round, and it was a big one.
+ */
+const isRevansch = ({ hand, round }: HandBadgeContext) => {
+    if (!hand.IS_WINNER || !round.previousHand) {
+        return false;
+    }
+    const previous = round.previousHand.find(prev => prev.TEAM_ID === hand.TEAM_ID);
+    return !!previous && -previous.HAND_SCORE > REVANSCH_LOSS
+        && previous.HAND_SCORE === Math.min(...round.previousHand.map(other => other.HAND_SCORE));
+};
 
 /** The team strictly ahead of all others, or undefined when the top is shared. */
 const soleLeader = (totals: { [teamId: string]: number }) => {
@@ -114,12 +120,20 @@ const isFrittFall = ({ hand, round }: HandBadgeContext) =>
     && soleLast(round.totals) === hand.TEAM_ID;
 
 /**
- * The team's total dropped below zero in this round.
+ * The team went from sole last to sole leader in a single round.
  */
-const isKonkurs = ({ hand, round }: HandBadgeContext) => {
+const isRaketen = ({ hand, round }: HandBadgeContext) =>
+    !!round.previousTotals && !!round.totals
+    && soleLast(round.previousTotals) === hand.TEAM_ID
+    && soleLeader(round.totals) === hand.TEAM_ID;
+
+/**
+ * The team's total climbed from below zero back to zero or above in this round.
+ */
+const isFagelFenix = ({ hand, round }: HandBadgeContext) => {
     const before = round.previousTotals?.[hand.TEAM_ID];
     const after = round.totals?.[hand.TEAM_ID];
-    return before !== undefined && after !== undefined && before >= 0 && after < 0;
+    return before !== undefined && after !== undefined && before < 0 && after >= 0;
 };
 
 const isBestHand = (context: HandBadgeContext) =>
@@ -185,13 +199,6 @@ export const HAND_BADGES: readonly HandBadgeDefinition[] = [
         streak: ({ positiveStreak }) => positiveStreak,
     },
     {
-        id: "fegis",
-        label: "Fegis",
-        color: "info",
-        icon: <DirectionsRunIcon />,
-        applies: isFegis,
-    },
-    {
         id: "kungamordare",
         label: "Kungamördare",
         color: "error",
@@ -206,11 +213,18 @@ export const HAND_BADGES: readonly HandBadgeDefinition[] = [
         applies: isSmygvinst,
     },
     {
-        id: "blodbad",
-        label: "Blodbad",
-        color: "error",
-        icon: <WaterDropIcon />,
-        applies: isBlodbad,
+        id: "antligen",
+        label: "Äntligen!",
+        color: "success",
+        icon: <CelebrationIcon />,
+        applies: isAntligen,
+    },
+    {
+        id: "revansch",
+        label: "Revansch",
+        color: "warning",
+        icon: <SportsMmaIcon />,
+        applies: isRevansch,
     },
     {
         id: "tronskifte",
@@ -227,11 +241,18 @@ export const HAND_BADGES: readonly HandBadgeDefinition[] = [
         applies: isFrittFall,
     },
     {
-        id: "konkurs",
-        label: "Konkurs",
-        color: "error",
-        icon: <MoneyOffIcon />,
-        applies: isKonkurs,
+        id: "raketen",
+        label: "Raketen",
+        color: "primary",
+        icon: <RocketLaunchIcon />,
+        applies: isRaketen,
+    },
+    {
+        id: "fagel-fenix",
+        label: "Fågel Fenix",
+        color: "warning",
+        icon: <AutoAwesomeIcon />,
+        applies: isFagelFenix,
     },
 ];
 

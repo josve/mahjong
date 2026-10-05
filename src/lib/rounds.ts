@@ -12,6 +12,8 @@ export interface Round {
     winStreaks?: { [teamId: string]: number };
     /** Consecutive rounds each team has scored above zero, including this one. */
     positiveStreaks?: { [teamId: string]: number };
+    /** Consecutive rounds each team had gone without a win before this round. */
+    previousWinlessStreaks?: { [teamId: string]: number };
     /** Each team's total score before this round was played. */
     previousTotals?: { [teamId: string]: number };
     /** Each team's total score after this round was played. */
@@ -44,6 +46,7 @@ export function buildRounds(hands: readonly Hand[]): Round[] {
     const teamEastStreak: { [teamId: string]: number } = {};
     const teamWinStreak: { [teamId: string]: number } = {};
     const teamPositiveStreak: { [teamId: string]: number } = {};
+    const teamWinlessStreak: { [teamId: string]: number } = {};
     const teamTotals: { [teamId: string]: number } = {};
     for (const hand of hands.slice(0, 4)) {
         teamTotals[hand.TEAM_ID] = (teamTotals[hand.TEAM_ID] ?? STARTING_SCORE) + hand.HAND_SCORE;
@@ -51,11 +54,13 @@ export function buildRounds(hands: readonly Hand[]): Round[] {
 
     for (let i = 0; i < handsToProcess.length; i += 4) {
         const sortedRound = [...handsToProcess.slice(i, i + 4)].sort(sortByTeamId);
+        const previousWinlessStreaks = {...teamWinlessStreak};
 
         for (const hand of sortedRound) {
             teamEastStreak[hand.TEAM_ID] = hand.WIND === 'E' ? (teamEastStreak[hand.TEAM_ID] || 0) + 1 : 0;
             teamWinStreak[hand.TEAM_ID] = hand.IS_WINNER ? (teamWinStreak[hand.TEAM_ID] || 0) + 1 : 0;
             teamPositiveStreak[hand.TEAM_ID] = hand.HAND_SCORE > 0 ? (teamPositiveStreak[hand.TEAM_ID] || 0) + 1 : 0;
+            teamWinlessStreak[hand.TEAM_ID] = hand.IS_WINNER ? 0 : (teamWinlessStreak[hand.TEAM_ID] || 0) + 1;
         }
 
         const previousTotals = {...teamTotals};
@@ -71,6 +76,7 @@ export function buildRounds(hands: readonly Hand[]): Round[] {
             eastStreaks: {...teamEastStreak},
             winStreaks: {...teamWinStreak},
             positiveStreaks: {...teamPositiveStreak},
+            previousWinlessStreaks,
             previousTotals,
             totals: {...teamTotals},
         });
