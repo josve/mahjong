@@ -9,7 +9,7 @@ import {
     Tooltip,
 } from '@mui/material';
 import { CheckCircle } from '@mui/icons-material';
-import { motion } from "motion/react";
+import { motion, type Variants } from "motion/react";
 import {Round} from "@/components/match/matchChartClient"; // Import motion
 import HandBadges from "@/components/match/HandBadges";
 
@@ -18,7 +18,7 @@ const MotionGrid = motion(Grid);
 const MotionBox = motion(Box);
 
 // Define animation variants
-const containerVariants = {
+const containerVariants: Variants = {
     hidden: { opacity: 0 },
     visible: {
         opacity: 1,
@@ -29,7 +29,7 @@ const containerVariants = {
     },
 };
 
-const itemVariants = {
+const itemVariants: Variants = {
     hidden: { opacity: 0, y: 20 },
     visible: { opacity: 1, y: 0 },
     hover: {
