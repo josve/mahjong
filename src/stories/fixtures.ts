@@ -108,9 +108,10 @@ interface GameOptions {
     numRounds: number;
     seed: number;
     limitHandInRound?: number;
+    autotableGameId?: string;
 }
 
-export function createGame({gameId, name, comment = "", teamIds, start, numRounds, seed, limitHandInRound}: GameOptions): GameWithHands {
+export function createGame({gameId, name, comment = "", teamIds, start, numRounds, seed, limitHandInRound, autotableGameId}: GameOptions): GameWithHands {
     const random = createRandom(seed);
     const hands: Hand[] = [];
     let eastIndex = 0;
@@ -170,7 +171,7 @@ export function createGame({gameId, name, comment = "", teamIds, start, numRound
     return {
         GAME_ID: gameId, TIME: new Date(start), NAME: name, COMMENT: comment,
         TEAM_ID_1: teamIds[0], TEAM_ID_2: teamIds[1], TEAM_ID_3: teamIds[2], TEAM_ID_4: teamIds[3],
-        IS_TEST: false, hands,
+        IS_TEST: false, AUTOTABLE_GAME_ID: autotableGameId ?? null, hands,
     };
 }
 
@@ -184,6 +185,7 @@ export const activeMatch = createGame({
     start: new Date(now - 2 * HOUR),
     numRounds: 12,
     seed: 42,
+    autotableGameId: "ABCDE",
 });
 
 export const limitHandMatch = createGame({

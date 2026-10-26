@@ -3,6 +3,7 @@ import Connection from "@/lib/connection";
 import { v4 as uuidv4 } from "uuid";
 import {auth} from "@/auth";
 import {MatchesResponse} from "@/types/api";
+import {createAutotableGame} from "@/lib/autotable";
 
 export async function POST(request: Request) {
   const { teamIds, matchName, matchDescription } = await request.json();
@@ -16,6 +17,8 @@ export async function POST(request: Request) {
     }
   }
 
+  const autotableGameId = await createAutotableGame();
+
   const connection = await Connection.getInstance().getConnection();
   try {
     // Start a transaction
@@ -23,13 +26,14 @@ export async function POST(request: Request) {
 
     // Insert into Games table
     await connection.query(
-      "INSERT INTO Games (GAME_ID, NAME, COMMENT, TIME, TEAM_ID_1, TEAM_ID_2, TEAM_ID_3, TEAM_ID_4, IS_TEST) VALUES (?, ?, ?, NOW(), ?, ?, ?, ?, 0)",
+      "INSERT INTO Games (GAME_ID, NAME, COMMENT, TIME, TEAM_ID_1, TEAM_ID_2, TEAM_ID_3, TEAM_ID_4, IS_TEST, AUTOTABLE_GAME_ID) VALUES (?, ?, ?, NOW(), ?, ?, ?, ?, 0, ?)",
       [
         gameId,
         matchName,
         matchDescription,
         ...teamIds,
         ...Array(4 - teamIds.length).fill(null),
+        autotableGameId,
       ]
     );
 

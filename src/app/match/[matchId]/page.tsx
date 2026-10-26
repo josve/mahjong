@@ -2,6 +2,7 @@ import { getMatchById } from "@/lib/dbMatch";
 import MatchChart from "@/components/match/matchChart";
 import { Metadata } from "next";
 import {auth} from "@/auth";
+import {getAutotableGameUrl} from "@/lib/autotable";
 
 interface PageProps {
   readonly params: Promise<{
@@ -27,11 +28,12 @@ export default async function Page({ params }: PageProps) {
   const isEditable =
     new Date().getTime() - matchDate.getTime() < 24 * 60 * 60 * 1000;
 
-  let allowRegister = true;
-  if (process.env.REQUIRE_LOGIN) {
-    const session = await auth();
-    allowRegister = !!session && !!session.user;
-  }
+  const session = await auth();
+  const isLoggedIn = !!session && !!session.user;
+  const allowRegister = !process.env.REQUIRE_LOGIN || isLoggedIn;
+  const autotableUrl = isLoggedIn
+    ? getAutotableGameUrl(match.AUTOTABLE_GAME_ID)
+    : null;
 
   return (
     <>
@@ -55,6 +57,15 @@ export default async function Page({ params }: PageProps) {
           >
             Poängräknare
           </a>
+          {autotableUrl &&
+          <a
+            href={autotableUrl}
+            className="button"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Till spelet
+          </a>}
         </div>
       )}
     </>

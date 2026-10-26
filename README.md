@@ -69,3 +69,15 @@ DEV_ALLOW_INSECURE_EMAIL=true
 
 This should obviously not be enabled in any production system but nice for quick testing.
 
+
+# Autotable
+
+When a match is created a game is also created on the [Autotable](https://github.com/josve/autotable) server, and logged in users get a link to it on the match page. Run the DB migrations and add the following to the .env file to enable it:
+
+```
+AUTOTABLE_API_URL=http://127.0.0.1:1235          # The Autotable server, used to create games
+AUTOTABLE_API_KEY=secret                         # Optional, must match AUTOTABLE_API_KEY on the Autotable server
+AUTOTABLE_URL=https://example.com/autotable/     # The Autotable frontend, used for the link
+```
+
+If the Autotable server can't be reached the match is still created, just without a link.
