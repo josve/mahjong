@@ -14,6 +14,7 @@ export interface Match {
     TEAM_ID_3: string;
     TEAM_ID_4: string;
     IS_TEST: boolean;
+    AUTOTABLE_GAME_ID?: string | null;
     GAME_IDX: number;
 }
 
@@ -80,6 +81,7 @@ export interface Game {
     TEAM_ID_3: string;
     TEAM_ID_4: string;
     IS_TEST: boolean;
+    AUTOTABLE_GAME_ID?: string | null;
 }
 
 export interface GameWithHands extends Game {

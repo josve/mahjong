@@ -12,6 +12,7 @@ import "../src/app/globals.css";
 sb.mock(import("../src/lib/dbMatch.ts"));
 sb.mock(import("../src/lib/fetchMatches.ts"));
 sb.mock(import("../src/lib/db/upcomingGame.ts"));
+sb.mock(import("../src/lib/autotable.ts"));
 sb.mock(import("../src/auth.ts"));
 
 const preview: Preview = {
