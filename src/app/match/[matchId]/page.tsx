@@ -64,7 +64,7 @@ export default async function Page({ params }: PageProps) {
             target="_blank"
             rel="noopener noreferrer"
           >
-            Spela i Autotable
+            Till spelet
           </a>}
         </div>
       )}
