@@ -13,6 +13,8 @@ import SportsScoreIcon from '@mui/icons-material/SportsScore';
 import CastleIcon from '@mui/icons-material/Castle';
 import { GameWithHands } from "@/types/db";
 import { getMatchStats, isActiveMatch, MatchRecords, MatchStats } from "@/lib/matchRecords";
+import { useTranslations } from "next-intl";
+import type messages from "../../../messages/sv.json";
 
 const LIMIT_HAND = 300;
 /** How far behind the leader the eventual winner must have been to count as a comeback. */
@@ -29,7 +31,8 @@ interface BadgeContext {
 
 export interface MatchBadgeDefinition {
     readonly id: string;
-    readonly label: string;
+    /** Key in the matchBadges namespace of messages/sv.json. */
+    readonly label: keyof typeof messages.matchBadges;
     readonly color: ChipProps["color"];
     readonly icon: React.ReactElement;
     readonly applies: (match: GameWithHands, context: BadgeContext) => boolean;
@@ -42,49 +45,49 @@ export interface MatchBadgeDefinition {
 export const MATCH_BADGES: readonly MatchBadgeDefinition[] = [
     {
         id: "limit-hand",
-        label: "Limit hand",
+        label: "limitHand",
         color: "error",
         icon: <LocalFireDepartment />,
         applies: (match) => match.hands.some(hand => hand.HAND === LIMIT_HAND),
     },
     {
         id: "active",
-        label: "Aktiv match",
+        label: "active",
         color: "primary",
         icon: <NotificationsIcon />,
         applies: (match) => isActiveMatch(match),
     },
     {
         id: "highest-score",
-        label: "Högsta poäng",
+        label: "highestScore",
         color: "success",
         icon: <EmojiEventsIcon />,
         applies: (_, { stats, records }) => !!stats && stats.highestScore === records.highestScore,
     },
     {
         id: "lowest-score",
-        label: "Lägsta poäng",
+        label: "lowestScore",
         color: "warning",
         icon: <SouthIcon />,
         applies: (_, { stats, records }) => !!stats && stats.lowestScore === records.lowestScore,
     },
     {
         id: "biggest-win",
-        label: "Största vinst",
+        label: "biggestWin",
         color: "success",
         icon: <TrendingUpIcon />,
         applies: (_, { stats, records }) => !!stats && stats.biggestWin === records.biggestWin,
     },
     {
         id: "biggest-loss",
-        label: "Största förlust",
+        label: "biggestLoss",
         color: "warning",
         icon: <TrendingDownIcon />,
         applies: (_, { stats, records }) => !!stats && stats.biggestLoss === records.biggestLoss,
     },
     {
         id: "shortest-match",
-        label: "Kortast match",
+        label: "shortestMatch",
         color: "info",
         icon: <BoltIcon />,
         applies: (match, { stats, records }) =>
@@ -92,14 +95,14 @@ export const MATCH_BADGES: readonly MatchBadgeDefinition[] = [
     },
     {
         id: "longest-match",
-        label: "Längst match",
+        label: "longestMatch",
         color: "info",
         icon: <HourglassBottomIcon />,
         applies: (_, { stats, records }) => !!stats && stats.rounds === records.mostRounds,
     },
     {
         id: "comeback",
-        label: "Comeback",
+        label: "comeback",
         color: "success",
         icon: <UndoIcon />,
         applies: (match, { stats }) =>
@@ -107,7 +110,7 @@ export const MATCH_BADGES: readonly MatchBadgeDefinition[] = [
     },
     {
         id: "thriller",
-        label: "Rysare",
+        label: "thriller",
         color: "secondary",
         icon: <SportsScoreIcon />,
         applies: (match, { stats }) =>
@@ -115,7 +118,7 @@ export const MATCH_BADGES: readonly MatchBadgeDefinition[] = [
     },
     {
         id: "hogmod-record",
-        label: "Högmodsrekord",
+        label: "hogmodRecord",
         color: "warning",
         icon: <CastleIcon />,
         applies: (_, { stats, records }) =>
@@ -130,6 +133,7 @@ interface Props {
 }
 
 export default function MatchBadges({ match, records }: Props) {
+    const t = useTranslations("matchBadges");
     const context: BadgeContext = { stats: getMatchStats(match), records };
     const badges = MATCH_BADGES.filter(badge => badge.applies(match, context));
 
@@ -150,7 +154,7 @@ export default function MatchBadges({ match, records }: Props) {
             {badges.map(badge => (
                 <Chip
                     key={badge.id}
-                    label={badge.label}
+                    label={t(badge.label)}
                     color={badge.color}
                     size="small"
                     icon={badge.icon}

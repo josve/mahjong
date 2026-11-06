@@ -1,6 +1,7 @@
 import React from "react";
 import RoundResultFormEdit from "./RoundResultFormEdit";
 import {Hand, IdToName} from "@/types/db";
+import {useTranslations} from "next-intl";
 
 interface RoundDisplayProps {
   round: string;
@@ -15,6 +16,7 @@ const RoundDisplay: React.FC<RoundDisplayProps> = ({
   matchId,
   teamIdToName,
 }) => {
+  const t = useTranslations("match");
   return (
     <div
       style={{
@@ -24,8 +26,8 @@ const RoundDisplay: React.FC<RoundDisplayProps> = ({
         padding: "20px",
       }}
     >
-      <h2>Runda {round}</h2>
-      <div>Nuvarande poäng: {hands.map((hand) => hand.HAND).join(", ")}</div>
+      <h2>{t("round", { round })}</h2>
+      <div>{t("currentScores", { scores: hands.map((hand) => hand.HAND).join(", ") })}</div>
       <RoundResultFormEdit
         hands={hands}
         matchId={matchId}

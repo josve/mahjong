@@ -18,6 +18,7 @@ import React from "react";
 import MatchBadges from "@/components/matches/MatchBadges";
 import MatchSparkline from "@/components/matches/MatchSparkline";
 import { MatchRecords } from "@/lib/matchRecords";
+import { useTranslations } from "next-intl";
 
 interface Props {
     readonly match: GameWithHands;
@@ -36,6 +37,7 @@ const StyledCard = styled(Card)(({ theme }) => ({
 }));
 
 export default function MatchGridItemClient({ index, match, idToName, records, colors }: Props) {
+    const t = useTranslations("common");
 
     const hands = match.hands;
     const name = match.NAME;
@@ -72,7 +74,7 @@ export default function MatchGridItemClient({ index, match, idToName, records, c
                                 #{index} {name}
                             </Typography>
                             <Typography variant="body2" color="primary">
-                                {numberOfRounds} omgångar
+                                {t("rounds", { count: numberOfRounds })}
                             </Typography>
                         </Box>
 

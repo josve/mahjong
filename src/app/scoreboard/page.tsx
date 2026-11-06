@@ -8,21 +8,63 @@ import TableCell from "@mui/material/TableCell";
 import Paper from "@mui/material/Paper";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
+import { getTranslations } from "next-intl/server";
+import type messages from "../../../messages/sv.json";
+
+type Scoreboard = typeof messages.scoreboard;
+
+/** Basic points for exposed and concealed sets, labelled by the keys in scoreboard.basic. */
+const BASIC_SCORES: { key: keyof Scoreboard["basic"]; exposed: string; concealed: string }[] = [
+  { key: "pungSimples", exposed: "2", concealed: "4" },
+  { key: "pungTerminals", exposed: "4", concealed: "8" },
+  { key: "pungWinds", exposed: "4", concealed: "8" },
+  { key: "pungDragons", exposed: "4", concealed: "8" },
+  { key: "kongSimples", exposed: "8", concealed: "16" },
+  { key: "kongTerminals", exposed: "16", concealed: "32" },
+  { key: "kongWinds", exposed: "16", concealed: "32" },
+  { key: "kongDragons", exposed: "16", concealed: "32" },
+  { key: "pairDragons", exposed: "2", concealed: "2" },
+  { key: "pairOwnWind", exposed: "2", concealed: "2" },
+  { key: "flowerSeason", exposed: "4", concealed: "-" },
+];
+
+const MULTIPLIERS: { key: keyof Scoreboard["multipliers"]; value: string }[] = [
+  { key: "ownWind", value: "X2" },
+  { key: "dragons", value: "X2" },
+  { key: "threeConcealed", value: "X2" },
+  { key: "fullStraight", value: "X2" },
+];
+
+const WINNER_SCORES: { key: keyof Scoreboard["winner"]; value: string }[] = [
+  { key: "mahjong", value: "10" },
+  { key: "selfDrawn", value: "2" },
+  { key: "concealedDiscard", value: "2" },
+  { key: "concealedSelfDrawn", value: "X2" },
+  { key: "lastTile", value: "X2" },
+  { key: "kongReplacement", value: "X2" },
+  { key: "noPoints", value: "10" },
+  { key: "halfFlush", value: "X2" },
+  { key: "fullFlush", value: "X8" },
+  { key: "noChows", value: "X2" },
+];
 
 export async function generateMetadata(): Promise<Metadata> {
+  const t = await getTranslations();
   return {
-    title: "Poängtabell - Mahjong Master System",
+    title: t("app.pageTitle", { title: t("scoreboard.title") }),
   };
 }
 
-export default function ScoreboardPage() {
+export default async function ScoreboardPage() {
+  const t = await getTranslations("scoreboard");
+
   return (
       <Box>
         <h1>
-          Poängtabell
+          {t("title")}
         </h1>
         <h2 className="score-board-header">
-          Ordinarie poäng
+          {t("basicTitle")}
         </h2>
         <Paper>
           <Box className="score-board-section">
@@ -30,140 +72,48 @@ export default function ScoreboardPage() {
             <TableHead>
               <TableRow>
                 <TableCell></TableCell>
-                <TableCell>Öppen</TableCell>
-                <TableCell>Dold</TableCell>
+                <TableCell>{t("exposed")}</TableCell>
+                <TableCell>{t("concealed")}</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
-              <TableRow>
-                <TableCell>Tretal 2-8</TableCell>
-                <TableCell>2</TableCell>
-                <TableCell>4</TableCell>
-              </TableRow>
-              <TableRow>
-                <TableCell>Tretal 1, 9</TableCell>
-                <TableCell>4</TableCell>
-                <TableCell>8</TableCell>
-              </TableRow>
-              <TableRow>
-                <TableCell>Tretal vindar</TableCell>
-                <TableCell>4</TableCell>
-                <TableCell>8</TableCell>
-              </TableRow>
-              <TableRow>
-                <TableCell>Tretal drakar</TableCell>
-                <TableCell>4</TableCell>
-                <TableCell>8</TableCell>
-              </TableRow>
-              <TableRow>
-                <TableCell>Fyrtal 2-8</TableCell>
-                <TableCell>8</TableCell>
-                <TableCell>16</TableCell>
-              </TableRow>
-              <TableRow>
-                <TableCell>Fyrtal 1, 9</TableCell>
-                <TableCell>16</TableCell>
-                <TableCell>32</TableCell>
-              </TableRow>
-              <TableRow>
-                <TableCell>Fyrtal vindar</TableCell>
-                <TableCell>16</TableCell>
-                <TableCell>32</TableCell>
-              </TableRow>
-              <TableRow>
-                <TableCell>Fyrtal drakar</TableCell>
-                <TableCell>16</TableCell>
-                <TableCell>32</TableCell>
-              </TableRow>
-              <TableRow>
-                <TableCell>Par drakar</TableCell>
-                <TableCell>2</TableCell>
-                <TableCell>2</TableCell>
-              </TableRow>
-              <TableRow>
-                <TableCell>Par egen vind</TableCell>
-                <TableCell>2</TableCell>
-                <TableCell>2</TableCell>
-              </TableRow>
-              <TableRow>
-                <TableCell>Blomma/årstid</TableCell>
-                <TableCell>4</TableCell>
-                <TableCell>-</TableCell>
-              </TableRow>
+              {BASIC_SCORES.map(({ key, exposed, concealed }) => (
+                <TableRow key={key}>
+                  <TableCell>{t(`basic.${key}`)}</TableCell>
+                  <TableCell>{exposed}</TableCell>
+                  <TableCell>{concealed}</TableCell>
+                </TableRow>
+              ))}
             </TableBody>
           </Table>
           </Box>
         </Paper>
 
         <h2 className="score-board-header">
-          Multiplikatorer
+          {t("multipliersTitle")}
         </h2>
         <Paper>
           <Box className="score-board-section">
-            <Box className="score-board-row">
-              <Typography>Tretal eller fyrtal egen vind</Typography>
-              <Typography>X2</Typography>
-            </Box>
-            <Box className="score-board-row">
-              <Typography>Tretal eller fyrtal drakar</Typography>
-              <Typography>X2</Typography>
-            </Box>
-            <Box className="score-board-row">
-              <Typography>Tre dolda tre- eller fyrtal</Typography>
-              <Typography>X2</Typography>
-            </Box>
-            <Box className="score-board-row">
-              <Typography>Hel stege 1-9 av en sort</Typography>
-              <Typography>X2</Typography>
-            </Box>
+            {MULTIPLIERS.map(({ key, value }) => (
+              <Box className="score-board-row" key={key}>
+                <Typography>{t(`multipliers.${key}`)}</Typography>
+                <Typography>{value}</Typography>
+              </Box>
+            ))}
           </Box>
         </Paper>
 
         <h2 className="score-board-header">
-          Vinnaren
+          {t("winnerTitle")}
         </h2>
         <Paper>
           <Box className="score-board-section">
-            <Box className="score-board-row">
-              <Typography>Mahjong</Typography>
-              <Typography>10</Typography>
-            </Box>
-            <Box className="score-board-row">
-              <Typography>Mahjong på egen dragen bricka</Typography>
-              <Typography>2</Typography>
-            </Box>
-            <Box className="score-board-row">
-              <Typography>Dold mahjong på slängd bricka</Typography>
-              <Typography>2</Typography>
-            </Box>
-            <Box className="score-board-row">
-              <Typography>Dold mahjong på egen dragen bricka</Typography>
-              <Typography>X2</Typography>
-            </Box>
-            <Box className="score-board-row">
-              <Typography>Mahjong på sista brickan i spelet</Typography>
-              <Typography>X2</Typography>
-            </Box>
-            <Box className="score-board-row">
-              <Typography>Mahjong på dragen extrabricka efter Kong</Typography>
-              <Typography>X2</Typography>
-            </Box>
-            <Box className="score-board-row">
-              <Typography>Inga poäng</Typography>
-              <Typography>10</Typography>
-            </Box>
-            <Box className="score-board-row">
-              <Typography>En sort och vindar eller drakar</Typography>
-              <Typography>X2</Typography>
-            </Box>
-            <Box className="score-board-row">
-              <Typography>Uteslutande en sort</Typography>
-              <Typography>X8</Typography>
-            </Box>
-            <Box className="score-board-row">
-              <Typography>Inga stegar</Typography>
-              <Typography>X2</Typography>
-            </Box>
+            {WINNER_SCORES.map(({ key, value }) => (
+              <Box className="score-board-row" key={key}>
+                <Typography>{t(`winner.${key}`)}</Typography>
+                <Typography>{value}</Typography>
+              </Box>
+            ))}
           </Box>
         </Paper>
       </Box>

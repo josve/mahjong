@@ -10,6 +10,7 @@ import InputLabel from "@mui/material/InputLabel";
 import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
 import {MahjongStats} from "@/lib/statistics";
+import {useTranslations} from "next-intl";
 
 interface BoxPlotProps {
     readonly stats: MahjongStats;
@@ -20,6 +21,7 @@ const BoxPlot: React.FC<BoxPlotProps> = ({
                                              stats,
                                              includeTeams
                                          }) => {
+    const t = useTranslations("statistics.boxPlot");
 
     const [selectedSeries, setSelectedSeries] = useState('allHands');
 
@@ -85,7 +87,7 @@ const BoxPlot: React.FC<BoxPlotProps> = ({
             bottom: '15%',
         },
         xAxis: {
-            name: 'Poäng',
+            name: t("score"),
             nameLocation: 'middle',
             nameGap: 30,
             scale: true
@@ -116,18 +118,18 @@ const BoxPlot: React.FC<BoxPlotProps> = ({
         <div style={{ paddingTop: "20px"}}>
             <div style={{ paddingLeft: "20px"}}>
             <FormControl>
-                <InputLabel id="data-label">Data</InputLabel>
+                <InputLabel id="data-label">{t("data")}</InputLabel>
                 <Select
                     labelId="data-label"
                     id="data-select"
-                    label="Data"
+                    label={t("data")}
                     value={selectedSeries}
                     onChange={handleSeriesChange}
                 >
-                    <MenuItem value="allHands">Händer (med lag)</MenuItem>
-                    <MenuItem value="allHandsNoTeams">Händer (utan lag)</MenuItem>
-                    <MenuItem value="allScores">Poäng (med lag)</MenuItem>
-                    <MenuItem value="allScoresNoTeams">Poäng (utan lag)</MenuItem>
+                    <MenuItem value="allHands">{t("allHands")}</MenuItem>
+                    <MenuItem value="allHandsNoTeams">{t("allHandsNoTeams")}</MenuItem>
+                    <MenuItem value="allScores">{t("allScores")}</MenuItem>
+                    <MenuItem value="allScoresNoTeams">{t("allScoresNoTeams")}</MenuItem>
                 </Select>
             </FormControl>
             </div>

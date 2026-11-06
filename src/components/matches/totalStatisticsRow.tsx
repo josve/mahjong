@@ -1,13 +1,18 @@
 import { getTotalStatistics } from "@/lib/dbMatch";
+import { getTranslations } from "next-intl/server";
 
 export default async function TotalStatisticsRow() {
     const stats = await getTotalStatistics();
+    const t = await getTranslations("matches");
 
     return (
         <div className="label">
             <p>
-                Totalt {stats?.totalMatches} matcher, {stats?.totalMahjongs} mahjonger
-                på {stats?.totalRounds - stats?.totalMatches} omgångar
+                {t("totalStatistics", {
+                    matches: stats?.totalMatches,
+                    mahjongs: stats?.totalMahjongs,
+                    rounds: stats?.totalRounds - stats?.totalMatches,
+                })}
             </p>
         </div>
     );

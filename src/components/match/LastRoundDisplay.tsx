@@ -12,6 +12,7 @@ import { CheckCircle } from '@mui/icons-material';
 import { motion, type Variants } from "motion/react";
 import {Round} from "@/components/match/matchChartClient"; // Import motion
 import HandBadges from "@/components/match/HandBadges";
+import { useTranslations } from "next-intl";
 
 // Create motion-enhanced components
 const MotionGrid = motion(Grid);
@@ -46,17 +47,12 @@ interface Props {
     readonly round: Round;
 }
 
-const windIcon = (wind: string) => {
-    const windMap: { [key: string]: string } = {
-        E: 'Öst',
-        N: 'Norr',
-        W: 'Väst',
-        S: 'Syd',
-    };
-    return windMap[wind] || wind;
-};
+const WINDS = ["E", "N", "W", "S"] as const;
+const isWind = (wind: string): wind is typeof WINDS[number] => (WINDS as readonly string[]).includes(wind);
 
 export default function LastRoundDisplay({ teamIdToName, round }: Props) {
+    const t = useTranslations();
+    const windIcon = (wind: string) => isWind(wind) ? t(`common.winds.${wind}`) : wind;
     const hands = round.hands;
 
     let highestScore = -100000;
@@ -114,7 +110,7 @@ export default function LastRoundDisplay({ teamIdToName, round }: Props) {
                             >
                                 {/* Vinnareikon */}
                                 {hasHighestWin ? (
-                                    <Tooltip title="Högsta poäng">
+                                    <Tooltip title={t("match.highestScore")}>
                                         <CheckCircle
                                             color="success"
                                             sx={{ position: 'absolute', top: 8, right: 8 }}
@@ -136,7 +132,7 @@ export default function LastRoundDisplay({ teamIdToName, round }: Props) {
 
                                 {/* Poäng */}
                                 <Typography variant="body1" sx={{ mt: 1 }}>
-                                    Poäng: {hand.HAND}
+                                    {t("match.handScore", { score: hand.HAND })}
                                 </Typography>
 
                                 {/* Resultat */}
@@ -145,7 +141,7 @@ export default function LastRoundDisplay({ teamIdToName, round }: Props) {
                                     color={hand.HAND_SCORE >= 0 ? 'green' : 'error'}
                                     sx={{ mt: 1 }}
                                 >
-                                    Resultat: {hand.HAND_SCORE}
+                                    {t("match.handResult", { result: hand.HAND_SCORE })}
                                 </Typography>
 
                                 <HandBadges hand={hand} round={round} />

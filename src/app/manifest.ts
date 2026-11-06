@@ -1,10 +1,12 @@
 import type { MetadataRoute } from 'next'
+import { getTranslations } from 'next-intl/server'
 
-export default function manifest(): MetadataRoute.Manifest {
+export default async function manifest(): Promise<MetadataRoute.Manifest> {
+    const t = await getTranslations('app')
     return {
-        name: 'Mahjong Master System',
-        short_name: 'Master System',
-        description: 'System for keeping track of mahjong scores',
+        name: t('manifestName'),
+        short_name: t('manifestShortName'),
+        description: t('manifestDescription'),
         start_url: '/',
         display: 'standalone',
         orientation: 'landscape',

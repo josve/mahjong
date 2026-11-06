@@ -4,6 +4,7 @@ import {Box, Button, FormGroup, FormControlLabel, Switch, Snackbar, Alert, TextF
 import { RgbColorPicker } from "react-colorful";
 import {IdToColorMap, TeamDetails, TeamIdToDetails} from "@/types/db";
 import {Session} from "next-auth";
+import {useTranslations} from "next-intl";
 
 interface ComponentParams {
     readonly session: Session;
@@ -14,6 +15,7 @@ interface ComponentParams {
 
 export default function ProfilePageClient({ session, teamDetails, playerColors, emails }: ComponentParams) {
     const user = session.user;
+    const t = useTranslations("profile");
 
     const [color, setColor] = useState({
         r: user.COLOR_RED,
@@ -85,11 +87,11 @@ export default function ProfilePageClient({ session, teamDetails, playerColors, 
             }),
         })
             .then(() => {
-                setSnackbarMessage("Profile updated successfully!");
+                setSnackbarMessage(t("profileUpdated"));
                 setSnackbarSeverity("success");
                 setSnackbarOpen(true);
             }).catch(() => {
-                setSnackbarMessage("Failed to update profile.");
+                setSnackbarMessage(t("profileUpdateFailed"));
                 setSnackbarSeverity("error");
                 setSnackbarOpen(true);
             })
@@ -119,11 +121,11 @@ export default function ProfilePageClient({ session, teamDetails, playerColors, 
             }),
         })
             .then(() => {
-                setSnackbarMessage("Uppdaterade " + newTeamName + "!");
+                setSnackbarMessage(t("teamUpdated", {team: newTeamName}));
                 setSnackbarSeverity("success");
                 setSnackbarOpen(true);
             }).catch(() => {
-                setSnackbarMessage("Lyckades inte uppdatera: " + newTeamName);
+                setSnackbarMessage(t("teamUpdateFailed", {team: newTeamName}));
                 setSnackbarSeverity("error");
                 setSnackbarOpen(true);
             })
@@ -133,7 +135,7 @@ export default function ProfilePageClient({ session, teamDetails, playerColors, 
         <div style={{ backgroundColor: "var(--background-color)"}}>
             <h1 style={{paddingBottom: "10px" }}>{user?.name}</h1>
             <div style={{paddingBottom: "20px"}}>
-                <div style={{paddingBottom: "10px"}}>Kopplade e-postadresser</div>
+                <div style={{paddingBottom: "10px"}}>{t("linkedEmails")}</div>
                 {emails.length > 0 ? (
                     <ul style={{margin: 0}}>
                         {emails.map((email) => (
@@ -141,32 +143,32 @@ export default function ProfilePageClient({ session, teamDetails, playerColors, 
                         ))}
                     </ul>
                 ) : (
-                    <div>Inga e-postadresser kopplade.</div>
+                    <div>{t("noLinkedEmails")}</div>
                 )}
             </div>
             <div>
-                <div style={{paddingBottom: "20px"}}>Färg</div>
+                <div style={{paddingBottom: "20px"}}>{t("color")}</div>
                 <RgbColorPicker color={color} onChange={setColor} />
             </div>
             <FormGroup style={{ paddingTop: "20px", paddingBottom: "20px" }}>
-                 <FormControlLabel control={<Switch checked={showPreviousRoundScore} onChange={handleCheckboxChange}  />} label="Visa föregående rundpoäng" />
+                 <FormControlLabel control={<Switch checked={showPreviousRoundScore} onChange={handleCheckboxChange}  />} label={t("showPreviousRoundScore")} />
             </FormGroup>
             <Button
                 variant="contained"
                 color="primary"
                 onClick={handleSubmit}
             >
-                Uppdatera profil
+                {t("updateProfile")}
             </Button>
             <div style={{ paddingTop: "20px" }}>
-                <h2>Dina lag</h2>
+                <h2>{t("yourTeams")}</h2>
                 {userTeams.map((team) => (
                     <div key={team.id} style={{paddingTop: "20px"}}>
                         <h3>{team.teamName}</h3>
                         <div style={{
                             paddingTop: "10px",
                         }}>
-                            Spelare: {team.concatenatedName}
+                            {t("teamPlayers", {players: team.concatenatedName})}
                         </div>
                         <Box style={{
                             display: "flex",
@@ -176,7 +178,7 @@ export default function ProfilePageClient({ session, teamDetails, playerColors, 
                             paddingBottom: "10px",
                         }}>
                             <span style={{paddingRight: "10px"}}>
-                            Färg:
+                            {t("teamColor")}
                             </span>
                             <div style={{
                                 width: "30px",
@@ -192,7 +194,7 @@ export default function ProfilePageClient({ session, teamDetails, playerColors, 
                             alignItems: "center",
                         }}>
                         <TextField
-                            label="Uppdatera lagnamn"
+                            label={t("teamName")}
                             value={team.teamName}
                             onChange={(e) => handleTeamNameChange(team.teamName, e.target.value)}
                             margin="normal"
@@ -203,7 +205,7 @@ export default function ProfilePageClient({ session, teamDetails, playerColors, 
                             style={{ marginLeft: "20px" }}
                             onClick={() => handleTeamNameSubmit(team.id, team.teamName)}
                         >
-                            Uppdatera
+                            {t("update")}
                         </Button>
                         </Box>
                     </div>
@@ -216,7 +218,7 @@ export default function ProfilePageClient({ session, teamDetails, playerColors, 
                     href="/api/auth/signout"
                     style={{ marginTop: "20px" }}
                 >
-                    Logga ut
+                    {t("signOut")}
                 </Button>
             </Box>
             <Snackbar

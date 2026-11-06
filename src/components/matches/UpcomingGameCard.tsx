@@ -15,6 +15,7 @@ import Link from "next/link";
 import { formatDate, capitalize } from "@/lib/formatting";
 import {Session} from "next-auth";
 import {generateICS} from "@/lib/ics"; // Ensure these utilities are available
+import {useTranslations} from "next-intl";
 
 interface UpcomingGameCardProps {
     upcomingGame: UpcomingGame;
@@ -28,12 +29,13 @@ const StyledCard = styled(Card)(({ theme }) => ({
 }));
 
 export default function UpcomingGameCard({ upcomingGame, session, suggestedTeams = [] }: UpcomingGameCardProps) {
+    const t = useTranslations("matches");
     const gameTime = new Date(upcomingGame.game_time);
     const endTime = new Date(gameTime.getTime() + 4 * 60 * 60 * 1000);
 
     const handleDownloadICS = () => {
-        const title = "Mahjong";
-        const description = `Dags för nästa mahjong!`;
+        const title = t("calendarTitle");
+        const description = t("calendarDescription");
         const ics = generateICS({
             title,
             description,
@@ -69,7 +71,7 @@ export default function UpcomingGameCard({ upcomingGame, session, suggestedTeams
                         mb: 2
                     }}>
                     <Typography variant="h6" component="div">
-                        Nästa match
+                        {t("nextMatch")}
                     </Typography>
                     <Typography variant="body2" sx={{
                         color: "text.secondary"
@@ -80,7 +82,7 @@ export default function UpcomingGameCard({ upcomingGame, session, suggestedTeams
                 {suggestedTeams.length > 0 && (
                     <Box>
                         <Typography variant="subtitle2" sx={{ color: "text.secondary" }}>
-                            Föreslagna lag
+                            {t("suggestedTeams")}
                         </Typography>
                         {suggestedTeams.map((team) => (
                             <Typography key={team.id} variant="body2">
@@ -100,7 +102,7 @@ export default function UpcomingGameCard({ upcomingGame, session, suggestedTeams
                         href={upcomingGame.meeting_link}
                         size="small"
                     >
-                        Till videomötet
+                        {t("toVideoMeeting")}
                     </Button>
                     <Button
                         variant="outlined"
@@ -108,7 +110,7 @@ export default function UpcomingGameCard({ upcomingGame, session, suggestedTeams
                         onClick={handleDownloadICS}
                         size="small"
                     >
-                        Lägg till i kalender
+                        {t("addToCalendar")}
                     </Button>
                 </CardActions>)}
         </StyledCard>

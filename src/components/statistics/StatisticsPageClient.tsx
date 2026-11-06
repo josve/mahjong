@@ -6,12 +6,14 @@ import ToggleButton from '@mui/material/ToggleButton';
 import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
 import { CircularProgress } from "@mui/material";
 import {StatisticsResponse} from "@/types/api";
+import {useTranslations} from "next-intl";
 
 interface Props {
     readonly data: StatisticsResponse;
 }
 
 export default function StatisticsPageClient({ data }: Props) {
+    const t = useTranslations("statistics");
 
     const [period, setPeriod] = useState<"all" | "new" | "year">("all");
     const [includeTeams, setIncludeTeams] = useState<boolean>(false);
@@ -40,29 +42,29 @@ export default function StatisticsPageClient({ data }: Props) {
     return (
         <div>
             <Box className="statistics-header" style={{}}>
-                <h1 style={{justifySelf: "start"}}>Statistik</h1>
+                <h1 style={{justifySelf: "start"}}>{t("title")}</h1>
                 <ToggleButtonGroup
                     value={period}
                     exclusive
                     className="statistics-buttons"
                     onChange={handlePeriodChange}
-                    aria-label="Tid"
+                    aria-label={t("period")}
                 >
                     <ToggleButton value="all" aria-label="left aligned">
-                        All tid
+                        {t("periodAll")}
                     </ToggleButton>
                     <ToggleButton value="new" aria-label="centered">
-                        Ny tid
+                        {t("periodNew")}
                     </ToggleButton>
                     <ToggleButton value="year" aria-label="right aligned">
-                        Nuvarande år
+                        {t("periodYear")}
                     </ToggleButton>
                 </ToggleButtonGroup>
             </Box>
             <FormGroup>
                 <FormControlLabel
                     control={<Switch checked={includeTeams} onChange={() => {setIncludeTeams(!includeTeams);}}/>}
-                    label="Visa lag"/>
+                    label={t("showTeams")}/>
             </FormGroup>
             <PlayerScoreChart
                 matches={data.matches}

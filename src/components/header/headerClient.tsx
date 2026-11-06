@@ -7,13 +7,15 @@ import Link from "next/link";
 import { AppBar, Toolbar, Box } from "@mui/material";
 import { Session } from "next-auth";
 import { getNavigationItems, NavigationItem } from "@/lib/navigationItems";
+import { useTranslations } from "next-intl";
 
 interface Props {
   readonly session: Session | null;
 }
 
 export default function HeaderClient({ session }: Props) {
-  const navigationItems: NavigationItem[] = getNavigationItems(session);
+  const t = useTranslations();
+  const navigationItems: NavigationItem[] = getNavigationItems(session, useTranslations("navigation"));
 
   // Filter items to include both authenticated and guest links
   const visibleItems = navigationItems.filter((item) =>
@@ -43,14 +45,14 @@ export default function HeaderClient({ session }: Props) {
               >
                 <Image
                     src="/mahjong_tiles.png"
-                    alt="Mahjong Tiles"
+                    alt={t("app.logoAlt")}
                     className="header-logo"
                     width="300"
                     height="200"
                 />
                 <div className="header-title">
-                  <span style={{ fontWeight: "700" }}>Mahjong</span> Master System
-                  4.4
+                  <span style={{ fontWeight: "700" }}>{t("app.headerTitlePrefix")}</span> {t("app.headerTitleSuffix")}{" "}
+                  {t("app.headerVersion")}
                 </div>
               </Box>
             </Link>

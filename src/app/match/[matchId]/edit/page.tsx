@@ -3,6 +3,7 @@ import MatchChart from "@/components/match/matchChart";
 import RegisterResultControls from "@/components/match/RegisterResultControls";
 import { Metadata } from "next";
 import {auth} from "@/auth";
+import { getTranslations } from "next-intl/server";
 
 interface PageProps {
   readonly params: Promise<{
@@ -15,8 +16,9 @@ export async function generateMetadata({
 }: PageProps): Promise<Metadata> {
   const { matchId } = await params;
   const match = await getMatchById(matchId);
+  const t = await getTranslations("app");
   return {
-    title: `${match.NAME} - Mahjong Master System`,
+    title: t("pageTitle", { title: match.NAME }),
   };
 }
 
@@ -26,7 +28,8 @@ export default async function Page({ params }: PageProps) {
         const session = await auth();
 
         if (!session || !session.user) {
-            return <p>Du måste vara inloggad för att se denna sida.</p>;
+            const t = await getTranslations("common");
+            return <p>{t("mustBeLoggedIn")}</p>;
         }
     }
 

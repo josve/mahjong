@@ -33,6 +33,16 @@ Opens Storybook on http://localhost:6006. `npm run build-storybook` builds a sta
 - The database and auth modules (`src/lib/dbMatch.ts`, `src/lib/fetchMatches.ts`, `src/lib/db/upcomingGame.ts`, `src/auth.ts`) are replaced by the files in the `__mocks__` folders next to them, see `.storybook/preview.tsx`. Server components and pages are rendered with Storybook's experimental RSC support.
 - Mock data is in `src/stories/fixtures.ts`. Calls to `/api/...` are answered by the mocks in `src/stories/apiMocks.ts`; a story can override them with the `fetchMocks` parameter.
 - Use `mockSession(session)` / `loggedIn(session)` from `src/stories/mocks.ts` to render a story as a logged in user.
+- `next-intl/server` is replaced by `src/stories/nextIntlServer.ts` (see `.storybook/main.ts`), so server components get their texts without a Next.js request.
+
+# Texts
+
+All texts shown in the app live in `messages/sv.json` and are read with [next-intl](https://next-intl.dev) (only Swedish, no locale in the URL; config in `src/i18n/request.ts`).
+
+- Client components and non-async server components: `const t = useTranslations("namespace"); t("key")`
+- Async server components, pages and `generateMetadata`: `const t = await getTranslations("namespace")` from `next-intl/server`
+- Placeholders use ICU syntax, e.g. `"rounds": "{count} omgångar"` → `t("rounds", {count: 12})`
+- Keys are type checked against `messages/sv.json` (`src/types/next-intl.d.ts`), so `npm run lint` fails on a missing or misspelled key.
 
 # Update DB
 

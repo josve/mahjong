@@ -5,6 +5,7 @@ import {Alert, Box, Button, FormControl, InputLabel, MenuItem, Select, Snackbar,
 import {useRouter} from "next/navigation";
 import {UpdateResultResponse} from "@/types/api";
 import {Hand, IdToName} from "@/types/db";
+import {useTranslations} from "next-intl";
 
 interface Props {
   readonly teamIdToName: IdToName;
@@ -20,6 +21,7 @@ export default function RoundResultFormEdit({
   round,
 }: Props) {
   const router = useRouter();
+  const t = useTranslations("match");
 
   let winner: any  = "-1";
   let east: any = "";
@@ -88,7 +90,7 @@ export default function RoundResultFormEdit({
     })
         .then((response) => response.json())
         .then((data: UpdateResultResponse) => {
-          setSnackbarMessage("Resultat är uppdaterat!");
+          setSnackbarMessage(t("resultUpdated"));
           setSnackbarSeverity("success");
           setSnackbarOpen(true);
           setTimeout(() => {
@@ -96,7 +98,7 @@ export default function RoundResultFormEdit({
           }, 1000);
         })
         .catch((error) => {
-          setSnackbarMessage("Misslyckades med att uppdatera resultatet.");
+          setSnackbarMessage(t("resultUpdateFailed"));
           setSnackbarSeverity("error");
           setSnackbarOpen(true);
           console.error("Error:", error);
@@ -141,7 +143,7 @@ export default function RoundResultFormEdit({
           {Object.entries(teamIdToName).map(([teamId, teamName]) => (
               <TextField
                   key={teamId}
-                  label={`${teamName} poäng`}
+                  label={t("teamScore", {team: teamName})}
                   type="number"
                   value={formData.scores[teamId] || ""}
                   onChange={(e) => handleScoreChange(e, teamId)}
@@ -152,15 +154,15 @@ export default function RoundResultFormEdit({
         </Box>
         <Box sx={{display: "grid", gap: 2, gridTemplateColumns: "1fr 1fr", flexWrap: "wrap", marginTop: 2, marginBottom: 2}}>
           <FormControl fullWidth>
-            <InputLabel id="east-label">Öst</InputLabel>
+            <InputLabel id="east-label">{t("east")}</InputLabel>
             <Select
                 labelId="east-label"
                 id="east-select"
-                label="Öst"
+                label={t("east")}
                 value={formData.eastTeam}
                 onChange={handleEastTeamChange}
             >
-              <MenuItem value="">Välj spelare i öst</MenuItem>
+              <MenuItem value="">{t("selectEast")}</MenuItem>
               {Object.entries(teamIdToName).map(([teamId, teamName]) => (
                   <MenuItem
                       key={teamId}
@@ -173,16 +175,16 @@ export default function RoundResultFormEdit({
           </FormControl>
 
           <FormControl fullWidth>
-            <InputLabel id="winner-label">Vinnare</InputLabel>
+            <InputLabel id="winner-label">{t("winner")}</InputLabel>
             <Select
                 labelId="winner-label"
                 id="winner-select"
-                label="Vinnare"
+                label={t("winner")}
                 value={formData.winner}
                 onChange={handleWinnerChange}
             >
-              <MenuItem value="-1">Välj vinnare</MenuItem>
-              <MenuItem value="">Ingen vinnare</MenuItem>
+              <MenuItem value="-1">{t("selectWinner")}</MenuItem>
+              <MenuItem value="">{t("noWinner")}</MenuItem>
               {Object.entries(teamIdToName).map(([teamId, teamName]) => (
                   <MenuItem
                       key={teamId}
@@ -199,7 +201,7 @@ export default function RoundResultFormEdit({
             variant="contained"
             disabled={!isFormValid()}
         >
-          Ändra resultat
+          {t("updateResult")}
         </Button>
         <Snackbar
             open={snackbarOpen}

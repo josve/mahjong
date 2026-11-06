@@ -1,6 +1,9 @@
 import React from "react";
 import type {Preview} from "@storybook/nextjs-vite";
 import {sb} from "storybook/test";
+import {NextIntlClientProvider} from "next-intl";
+import messages from "../messages/sv.json";
+import {locale, timeZone} from "../src/i18n/request";
 import Providers from "../src/components/Providers";
 import AppLayout from "../src/stories/AppLayout";
 import {installFetchMocks, type FetchMock} from "../src/stories/fetchMock";
@@ -33,7 +36,11 @@ const preview: Preview = {
             const content = parameters.appLayout
                 ? <AppLayout session={parameters.appLayout.session ?? null}><Story/></AppLayout>
                 : <Story/>;
-            return <Providers>{content}</Providers>;
+            return (
+                <NextIntlClientProvider locale={locale} timeZone={timeZone} messages={messages}>
+                    <Providers>{content}</Providers>
+                </NextIntlClientProvider>
+            );
         },
     ],
     beforeEach({parameters}) {

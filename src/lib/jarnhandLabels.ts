@@ -1,8 +1,11 @@
-export function getJarnhandLabel(streakLength: number): string {
-    if (streakLength >= 8) return "Orubblig";
-    if (streakLength >= 7) return "Osårbar";
-    if (streakLength >= 6) return "Okuvlig";
-    if (streakLength >= 5) return "Befäst";
-    if (streakLength >= 4) return "Ståndaktig";
-    return "Järnhand";
+import type {HandBadgeLabelKey} from "@/components/match/HandBadges";
+
+/** The message key (in the handBadges namespace) for a Järnhand streak of the given length. */
+export function getJarnhandLabel(streakLength: number): HandBadgeLabelKey {
+    if (streakLength >= 8) return "orubblig";
+    if (streakLength >= 7) return "osarbar";
+    if (streakLength >= 6) return "okuvlig";
+    if (streakLength >= 5) return "befast";
+    if (streakLength >= 4) return "standaktig";
+    return "jarnhand";
 }

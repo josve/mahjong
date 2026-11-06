@@ -4,6 +4,7 @@ import React from "react";
 import {AnimatePresence, motion} from "motion/react";
 import {useMediaQuery} from "@mui/material";
 import {Hand, IdToColorMap, IdToName} from "@/types/db";
+import {useTranslations} from "next-intl";
 
 const STARTING_SCORE = 500;
 
@@ -88,6 +89,7 @@ interface Props {
 
 /** The current standings as a mechanical split-flap board where every digit flips when it changes. */
 export default function SplitFlapScoreboard({teams, round}: Props) {
+    const t = useTranslations("match");
     const small = useMediaQuery("(max-width:500px)");
     const flapWidth = small ? 22 : 30;
     const rows = [...teams].sort((a, b) => b.score - a.score || a.name.localeCompare(b.name));
@@ -104,8 +106,8 @@ export default function SplitFlapScoreboard({teams, round}: Props) {
             overflowX: "auto",
         }}>
             <div style={{display: "flex", justifyContent: "space-between", marginBottom: 10, fontSize: 12, letterSpacing: "0.2em", color: "var(--header-color)"}}>
-                <span>STÄLLNING</span>
-                <span>{round > 0 ? `OMGÅNG ${round}` : "START"}</span>
+                <span>{t("standings")}</span>
+                <span>{round > 0 ? t("roundNumber", {round}) : t("start")}</span>
             </div>
             {rows.map((team, index) => (
                 <motion.div

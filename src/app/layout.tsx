@@ -5,20 +5,28 @@ import Footer from "@/components/footer/footer";
 import Container from "@mui/material/Container";
 import Box from "@mui/material/Box";
 import Providers from "@/components/Providers";
+import {NextIntlClientProvider} from "next-intl";
+import {getLocale, getTranslations} from "next-intl/server";
 
-export const metadata: Metadata = {
-  title: "Mahjong Master System 4.0",
-  description: "The fantastic mahjong master system",
-};
+export async function generateMetadata(): Promise<Metadata> {
+    const t = await getTranslations("app");
+    return {
+        title: t("title"),
+        description: t("description"),
+    };
+}
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+    const locale = await getLocale();
+
     return (
-        <html lang="en">
+        <html lang={locale}>
         <body>
+        <NextIntlClientProvider>
         <Providers>
             <Header/>
             <Container className="content-container">
@@ -43,6 +51,7 @@ export default function RootLayout({
             </Container>
             <Footer/>
         </Providers>
+        </NextIntlClientProvider>
         </body>
         </html>
     );

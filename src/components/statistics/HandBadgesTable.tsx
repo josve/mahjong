@@ -7,7 +7,8 @@ import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import {Chip, Typography} from "@mui/material";
 import {MahjongStats} from "@/lib/statistics";
-import {HAND_BADGES} from "@/components/match/HandBadges";
+import {HAND_BADGES, HandBadgeLabelKey} from "@/components/match/HandBadges";
+import {useTranslations} from "next-intl";
 
 interface HandBadgesTableProps {
     stats: MahjongStats;
@@ -15,16 +16,17 @@ interface HandBadgesTableProps {
 }
 
 /** Column headers for badges whose label depends on the hand. */
-const DYNAMIC_LABELS: { [badgeId: string]: string } = {
-    hogmod: "Högmod",
-    storvinnare: "Storvinnare",
-    jarnhand: "Järnhand",
+const DYNAMIC_LABELS: { [badgeId: string]: HandBadgeLabelKey } = {
+    hogmod: "hogmod",
+    storvinnare: "storvinnare",
+    jarnhand: "jarnhand",
 };
 
 const HandBadgesTable: React.FC<HandBadgesTableProps> = ({
                                                              stats,
                                                              includeTeams
                                                          }) => {
+    const t = useTranslations();
 
     const players = stats.getDataToShow(includeTeams);
     const total = (counts: { [badgeId: string]: number }) =>
@@ -35,18 +37,20 @@ const HandBadgesTable: React.FC<HandBadgesTableProps> = ({
             <Table size="small">
                 <TableHead>
                     <TableRow>
-                        <TableCell>Spelare</TableCell>
+                        <TableCell>{t("common.player")}</TableCell>
                         {HAND_BADGES.map(badge => (
                             <TableCell key={badge.id} align="center">
                                 <Chip
-                                    label={typeof badge.label === "string" ? badge.label : DYNAMIC_LABELS[badge.id] ?? badge.id}
+                                    label={typeof badge.label === "string"
+                                        ? t(`handBadges.${badge.label}`)
+                                        : DYNAMIC_LABELS[badge.id] ? t(`handBadges.${DYNAMIC_LABELS[badge.id]}`) : badge.id}
                                     color={badge.color}
                                     size="small"
                                     icon={badge.icon}
                                 />
                             </TableCell>
                         ))}
-                        <TableCell align="center">Totalt</TableCell>
+                        <TableCell align="center">{t("common.total")}</TableCell>
                     </TableRow>
                 </TableHead>
                 <TableBody>
@@ -66,7 +70,7 @@ const HandBadgesTable: React.FC<HandBadgesTableProps> = ({
                                         {count}
                                         {longestStreak !== undefined && (
                                             <Typography variant="caption" color="text.secondary" sx={{display: "block"}}>
-                                                längsta {longestStreak}
+                                                {t("statistics.longestStreak", {streak: longestStreak})}
                                             </Typography>
                                         )}
                                     </TableCell>

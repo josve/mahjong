@@ -17,6 +17,7 @@ import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import SaveIcon from "@mui/icons-material/Save";
 import CancelIcon from "@mui/icons-material/Cancel";
+import { useTranslations } from "next-intl";
 
 interface UpcomingGamesTableProps {
     upcomingGames: UpcomingGame[];
@@ -29,6 +30,7 @@ export default function UpcomingGamesTable({
                                                onUpdate,
                                                onDelete,
                                            }: UpcomingGamesTableProps) {
+    const t = useTranslations("upcomingGames");
     const [editRowId, setEditRowId] = useState<number | null>(null);
     const [editGameTime, setEditGameTime] = useState<string>("");
     const [editMeetingLink, setEditMeetingLink] = useState<string>("");
@@ -59,9 +61,9 @@ export default function UpcomingGamesTable({
             <Table>
                 <TableHead>
                     <TableRow>
-                        <TableCell>Datum</TableCell>
-                        <TableCell>Möteslänk</TableCell>
-                        <TableCell align="right">Handlingar</TableCell>
+                        <TableCell>{t("date")}</TableCell>
+                        <TableCell>{t("meetingLink")}</TableCell>
+                        <TableCell align="right">{t("actions")}</TableCell>
                     </TableRow>
                 </TableHead>
                 <TableBody>

@@ -17,12 +17,14 @@ import { Session } from "next-auth";
 import { getNavigationItems, NavigationItem } from "@/lib/navigationItems";
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import {MoreHoriz} from "@mui/icons-material";
+import {useTranslations} from "next-intl";
 
 interface Props {
     readonly session: Session | null;
 }
 
 export default function FooterClient({ session }: Props) {
+    const t = useTranslations("navigation");
     const [value, setValue] = React.useState(0);
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
     const open = Boolean(anchorEl);
@@ -35,7 +37,7 @@ export default function FooterClient({ session }: Props) {
         setAnchorEl(null);
     };
 
-    const navigationItems: NavigationItem[] = getNavigationItems(session);
+    const navigationItems: NavigationItem[] = getNavigationItems(session, t);
 
     // Filter items to include both authenticated and guest links
     const visibleItems = navigationItems.filter((item) =>
@@ -85,7 +87,7 @@ export default function FooterClient({ session }: Props) {
                     {moreItems.length > 0 && (
                         <>
                             <BottomNavigationAction
-                                label="More"
+                                label={t("more")}
                                 icon={<MoreHoriz />}
                                 onClick={handleMoreClick}
                             />

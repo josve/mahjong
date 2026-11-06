@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import {TextField, Button, Box, FormControl, InputLabel, Select, MenuItem} from "@mui/material";
 import {AddResultResponse} from "@/types/api";
 import {IdToName} from "@/types/db";
+import {useTranslations} from "next-intl";
 
 export default function RoundResultFormAdd({
   teamIdToName,
@@ -12,6 +13,7 @@ export default function RoundResultFormAdd({
   readonly teamIdToName: IdToName;
   readonly matchId: string;
 }) {
+  const t = useTranslations("match");
   const [formData, setFormData] = useState<{ [key: string]: any }>({
     scores: {},
     eastTeam: "",
@@ -88,7 +90,7 @@ export default function RoundResultFormAdd({
           {Object.entries(teamIdToName).map(([teamId, teamName]) => (
               <TextField
                   key={teamId}
-                  label={`Poäng - ${teamName}`}
+                  label={t("scoreFor", {team: teamName})}
                   type="number"
                   value={formData.scores[teamId] || ""}
                   onChange={(e) => handleScoreChange(e, teamId)}
@@ -99,15 +101,15 @@ export default function RoundResultFormAdd({
         </Box>
         <Box sx={{display: "grid", gap: 2, gridTemplateColumns: "1fr 1fr", flexWrap: "wrap", marginTop: 2}}>
           <FormControl fullWidth>
-            <InputLabel id="east-label">Öst</InputLabel>
+            <InputLabel id="east-label">{t("east")}</InputLabel>
             <Select
                 labelId="east-label"
                 id="east-select"
-                label="Öst"
+                label={t("east")}
                 value={formData.eastTeam}
                 onChange={handleEastTeamChange}
             >
-              <MenuItem value="">Välj spelare i öst</MenuItem>
+              <MenuItem value="">{t("selectEast")}</MenuItem>
               {Object.entries(teamIdToName).map(([teamId, teamName]) => (
                   <MenuItem
                       key={teamId}
@@ -120,16 +122,16 @@ export default function RoundResultFormAdd({
           </FormControl>
 
           <FormControl fullWidth>
-            <InputLabel id="winner-label">Vinnare</InputLabel>
+            <InputLabel id="winner-label">{t("winner")}</InputLabel>
             <Select
                 labelId="winner-label"
                 id="winner-select"
-                label="Vinnare"
+                label={t("winner")}
                 value={formData.winner}
                 onChange={handleWinnerChange}
             >
-              <MenuItem value="-1">Välj vinnare</MenuItem>
-              <MenuItem value="">Ingen vinnare</MenuItem>
+              <MenuItem value="-1">{t("selectWinner")}</MenuItem>
+              <MenuItem value="">{t("noWinner")}</MenuItem>
               {Object.entries(teamIdToName).map(([teamId, teamName]) => (
                   <MenuItem
                       key={teamId}
@@ -147,7 +149,7 @@ export default function RoundResultFormAdd({
             className="button match-add-result-button"
             disabled={!isFormValid()}
         >
-          Lägg till resultat
+          {t("addResult")}
         </Button>
       </Box>
   );
