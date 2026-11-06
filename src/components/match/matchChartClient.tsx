@@ -9,7 +9,7 @@ import {HandWithScore} from "@/types/components";
 import {EChartsOption} from "echarts-for-react/src/types";
 import Confetti from 'react-confetti'
 import LastRoundDisplay from "@/components/match/LastRoundDisplay";
-import SplitFlapScoreboard, {scoreboardTeams} from "@/components/match/SplitFlapScoreboard";
+import MatchStandings, {standingsTeams} from "@/components/match/MatchStandings";
 import {buildRounds, Round} from "@/lib/rounds";
 import {useTranslations} from "next-intl";
 
@@ -473,8 +473,8 @@ export default function MatchChartClient({
           )}
         </div>
 
-        <SplitFlapScoreboard
-            teams={scoreboardTeams(hands, teamIdToName, teamColors)}
+        <MatchStandings
+            teams={standingsTeams(hands, teamIdToName, teamColors)}
             round={Math.max(0, ...hands.map((hand: Hand) => hand.ROUND))}
         />
 
