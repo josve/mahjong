@@ -19,7 +19,6 @@ interface HandBadgesTableProps {
 const DYNAMIC_LABELS: { [badgeId: string]: HandBadgeLabelKey } = {
     hogmod: "hogmod",
     storvinnare: "storvinnare",
-    jarnhand: "jarnhand",
 };
 
 const HandBadgesTable: React.FC<HandBadgesTableProps> = ({

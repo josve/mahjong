@@ -10,12 +10,10 @@ import StairsIcon from '@mui/icons-material/Stairs';
 import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome';
 import SportsMmaIcon from '@mui/icons-material/SportsMma';
 import EmojiEventsIcon from '@mui/icons-material/EmojiEvents';
-import ShieldIcon from '@mui/icons-material/Shield';
 import { Hand } from "@/types/db";
 import { Round } from "@/lib/rounds";
 import { getHogmodLabel } from "@/lib/hogmodLabels";
 import { getStorvinnareLabel } from "@/lib/storvinnareLabels";
-import { getJarnhandLabel } from "@/lib/jarnhandLabels";
 import { useTranslations } from "next-intl";
 import type messages from "../../../messages/sv.json";
 
@@ -26,7 +24,6 @@ const LIMIT_HAND = 300;
 const HIGHROLLER_HAND = 100;
 const HOGMOD_STREAK = 2;
 const STORVINNARE_STREAK = 2;
-const JARNHAND_STREAK = 3;
 /** How many rounds a team must have gone without a win for its next win to count as Äntligen. */
 const ANTLIGEN_WINLESS = 3;
 /** How many places a team must climb in the standings in one round to count as Klättraren. */
@@ -42,7 +39,6 @@ export interface HandBadgeContext {
     readonly round: Round;
     readonly eastStreak: number;
     readonly winStreak: number;
-    readonly positiveStreak: number;
 }
 
 export interface HandBadgeDefinition {
@@ -198,14 +194,6 @@ export const HAND_BADGES: readonly HandBadgeDefinition[] = [
         streak: ({ winStreak }) => winStreak,
     },
     {
-        id: "jarnhand",
-        label: ({ positiveStreak }) => getJarnhandLabel(positiveStreak),
-        color: "success",
-        icon: <ShieldIcon />,
-        applies: ({ positiveStreak }) => positiveStreak >= JARNHAND_STREAK,
-        streak: ({ positiveStreak }) => positiveStreak,
-    },
-    {
         id: "smygvinst",
         label: "smygvinst",
         color: "success",
@@ -268,7 +256,6 @@ export function createHandBadgeContext(hand: Hand, round: Round): HandBadgeConte
         round,
         eastStreak: round.eastStreaks?.[hand.TEAM_ID] || 0,
         winStreak: round.winStreaks?.[hand.TEAM_ID] || 0,
-        positiveStreak: round.positiveStreaks?.[hand.TEAM_ID] || 0,
     };
 }
 

@@ -1,7 +1,7 @@
 {
   "app": {
     "title": "Mahjong Master System 4.0",
-    "description": "The fantastic mahjong master system",
+    "description": "Det fantastiska mahjong-mastersystemet",
     "pageTitle": "{title} - Mahjong Master System",
     "headerTitlePrefix": "Mahjong",
     "headerTitleSuffix": "Master System",
@@ -9,7 +9,7 @@
     "logoAlt": "Mahjong Tiles",
     "manifestName": "Mahjong Master System",
     "manifestShortName": "Master System",
-    "manifestDescription": "System for keeping track of mahjong scores"
+    "manifestDescription": "System för att hålla koll på mahjongpoäng"
   },
   "common": {
     "player": "Spelare",
@@ -17,7 +17,7 @@
     "rounds": "{count} omgångar",
     "mustBeLoggedIn": "Du måste vara inloggad för att se denna sida.",
     "matchTooOld": "Matchen är för gammal för att göra ändringar.",
-    "accessDenied": "Access Denied",
+    "accessDenied": "Åtkomst nekad",
     "winds": {
       "E": "Öst",
       "N": "Nord",
@@ -33,7 +33,7 @@
     "upcomingGames": "Kommande matcher",
     "profile": "Spelare",
     "signIn": "Logga in",
-    "more": "More"
+    "more": "Mer"
   },
   "matches": {
     "title": "Matcher",
@@ -99,18 +99,12 @@
     "gudomlig": "Gudomlig",
     "ododlig": "Odödlig",
     "storvinnare": "Storvinnare",
-    "segrare": "Segrare",
-    "champion": "Champion",
-    "mastare": "Mästare",
-    "dominant": "Dominant",
-    "oovervinnlig": "Oövervinnlig",
-    "jarnhand": "Järnhand",
-    "standaktig": "Ståndaktig",
-    "befast": "Befäst",
-    "okuvlig": "Okuvlig",
-    "osarbar": "Osårbar",
-    "orubblig": "Orubblig",
-    "smygvinst": "Smygvinst",
+    "segrare": "Storvinnare X2",
+    "champion": "Storvinnare X3",
+    "mastare": "Storvinnare X4",
+    "dominant": "Storvinnare X5",
+    "oovervinnlig": "Storvinnare X6",
+    "smygvinst": "Mer poäng än vinnaren",
     "antligen": "Äntligen!",
     "revansch": "Revansch",
     "tronskifte": "Tronskifte",
@@ -179,8 +173,8 @@
     "color": "Färg",
     "showPreviousRoundScore": "Visa föregående rundpoäng",
     "updateProfile": "Uppdatera profil",
-    "profileUpdated": "Profile updated successfully!",
-    "profileUpdateFailed": "Failed to update profile.",
+    "profileUpdated": "Profilen är uppdaterad!",
+    "profileUpdateFailed": "Kunde inte uppdatera profilen.",
     "yourTeams": "Dina lag",
     "teamPlayers": "Spelare: {players}",
     "teamColor": "Färg:",
@@ -198,9 +192,9 @@
     "actions": "Handlingar",
     "create": "Skapa",
     "timeRequired": "Du måste välja en tid",
-    "createFailed": "Failed to create game",
-    "updateFailed": "Failed to update game",
-    "deleteFailed": "Failed to delete game"
+    "createFailed": "Kunde inte skapa matchen",
+    "updateFailed": "Kunde inte uppdatera matchen",
+    "deleteFailed": "Kunde inte ta bort matchen"
   },
   "scoreboard": {
     "title": "Poängtabell",
@@ -289,9 +283,9 @@
     "footnote": "Extra X2 vid mahjong på sista brickan i spelet eller extrabricka vid fyrtal ej med"
   },
   "matchChart": {
-    "unknownTeam": "Unknown Team",
-    "noWinner": "No Winner",
-    "winsTooltip": "{team}: {wins} wins ({percentage}%)",
+    "unknownTeam": "Okänt lag",
+    "noWinner": "Ingen vinnare",
+    "winsTooltip": "{team}: {wins} vinster ({percentage}%)",
     "handDetails": "{wind} {hand}p{isWinner, select, true { mahjong} other {}}, {score}",
     "latestRound": "Senaste omgången",
     "showAllRounds": "Visa alla omgångar",
