@@ -3,6 +3,7 @@ import MatchChart from "@/components/match/matchChart";
 import { Metadata } from "next";
 import {auth} from "@/auth";
 import {getAutotableGameUrl} from "@/lib/autotable";
+import { getTranslations } from "next-intl/server";
 
 interface PageProps {
   readonly params: Promise<{
@@ -15,14 +16,16 @@ export async function generateMetadata({
 }: PageProps): Promise<Metadata> {
   const { matchId } = await params;
   const match = await getMatchById(matchId);
+  const t = await getTranslations("app");
   return {
-    title: `${match.NAME} - Mahjong Master System`,
+    title: t("pageTitle", { title: match.NAME }),
   };
 }
 
 export default async function Page({ params }: PageProps) {
   const { matchId } = await params;
   const match = await getMatchById(matchId);
+  const t = await getTranslations("match");
 
   const matchDate = new Date(match.TIME);
   const isEditable =
@@ -49,13 +52,13 @@ export default async function Page({ params }: PageProps) {
             href={`/match/${matchId}/edit`}
             className="button"
           >
-            Registrera resultat
+            {t("registerResult")}
           </a>}
           <a
             href={`/scorecalculator`}
             className="button"
           >
-            Poängräknare
+            {t("scoreCalculator")}
           </a>
           {autotableUrl &&
           <a
@@ -64,7 +67,7 @@ export default async function Page({ params }: PageProps) {
             target="_blank"
             rel="noopener noreferrer"
           >
-            Till spelet
+            {t("toGame")}
           </a>}
         </div>
       )}

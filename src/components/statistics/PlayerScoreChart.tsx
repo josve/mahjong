@@ -20,6 +20,7 @@ import {PeriodType} from "@/types/components";
 import {filterGames} from "@/lib/statsFilter";
 import {CustomTabPanel} from "@/components/CustomTabPanel";
 import {MahjongStats} from "@/lib/statistics";
+import {useTranslations} from "next-intl";
 
 interface PlayerScoreChartProps {
   matches: GameWithHands[];
@@ -39,6 +40,7 @@ const PlayerScoreChart: React.FC<PlayerScoreChartProps> = ({
                                                                teamAndPlayerColors,
                                                                includeTeams
                                                            }) => {
+    const t = useTranslations("statistics.tabs");
     const [selectedTab, setSelectedTab] = useState(0);
     const [filteredMatches, setFilteredMatches] = useState<GameWithHands[]>(matches);
 
@@ -75,14 +77,14 @@ const PlayerScoreChart: React.FC<PlayerScoreChartProps> = ({
                   variant="scrollable"
                   scrollButtons="auto"
                   onChange={handleTabChange}>
-                <Tab label="Poäng" />
-                <Tab label="Mahjong" />
-                <Tab label="High Roller" />
-                <Tab label="Medelhänder" />
-                <Tab label="Distribution" />
-                <Tab label="Comeback" />
-                <Tab label="Vindposition" />
-                <Tab label="Badges" />
+                <Tab label={t("scores")} />
+                <Tab label={t("mahjong")} />
+                <Tab label={t("highRoller")} />
+                <Tab label={t("averageHands")} />
+                <Tab label={t("distribution")} />
+                <Tab label={t("comeback")} />
+                <Tab label={t("wind")} />
+                <Tab label={t("badges")} />
             </Tabs>
             <CustomTabPanel value={selectedTab} index={0}>
                 <PlayerScoresChart

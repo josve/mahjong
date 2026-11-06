@@ -1,5 +1,6 @@
 import React from "react";
 import {MahjongStats} from "@/lib/statistics";
+import {useTranslations} from "next-intl";
 
 interface WindStatsChartProps {
     stats: MahjongStats;
@@ -7,13 +8,14 @@ interface WindStatsChartProps {
 }
 
 const WINDS = [
-    { key: "E", label: "Öst" },
-    { key: "N", label: "Nord" },
-    { key: "W", label: "Väst" },
-    { key: "S", label: "Syd" },
+    { key: "E" },
+    { key: "N" },
+    { key: "W" },
+    { key: "S" },
 ] as const;
 
 const WindStatsChart: React.FC<WindStatsChartProps> = ({ stats, includeTeams }) => {
+    const t = useTranslations();
     const playerStats = stats.getDataToShow(includeTeams)
         .filter(d => d.numHands > 0);
 
@@ -27,12 +29,11 @@ const WindStatsChart: React.FC<WindStatsChartProps> = ({ stats, includeTeams }) 
                 color: "#555",
                 lineHeight: 1.5,
             }}>
-                <strong>Vindposition</strong> — visar hur ofta en spelare vinner mahjong beroende på vilken vindposition
-                (Öst, Nord, Väst, Syd) de sitter på. Procenten anger andelen rundor i den positionen som resulterade i mahjong-vinst.
+                <strong>{t("statistics.wind.title")}</strong> — {t("statistics.wind.description")}
             </div>
 
             {playerStats.length === 0 && (
-                <p style={{ fontStyle: "italic" }}>Ingen data tillgänglig.</p>
+                <p style={{ fontStyle: "italic" }}>{t("statistics.wind.noData")}</p>
             )}
 
             {playerStats.length > 0 && (
@@ -43,13 +44,13 @@ const WindStatsChart: React.FC<WindStatsChartProps> = ({ stats, includeTeams }) 
                 }}>
                     <thead>
                         <tr style={{ borderBottom: "2px solid #ddd" }}>
-                            <th style={{ textAlign: "left", padding: "8px 12px" }}>Spelare</th>
+                            <th style={{ textAlign: "left", padding: "8px 12px" }}>{t("common.player")}</th>
                             {WINDS.map(w => (
                                 <th key={w.key} style={{ textAlign: "center", padding: "8px 12px" }}>
-                                    {w.label}
+                                    {t(`common.winds.${w.key}`)}
                                 </th>
                             ))}
-                            <th style={{ textAlign: "center", padding: "8px 12px" }}>Totalt</th>
+                            <th style={{ textAlign: "center", padding: "8px 12px" }}>{t("common.total")}</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -112,7 +113,7 @@ const WindStatsChart: React.FC<WindStatsChartProps> = ({ stats, includeTeams }) 
             )}
 
             <div style={{ fontStyle: "italic", paddingTop: "20px", color: "#666" }}>
-                Visar andel mahjong-vinster per vindposition. Grön markering = bästa vindposition.
+                {t("statistics.wind.footnote")}
             </div>
         </div>
     );

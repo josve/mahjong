@@ -1,5 +1,6 @@
 import React from "react";
 import {MahjongStats} from "@/lib/statistics";
+import {useTranslations} from "next-intl";
 
 interface HighRollerChartProps {
     stats: MahjongStats;
@@ -10,6 +11,7 @@ const HighRollerChart: React.FC<HighRollerChartProps> = ({
                                                            stats,
                                                              includeTeams
                                                          }) => {
+  const t = useTranslations("statistics");
 
   const getCircleSize = (score: number) => {
     const minSize = 10;
@@ -69,7 +71,7 @@ const HighRollerChart: React.FC<HighRollerChartProps> = ({
                       justifyContent: "center",
                       margin: "0 5px",
                   }}
-                  title={`Spel #${highRoller.gameIndex + 1}: ${highRoller.hand}`}
+                  title={t("highRollerTooltip", {game: highRoller.gameIndex + 1, hand: highRoller.hand})}
               >
               </div>
                     }
@@ -79,7 +81,7 @@ const HighRollerChart: React.FC<HighRollerChartProps> = ({
             </div>
         ))}
           <div style={{ fontStyle: "italic", paddingTop: "20px" }}>
-              Streckade cirklar är från när man spelat i lag.
+              {t("highRollerTeamNote")}
           </div>
       </div>
   );

@@ -7,6 +7,9 @@ import Person2OutlinedIcon from "@mui/icons-material/Person2Outlined";
 import AlarmIcon from '@mui/icons-material/Alarm';
 import { Session } from "next-auth";
 import type {SvgIconComponent} from "@mui/icons-material";
+import type {useTranslations} from "next-intl";
+
+type NavigationTranslator = ReturnType<typeof useTranslations<"navigation">>;
 
 export interface NavigationItem {
     label: string;
@@ -18,48 +21,49 @@ export interface NavigationItem {
 /**
  * Generates navigation items based on the user's session.
  * @param session The current user session.
+ * @param t Translator for the navigation namespace, from useTranslations("navigation").
  * @returns An array of navigation items.
  */
-export function getNavigationItems(session: Session | null): NavigationItem[] {
+export function getNavigationItems(session: Session | null, t: NavigationTranslator): NavigationItem[] {
     const items: NavigationItem[] = [
         {
-            label: "Matcher",
+            label: t("matches"),
             href: "/",
             icon: CasinoOutlinedIcon,
             auth: "both",
         },
         {
-            label: "Statistik",
+            label: t("statistics"),
             href: "/statistics",
             icon: TrendingUpOutlinedIcon,
             auth: "both",
         },
         {
-            label: "Poängtabell",
+            label: t("scoreboard"),
             href: "/scoreboard",
             icon: TableChartOutlinedIcon,
             auth: "both",
         },
         {
-            label: "Poängräknare",
+            label: t("scoreCalculator"),
             href: "/scorecalculator",
             icon: CalculateOutlinedIcon,
             auth: "both",
         },
         {
-            label: "Kommande matcher",
+            label: t("upcomingGames"),
             href: "/upcomingGames",
             icon: AlarmIcon,
             auth: "both",
         },
         {
-            label: session?.user?.name || "Spelare",
+            label: session?.user?.name || t("profile"),
             href: "/profile",
             icon: Person2OutlinedIcon,
             auth: "authenticated",
         },
         {
-            label: "Logga in",
+            label: t("signIn"),
             href: "/api/auth/signin",
             icon: LoginOutlinedIcon,
             auth: "guest",

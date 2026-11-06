@@ -2,6 +2,7 @@ import React from "react";
 import {MahjongStats} from "@/lib/statistics";
 import TrendingUpIcon from '@mui/icons-material/TrendingUp';
 import Tooltip from "@mui/material/Tooltip";
+import {useTranslations} from "next-intl";
 
 interface ComebackChartProps {
     stats: MahjongStats;
@@ -9,6 +10,7 @@ interface ComebackChartProps {
 }
 
 const ComebackChart: React.FC<ComebackChartProps> = ({ stats, includeTeams }) => {
+    const t = useTranslations("statistics.comeback");
     const playerStats = stats.getDataToShow(includeTeams);
 
     const sorted = [...playerStats]
@@ -29,8 +31,7 @@ const ComebackChart: React.FC<ComebackChartProps> = ({ stats, includeTeams }) =>
                 color: "#555",
                 lineHeight: 1.5,
             }}>
-                <strong>Comeback</strong> — registreras när en spelare vinner ett spel trots att ha legat på sista plats
-                under spelets gång. Ju större poängunderlaget var, desto mer imponerande comeback.
+                <strong>{t("title")}</strong> — {t("description")}
             </div>
 
             {biggestComeback && (
@@ -42,24 +43,26 @@ const ComebackChart: React.FC<ComebackChartProps> = ({ stats, includeTeams }) =>
                     border: "1px solid #90caf9",
                 }}>
                     <h3 style={{ margin: "0 0 8px 0" }}>
-                        Största comebacken
+                        {t("biggest")}
                     </h3>
                     <div style={{ fontSize: "1.2em" }}>
-                        <strong>{biggestComeback.playerName}</strong> — vände {biggestComeback.deficit} poängs underläge till vinst
-                        {" "}(spel #{biggestComeback.gameIndex + 1})
+                        <strong>{biggestComeback.playerName}</strong> — {t("biggestDescription", {
+                            deficit: biggestComeback.deficit,
+                            game: biggestComeback.gameIndex + 1,
+                        })}
                     </div>
                 </div>
             )}
 
             {sorted.length === 0 && (
-                <p style={{ fontStyle: "italic" }}>Inga comebacks registrerade.</p>
+                <p style={{ fontStyle: "italic" }}>{t("none")}</p>
             )}
 
             {sorted.map((data) => (
                 <div key={data.id} style={{ marginBottom: "20px" }}>
                     <h3 style={{ marginBottom: "4px" }}>{data.name}</h3>
                     <div style={{ marginBottom: "8px", color: "#666" }}>
-                        Totalt: {data.comebackGames.length} comebacks
+                        {t("total", {count: data.comebackGames.length})}
                     </div>
                     <div style={{
                         display: "flex",
@@ -73,7 +76,7 @@ const ComebackChart: React.FC<ComebackChartProps> = ({ stats, includeTeams }) =>
                             return (
                                 <Tooltip
                                     key={c.comebackIndex}
-                                    title={`Spel #${c.gameIndex + 1}: Vände ${c.deficit} poängs underläge från sista plats`}
+                                    title={t("tooltip", {game: c.gameIndex + 1, deficit: c.deficit})}
                                 >
                                     <TrendingUpIcon
                                         style={{
@@ -90,7 +93,7 @@ const ComebackChart: React.FC<ComebackChartProps> = ({ stats, includeTeams }) =>
             ))}
             {sorted.length > 0 && (
                 <div style={{ fontStyle: "italic", paddingTop: "20px", color: "#666" }}>
-                    Comeback = vann spelet trots att ha legat sist. Halvtransparenta ikoner är från lagspel.
+                    {t("footnote")}
                 </div>
             )}
         </div>

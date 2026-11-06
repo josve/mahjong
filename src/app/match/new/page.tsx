@@ -1,9 +1,11 @@
 import { Metadata } from "next";
 import NewMatchClient from "@/components/newMatchClient";
+import { getTranslations } from "next-intl/server";
 
 export async function generateMetadata(): Promise<Metadata> {
+  const t = await getTranslations();
   return {
-    title: "Ny match - Mahjong Master System",
+    title: t("app.pageTitle", { title: t("match.newMatchTitle") }),
   };
 }
 

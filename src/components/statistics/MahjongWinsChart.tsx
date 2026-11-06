@@ -1,6 +1,7 @@
 import React from "react";
 import ReactEcharts from "echarts-for-react";
 import {MahjongStats} from "@/lib/statistics";
+import {useTranslations} from "next-intl";
 
 interface MahjongWinsChartProps {
   stats: MahjongStats;
@@ -11,7 +12,7 @@ const MahjongWinsChart: React.FC<MahjongWinsChartProps> = ({
                                                              stats,
                                                              includeTeams
                                                            }) => {
-
+  const t = useTranslations("statistics");
 
   const playerStats = stats.getDataToShow(includeTeams);
 
@@ -25,7 +26,7 @@ const MahjongWinsChart: React.FC<MahjongWinsChartProps> = ({
 
   const winsOptions = {
     title: {
-      text: "Totala Mahjong-vinster per spelare",
+      text: t("mahjongWinsTitle"),
       left: "center",
     },
     tooltip: {
@@ -34,7 +35,7 @@ const MahjongWinsChart: React.FC<MahjongWinsChartProps> = ({
     },
     series: [
       {
-        name: "Mahjong-vinster",
+        name: t("mahjongWinsSeries"),
         type: "pie",
         radius: ["50%", "30%"],
         data: winsSeries,

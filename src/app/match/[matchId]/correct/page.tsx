@@ -2,6 +2,7 @@ import { getMatchById, getHandsByGameId, getTeamIdToName } from "@/lib/dbMatch";
 import RoundDisplay from "@/components/RoundDisplay";
 import { Metadata } from "next";
 import {auth} from "@/auth";
+import { getTranslations } from "next-intl/server";
 import {Hand, IdToName} from "@/types/db";
 
 interface PageProps {
@@ -15,19 +16,21 @@ export async function generateMetadata({
 }: PageProps): Promise<Metadata> {
   const { matchId } = await params;
   const match = await getMatchById(matchId);
+  const t = await getTranslations();
   return {
-    title: `Korrigera resultat för ${match.NAME} - Mahjong Master System`,
+    title: t("app.pageTitle", { title: t("match.correctResultFor", { name: match.NAME }) }),
   };
 }
 
 export default async function EditPage({ params }: PageProps) {
   const { matchId } = await params;
+  const t = await getTranslations();
 
   if (process.env.REQUIRE_LOGIN) {
     const session = await auth();
 
     if (!session || !session.user) {
-      return <p>Du måste vara inloggad för att se denna sida.</p>;
+      return <p>{t("common.mustBeLoggedIn")}</p>;
     }
   }
 
@@ -61,7 +64,7 @@ export default async function EditPage({ params }: PageProps) {
 
   return (
     <div style={{ padding: "20px" }}>
-      <h1>Korrigera resultat för {match.NAME}</h1>
+      <h1>{t("match.correctResultFor", { name: match.NAME })}</h1>
       {isEditable ? (
         Object.entries(rounds).map(
           ([round, hands]: [string, Hand[]]) =>
@@ -84,7 +87,7 @@ export default async function EditPage({ params }: PageProps) {
             paddingBottom: "20px",
           }}
         >
-          Matchen är för gammal för att göra ändringar.
+          {t("common.matchTooOld")}
         </p>
       )}
     </div>

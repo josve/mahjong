@@ -1,6 +1,7 @@
 import React from "react";
 import {Box, Typography} from "@mui/material";
 import {GameWithHands, IdToColorMap, IdToName} from "@/types/db";
+import {useTranslations} from "next-intl";
 
 const STARTING_SCORE = 500;
 const WIDTH = 240;
@@ -59,6 +60,7 @@ interface Props {
 
 /** Small line chart of each team's score after every round, with the final standings next to it. */
 export default function MatchSparkline({match, idToName, colors}: Props) {
+    const t = useTranslations("matches");
     const teams = getTeamLines(match, idToName, colors);
     const steps = teams[0].history.length - 1;
     const all = teams.flatMap(team => team.history);
@@ -71,7 +73,7 @@ export default function MatchSparkline({match, idToName, colors}: Props) {
         <Box sx={{display: "flex", gap: 2, alignItems: "center"}}>
             {steps > 0 && (
                 <Box component="svg" viewBox={`0 0 ${WIDTH} ${HEIGHT}`} preserveAspectRatio="none"
-                     sx={{flex: 1, height: HEIGHT, minWidth: 0}} role="img" aria-label="Poängutveckling per omgång">
+                     sx={{flex: 1, height: HEIGHT, minWidth: 0}} role="img" aria-label={t("sparklineLabel")}>
                     <line x1={0} x2={WIDTH} y1={y(STARTING_SCORE)} y2={y(STARTING_SCORE)} stroke="#ddd" strokeDasharray="3 3"
                           vectorEffect="non-scaling-stroke"/>
                     {teams.map((team, i) => (

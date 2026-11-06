@@ -11,6 +11,7 @@ import Confetti from 'react-confetti'
 import LastRoundDisplay from "@/components/match/LastRoundDisplay";
 import SplitFlapScoreboard, {scoreboardTeams} from "@/components/match/SplitFlapScoreboard";
 import {buildRounds, Round} from "@/lib/rounds";
+import {useTranslations} from "next-intl";
 
 interface Props {
   readonly matchId: string;
@@ -31,6 +32,7 @@ export default function MatchChartClient({
                                            playerId,
                                            isEditable,
                                          }: Props) {
+  const t = useTranslations();
   const [data, setData] = useState<MatchChartResponse | null>(null);
   const [lastRoundCount, setLastRoundCount] = useState<number>(0);
   const [showConfetti, setShowConfetti] = useState<boolean>(false);
@@ -164,8 +166,9 @@ export default function MatchChartClient({
       (i + 1).toString()
   );
 
+  const unknownTeam = t("matchChart.unknownTeam");
   const getTeamName = (teamId: string) => {
-    return teamIdToName[teamId] || "Unknown Team";
+    return teamIdToName[teamId] || unknownTeam;
   };
 
   let series = [];
@@ -193,7 +196,7 @@ export default function MatchChartClient({
 
   const pieData = Object.keys(winCounts).map((teamId) => ({
     value: winCounts[teamId],
-    name: teamId === "no-winner" ? "No Winner" : getTeamName(teamId),
+    name: teamId === "no-winner" ? t("matchChart.noWinner") : getTeamName(teamId),
     label: {
       color: teamColors[teamId],
     },
@@ -209,14 +212,13 @@ export default function MatchChartClient({
           return params
               .map((param) => {
                 const teamName = getTeamName(param.seriesName);
-                if (teamName !== "Unknown Team") {
+                if (teamName !== unknownTeam) {
                   const windHand = param.data.name.WIND_HAND;
                   const handScore = param.data.name.HAND_SCORE;
                   const isWinner = param.data.name.IS_WINNER;
-                  const mahjongText = isWinner ? " mahjong" : "";
                   return `${teamName}: ${
                       param.value - 500
-                  } (${windHand} HANDp${mahjongText}, ${handScore})`;
+                  } (${t("matchChart.handDetails", {wind: windHand, hand: "HAND", isWinner: String(!!isWinner), score: handScore})})`;
                 }
                 return null;
               })
@@ -225,7 +227,7 @@ export default function MatchChartClient({
         } else {
           const teamName = getTeamName(params.name);
           const percentage = ((params.value / totalWins) * 100).toFixed(2);
-          return `${teamName}: ${params.value} wins (${percentage}%)`;
+          return t("matchChart.winsTooltip", {team: teamName, wins: params.value, percentage});
         }
       },
     },
@@ -365,7 +367,7 @@ export default function MatchChartClient({
         return params
             .map((param: any) => {
               const teamName = getTeamName(param.seriesName);
-              if (teamName !== "Unknown Team") {
+              if (teamName !== unknownTeam) {
                 const color = teamColors[param.seriesName]
                     ? `rgb(${teamColors[param.seriesName].color_red}, ${
                         teamColors[param.seriesName].color_green
@@ -376,15 +378,19 @@ export default function MatchChartClient({
                   const teamId = param.data.name.TEAM_ID;
                   const scoreHand = scoreHands.find((hand: Hand) => hand.TEAM_ID === teamId)!;
                   const windHand = scoreHand.WIND;
-                  const hand = scoreHand.HAND + "p";
                   const handScore = scoreHand.HAND_SCORE;
                   const isWinner = scoreHand.IS_WINNER;
-                  const mahjongText = isWinner ? " mahjong" : "";
                   const formattedHandScore =
                       handScore > 0 ? `+${handScore}` : handScore;
+                  const details = t("matchChart.handDetails", {
+                    wind: windHand,
+                    hand: scoreHand.HAND,
+                    isWinner: String(!!isWinner),
+                    score: formattedHandScore,
+                  });
                   return `<span style="display:inline-block;width:10px;height:10px;background-color:${color};margin-right:5px;"></span>${teamName}: ${
                       param.value
-                  } (${windHand} ${hand}${mahjongText}, ${formattedHandScore})`;
+                  } (${details})`;
                 } else {
                   return `<span style="display:inline-block;width:10px;height:10px;background-color:${color};margin-right:5px;"></span>${teamName}: ${
                       param.value
@@ -455,7 +461,7 @@ export default function MatchChartClient({
         <div>
           <div className="multi-title-header">
             <h1>{data?.match?.NAME}</h1>
-            <h2 style={{textAlign: "left"}}>{numRounds} omgångar</h2>
+            <h2 style={{textAlign: "left"}}>{t("common.rounds", {count: numRounds})}</h2>
           </div>
           <div className="label">
             {capitalize(formatDate(data?.match?.TIME))}
@@ -477,19 +483,18 @@ export default function MatchChartClient({
             style={{height: "600px"}}
         />
         {handsToShow && handsToShow.hands.length > 0 && !showAllRounds && (<>
-          <Typography variant="h5" style={{paddingTop: 30, paddingBottom: 10}}>Senaste omgången</Typography>
+          <Typography variant="h5" style={{paddingTop: 30, paddingBottom: 10}}>{t("matchChart.latestRound")}</Typography>
           <LastRoundDisplay teamIdToName={data.teamIdToName} round={handsToShow}/>
-          <Button style={{marginTop: 20}} variant="outlined" onClick={toggleShowAllRounds}>Visa alla omgångar</Button>
+          <Button style={{marginTop: 20}} variant="outlined" onClick={toggleShowAllRounds}>{t("matchChart.showAllRounds")}</Button>
         </>)}
         {handsToShow && handsToShow.hands.length > 0 && showAllRounds && (<>
-          <Typography variant="h5" style={{paddingTop: 30, paddingBottom: 10}}>Alla omgångar</Typography>
+          <Typography variant="h5" style={{paddingTop: 30, paddingBottom: 10}}>{t("matchChart.allRounds")}</Typography>
           {allHandsExceptFirst.map(((round) => (
               <Box style={{paddingTop: 10}}>
                 <LastRoundDisplay teamIdToName={data.teamIdToName} round={round}/>
               </Box>
           )))}
-          <Button style={{marginTop: 20}} variant="outlined" onClick={toggleShowAllRounds}>Visa bara senaste
-            omgången</Button>
+          <Button style={{marginTop: 20}} variant="outlined" onClick={toggleShowAllRounds}>{t("matchChart.showLatestRound")}</Button>
         </>)}
       </>
   );

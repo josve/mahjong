@@ -1,6 +1,7 @@
 import { getMatchById, getTeamIdToName } from "@/lib/dbMatch";
 import RoundResultFormAdd from "@/components/match/RoundResultFormAdd";
 import {IdToName} from "@/types/db";
+import { getTranslations } from "next-intl/server";
 
 interface Props {
   readonly matchId: string;
@@ -9,6 +10,7 @@ interface Props {
 export default async function RegisterResultControls({ matchId }: Props) {
   const match = await getMatchById(matchId);
   const teamIdToName = await getTeamIdToName();
+  const t = await getTranslations();
   const relevantTeamIds = [
     match.TEAM_ID_1,
     match.TEAM_ID_2,
@@ -40,13 +42,13 @@ export default async function RegisterResultControls({ matchId }: Props) {
                 textDecoration: "underline",
               }}
             >
-              Korrigera resultat
+              {t("match.correctResult")}
             </a>
           </div>
         </>
       ) : (
         <div className="label">
-          Matchen är för gammal för att göra ändringar.
+          {t("common.matchTooOld")}
         </div>
       )}
     </>

@@ -13,6 +13,7 @@ import {
 } from "@mui/material";
 import UpcomingGamesTable from "./UpcomingGamesTable";
 import moment from 'moment';
+import { useTranslations } from "next-intl";
 
 interface AdminUpcomingGamesPageProps {
     session: Session;
@@ -24,10 +25,11 @@ export default function AdminUpcomingGamesPage({
                                                    upcomingGames,
                                                }: AdminUpcomingGamesPageProps) {
     const user = session.user;
+    const t = useTranslations();
 
     // If you have an admin check, you can do it here:
     if (!user) {
-        return <Typography variant="h6">Access Denied</Typography>;
+        return <Typography variant="h6">{t("common.accessDenied")}</Typography>;
     }
 
     const [games, setGames] = useState<UpcomingGame[]>(upcomingGames);
@@ -46,7 +48,7 @@ export default function AdminUpcomingGamesPage({
 
         try {
             if (!newGameTime) {
-                setErrorMessage("Du måste välja en tid");
+                setErrorMessage(t("upcomingGames.timeRequired"));
                 return;
             }
 
@@ -63,7 +65,7 @@ export default function AdminUpcomingGamesPage({
 
             if (!response.ok) {
                 const data = await response.json();
-                throw new Error(data.error || "Failed to create game");
+                throw new Error(data.error || t("upcomingGames.createFailed"));
             }
 
             const { id } = await response.json();
@@ -80,7 +82,7 @@ export default function AdminUpcomingGamesPage({
             setNewGameTime("");
             setNewMeetingLink("");
         } catch (error: any) {
-            setErrorMessage(error.message || "Failed to create game");
+            setErrorMessage(error.message || t("upcomingGames.createFailed"));
         }
     };
 
@@ -108,7 +110,7 @@ export default function AdminUpcomingGamesPage({
 
             if (!response.ok) {
                 const data = await response.json();
-                throw new Error(data.error || "Failed to update game");
+                throw new Error(data.error || t("upcomingGames.updateFailed"));
             }
 
             // Update local state
@@ -124,7 +126,7 @@ export default function AdminUpcomingGamesPage({
                 )
             );
         } catch (error: any) {
-            setErrorMessage(error.message || "Failed to update game");
+            setErrorMessage(error.message || t("upcomingGames.updateFailed"));
         }
     };
 
@@ -141,20 +143,20 @@ export default function AdminUpcomingGamesPage({
 
             if (!response.ok) {
                 const data = await response.json();
-                throw new Error(data.error || "Failed to delete game");
+                throw new Error(data.error || t("upcomingGames.deleteFailed"));
             }
 
             // Update local state
             setGames((prev) => prev.filter((g) => g.id !== id));
         } catch (error: any) {
-            setErrorMessage(error.message || "Failed to delete game");
+            setErrorMessage(error.message || t("upcomingGames.deleteFailed"));
         }
     };
 
     return (
         <Box sx={{ p: 2 }}>
             <Typography variant="h4" gutterBottom>
-                Administrera kommande matcher
+                {t("upcomingGames.title")}
             </Typography>
 
             {errorMessage && (
@@ -165,14 +167,14 @@ export default function AdminUpcomingGamesPage({
 
             <Paper sx={{ p: 2, mb: 4 }}>
                 <Typography variant="h6" style={{ paddingBottom: 10 }} gutterBottom>
-                    Skapa en ny kommande match
+                    {t("upcomingGames.createTitle")}
                 </Typography>
 
                 <Stack direction="row" spacing={2} sx={{
                     alignItems: "center"
                 }}>
                     <TextField
-                        label="Datum"
+                        label={t("upcomingGames.date")}
                         type="datetime-local"
                         value={newGameTime}
                         onChange={(e) => setNewGameTime(e.target.value)}
@@ -183,13 +185,13 @@ export default function AdminUpcomingGamesPage({
                         }}
                     />
                     <TextField
-                        label="Möteslänk"
+                        label={t("upcomingGames.meetingLink")}
                         type="text"
                         value={newMeetingLink}
                         onChange={(e) => setNewMeetingLink(e.target.value)}
                     />
                     <Button variant="contained" onClick={handleCreateGame}>
-                        Skapa
+                        {t("upcomingGames.create")}
                     </Button>
                 </Stack>
             </Paper>

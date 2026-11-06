@@ -11,6 +11,7 @@ import {suggestTeams} from "@/lib/teamSuggestion";
 import {getNextUpcomingGame} from "@/lib/db/upcomingGame";
 import UpcomingGameCard from "@/components/matches/UpcomingGameCard";
 import {computeMatchRecords} from "@/lib/matchRecords";
+import {getTranslations} from "next-intl/server";
 
 export const revalidate = 60;
 
@@ -23,6 +24,7 @@ export default async function Home() {
     const suggestedTeams = suggestTeams(matches, teamDetails).map((teamId) => teamDetails[teamId]);
     const numMatches = matches.length;
     const records = computeMatchRecords(matches);
+    const t = await getTranslations("matches");
 
     const session = await auth();
     let allowCreate = true;
@@ -34,7 +36,7 @@ export default async function Home() {
         <>
             <Box className="matches-header">
                 <h1>
-                    Matcher
+                    {t("title")}
                 </h1>
                 {allowCreate &&
                 <Box sx={{display: {xs: "none", md: "block"}}}
@@ -43,7 +45,7 @@ export default async function Home() {
                         href="/match/new"
                         passHref
                     >
-                        <button className="button create-match-button">Skapa ny match</button>
+                        <button className="button create-match-button">{t("createMatch")}</button>
                     </Link>
                 </Box>}
             </Box>

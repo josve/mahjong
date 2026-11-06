@@ -11,9 +11,11 @@ import {
 } from "@mui/material";
 import { useRouter } from "next/navigation";
 import {MatchesResponse, SuggestedTeamsResponse, TeamsResponse} from "@/types/api";
+import { useTranslations } from "next-intl";
 
 
 export default function NewMatchClient() {
+  const t = useTranslations("newMatch");
   const [teams, setTeams] = useState<TeamsResponse[]>([]);
   const [selectedTeams, setSelectedTeams] = useState<(TeamsResponse | null)[]>([
     null,
@@ -121,12 +123,12 @@ export default function NewMatchClient() {
           component="h1"
           gutterBottom
         >
-          Skapa ny match
+          {t("title")}
         </Typography>
         <form onSubmit={handleSubmit}>
           <TextField
             fullWidth
-            label="Namn"
+            label={t("name")}
             value={matchName}
             onChange={(e) => setMatchName(e.target.value)}
             margin="normal"
@@ -134,7 +136,7 @@ export default function NewMatchClient() {
           />
           <TextField
             fullWidth
-            label="Beskrivning"
+            label={t("description")}
             value={matchDescription}
             onChange={(e) => setMatchDescription(e.target.value)}
             margin="normal"
@@ -165,7 +167,7 @@ export default function NewMatchClient() {
                 <TextField
                   {...params}
                   fullWidth
-                  label={`Lag ${index + 1}`}
+                  label={t("team", { number: index + 1 })}
                   margin="normal"
                   required
                 />
@@ -179,7 +181,7 @@ export default function NewMatchClient() {
             sx={{ mt: 3, mb: 2 }}
             disabled={!isFormValid()}
           >
-            Skapa match
+            {t("create")}
           </Button>
         </form>
       </Box>

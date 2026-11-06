@@ -1,12 +1,15 @@
 import { auth } from "@/auth";
+import { getTranslations } from "next-intl/server";
 import ProfilePageClient from "@/components/profile/ProfilePageClient";
 import { getTeamDetails, getPlayerColors, getPlayerEmails } from "@/lib/dbMatch";
 
 export default async function ProfilePage() {
   const session = await auth();
 
+  const t = await getTranslations("common");
+
   if (!session || !session.user) {
-    return <p>Du måste vara inloggad för att se denna sida.</p>;
+    return <p>{t("mustBeLoggedIn")}</p>;
   }
 
   const teamDetails = await getTeamDetails();

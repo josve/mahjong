@@ -5,6 +5,7 @@ import TableBody from "@mui/material/TableBody";
 import TableRow from "@mui/material/TableRow";
 import TableCell from "@mui/material/TableCell";
 import {MahjongStats} from "@/lib/statistics";
+import {useTranslations} from "next-intl";
 
 interface AverageHandTableProps {
     stats: MahjongStats;
@@ -15,6 +16,7 @@ const AverageHandTable: React.FC<AverageHandTableProps> = ({
                                                                stats,
                                                                includeTeams
                                                            }) => {
+    const t = useTranslations();
 
     const nonTeams = stats.getDataToShow(includeTeams);
 
@@ -22,8 +24,8 @@ const AverageHandTable: React.FC<AverageHandTableProps> = ({
         <Table>
             <TableHead>
                 <TableRow>
-                    <TableCell>Spelare</TableCell>
-                    <TableCell>Medelpoäng (omgång)</TableCell>
+                    <TableCell>{t("common.player")}</TableCell>
+                    <TableCell>{t("statistics.averageHand")}</TableCell>
                 </TableRow>
             </TableHead>
             <TableBody>

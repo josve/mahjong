@@ -16,6 +16,11 @@ import { Round } from "@/lib/rounds";
 import { getHogmodLabel } from "@/lib/hogmodLabels";
 import { getStorvinnareLabel } from "@/lib/storvinnareLabels";
 import { getJarnhandLabel } from "@/lib/jarnhandLabels";
+import { useTranslations } from "next-intl";
+import type messages from "../../../messages/sv.json";
+
+/** A key in the handBadges namespace of messages/sv.json. */
+export type HandBadgeLabelKey = keyof typeof messages.handBadges;
 
 const LIMIT_HAND = 300;
 const HIGHROLLER_HAND = 100;
@@ -42,7 +47,8 @@ export interface HandBadgeContext {
 
 export interface HandBadgeDefinition {
     readonly id: string;
-    readonly label: string | ((context: HandBadgeContext) => string);
+    /** Message key of the label, or a function choosing one for labels that depend on the hand. */
+    readonly label: HandBadgeLabelKey | ((context: HandBadgeContext) => HandBadgeLabelKey);
     readonly color: ChipProps["color"];
     readonly icon: React.ReactElement;
     readonly applies: (context: HandBadgeContext) => boolean;
@@ -147,28 +153,28 @@ const isBestHand = (context: HandBadgeContext) =>
 export const HAND_BADGES: readonly HandBadgeDefinition[] = [
     {
         id: "limit-hand",
-        label: "Limit hand",
+        label: "limitHand",
         color: "error",
         icon: <LocalFireDepartment />,
         applies: ({ hand }) => hand.HAND === LIMIT_HAND,
     },
     {
         id: "highroller",
-        label: "Highroller",
+        label: "highroller",
         color: "secondary",
         icon: <LocalFireDepartment />,
         applies: (context) => isHighroller(context) && context.hand.HAND !== LIMIT_HAND,
     },
     {
         id: "best-hand",
-        label: "Bästa hand",
+        label: "bestHand",
         color: "primary",
         icon: <LocalFireDepartment />,
         applies: isBestHand,
     },
     {
         id: "best-score",
-        label: "Störst vinst",
+        label: "bestScore",
         color: "primary",
         icon: <LocalFireDepartment />,
         applies: (context) =>
@@ -201,49 +207,49 @@ export const HAND_BADGES: readonly HandBadgeDefinition[] = [
     },
     {
         id: "smygvinst",
-        label: "Smygvinst",
+        label: "smygvinst",
         color: "success",
         icon: <MasksIcon />,
         applies: isSmygvinst,
     },
     {
         id: "antligen",
-        label: "Äntligen!",
+        label: "antligen",
         color: "success",
         icon: <CelebrationIcon />,
         applies: isAntligen,
     },
     {
         id: "revansch",
-        label: "Revansch",
+        label: "revansch",
         color: "warning",
         icon: <SportsMmaIcon />,
         applies: isRevansch,
     },
     {
         id: "tronskifte",
-        label: "Tronskifte",
+        label: "tronskifte",
         color: "warning",
         icon: <MilitaryTechIcon />,
         applies: isTronskifte,
     },
     {
         id: "raketen",
-        label: "Raketen",
+        label: "raketen",
         color: "primary",
         icon: <RocketLaunchIcon />,
         applies: isRaketen,
     },
     {
         id: "klattraren",
-        label: "Klättraren",
+        label: "klattraren",
         color: "info",
         icon: <StairsIcon />,
         applies: isKlattraren,
     },
     {
         id: "ateruppstandelse",
-        label: "Återuppståndelse",
+        label: "ateruppstandelse",
         color: "warning",
         icon: <AutoAwesomeIcon />,
         applies: isAteruppstandelse,
@@ -272,6 +278,7 @@ interface Props {
 }
 
 export default function HandBadges({ hand, round }: Props) {
+    const t = useTranslations("handBadges");
     const context = createHandBadgeContext(hand, round);
     const badges = getHandBadges(hand, round);
 
@@ -291,7 +298,7 @@ export default function HandBadges({ hand, round }: Props) {
             {badges.map(badge => (
                 <Chip
                     key={badge.id}
-                    label={typeof badge.label === "function" ? badge.label(context) : badge.label}
+                    label={t(typeof badge.label === "function" ? badge.label(context) : badge.label)}
                     color={badge.color}
                     size="small"
                     icon={badge.icon}
