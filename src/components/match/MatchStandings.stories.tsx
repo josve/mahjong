@@ -1,15 +1,15 @@
 import React, {useEffect, useState} from "react";
 import type {Meta, StoryObj} from "@storybook/nextjs-vite";
-import SplitFlapScoreboard, {scoreboardTeams} from "@/components/match/SplitFlapScoreboard";
+import MatchStandings, {standingsTeams} from "@/components/match/MatchStandings";
 import {activeMatch, limitHandMatch, matchChartResponse} from "@/stories/fixtures";
 import type {GameWithHands} from "@/types/db";
 
 function teamsAfter(game: GameWithHands, round: number) {
     const {teamIdToName, teamColors} = matchChartResponse(game);
-    return scoreboardTeams(game.hands.filter((hand) => hand.ROUND <= round), teamIdToName, teamColors);
+    return standingsTeams(game.hands.filter((hand) => hand.ROUND <= round), teamIdToName, teamColors);
 }
 
-/** Plays the match round by round to show the flip animations. */
+/** Plays the match round by round to show the rows reordering. */
 function Replay({game}: { readonly game: GameWithHands }) {
     const lastRound = Math.max(...game.hands.map((hand) => hand.ROUND));
     const [round, setRound] = useState(0);
@@ -19,17 +19,17 @@ function Replay({game}: { readonly game: GameWithHands }) {
         return () => clearTimeout(timer);
     }, [round, lastRound]);
 
-    return <SplitFlapScoreboard teams={teamsAfter(game, round)} round={round}/>;
+    return <MatchStandings teams={teamsAfter(game, round)} round={round}/>;
 }
 
 const meta = {
-    title: "Components/Match/SplitFlapScoreboard",
-    component: SplitFlapScoreboard,
+    title: "Components/Match/MatchStandings",
+    component: MatchStandings,
     args: {
         teams: teamsAfter(activeMatch, 12),
         round: 12,
     },
-} satisfies Meta<typeof SplitFlapScoreboard>;
+} satisfies Meta<typeof MatchStandings>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;
